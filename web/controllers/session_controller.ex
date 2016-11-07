@@ -13,10 +13,9 @@ defmodule Publit.SessionController do
   def create(conn, %{"user" => user_params}) do
     case UserAuth.valid_user(user_params) do
       {:ok, user} ->
-        IO.puts "Redirection"
-        #|> put_session(user_id: UserAuth.encrypt_user(user))
         conn
         |> put_flash(:info, "Logged in correctly")
+        |> put_session(:user_id, UserAuth.encrypt_user(user))
         |> redirect(to: "/store")
       {:error, cs} ->
         conn

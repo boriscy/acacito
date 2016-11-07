@@ -13,6 +13,9 @@ defmodule Publit.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :validate do
+  end
+
   scope "/", Publit do
     pipe_through :browser # Use the default browser stack
 

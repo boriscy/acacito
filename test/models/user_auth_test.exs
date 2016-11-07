@@ -27,4 +27,12 @@ defmodule Publit.UserAuthTest do
     {:error, cs} = UserAuth.valid_user(%{"email" => "amaru@mail.com", "password" => "demo1234"})
     assert cs.email == "amaru@mail.com"
   end
+
+  test "encrypt_user" do
+    user = insert(:user)
+
+    token = UserAuth.encrypt_user(user)
+    {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", token)
+    assert user_id == user.id
+  end
 end

@@ -25,6 +25,9 @@ defmodule Publit.SessionControllerTest do
       |> post("/login", %{"user" => %{"email" => "amaru@mail.com", "password" => "demo1234"} })
 
       assert redirected_to(conn) == "/store"
+      {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", conn.private.plug_session["user_id"])
+
+      assert user_id == user.id
     end
 
     test "Error", %{conn: conn, user: user} do
