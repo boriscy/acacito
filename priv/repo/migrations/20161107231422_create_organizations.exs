@@ -8,6 +8,7 @@ defmodule Publit.Repo.Migrations.CreateOrganizations do
       add :id, :uuid, primary_key: true
       add :name, :string
       add :currency, :string
+      add :address, :string
       add :info, :map, default: "{}"
       add :settings, :map, default: "{}"
       add :geom, :geometry
@@ -17,8 +18,8 @@ defmodule Publit.Repo.Migrations.CreateOrganizations do
   end
 
   def down do
-    execute "DROP EXTENSION IF EXISTS postgis"
-
     drop table(:organizations)
+
+    execute "DROP EXTENSION IF EXISTS postgis"
   end
 end

@@ -12,55 +12,43 @@ defmodule Publit.Organization do
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "organizations" do
     field :name, :string
-    field :currency, :string
+    field :currency, :string, default: "BOB"
+    field :address, :string
     field :info, :map, default: %{}
+    field :settings, :map, default: %{}
     field :geom, Geo.Geometry
 
     timestamps
   end
 
-  @required_fields ~w(name currency tenant)
-  @optional_fields ~w(info settings)
-
   @currencies ~w(USD BOB)
 
-
+  @doc """
+  Creates organization
+  """
   def create(params) do
     %Organization{}
     |> cast(params, [:name, :currency, :address])
-  end
-
-  def changeset(model, params \\ %{}) do
-    cast(model, params, [:name, :currency, :tenant])
-    |> validate_required([:name, :currency, :tenant])
+    |> validate_required([:name, :currency])
     |> validate_inclusion(:currency, @currencies)
-    |> cast_embed(:settings)
-    #|> put_embed(:settings, OrganizationSettings.changeset(%OrganizationSettings{}, params[:settings] || %{}))
-    |> change(%{info: params[:info] || %{}})
+    |> Repo.insert()
   end
 
+  @doc """
+  Updates the current organization with the new params
+  """
+  def update(org, params) do
+    org
+    |> cast(params, [:name, :address])
+    |> validate_required([:name, :currency])
+    |> Repo.update()
+  end
+
+  @doc """
+  Returns all orgs with the ids
+  """
   def orgs(ids) do
-    Repo.all(
-      from o in Organization,
-      where: o.id in ^ids
-    )
-  end
-
-  def create(user, params) do
-    params = Map.merge(params, %{"tenant" => get_tenant(params["name"])})
-
-    cs = changeset(%Organization{}, params)
-    cs = put_change(cs, :info, %{created_by: user.id})
-
-    if cs.valid? do
-      Repo.transaction fn ->
-        {:ok, org} = Repo.insert(cs)
-        {:ok, _user} = Publit.UserOrganization.add_user_org(user, org, %{"role" => "admin"})
-        org
-      end
-    else
-      {:error, cs}
-    end
+    Repo.all(from o in Organization, where: o.id in ^ids)
   end
 
   #SELECT id, email, org->>'tenant' as tenant, org->>'active' as active, org->>'organization_id' as organization_id
@@ -84,16 +72,6 @@ defmodule Publit.Organization do
       {:ok, usrs} ->
         Enum.into(usrs, %{}, fn(u) -> {u["id"], u} end)
     end
-  end
-
-  defp get_tenant(""), do: false
-  defp get_tenant(nil), do: false
-  defp get_tenant(name) do
-    tenant = name
-    |> String.strip
-    |> String.downcase
-
-    Regex.replace(~r/[^a-z]/i, tenant, "")
   end
 
 end

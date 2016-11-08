@@ -14,7 +14,8 @@ defmodule Publit.Factory do
   def organization_factory do
     %Publit.Organization{
       name: "Publit",
-      currency: "BOB"
+      currency: "BOB",
+      address: "Calle 1 Near Here"
     }
   end
 
