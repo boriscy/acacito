@@ -1,12 +1,16 @@
 defmodule Publit.SessionControllerTest do
   use Publit.ConnCase
-  alias Publit.{UserAuth}
+  alias Publit.{UserAuth, UserOrganization}
 
   setup do
-    user = insert(:user)
+    org = insert(:organization)
+    user = insert(:user, organizations: [%UserOrganization{
+      organization_id: org.id, name: org.name
+    }])
+
     conn = build_conn
 
-    %{conn: conn, user: user}
+    %{conn: conn, user: user, org: org}
   end
 
   describe "GET /login" do
@@ -20,14 +24,29 @@ defmodule Publit.SessionControllerTest do
   end
 
   describe "POST /login" do
-    test "OK", %{conn: conn, user: user} do
+    test "OK", %{conn: conn, user: user, org: org} do
       conn = conn
       |> post("/login", %{"user" => %{"email" => "amaru@mail.com", "password" => "demo1234"} })
 
       assert redirected_to(conn) == "/store"
-      {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", conn.private.plug_session["user_id"])
+      {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
 
       assert user_id == user.id
+      {:ok, org_id} = Phoenix.Token.verify(Publit.Endpoint, "organization_id", get_session(conn, "organization_id"))
+
+      assert org_id == org.id
+    end
+
+    test "OK no active organizations" do
+      user = insert(:user, email: "other@mail.com")
+
+      conn = build_conn()
+      |> post("/login", %{"user" => %{"email" => "other@mail.com", "password" => "demo1234"} })
+
+      assert redirected_to(conn) == "/organizations"
+      {:ok, u_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
+
+      assert u_id == user.id
     end
 
     test "Error", %{conn: conn, user: user} do
