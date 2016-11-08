@@ -11,4 +11,11 @@ defmodule Publit.Factory do
     }
   end
 
+  def organization_factory do
+    %Publit.Organization{
+      name: "Publit",
+      currency: "BOB"
+    }
+  end
+
 end

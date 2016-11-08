@@ -1,6 +1,6 @@
 defmodule Publit.User do
   use Publit.Web, :model
-  alias Publit.{User, Repo}
+  alias Publit.{User, UserOrganization, Repo}
 
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
@@ -10,7 +10,13 @@ defmodule Publit.User do
     field :email, :string
     field :full_name, :string
     field :encrypted_password, :string
+    field :locale, :string, default: "es"
+    field :settings, :map, default: %{}
+    field :extra_data, :map, default: %{}
+
     field :password, :string, virtual: true
+
+    embeds_many :organizations, UserOrganization, on_replace: :delete
 
     timestamps()
   end

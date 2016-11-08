@@ -22,6 +22,8 @@ defmodule Publit.ModelCase do
       import Ecto.Changeset
       import Ecto.Query
       import Publit.ModelCase
+
+      import Publit.Factory
     end
   end
 
