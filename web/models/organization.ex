@@ -14,7 +14,7 @@ defmodule Publit.Organization do
     field :name, :string
     field :currency, :string
     field :info, :map, default: %{}
-    #embeds_one :settings, OrganizationSettings, on_replace: :delete
+    field :geom, Geo.Geometry
 
     timestamps
   end
@@ -23,6 +23,12 @@ defmodule Publit.Organization do
   @optional_fields ~w(info settings)
 
   @currencies ~w(USD BOB)
+
+
+  def create(params) do
+    %Organization{}
+    |> cast(params, [:name, :currency, :address])
+  end
 
   def changeset(model, params \\ %{}) do
     cast(model, params, [:name, :currency, :tenant])

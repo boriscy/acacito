@@ -40,4 +40,5 @@ config :publit, Publit.Repo,
   password: "postgres",
   database: "publit_dev",
   hostname: "localhost",
-  pool_size: 10
+  pool_size: 10,
+  extensions: [{Geo.PostGIS.Extension, []}]

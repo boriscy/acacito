@@ -39,6 +39,7 @@ defmodule Publit.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:comeonin, "~> 2.6"},
+     {:geo, "~> 1.2"},
      {:ex_machina, "~> 1.0", only: [:dev, :test]}]
   end
 
