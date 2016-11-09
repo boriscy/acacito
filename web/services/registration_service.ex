@@ -25,7 +25,7 @@ defmodule Publit.RegistrationService do
       true ->
         multi = Multi.new
         |> Multi.insert(:org, %Organization{name: cs.changes.name})
-        |> Multi.run(:user_org, fn(%{org: org}) -> set_user_multi(cs, org) end)
+        |> Multi.run(:user_org, fn(%{org: org}) -> set_user_multi(cs.changes, org) end)
         |> Multi.merge(&create_user_multi/1)
 
         Repo.transaction(multi)
@@ -33,9 +33,10 @@ defmodule Publit.RegistrationService do
     end
   end
 
-  defp set_user_multi(cs, org) do
+  defp set_user_multi(changes, org) do
     {:ok, %User{
-        email: cs.changes.email,
+        email: changes.email,
+        encrypted_password: Comeonin.Bcrypt.hashpwsalt(changes.password),
         organizations: [%UserOrganization{
           name: org.name,
           organization_id: org.id,

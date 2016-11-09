@@ -18,6 +18,8 @@ defmodule Publit.RegistrationServiceTest do
       assert user_org.organization_id == org.id
       assert user_org.active == true
       assert user_org.role == "admin"
+      assert String.length(user.encrypted_password) > 20
     end
+
   end
 end
