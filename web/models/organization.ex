@@ -17,11 +17,13 @@ defmodule Publit.Organization do
     field :info, :map, default: %{}
     field :settings, :map, default: %{}
     field :geom, Geo.Geometry
+    field :category, :string, default: "restaurant"
 
     timestamps
   end
 
   @currencies ~w(USD BOB)
+  @categories ["restaurant", "store"]
 
   @doc """
   Creates organization

@@ -9,8 +9,15 @@ defmodule Publit.ErrorHelpers do
   Generates tag for inlined form input errors.
   """
   def error_tag(form, field) do
-    if error = form.errors[field] do
-      content_tag :span, translate_error(error), class: "help-block"
+    if error = form.source.errors[field] do
+      error = elem(error, 0)
+      content_tag :span, translate_error({error, []}), class: "help-block"
+    end
+  end
+
+  def has_error(form, field) do
+    if error = form.source.errors[field] do
+      "has-error"
     end
   end
 

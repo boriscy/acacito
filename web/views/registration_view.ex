@@ -1,3 +1,3 @@
-defmodule Publit.RegistationView do
+defmodule Publit.RegistrationView do
   use Publit.Web, :view
 end

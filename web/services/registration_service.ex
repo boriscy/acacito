@@ -29,7 +29,8 @@ defmodule Publit.RegistrationService do
         |> Multi.merge(&create_user_multi/1)
 
         Repo.transaction(multi)
-      false -> cs
+      false ->
+        {:error, cs}
     end
   end
 
@@ -57,6 +58,7 @@ defmodule Publit.RegistrationService do
     |> validate_required([:email, :password, :name, :category, :address])
     |> validate_format(:email, @email_reg)
     |> validate_length(:password, min: 8)
+    |> validate_length(:address, min: 8)
     |> validate_inclusion(:category, @categories)
   end
 

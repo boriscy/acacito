@@ -21,5 +21,20 @@ defmodule Publit.RegistrationServiceTest do
       assert String.length(user.encrypted_password) > 20
     end
 
+    test "validations" do
+      assert {:error, reg_cs} = RegistrationService.register(%{})
+
+      assert reg_cs.errors[:email]
+      assert reg_cs.errors[:password]
+      assert reg_cs.errors[:name]
+      refute reg_cs.errors[:category]
+      assert reg_cs.errors[:address]
+
+      assert {:error, reg_cs} = RegistrationService.register(%{email: "fake@mail", password: "demo123", addres: "Small"})
+
+      assert reg_cs.errors[:email]
+      assert reg_cs.errors[:password]
+    end
+
   end
 end
