@@ -62,7 +62,7 @@ defmodule Publit.Organization do
 
     {:ok, resp} = Ecto.Adapters.SQL.query(Repo, sql, [org_id])
     rows = resp.rows
-    |> Enum.map(fn(val) -> Publit.ListHelper.to_zip_to_map(resp.columns, val) end)
+    #|> Enum.map(fn(val) -> Publit.ListHelper.to_zip_to_map(resp.columns, val) end)
 
     {:ok, rows}
   end

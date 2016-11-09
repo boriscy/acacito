@@ -26,6 +26,7 @@ defmodule Publit.Router do
     delete "/logout", SessionController, :destroy
 
     resources "/users", UserController
+    resources "/registration", RegistrationController, only: [:index, :create]
   end
 
   # Other scopes may use custom stacks.
