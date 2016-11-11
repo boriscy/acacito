@@ -1,20 +1,11 @@
 # Publit
 
-To start your Phoenix app:
+# Arc
+Arc stores images and requires config, remember to config
+`config/prod.exs`, `config/dev.exs` and `config/test.exs`
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `npm install`
-  * Start Phoenix endpoint with `mix phoenix.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+```elixir
+config :arc,
+  storage: Arc.Storage.S3, # or Arc.Storage.Local
+  bucket: {:system, "AWS_S3_BUCKET"}, # if using Amazon S3
+```

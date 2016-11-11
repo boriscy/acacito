@@ -1,11 +1,11 @@
 defmodule Publit.Organization do
   @moduledoc """
-  The organization defines the schema in which you work
+  The organization defines the schema in which you work
   """
   use Publit.Web, :model
   import Ecto.Query
 
-  alias Publit.{Organization, Repo, OrganizationSettings}
+  alias Publit.{Organization, Product, Repo}
 
   @derive {Poison.Encoder, only: [:id, :name, :currency, :tenant, :info, :settings]}
 
@@ -18,6 +18,8 @@ defmodule Publit.Organization do
     field :settings, :map, default: %{}
     field :geom, Geo.Geometry
     field :category, :string, default: "restaurant"
+
+    #has_many :products, Product
 
     timestamps
   end

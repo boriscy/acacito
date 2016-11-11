@@ -1,4 +1,6 @@
-%{"comeonin": {:hex, :comeonin, "2.6.0", "74c288338b33205f9ce97e2117bb9a2aaab103a1811d243443d76fdb62f904ac", [:make, :make, :mix], []},
+%{"arc": {:hex, :arc, "0.6.0-rc3", "b950c6b67054bbc4ae56e13815d4159be3523a6fb5c2bdba38c34729014a8e6c", [:mix], [{:ex_aws, "~> 1.0.0-rc.3", [hex: :ex_aws, optional: true]}, {:hackney, "~> 1.5", [hex: :hackney, optional: true]}, {:poison, "~> 2.0", [hex: :poison, optional: true]}, {:sweet_xml, "~> 0.5", [hex: :sweet_xml, optional: true]}]},
+  "arc_ecto": {:hex, :arc_ecto, "0.5.0-rc1", "e03002f2e0decc044d26a8dc8f42813ffa7848e7f68a6a52571caf335b6f18da", [:mix], [{:arc, "~> 0.6.0-rc1", [hex: :arc, optional: false]}, {:ecto, "~> 2.0", [hex: :ecto, optional: false]}]},
+  "comeonin": {:hex, :comeonin, "2.6.0", "74c288338b33205f9ce97e2117bb9a2aaab103a1811d243443d76fdb62f904ac", [:make, :make, :mix], []},
   "connection": {:hex, :connection, "1.0.4", "a1cae72211f0eef17705aaededacac3eb30e6625b04a6117c1b2db6ace7d5976", [:mix], []},
   "cowboy": {:hex, :cowboy, "1.0.4", "a324a8df9f2316c833a470d918aaf73ae894278b8aa6226ce7a9bf699388f878", [:make, :rebar], [{:cowlib, "~> 1.0.0", [hex: :cowlib, optional: false]}, {:ranch, "~> 1.0", [hex: :ranch, optional: false]}]},
   "cowlib": {:hex, :cowlib, "1.0.2", "9d769a1d062c9c3ac753096f868ca121e2730b9a377de23dec0f7e08b1df84ee", [:make], []},

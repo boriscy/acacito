@@ -42,3 +42,6 @@ config :publit, Publit.Repo,
   hostname: "localhost",
   pool_size: 10,
   extensions: [{Geo.PostGIS.Extension, []}]
+
+config :arc,
+  storage: Arc.Storage.Local

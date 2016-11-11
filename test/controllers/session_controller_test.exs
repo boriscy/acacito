@@ -1,6 +1,6 @@
 defmodule Publit.SessionControllerTest do
   use Publit.ConnCase
-  alias Publit.{UserAuth, UserOrganization}
+  alias Publit.{UserOrganization}
 
   setup do
     org = insert(:organization)
@@ -17,7 +17,8 @@ defmodule Publit.SessionControllerTest do
     test "OK", %{conn: conn} do
       conn = get(conn, "/login")
 
-      assert conn.assigns.changeset == %UserAuth{}
+      assert conn.assigns.changeset
+      assert conn.assigns.valid == true
       assert conn.private.phoenix_action == :index
       assert conn.private.phoenix_controller == Publit.SessionController
     end
@@ -26,9 +27,9 @@ defmodule Publit.SessionControllerTest do
   describe "POST /login" do
     test "OK", %{conn: conn, user: user, org: org} do
       conn = conn
-      |> post("/login", %{"user" => %{"email" => "amaru@mail.com", "password" => "demo1234"} })
+      |> post("/login", %{"user_auth" => %{"email" => "amaru@mail.com", "password" => "demo1234"} })
 
-      assert redirected_to(conn) == "/store"
+      assert redirected_to(conn) == "/dashboard"
       {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
 
       assert user_id == user.id
@@ -41,7 +42,7 @@ defmodule Publit.SessionControllerTest do
       user = insert(:user, email: "other@mail.com")
 
       conn = build_conn()
-      |> post("/login", %{"user" => %{"email" => "other@mail.com", "password" => "demo1234"} })
+      |> post("/login", %{"user_auth" => %{"email" => "other@mail.com", "password" => "demo1234"} })
 
       assert redirected_to(conn) == "/organizations"
       {:ok, u_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
@@ -49,9 +50,9 @@ defmodule Publit.SessionControllerTest do
       assert u_id == user.id
     end
 
-    test "Error", %{conn: conn, user: user} do
+    test "Error", %{conn: conn} do
       conn = conn
-      |> post("/login", %{"user" => %{"email" => "amaru@mail.com", "password" => "demo12"} })
+      |> post("/login", %{"user_auth" => %{"email" => "amaru@mail.com", "password" => "demo12"} })
 
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
       assert conn.private.phoenix_flash["error"]

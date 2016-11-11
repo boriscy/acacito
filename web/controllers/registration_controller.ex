@@ -19,7 +19,7 @@ defmodule Publit.RegistrationController do
         conn
         |> put_session(:user_id, UserAuth.encrypt_user(user))
         |> put_session(:organization_id, Phoenix.Token.sign(Publit.Endpoint, "organization_id", org.id))
-        |> redirect(to: "/shop")
+        |> redirect(to: "/dashboard")
       {:error, registration} ->
         render(conn, "index.html", registration: registration, valid: false)
     end

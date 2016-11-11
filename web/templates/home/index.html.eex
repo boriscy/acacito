@@ -1,0 +1,3 @@
+<h1>Publit</h1>
+
+<%= link("Login", to: "/login") %>

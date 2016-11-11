@@ -13,14 +13,22 @@ defmodule Publit.Router do
     plug :accepts, ["json"]
   end
 
-  pipeline :validate do
+  pipeline :user_auth do
+    plug Publit.Plug.UserAuth
+  end
+
+  pipeline :organization_auth do
+    plug Publit.Plug.OrganizationAuth
+  end
+
+  pipeline :admin_auth do
+    plug Publit.Plug.OrganizationAuth
   end
 
   scope "/", Publit do
-    pipe_through :browser # Use the default browser stack
+    pipe_through [:browser] # Use the default browser stack
 
-    get "/", PageController, :index
-
+    get "/", HomeController, :index
     get "/login", SessionController, :index
     post "/login", SessionController, :create
     delete "/logout", SessionController, :destroy
@@ -29,8 +37,21 @@ defmodule Publit.Router do
     resources "/registration", RegistrationController, only: [:index, :create]
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Publit do
-  #   pipe_through :api
-  # end
+  # UserAuth
+  scope "/", Publit do
+    pipe_through [:browser, :user_auth]
+  end
+
+  # OrganizationAuth
+  scope "/", Publit do
+    pipe_through [:browser, :user_auth, :organization_auth]
+
+    get "/dashboard", DashboardController, :index
+
+  end
+
+  scope "/", Publit do
+    pipe_through [:browser, :user_auth, :organization_auth, :admin_auth]
+    resources "/products", ProductController
+  end
 end

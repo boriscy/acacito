@@ -1,21 +1,31 @@
 defmodule Publit.UserAuth do
-  defstruct [:email, :password]
+  use Ecto.Schema
+  import Ecto.Changeset
 
   alias Publit.{UserAuth, User, Repo}
 
+  embedded_schema do
+    field :email
+    field :password
+  end
+
   def changeset(params \\ %{}) do
-    %UserAuth{email: params["email"]}
+    cast(%UserAuth{}, params, [:email])
   end
 
   def valid_user(params) do
-    case Repo.get_by(User, email: params["email"]) do
-      nil -> {:error, changeset(params) }
-      user ->
-        if valid_password?(user, params["password"]) do
-          {:ok, user}
-        else
-          {:error, changeset(params) }
-        end
+    if params["email"] do
+      case Repo.get_by(User, email: params["email"]) do
+        nil -> {:error, changeset(params) }
+        user ->
+          if valid_password?(user, params["password"]) do
+            {:ok, user}
+          else
+            {:error, changeset(params) }
+          end
+      end
+    else
+      {:error, changeset(params)}
     end
   end
 

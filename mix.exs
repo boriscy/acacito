@@ -19,7 +19,7 @@ defmodule Publit.Mixfile do
   def application do
     [mod: {Publit, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin]]
+                    :phoenix_ecto, :postgrex, :comeonin, :arc_ecto]]
   end
 
   # Specifies which paths to compile per environment.
@@ -40,6 +40,8 @@ defmodule Publit.Mixfile do
      {:cowboy, "~> 1.0"},
      {:comeonin, "~> 2.6"},
      {:geo, "~> 1.2"},
+     #{:arc, "0.6.0-rc3"},
+     {:arc_ecto, "0.5.0-rc1"},
      {:ex_machina, "~> 1.0", only: [:dev, :test]}]
   end
 

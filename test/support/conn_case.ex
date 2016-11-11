@@ -29,6 +29,9 @@ defmodule Publit.ConnCase do
 
       import Publit.Router.Helpers
 
+      import Phoenix.Controller, only: [view_template: 1]
+      import Publit.Support.Session
+
       # The default endpoint for testing
       @endpoint Publit.Endpoint
     end

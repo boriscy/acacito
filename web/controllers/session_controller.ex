@@ -1,17 +1,17 @@
 defmodule Publit.SessionController do
   use Publit.Web, :controller
-  plug :scrub_params, "user" when action in [:create]
+  plug :scrub_params, "user_auth" when action in [:create]
 
-  alias Publit.{UserAuth}
+  alias Publit.{UserAuth, Endpoint}
 
   # GET /login
   def index(conn, _params) do
-    render(conn, "index.html", changeset: UserAuth.changeset())
+    render(conn, "index.html", changeset: UserAuth.changeset(), valid: true)
   end
 
   # POST /login
-  def create(conn, %{"user" => user_params}) do
-    case UserAuth.valid_user(user_params) do
+  def create(conn, %{"user_auth" => user_auth_params}) do
+    case UserAuth.valid_user(user_auth_params) do
       {:ok, user} ->
         {conn, route} = set_organization(conn, user)
         conn
@@ -22,7 +22,7 @@ defmodule Publit.SessionController do
         conn
         |> put_flash(:error, "Invalid email or password")
         |> put_status(:unprocessable_entity)
-        |> render("index.html", changeset: cs)
+        |> render("index.html", changeset: cs, valid: false)
     end
   end
 
@@ -34,7 +34,7 @@ defmodule Publit.SessionController do
         conn = conn
         |> put_session(:organization_id, Phoenix.Token.sign(Publit.Endpoint, "organization_id", org.organization_id))
 
-        {conn, "/store"}
+        {conn, "/dashboard"}
     end
   end
 

@@ -1,6 +1,5 @@
 defmodule Publit.RegistrationControllerTest do
   use Publit.ConnCase
-  import Phoenix.Controller, only: [view_template: 1]
   alias Publit.{RegistrationService, User, Organization}
 
   setup do
@@ -29,7 +28,7 @@ defmodule Publit.RegistrationControllerTest do
         }
       })
 
-      assert redirected_to(conn) == "/shop"
+      assert redirected_to(conn) == "/dashboard"
       assert get_session(conn, "user_id")
       assert get_session(conn, "organization_id")
 

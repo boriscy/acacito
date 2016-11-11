@@ -1,0 +1,6 @@
+<h2><%= gettext("Products") %></h2>
+
+<%= link "New", to: product_path(@conn, :new)%>
+
+<%= for prod <- @products do %>
+<% end %>
