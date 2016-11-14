@@ -19,4 +19,7 @@ defmodule Publit.Factory do
     }
   end
 
+  def product_factory do
+    
+  end
 end

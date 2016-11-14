@@ -1,9 +1,10 @@
 defmodule Publit.Product do
   use Publit.Web, :model
+  use Arc.Ecto.Schema
   import Ecto.Query
-  alias Publit.{Product, Repo}
+  alias Publit.{Product, Repo, ProductVariation}
 
-
+  @primary_key {:id, :binary_id, autogenerate: true}
   schema "products" do
     field :name, :string
     field :description, :string
@@ -19,21 +20,38 @@ defmodule Publit.Product do
     field :moderated, :boolean, default: false, null: false
 
     belongs_to :organization, Publit.Organization, type: :binary_id
+
+    embeds_many :variations, ProductVariation, on_replace: :delete
+
     timestamps()
   end
 
-
   @doc """
-  Builds a changeset based on the `struct` and `params`.
+  Builds and empte product
   """
-  def changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:name, :price, :publish])
-    |> validate_required([:name, :price, :publish])
+  def new() do
+    Ecto.Changeset.change(%Product{variations: [%ProductVariation{}]})
   end
 
-  def new() do
-    Ecto.Changeset.change(%Product{})
+  @doc """
+  Creates a new product and checks validations
+  """
+  def create(params) do
+    %Product{}
+    |> cast(params, [:name, :description, :price, :organization_id])
+    |> cast_attachments(params, [:image])
+    |> validate_required([:name, :organization_id])
+    |> ProductVariation.add(params["variations"])
+    |> Repo.insert()
+  end
+
+  def update(product, params) do
+    product
+    |> cast(params, [:name, :description])
+    |> cast_attachments(params, [:image])
+    |> validate_required([:name])
+    |> ProductVariation.add(params["variations"])
+    |> Repo.update()
   end
 
   @doc """
