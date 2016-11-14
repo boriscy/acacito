@@ -19,7 +19,7 @@ defmodule Publit.Repo.Migrations.CreateProduct do
       add :has_inventory, :boolean, default: true
       add :moderated, :boolean, default: false, null: false
 
-      add :organization_id, references(:organizations, type: :uuid, null: false, on_delete: :delete_all)
+      add :organization_id, references(:organizations, type: :uuid, null: false, on_delete: :delete_all), null: false
 
       timestamps()
     end

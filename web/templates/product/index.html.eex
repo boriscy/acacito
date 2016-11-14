@@ -2,5 +2,20 @@
 
 <%= link "New", to: product_path(@conn, :new)%>
 
-<%= for prod <- @products do %>
+<%= for product <- @products do %>
+  <div class="row">
+    <div class"flex">
+      <img src="<%= img_url(:thumb, product) %>" />
+      <h3>
+        <%= link product.name, to: product_path(@conn, :show, product) %>
+      </h3>
+    </div>
+    <div>
+      <%= product.price %>
+      <p>
+        <%= product.description %>
+      </p>
+    </div>
+    <%= link gettext("Edit"), to: product_path(@conn, :edit, product) %>
+  </div>
 <% end %>
