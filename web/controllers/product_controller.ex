@@ -70,7 +70,7 @@ defmodule Publit.ProductController do
     else
       Repo.delete(conn.assigns.product)
       conn
-      |> put_flash(:success, "Product was deleted.")
+      |> put_flash(:success, gettext("Product was deleted."))
       |> redirect(to: product_path(conn, :index))
     end
 

@@ -101,3 +101,15 @@ msgstr ""
 #: web/controllers/product_controller.ex:59
 msgid "There are errors in the product."
 msgstr ""
+
+#: web/templates/product/index.html.eex:21
+msgid "Are you sure to delete the product \"%{name}\"?"
+msgstr ""
+
+#: web/templates/product/index.html.eex:20
+msgid "Delete"
+msgstr ""
+
+#: web/controllers/product_controller.ex:73
+msgid "Product was deleted."
+msgstr ""

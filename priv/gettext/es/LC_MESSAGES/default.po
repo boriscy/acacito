@@ -100,4 +100,16 @@ msgstr "Producto actualizado."
 #: web/controllers/product_controller.ex:34
 #: web/controllers/product_controller.ex:59
 msgid "There are errors in the product."
-msgstr ""
+msgstr "Hay errores en el producto."
+
+#: web/templates/product/index.html.eex:21
+msgid "Are you sure to delete the product \"%{name}\"?"
+msgstr "Esta segur@ de eliminar el producto \"%{name}\"?"
+
+#: web/templates/product/index.html.eex:20
+msgid "Delete"
+msgstr "Borrar"
+
+#: web/controllers/product_controller.ex:73
+msgid "Product was deleted."
+msgstr "Producto eliminado."
