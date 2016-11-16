@@ -15,7 +15,13 @@ import "phoenix_html"
 
 // Set all window defaults and global methods
 window.translations = {
-  "Name": "Nombre"
+  "Name": "Nombre",
+  "Price": "Precio",
+  "Add line": "Nueva linea",
+  "Remove": "Eliminar",
+  "Small": "Pequeña",
+  "Medium": "Mediana",
+  "Variations": "Variaciones"
 }
 window.gettext = function(tra) {
   return translations[tra] || tra

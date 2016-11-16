@@ -1,0 +1,28 @@
+@import "colors";
+
+.product-variations {
+  margin-bottom: 10px;
+  .title {
+    margin: 4px 0px;
+    color: $grayLight;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  .name {
+    width: 60%;
+  }
+  .price {
+    width: 25%;
+  }
+  .col{
+    padding: 4px 0px;
+    margin-right: 8px;
+    &:last {
+      margin-right: 0px;
+    }
+  }
+  .header {
+    font-size: 1.1em;
+    margin-bottom: 4px;
+  }
+}

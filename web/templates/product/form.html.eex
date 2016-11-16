@@ -2,14 +2,13 @@
 
   <div class="form-group <%= has_error(f, :name) %>">
     <%= label f, :name, gettext("Name") %>
-    <%= text_input f, :name, class: "form-control" %>
+    <%= text_input f, :name, class: "form-control", placeholder: gettext("Pizza with ham") %>
     <%= error_tag f, :name %>
   </div>
 
-  <div class="form-group <%= has_error(f, :price) %>">
-    <%= label f, :price, gettext("Price") %>
-    <%= number_input f, :price, class: "form-control", step: 0.01 %>
-    <%= error_tag f, :price %>
+  <div class="product-variations">
+    <!-- web/static/js/product/ProductForm.Comp.vue -->
+    <product-form></product-form>
   </div>
 
   <div>
@@ -29,10 +28,6 @@
     <%= label f, :description, text: gettext("Description") %>
     <%= textarea f, :description, class: "form-control" %>
     <%= error_tag f, :description %>
-  </div>
-
-  <div class="product-variations">
-    <product-form></product-form>
   </div>
 
   <div class="form-group text-center button">

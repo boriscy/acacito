@@ -1,18 +1,28 @@
 <template>
-  <div>
-    <div class="form-group flex" v-for="(prodVar, index) in variations">
-      <div v-bind:class="hasError(prodVar, 'name')">
-        <input type="text" v-bind:value="prodVar.name" v-bind:name="productName('name', index)" class="form-control" v-bind:placeholder="gettext('Name')"/>
+  <div class="prouct-variations">
+    <div class="title">{{gettext("Variations")}}</div>
+
+    <div class="flex">
+      <div class="name header">{{gettext("Name")}}</div>
+      <div class="price header">{{gettext("Price")}}</div>
+    </div>
+    <div class="flex" v-for="(prodVar, index) in variations">
+      <div v-bind:class="hasError(prodVar, 'name')" class="name col">
+        <input type="text" v-bind:value="prodVar.name" v-bind:name="productName('name', index)"
+        class="form-control" v-bind:placeholder="getPlaceholder(index)"/>
         <span class="help-block">{{readError(prodVar, 'name')}}</span>
       </div>
-      <div  v-bind:class="hasError(prodVar, 'name')">
+      <div v-bind:class="hasError(prodVar, 'name')" class="price col">
         <input type="number" v-bind:value="prodVar.price" v-bind:name="productName('price', index)" class="form-control"/>
         <span class="help-block">{{readError(prodVar, 'price')}}</span>
       </div>
-
-      <button class="btn btn-danger btn-sm" @click.prevent="removeLine(prodVar, index)" v-show="index != 0">Remove</button>
+      <div class="col remove">
+        <button class="btn btn-danger btn-sm remove" @click.prevent="removeLine(prodVar, index)" v-show="index != 0">
+          {{gettext("Remove")}}
+        </button>
+      </div>
     </div>
-    <button class="btn btn-primary" @click.prevent="addLine()">Add line</button>
+    <button class="btn btn-primary" @click.prevent="addLine()">{{gettext("Add line")}}</button>
   </div>
 </template>
 
@@ -36,6 +46,11 @@ export default {
     },
     removeLine: function(prod, index) {
       this.variations.splice(index, 1)
+    },
+    getPlaceholder: function(index) {
+      let ph = [gettext("Small"), gettext("Medium")][index]
+
+      return ph ? ph : ""
     }
   },
   mounted: function() {

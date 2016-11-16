@@ -30,7 +30,7 @@ defmodule Publit.Product do
   Builds and empte product
   """
   def new() do
-    Ecto.Changeset.change(%Product{variations: [%ProductVariation{}]})
+    Ecto.Changeset.change(%Product{variations: [%ProductVariation{}, %ProductVariation{}]})
   end
 
   @doc """
