@@ -15,7 +15,7 @@ defmodule Publit.ProductVariationTest do
       pvc = ProductVariation.changeset(%ProductVariation{}, %{"price"=> "-1", "name" => "", "description" => "Medium size 15 x 15"})
 
       refute pvc.valid?
-      assert pvc.errors[:name]
+      refute pvc.errors[:name]
       assert pvc.errors[:price]
     end
   end

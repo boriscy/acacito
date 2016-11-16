@@ -19,7 +19,7 @@ defmodule Publit.ProductVariation do
 
   def changeset(pv, params) do
     cast(pv, params, [:name, :price, :description, :id])
-    |> validate_required([:name, :price])
+    |> validate_required([:price])
     |> validate_number(:price, greater_than_or_equal_to: 0)
   end
 

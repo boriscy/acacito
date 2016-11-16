@@ -12,8 +12,9 @@
         class="form-control" v-bind:placeholder="getPlaceholder(index)"/>
         <span class="help-block">{{readError(prodVar, 'name')}}</span>
       </div>
-      <div v-bind:class="hasError(prodVar, 'name')" class="price col">
-        <input type="number" v-bind:value="prodVar.price" v-bind:name="productName('price', index)" class="form-control"/>
+      <div v-bind:class="hasError(prodVar, 'price')" class="price col">
+        <input type="number" v-model="prodVar.price" v-bind:name="productName('price', index)"
+        class="form-control" step="0.01" @blur="roundPrice(prodVar)"/>
         <span class="help-block">{{readError(prodVar, 'price')}}</span>
       </div>
       <div class="col remove">
@@ -48,9 +49,13 @@ export default {
       this.variations.splice(index, 1)
     },
     getPlaceholder: function(index) {
-      let ph = [gettext("Small"), gettext("Medium")][index]
+      let ph = [gettext("Small"), gettext("Medium"), gettext("Big")][index]
 
       return ph ? ph : ""
+    },
+    roundPrice: function(prod) {
+      console.log(prod.price)
+      prod.price = this.toFixed(+prod.price, 2)
     }
   },
   mounted: function() {

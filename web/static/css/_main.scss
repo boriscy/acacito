@@ -1,9 +1,8 @@
-/* Includes Bootstrap as well as some default style for the starter
- * application. This can be safely deleted to start fresh.
- */
+@import "colors";
 
 /* Space out content a bit */
-body, form, ul, table {
+body {
+  background: $white;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -19,14 +18,6 @@ form.link, form.button {
 /* Custom page header */
 .header {
   border-bottom: 1px solid #e5e5e5;
-}
-.logo {
-  width: 519px;
-  height: 71px;
-  display: inline-block;
-  margin-bottom: 1em;
-  background-image: url("/images/phoenix.png");
-  background-size: 519px 71px;
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */

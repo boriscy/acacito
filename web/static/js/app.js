@@ -21,6 +21,7 @@ window.translations = {
   "Remove": "Eliminar",
   "Small": "Pequeña",
   "Medium": "Mediana",
+  "Big": "Grande",
   "Variations": "Variaciones"
 }
 window.gettext = function(tra) {
