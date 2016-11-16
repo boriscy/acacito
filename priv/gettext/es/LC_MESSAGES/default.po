@@ -1,0 +1,82 @@
+## `msgid`s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove `msgid`s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use `mix gettext.extract --merge` or `mix gettext.merge`
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es\n"
+
+#: web/templates/registration/index.html.eex:31
+msgid "Address"
+msgstr "Direccion"
+
+#: web/templates/product/new.html.eex:1 web/templates/product/new.html.eex:6
+msgid "Create Product"
+msgstr "Crear Producto"
+
+#: web/templates/product/index.html.eex:19
+msgid "Edit"
+msgstr ""
+
+#: web/templates/registration/index.html.eex:16
+#: web/templates/session/index.html.eex:7
+msgid "Email"
+msgstr "Email"
+
+#: web/templates/product/form.html.eex:22 web/templates/product/form.html.eex:29
+msgid "Image"
+msgstr "Imagen"
+
+#: web/templates/session/index.html.eex:2
+#: web/templates/session/index.html.eex:17
+msgid "Login"
+msgstr "Ingresar"
+
+#: web/templates/product/form.html.eex:4
+msgid "Name"
+msgstr "Nombre"
+
+#: web/templates/dashboard/index.html.eex:1
+msgid "New product"
+msgstr "Nuevo Producto"
+
+#: web/templates/registration/index.html.eex:21
+#: web/templates/session/index.html.eex:12
+msgid "Password"
+msgstr "Contrasenia"
+
+#: web/templates/product/form.html.eex:10
+msgid "Price"
+msgstr "Precio"
+
+#: web/templates/product/index.html.eex:1
+msgid "Products"
+msgstr "Productos"
+
+#: web/templates/registration/index.html.eex:36
+msgid "Register shop"
+msgstr "Registrar Venta"
+
+#: web/templates/registration/index.html.eex:9
+msgid "Register your shop"
+msgstr "Registre su venta"
+
+#: web/templates/registration/index.html.eex:26
+msgid "Shop name"
+msgstr "Nombre de la venta"
+
+#: web/templates/product/form.html.eex:16
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: web/templates/product/edit.html.eex:1 web/templates/product/edit.html.eex:6
+msgid "Update Product"
+msgstr "Actualizar producto"
+
+#: web/templates/registration/index.html.eex:4
+msgid "You have entered invalid data please fix the errors"
+msgstr "Ingreso datos invalidos por favor corrija los errores"

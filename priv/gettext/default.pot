@@ -1,0 +1,87 @@
+## This file is a PO Template file.
+##
+## `msgid`s here are often extracted from source code.
+## Add new translations manually only if they're dynamic
+## translations that can't be statically extracted.
+##
+## Run `mix gettext.extract` to bring this file up to
+## date. Leave `msgstr`s empty as changing them here as no
+## effect: edit them in PO (`.po`) files instead.
+msgid ""
+msgstr ""
+"Language: INSERT LANGUAGE HERE\n"
+
+#: web/templates/registration/index.html.eex:31
+msgid "Address"
+msgstr ""
+
+#: web/templates/product/new.html.eex:1 web/templates/product/new.html.eex:6
+msgid "Create Product"
+msgstr ""
+
+#: web/templates/product/index.html.eex:19
+msgid "Edit"
+msgstr ""
+
+#: web/templates/registration/index.html.eex:16
+#: web/templates/session/index.html.eex:7
+msgid "Email"
+msgstr ""
+
+#: web/templates/product/form.html.eex:22
+msgid "Image"
+msgstr ""
+
+#: web/templates/session/index.html.eex:2
+#: web/templates/session/index.html.eex:17
+msgid "Login"
+msgstr ""
+
+#: web/templates/product/form.html.eex:4
+msgid "Name"
+msgstr ""
+
+#: web/templates/dashboard/index.html.eex:1
+msgid "New product"
+msgstr ""
+
+#: web/templates/registration/index.html.eex:21
+#: web/templates/session/index.html.eex:12
+msgid "Password"
+msgstr ""
+
+#: web/templates/product/form.html.eex:10
+msgid "Price"
+msgstr ""
+
+#: web/templates/product/index.html.eex:1
+msgid "Products"
+msgstr ""
+
+#: web/templates/registration/index.html.eex:36
+msgid "Register shop"
+msgstr ""
+
+#: web/templates/registration/index.html.eex:9
+msgid "Register your shop"
+msgstr ""
+
+#: web/templates/registration/index.html.eex:26
+msgid "Shop name"
+msgstr ""
+
+#: web/templates/product/form.html.eex:16
+msgid "Tags"
+msgstr ""
+
+#: web/templates/product/edit.html.eex:1 web/templates/product/edit.html.eex:6
+msgid "Update Product"
+msgstr ""
+
+#: web/templates/registration/index.html.eex:4
+msgid "You have entered invalid data please fix the errors"
+msgstr ""
+
+#: web/templates/product/form.html.eex:29
+msgid "Description"
+msgstr ""

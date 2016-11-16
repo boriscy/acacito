@@ -24,7 +24,6 @@ defmodule Publit.ProductController do
     |> Map.put("organization_id", conn.assigns.current_organization.id)
     |> Map.put("variations", get_product_variations(product_params))
 
-
     case Product.create(product_params) do
       {:ok, product} ->
         redirect(conn, to: product_path(conn, :index))

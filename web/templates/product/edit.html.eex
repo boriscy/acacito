@@ -1,0 +1,6 @@
+<h2><%= gettext("Update Product") %></h2>
+
+<%= render "form.html", conn: @conn,
+                        changeset: @changeset,
+                        action: product_path(@conn, :update, @product),
+                        button_text: gettext("Update Product") %>

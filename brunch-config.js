@@ -3,21 +3,6 @@ exports.config = {
   files: {
     javascripts: {
       joinTo: "js/app.js"
-
-      // To use a separate vendor.js bundle, specify two files path
-      // http://brunch.io/docs/config#-files-
-      // joinTo: {
-      //  "js/app.js": /^(web\/static\/js)/,
-      //  "js/vendor.js": /^(web\/static\/vendor)|(deps)/
-      // }
-      //
-      // To change the order of concatenation of files, explicitly mention here
-      // order: {
-      //   before: [
-      //     "web/static/vendor/js/jquery-2.1.1.js",
-      //     "web/static/vendor/js/bootstrap.min.js"
-      //   ]
-      // }
     },
     stylesheets: {
       joinTo: "css/app.css",
@@ -52,8 +37,16 @@ exports.config = {
   // Configure your plugins
   plugins: {
     babel: {
+      presets: ['es2015'],
       // Do not use ES6 compiler in vendor code
       ignore: [/web\/static\/vendor/]
+    },
+    sass: {
+      mode: 'ruby',
+      debug: 'comments',
+      options: {
+        sourceMapEmbed: true
+      }
     }
   },
 
@@ -64,6 +57,9 @@ exports.config = {
   },
 
   npm: {
-    enabled: true
+    enabled: true,
+    aliases: {
+      vue: 'vue/dist/vue.js'
+    }
   }
 };

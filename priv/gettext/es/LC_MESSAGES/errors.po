@@ -1,48 +1,42 @@
-## This file is a PO Template file.
+## `msgid`s in this file come from POT (.pot) files.
 ##
-## `msgid`s here are often extracted from source code.
-## Add new translations manually only if they're dynamic
-## translations that can't be statically extracted.
+## Do not add, change, or remove `msgid`s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
 ##
-## Run `mix gettext.extract` to bring this file up to
-## date. Leave `msgstr`s empty as changing them here as no
-## effect: edit them in PO (`.po`) files instead.
-## From Ecto.Changeset.cast/4
+## Use `mix gettext.extract --merge` or `mix gettext.merge`
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: es\n"
+
 msgid "can't be blank"
-msgstr ""
+msgstr "No debe estar vacio"
 
-## From Ecto.Changeset.unique_constraint/3
 msgid "has already been taken"
-msgstr ""
+msgstr "Ha sido tomado"
 
-## From Ecto.Changeset.put_change/3
 msgid "is invalid"
-msgstr ""
+msgstr "es invalido"
 
-## From Ecto.Changeset.validate_format/3
 msgid "has invalid format"
-msgstr ""
+msgstr "tiene formato invalido"
 
-## From Ecto.Changeset.validate_subset/3
 msgid "has an invalid entry"
-msgstr ""
+msgstr "es un valor invalido"
 
-## From Ecto.Changeset.validate_exclusion/3
 msgid "is reserved"
-msgstr ""
+msgstr "es reservado"
 
-## From Ecto.Changeset.validate_confirmation/3
 msgid "does not match confirmation"
-msgstr ""
+msgstr "no es igual a la confirmacion"
 
-## From Ecto.Changeset.no_assoc_constraint/3
 msgid "is still associated to this entry"
-msgstr ""
+msgstr "esta asociado con la entrada"
 
 msgid "are still associated to this entry"
-msgstr ""
+msgstr "estan asociados con esta entrada"
 
-## From Ecto.Changeset.validate_length/3
 msgid "should be %{count} character(s)"
 msgid_plural "should be %{count} character(s)"
 msgstr[0] ""
@@ -73,18 +67,17 @@ msgid_plural "should have at most %{count} item(s)"
 msgstr[0] ""
 msgstr[1] ""
 
-## From Ecto.Changeset.validate_number/3
 msgid "must be less than %{number}"
-msgstr ""
+msgstr "debe ser menor que %{number}"
 
 msgid "must be greater than %{number}"
-msgstr ""
+msgstr "debe ser mayor que %{number}"
 
 msgid "must be less than or equal to %{number}"
-msgstr ""
+msgstr "debe ser menor o igual que %{number}"
 
 msgid "must be greater than or equal to %{number}"
-msgstr ""
+msgstr "debe ser mayor o igual que %{number}"
 
 msgid "must be equal to %{number}"
-msgstr ""
+msgstr "debe ser igual a %{number}"

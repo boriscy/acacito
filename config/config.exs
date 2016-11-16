@@ -16,6 +16,9 @@ config :publit, Publit.Endpoint,
   render_errors: [view: Publit.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Publit.PubSub,
            adapter: Phoenix.PubSub.PG2]
+config :publit, Publit.Gettext,
+
+  default_locale: "es"
 
 # Configures Elixir's Logger
 config :logger, :console,

@@ -3,6 +3,7 @@ defmodule Publit.ProductImage do
   use Arc.Ecto.Definition
 
   @versions [:big, :thumb]
+  @extension_whitelist ~w(.jpg .jpeg)
 
   def transform(:big, _), do: {:convert, "-strip -thumbnail 500x500"}
   def transform(:thumb, _), do: {:convert, "-strip -thumbnail 100x100"}

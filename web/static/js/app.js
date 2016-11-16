@@ -13,6 +13,33 @@
 // to also remove its path from "config.paths.watched".
 import "phoenix_html"
 
+// Set all window defaults and global methods
+window.translations = {
+  "Name": "Nombre"
+}
+window.gettext = function(tra) {
+  return translations[tra] || tra
+}
+
+import moment from "moment"
+
+import Vue from 'vue'
+import productForm from './product/ProductForm.Comp.vue'
+
+
+switch(window.vueLoad) {
+  case 'productForm':
+    new Vue({
+      el: '.product-variations',
+      mounted: function() {
+      },
+      components: {
+        'product-form': productForm
+      }
+    })
+  break;
+}
+
 // Import local files
 //
 // Local files can be imported directly using relative
