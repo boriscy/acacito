@@ -1,21 +1,37 @@
-<h2><%= gettext("Products") %></h2>
-
-<%= link "New", to: product_path(@conn, :new)%>
-
-<%= for product <- @products do %>
-  <div class="row">
-    <div class"flex">
-      <img src="<%= img_url(:thumb, product) %>" />
-      <h3>
-        <%= link product.name, to: product_path(@conn, :show, product) %>
-      </h3>
-    </div>
-    <div>
-      <%= product.price %>
-      <p>
-        <%= product.description %>
-      </p>
-    </div>
-    <%= link gettext("Edit"), to: product_path(@conn, :edit, product) %>
+<div class="flex title">
+  <h2><%= gettext("Products") %></h2>
+  <div class="actions">
+    <%= link gettext("New Product"), to: product_path(@conn, :new), class: "btn" %>
   </div>
-<% end %>
+</div>
+
+<hr/>
+
+<div>
+  <%= for product <- @products do %>
+    <div class="product">
+      <img src="<%= img_url(:big, product) %>" class="img" />
+      <div class="header flex">
+        <h3 class="title">
+          <%= link product.name, to: product_path(@conn, :show, product) %>
+        </h3>
+        <div class="actions">
+          <%= link gettext("Edit"), to: product_path(@conn, :edit, product), class: "btn btn-sm btn-primary" %>
+        </div>
+      </div>
+
+      <div>
+        <%= for pv <- product.variations do %>
+          <div class="price">
+            <%= pv.name %>
+            <strong><%= pv.price %></strong>
+            bs.
+          </div>
+        <% end %>
+        <p class="description">
+          <%= product.description %>
+        </p>
+      </div>
+    </div>
+  <% end %>
+</div>

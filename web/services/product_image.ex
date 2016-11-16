@@ -15,7 +15,7 @@ defmodule Publit.ProductImage do
   def filename(:big, {file, _}), do: "big-#{Path.basename(file.file_name)}"
   def filename(:thumb, {file, _}), do: "thumb-#{Path.basename(file.file_name)}"
 
-  def img_url(:big, product), do: "#{public_dir()}/#{filename(:big, {product.image, nil})}"
-  def img_url(:thumb, product), do: "#{public_dir()}/#{filename(:thumb, {product.image, nil})}"
+  def img_url(:big, product), do: "/#{public_dir()}/#{filename(:big, {product.image, nil})}"
+  def img_url(:thumb, product), do: "/#{public_dir()}/#{filename(:thumb, {product.image, nil})}"
 
 end

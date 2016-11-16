@@ -6,9 +6,10 @@
       <div class="name header">{{gettext("Name")}}</div>
       <div class="price header">{{gettext("Price")}}</div>
     </div>
+
     <div class="flex" v-for="(prodVar, index) in variations">
       <div v-bind:class="hasError(prodVar, 'name')" class="name col">
-        <input type="text" v-bind:value="prodVar.name" v-bind:name="productName('name', index)"
+        <input type="text" v-model="prodVar.name"  v-bind:name="productName('name', index)"
         class="form-control" v-bind:placeholder="getPlaceholder(index)"/>
         <span class="help-block">{{readError(prodVar, 'name')}}</span>
       </div>
@@ -54,7 +55,6 @@ export default {
       return ph ? ph : ""
     },
     roundPrice: function(prod) {
-      console.log(prod.price)
       prod.price = this.toFixed(+prod.price, 2)
     }
   },

@@ -20,14 +20,14 @@ msgstr "Crear Producto"
 
 #: web/templates/product/index.html.eex:19
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: web/templates/registration/index.html.eex:16
 #: web/templates/session/index.html.eex:7
 msgid "Email"
 msgstr "Email"
 
-#: web/templates/product/form.html.eex:22 web/templates/product/form.html.eex:29
+#: web/templates/product/form.html.eex:21
 msgid "Image"
 msgstr "Imagen"
 
@@ -49,11 +49,7 @@ msgstr "Nuevo Producto"
 msgid "Password"
 msgstr "Contrasenia"
 
-#: web/templates/product/form.html.eex:10
-msgid "Price"
-msgstr "Precio"
-
-#: web/templates/product/index.html.eex:1
+#: web/templates/product/index.html.eex:2
 msgid "Products"
 msgstr "Productos"
 
@@ -69,7 +65,7 @@ msgstr "Registre su venta"
 msgid "Shop name"
 msgstr "Nombre de la venta"
 
-#: web/templates/product/form.html.eex:16
+#: web/templates/product/form.html.eex:15
 msgid "Tags"
 msgstr "Etiquetas"
 
@@ -80,3 +76,28 @@ msgstr "Actualizar producto"
 #: web/templates/registration/index.html.eex:4
 msgid "You have entered invalid data please fix the errors"
 msgstr "Ingreso datos invalidos por favor corrija los errores"
+
+#: web/templates/product/form.html.eex:28
+msgid "Description"
+msgstr "Descripcion"
+
+#: web/templates/product/index.html.eex:4
+msgid "New Product"
+msgstr "Nuevo Producto"
+
+#: web/templates/product/form.html.eex:5
+msgid "Pizza with ham"
+msgstr "Pizza con jamon"
+
+#: web/controllers/product_controller.ex:30
+msgid "Product created."
+msgstr "Producto creado."
+
+#: web/controllers/product_controller.ex:55
+msgid "Product updated."
+msgstr "Producto actualizado."
+
+#: web/controllers/product_controller.ex:34
+#: web/controllers/product_controller.ex:59
+msgid "There are errors in the product."
+msgstr ""

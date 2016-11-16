@@ -1,5 +1,6 @@
 @import "colors";
 
+// Product form
 .product-variations {
   margin-bottom: 10px;
   .title {
@@ -24,5 +25,51 @@
   .header {
     font-size: 1.1em;
     margin-bottom: 4px;
+  }
+}
+
+// Product index
+.product {
+  width: 50%;
+  position: relative;
+  img.img {
+    width: 100%;
+    height: 100%;
+  }
+  .header {
+    position: absolute;
+    top: 0px;
+    background: rgba(256, 256, 256, 0.5);
+    margin: 0px;
+    width: 100%;
+    padding: 0.2em;
+    .title{
+      width: 70%;
+      font-size: 1.3em;
+      margin: 0.3em;
+    }
+    .actions {
+      text-align: right;
+      width: 30%;
+      padding: 0.4em 0.1em;
+    }
+  }
+  .price {
+    border-radius: 4px;
+    color: $white;
+    background: $green;
+    padding: 0.5em;
+    text-align: center;
+    border: 1px solid $gray;
+    margin: 0.3em 0.1em;
+    font-size: 1.3em;
+    strong {
+      font-size: 120%;
+    }
+  }
+  .description{
+    border-bottom: 1px solid $grayLighter;
+    margin-bottom: 2em;
+    padding: 0.2em 0em;
   }
 }
