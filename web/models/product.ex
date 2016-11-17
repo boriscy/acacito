@@ -47,7 +47,7 @@ defmodule Publit.Product do
 
   def update(product, params) do
     product
-    |> cast(params, [:name, :description])
+    |> cast(params, [:name, :description, :publish])
     |> cast_attachments(params, [:image])
     |> validate_required([:name])
     |> ProductVariation.add(params["variations"])

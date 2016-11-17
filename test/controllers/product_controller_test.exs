@@ -95,6 +95,17 @@ defmodule Publit.ProductControllerTest do
       assert get_flash(conn, :error)
       assert view_template(conn) == "edit.html"
     end
+
+    test "User" do
+      conn = build_conn |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
+      p_id = Ecto.UUID.generate()
+
+      conn = put(conn, "/products/#{p_id}", %{"product" => %{"name" => "New name",
+        "variations" => %{"0" => %{"name" => "New variation", "price" => "111.5"} } } } )
+
+     assert redirected_to(conn) == "/products"
+     assert get_flash(conn, :error)
+    end
   end
 
   describe "DELETE /products/:id" do

@@ -26,16 +26,19 @@ defmodule Publit.Support.Session do
     |> fetch_session
   end
 
-  def create_user_org(params \\ %{user: %{}, org: %{}}) do
-    org = insert(:organization, params[:org])
-    user = insert(:user, organizations: [
-      %Publit.UserOrganization{role: "admin", organization_id: org.id, name: org.name, active: true}
+  def create_user_org(params \\ %{}) do
+    org = insert(:organization, params[:org] || %{})
+    role = params[:role] || "admin"
+    email = params[:email] || "amaru@mail.com"
+
+    user = insert(:user, email: email, organizations: [
+      %Publit.UserOrganization{role: role, organization_id: org.id, name: org.name, active: true}
     ])
 
     {user, org}
   end
 
-  def set_user_org_conn(conn, params \\ %{user: %{}, org: %{}}) do
+  def set_user_org_conn(conn, params \\ %{}) do
     {user, org} = create_user_org(params)
 
     conn
