@@ -1,1 +1,1 @@
-alias Publit.{User, UserAuth, Product, Organization, Repo}
+alias Publit.{User, UserAuth, Product,ProductVariation, Organization, Repo}

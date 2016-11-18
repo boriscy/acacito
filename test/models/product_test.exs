@@ -11,8 +11,8 @@ defmodule Publit.ProductTest do
 
   @variations [
     %{"price"=> "20", "name" => "Small", "description" => "Small size 10 x 10"},
-    %{"price"=> "20", "name" => "Medium", "description" => "Medium size 15 x 15"},
-    %{"price"=> "20", "name" => "Big", "description" => "Big size 20 x 20"}
+    %{"price"=> "30", "name" => "Medium", "description" => "Medium size 15 x 15"},
+    %{"price"=> "40", "name" => "Big", "description" => "Big size 20 x 20"}
   ]
 
   defp valid_attrs do
@@ -34,7 +34,6 @@ defmodule Publit.ProductTest do
 
       assert cs.errors[:name]
       assert cs.errors[:organization_id]
-      assert Enum.count(cs.changes.variations) == 1
     end
 
     test "Invalid varition" do
@@ -56,12 +55,13 @@ defmodule Publit.ProductTest do
     test "OK" do
       assert {:ok, product} = Product.create(valid_attrs())
 
-      [_p1, p2, p3] = product.variations
+      [pv1, pv2, pv3] = product.variations
       attrs = %{
         "name" => "A new name", "organization_id" => Ecto.UUID.generate(),
         "variations" =>
-        [%{"price"=> "22.5", "name" => "Medium Esp", "description" => "Medium size 15 x 15", "id" => p2.id},
-        %{"price"=> "20", "name" => "Big", "description" => "Big size 20 x 20", "id" => p3.id}]
+        [%{"price"=> "22", "name" => "Small", "description" => "Small size 10 x 10", "id" => pv1.id},
+         %{"price"=> "30.5", "name" => "Medium Esp", "description" => "Medium size 15 x 15", "id" => pv2.id},
+         %{"price"=> "40", "name" => "Big", "description" => "Big size 20 x 20", "id" => pv3.id}]
       }
 
       assert {:ok, p2} = Product.update(product, attrs)
@@ -71,13 +71,15 @@ defmodule Publit.ProductTest do
 
       vars = p2.variations
 
-      assert Enum.count(vars) == 2
+      assert Enum.count(vars) == 3
 
-      pv1 = Enum.at(vars, 0)
-      assert pv1.name == "Medium Esp"
-      assert pv1.price == Decimal.new("22.5")
+      pvar1 = Enum.at(vars, 0)
+      assert pvar1.id == pv1.id
+      assert pvar1.name == "Small"
+      assert pvar1.price == Decimal.new("22")
       pv2 = Enum.at(vars, 1)
-      assert pv2.name == "Big"
+      assert pv2.name == "Medium Esp"
+      assert pv2.price == Decimal.new("30.5")
     end
   end
 

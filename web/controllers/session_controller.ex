@@ -1,6 +1,7 @@
 defmodule Publit.SessionController do
   use Publit.Web, :controller
   plug :scrub_params, "user_auth" when action in [:create]
+  plug :put_layout, "basic.html"
 
   alias Publit.{UserAuth, Endpoint}
 

@@ -18,6 +18,16 @@ defmodule Publit.ProductControllerTest do
     end
   end
 
+  describe "GET /products/:id" do
+    test "OK", %{conn: conn} do
+      prod = insert(:product, organization_id: conn.assigns.current_organization.id)
+      conn = get(conn, "/products/#{prod.id}")
+
+      assert conn.status == 200
+      assert view_template(conn) == "show.html"
+    end
+  end
+
   describe "GET /products/new" do
     test "OK", %{conn: conn} do
       conn = get(conn, "/products/new")
@@ -28,8 +38,10 @@ defmodule Publit.ProductControllerTest do
   end
 
   @valid_attrs %{
-    "name" => "Pizza", "price" => "40.5",
-    "variations" => [%{"price"=> "-20", "name" => "Small", "description" => "Small size 10 x 10"}]
+    "name" => "Pizza",
+    "variations" => %{"0" =>
+      %{"price"=> "20", "name" => "Small", "description" => "Small size 10 x 10", "id" => nil}
+    }
   }
 
   describe "POST /products" do
@@ -37,8 +49,10 @@ defmodule Publit.ProductControllerTest do
       assert Enum.count(Repo.all(Product)) == 0
       conn = post(conn, "/products", %{"product" => @valid_attrs})
 
-      assert redirected_to(conn) == "/products"
-      assert Enum.count(Repo.all(Product)) == 1
+      prods = Repo.all(Product)
+      assert Enum.count(prods) == 1
+      prod = List.first(prods)
+      assert redirected_to(conn) == "/products/#{prod.id}"
       assert get_flash(conn, :success)
     end
 
@@ -67,15 +81,26 @@ defmodule Publit.ProductControllerTest do
 
       assert view_template(conn) == "edit.html"
     end
+
+    test "Admin user" do
+      conn = build_conn |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
+
+      conn = post(conn, "/products", %{"product" => @valid_attrs})
+
+     assert redirected_to(conn) == "/products"
+     assert get_flash(conn, :error)
+    end
   end
 
   describe "PUT /products/:id" do
     test "OK", %{conn: conn} do
       prod = insert(:product, organization_id: conn.assigns.current_organization.id)
+      [pvar1 | _] = prod.variations
       conn = put(conn, "/products/#{prod.id}", %{"product" => %{"name" => "New name",
-        "variations" => %{"0" => %{"name" => "New variation", "price" => "111.5"} } } } )
+        "variations" => %{"0" =>
+          %{"name" => "New variation", "price" => "111.5", "id" => pvar1.id} } } } )
 
-      assert redirected_to(conn) == "/products"
+      assert redirected_to(conn) == "/products/#{prod.id}"
       assert get_flash(conn, :success)
 
       prod = Repo.get(Product, prod.id)
@@ -83,6 +108,7 @@ defmodule Publit.ProductControllerTest do
       assert prod.name == "New name"
       [pv1] = prod.variations
 
+      assert pv1.id == pvar1.id
       assert pv1.name == "New variation"
       assert pv1.price == Decimal.new("111.5")
     end
@@ -96,7 +122,7 @@ defmodule Publit.ProductControllerTest do
       assert view_template(conn) == "edit.html"
     end
 
-    test "User" do
+    test "Admin user" do
       conn = build_conn |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
       p_id = Ecto.UUID.generate()
 
@@ -130,6 +156,16 @@ defmodule Publit.ProductControllerTest do
       assert get_flash(conn, :error)
 
       assert Repo.get(Product, prod.id)
+    end
+
+    test "Admin user" do
+      conn = build_conn |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
+      p_id = Ecto.UUID.generate()
+
+      conn = delete(conn, "/products/#{p_id}")
+
+     assert redirected_to(conn) == "/products"
+     assert get_flash(conn, :error)
     end
   end
 

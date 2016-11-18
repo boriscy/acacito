@@ -8,6 +8,8 @@
     </div>
 
     <div class="flex" v-for="(prodVar, index) in variations">
+      <input type="hidden" v-bind:value="prodVar.id" v-bind:name="productName('id', index)"/>
+
       <div v-bind:class="hasError(prodVar, 'name')" class="name col">
         <input type="text" v-model="prodVar.name"  v-bind:name="productName('name', index)"
         class="form-control" v-bind:placeholder="getPlaceholder(index)"/>
@@ -15,7 +17,7 @@
       </div>
       <div v-bind:class="hasError(prodVar, 'price')" class="price col">
         <input type="number" v-model="prodVar.price" v-bind:name="productName('price', index)"
-        class="form-control" step="0.01" @blur="roundPrice(prodVar)"/>
+        class="form-control" step="0.01" @blur="roundPrice(prodVar)" placeholder="0.00"/>
         <span class="help-block">{{readError(prodVar, 'price')}}</span>
       </div>
       <div class="col remove">

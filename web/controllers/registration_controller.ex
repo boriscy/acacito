@@ -3,7 +3,7 @@ defmodule Publit.RegistrationController do
   alias Publit.{RegistrationService, UserAuth}
 
   plug :scrub_params, "registration_service" when action in [:create]
-  # plug put_layout, "chromeless.html" # Later add custom template
+  plug :put_layout, "basic.html"
 
   # GET /registration
   def index(conn, _params) do

@@ -32,15 +32,15 @@ defmodule Publit.Mixfile do
   defp deps do
     [{:phoenix, "~> 1.2.1"},
      {:phoenix_pubsub, "~> 1.0"},
-     {:phoenix_ecto, "~> 3.0"},
-     {:postgrex, ">= 0.0.0"},
+     {:phoenix_ecto, "~> 3.1.0-rc.0"},
+     {:ecto, "2.1.0-rc.4", override: true},
+     {:postgrex, "~> 1.0.0-rc.1", override: true},
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:comeonin, "~> 2.6"},
      {:geo, "~> 1.2"},
-     #{:arc, "0.6.0-rc3"},
      {:arc_ecto, "0.5.0-rc1"},
      {:ex_machina, "~> 1.0", only: [:dev, :test]}]
   end

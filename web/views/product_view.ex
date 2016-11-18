@@ -9,7 +9,6 @@ defmodule Publit.ProductView do
     data = if cs.changes == %{} do
       variations_data(:data, cs.data.variations)
     else
-      cs.changes.variations
       variations_data(:changes, cs.changes.variations)
     end
 
@@ -17,12 +16,14 @@ defmodule Publit.ProductView do
   end
 
   defp variations_data(:data, variations) do
-    Enum.map(variations, fn(p) -> %{name: p.name, price: p.price} end)
+    Enum.map(variations, fn(p) -> %{id: p.id, name: p.name, price: p.price} end)
   end
 
   defp variations_data(:changes, variations) do
+      #%{name: p.changes[:name], price: p.changes[:price], errors: get_errors(p)}
     Enum.map(variations, fn(p) ->
-      %{name: p.changes[:name], price: p.changes[:price], errors: get_errors(p)}
+      Map.merge(p.data, p.changes)
+      |> Map.put(:errors, get_errors(p))
     end)
   end
 

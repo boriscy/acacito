@@ -13,14 +13,6 @@
 
   <body>
     <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <span class="">Publit</span>
-          <ul class="nav nav-pills pull-right">
-            <li><a href="/products">Productos</a></li>
-          </ul>
-        </nav>
-      </header>
 
       <p class="alert alert-success" role="alert"><%= get_flash(@conn, :success) %></p>
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>

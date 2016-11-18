@@ -41,7 +41,7 @@ defmodule Publit.Product do
     |> cast(params, [:name, :description, :price, :organization_id])
     |> cast_attachments(params, [:image])
     |> validate_required([:name, :organization_id])
-    |> ProductVariation.add(params["variations"])
+    |> cast_embed(:variations)
     |> Repo.insert()
   end
 
@@ -49,8 +49,8 @@ defmodule Publit.Product do
     product
     |> cast(params, [:name, :description, :publish])
     |> cast_attachments(params, [:image])
+    |> cast_embed(:variations)
     |> validate_required([:name])
-    |> ProductVariation.add(params["variations"])
     |> Repo.update()
   end
 

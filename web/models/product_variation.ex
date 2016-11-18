@@ -5,7 +5,7 @@ defmodule Publit.ProductVariation do
 
   embedded_schema do
     field :name, :string
-    field :price, :decimal, default: 0.0
+    field :price, :decimal, default: nil
     field :description, :string
   end
 
@@ -13,12 +13,13 @@ defmodule Publit.ProductVariation do
   Adds product variations to a product changeset
   """
   def add(product_cs, params \\ []) do
-    product_cs
+    pc = product_cs
     |> put_embed(:variations, set_variations(params))
+    pc
   end
 
   def changeset(pv, params) do
-    cast(pv, params, [:name, :price, :description, :id])
+    cast(pv, params, [:id, :name, :price, :description])
     |> validate_required([:price])
     |> validate_number(:price, greater_than_or_equal_to: 0)
   end

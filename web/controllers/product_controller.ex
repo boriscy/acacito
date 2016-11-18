@@ -3,13 +3,18 @@ defmodule Publit.ProductController do
   alias Publit.{Product, ProductImage}
   plug :scrub_params, "product" when action in [:create, :update]
   plug :verify_user when action in [:create, :edit, :update, :delete]
-  plug :set_product when action in [:edit, :update, :delete]
+  plug :set_product when action in [:show, :edit, :update, :delete]
 
   # GET /products
   def index(conn, _params) do
     products = Product.all(conn.assigns.current_organization.id)
 
     render(conn, "index.html", products: products)
+  end
+
+  # GET /products/:id
+  def show(conn, _params) do
+    render(conn, "show.html", product: conn.assigns.product)
   end
 
   # GET /products/new
@@ -23,13 +28,12 @@ defmodule Publit.ProductController do
   def create(conn, %{"product" => product_params}) do
     product_params = product_params
     |> Map.put("organization_id", conn.assigns.current_organization.id)
-    |> Map.put("variations", get_product_variations(product_params))
 
     case Product.create(product_params) do
       {:ok, product} ->
         conn
         |> put_flash(:success, gettext("Product created."))
-        |> redirect(to: product_path(conn, :index))
+        |> redirect(to: product_path(conn, :show, product))
       {:error, changeset} ->
         conn
         |> put_flash(:error, gettext("There are errors in the product."))
@@ -47,14 +51,11 @@ defmodule Publit.ProductController do
 
   # PATCH /products/:id
   def update(conn, %{"product" => product_params}) do
-    product_params = product_params
-    |> Map.put("variations", get_product_variations(product_params))
-
     case Product.update(conn.assigns.product, product_params) do
       {:ok, product} ->
         conn
         |> put_flash(:success, gettext("Product updated."))
-        |> redirect(to: product_path(conn, :index))
+        |> redirect(to: product_path(conn, :show, product))
       {:error, changeset} ->
         conn
         |> put_flash(:error, gettext("There are errors in the product."))
@@ -81,14 +82,6 @@ defmodule Publit.ProductController do
     prod = Repo.get_by(Product, id: conn.params["id"], organization_id: conn.assigns.current_organization.id)
 
     conn = assign(conn, :product, prod)
-  end
-
-  defp get_product_variations(params) do
-    if params["variations"] && is_map(params["variations"]) do
-      Enum.map(params["variations"], fn({k, pv}) -> pv end)
-    else
-      []
-    end
   end
 
   defp verify_user(conn, _) do
