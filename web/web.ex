@@ -36,6 +36,8 @@ defmodule Publit.Web do
 
       import Publit.Router.Helpers
       import Publit.Gettext
+
+      import Publit.Plug.OrganizationAuth, only: [verify_admin_user: 2]
     end
   end
 

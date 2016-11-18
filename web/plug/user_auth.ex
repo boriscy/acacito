@@ -12,6 +12,7 @@ defmodule Publit.Plug.UserAuth do
           conn
           |> assign(:current_user, user)
         :error ->
+
           conn
           |> put_flash(:error, "You need to login")
           |> redirect(to: "/login")

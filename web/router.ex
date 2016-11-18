@@ -21,10 +21,6 @@ defmodule Publit.Router do
     plug Publit.Plug.OrganizationAuth
   end
 
-  pipeline :admin_auth do
-    plug Publit.Plug.OrganizationAuth
-  end
-
   scope "/", Publit do
     pipe_through [:browser] # Use the default browser stack
 
@@ -40,6 +36,7 @@ defmodule Publit.Router do
   # UserAuth
   scope "/", Publit do
     pipe_through [:browser, :user_auth]
+    get "/organizations", OrganizationController, :index
   end
 
   # OrganizationAuth
@@ -48,10 +45,9 @@ defmodule Publit.Router do
 
     get "/dashboard", DashboardController, :index
 
-  end
-
-  scope "/", Publit do
-    pipe_through [:browser, :user_auth, :organization_auth, :admin_auth]
     resources "/products", ProductController
+
+    get "/organizations/:id", OrganizationController, :show
+    put "/organizations/current", OrganizationController, :update
   end
 end

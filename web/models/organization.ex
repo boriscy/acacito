@@ -43,7 +43,7 @@ defmodule Publit.Organization do
   """
   def update(org, params) do
     org
-    |> cast(params, [:name, :address])
+    |> cast(params, [:name, :address, :geom])
     |> validate_required([:name, :currency])
     |> Repo.update()
   end
@@ -76,6 +76,22 @@ defmodule Publit.Organization do
       {:ok, usrs} ->
         Enum.into(usrs, %{}, fn(u) -> {u["id"], u} end)
     end
+  end
+
+  def to_api(org) do
+    coords = case org.geom do
+      nil -> nil
+      p ->
+        {lat,lng} = p.coordinates
+        %{lat: lat, lng: lng}
+    end
+    %{
+      name: org.name,
+      currency: org.currency,
+      address: org.address,
+      coords: coords,
+      category: org.category
+    }
   end
 
 end

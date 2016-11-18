@@ -43,6 +43,14 @@ defmodule Publit.OrganizationTest do
       assert org.address == "The other address"
       assert org.currency == "USD"
     end
+
+    test "OK geom" do
+      org = insert(:organization, currency: "USD")
+      p = Geo.WKT.decode("POINT(30 -90)")
+      {:ok, org} = Organization.update(org, %{name: "Changes to name", geom: p})
+
+      assert org.geom
+    end
   end
 
 end

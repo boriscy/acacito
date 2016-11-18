@@ -53,7 +53,7 @@ defmodule Publit.RegistrationService do
   end
 
   def changeset(params) do
-    cs = %RegistrationService{}
+    %RegistrationService{}
     |> cast(params, [:email, :password, :name, :category, :address])
     |> validate_required([:email, :password, :name, :category, :address])
     |> validate_format(:email, @email_reg)

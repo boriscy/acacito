@@ -1,6 +1,8 @@
 defmodule Publit.Plug.OrganizationAuth do
   import Plug.Conn
   import Phoenix.Controller, only: [put_flash: 3, redirect: 2]
+  import Publit.Gettext
+  import Plug.Conn
   alias Publit.{Repo, Organization, Repo, Endpoint}
 
   def init(default), do: default
@@ -21,6 +23,27 @@ defmodule Publit.Plug.OrganizationAuth do
     else
       conn
     end
+  end
+
+  def verify_admin_user(conn, opts) do
+    path = opts[:path] || "/"
+    user_org = get_user_organization(conn)
+
+    if user_org.role != "admin" do
+      conn
+      |> put_flash(:error, gettext("You don't have permission to access this page"))
+      |> redirect(to: path)
+      |> halt()
+    else
+      conn
+    end
+  end
+
+  defp get_user_organization(conn) do
+    org_id = conn.assigns.current_organization.id
+
+    conn.assigns.current_user.organizations
+    |> Enum.find(fn(uo) -> uo.organization_id == org_id end)
   end
 
   defp get_organization(conn) do

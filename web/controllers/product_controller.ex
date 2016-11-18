@@ -2,7 +2,8 @@ defmodule Publit.ProductController do
   use Publit.Web, :controller
   alias Publit.{Product, ProductImage}
   plug :scrub_params, "product" when action in [:create, :update]
-  plug :verify_user when action in [:create, :edit, :update, :delete]
+  # function imported on web.ex and created in Publit.Plug.OrganizationAuth
+  plug :verify_admin_user, [path: "/products"] when action in [:create, :edit, :update, :delete]
   plug :set_product when action in [:show, :edit, :update, :delete]
 
   # GET /products
@@ -84,23 +85,4 @@ defmodule Publit.ProductController do
     conn = assign(conn, :product, prod)
   end
 
-  defp verify_user(conn, _) do
-    user_org = get_user_organization(conn)
-
-    if user_org.role != "admin" do
-      conn
-      |> put_flash(:error, gettext("You don't have permission to access this page"))
-      |> redirect(to: product_path(conn, :index))
-      |> halt()
-    else
-      conn
-    end
-  end
-
-  defp get_user_organization(conn) do
-    org_id = conn.assigns.current_organization.id
-
-    conn.assigns.current_user.organizations
-    |> Enum.find(fn(uo) -> uo.organization_id == org_id end)
-  end
 end
