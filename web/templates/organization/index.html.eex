@@ -1,1 +1,7 @@
 <h1><%= gettext("Organizations") %></h1>
+
+<%= for org <- @organizations do %>
+  <h3>
+    <%= link org.name, to: organization_path(@conn, :show, org) %>
+  </h3>
+<% end %>

@@ -12,6 +12,18 @@ defmodule Publit.OrganizationController do
     render(conn, "index.html", organizations: active_organizations(conn.assigns.current_user))
   end
 
+  def show(conn, %{"id" => id}) do
+    user_org = conn.assigns.current_user.organizations
+    |> Enum.find(fn(uo)-> uo.active && uo.organization_id == id end)
+
+    case user_org do
+      nil -> redirect(conn, to: "/organizations")
+      user_org ->
+        org = Repo.get(Organization, user_org.organization_id)
+        render(conn, "show.html", organization: org, user_organization: user_org)
+    end
+  end
+
   # PUT /organizations/xyz
   def update(conn, %{"organization" => %{"geom" => geom}}) do
     geom = %Geo.Point{ coordinates: {geom["lat"], geom["lng"]}, srid: nil}
