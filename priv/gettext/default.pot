@@ -90,16 +90,16 @@ msgstr ""
 msgid "Pizza with ham"
 msgstr ""
 
-#: web/controllers/product_controller.ex:30
+#: web/controllers/product_controller.ex:36
 msgid "Product created."
 msgstr ""
 
-#: web/controllers/product_controller.ex:55
+#: web/controllers/product_controller.ex:58
 msgid "Product updated."
 msgstr ""
 
-#: web/controllers/product_controller.ex:34
-#: web/controllers/product_controller.ex:59
+#: web/controllers/product_controller.ex:40
+#: web/controllers/product_controller.ex:62
 msgid "There are errors in the product."
 msgstr ""
 
@@ -111,6 +111,18 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: web/controllers/product_controller.ex:73
+#: web/controllers/product_controller.ex:76
 msgid "Product was deleted."
+msgstr ""
+
+#: web/templates/organization/index.html.eex:1
+msgid "Organizations"
+msgstr ""
+
+#: web/plug/organization_auth.ex:35
+msgid "You don't have permission to access this page"
+msgstr ""
+
+#: web/templates/organization/show.html.eex:8
+msgid "Update Position"
 msgstr ""

@@ -79,19 +79,22 @@ defmodule Publit.Organization do
   end
 
   def to_api(org) do
-    coords = case org.geom do
-      nil -> nil
-      p ->
-        {lat,lng} = p.coordinates
-        %{lat: lat, lng: lng}
-    end
     %{
       name: org.name,
       currency: org.currency,
       address: org.address,
-      coords: coords,
+      coords: coords(org),
       category: org.category
     }
+  end
+
+  def coords(org) do
+    case org.geom do
+      nil -> %{lat: nil, lng: nil}
+      p ->
+        {lat,lng} = p.coordinates
+        %{lat: lat, lng: lng}
+    end
   end
 
 end

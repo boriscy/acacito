@@ -37,7 +37,6 @@ defmodule Publit.Router do
   scope "/", Publit do
     pipe_through [:browser, :user_auth]
     get "/organizations", OrganizationController, :index
-    get "/organizations/:id", OrganizationController, :show
   end
 
   # OrganizationAuth
@@ -48,6 +47,7 @@ defmodule Publit.Router do
 
     resources "/products", ProductController
 
+    get "/organizations/:id", OrganizationController, :show
     put "/organizations/current", OrganizationController, :update
   end
 end

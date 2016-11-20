@@ -13,26 +13,29 @@ defmodule Publit.OrganizationController do
   end
 
   def show(conn, %{"id" => id}) do
-    user_org = conn.assigns.current_user.organizations
-    |> Enum.find(fn(uo)-> uo.active && uo.organization_id == id end)
+    #user_org = conn.assigns.current_user.organizations
+    #|> Enum.find(fn(uo)-> uo.active && uo.organization_id == id end)
 
-    case user_org do
-      nil -> redirect(conn, to: "/organizations")
-      user_org ->
-        org = Repo.get(Organization, user_org.organization_id)
-        render(conn, "show.html", organization: org, user_organization: user_org)
-    end
+    #case user_org do
+    #  nil -> redirect(conn, to: "/organizations")
+    #  user_org ->
+    #    org = Repo.get(Organization, user_org.organization_id)
+    render(conn, "show.html", organization: conn.assigns.current_organization,
+                              user_org: conn.assigns.current_user_org)
+    #end
   end
 
   # PUT /organizations/xyz
-  def update(conn, %{"organization" => %{"geom" => geom}}) do
-    geom = %Geo.Point{ coordinates: {geom["lat"], geom["lng"]}, srid: nil}
-    case Organization.update(conn.assigns.current_organization, %{"geom" => geom}) do
+  #def update(conn, %{"organization" => %{"geom" => geom}}) do
+  def update(conn, %{"organization" => org_params, "format" => "json"}) do
+    org_params = set_org_params(org_params)
+    case Organization.update(conn.assigns.current_organization, org_params) do
       {:ok, org} ->
         conn
         |> render("show.json", organization: Organization.to_api(org))
       {:error, org} ->
         conn
+        |> put_status(:unprocessable_entity)
         |> render("error.json", errors: [])
     end
   end
@@ -42,10 +45,10 @@ defmodule Publit.OrganizationController do
     case Organization.update(conn.assigns.current_organization, organization_params) do
       {:ok, org} ->
         conn
-        |> render("show.html")
-      {:error, org} ->
+        |> redirect(to: organization_path(conn, :show, org))
+      {:error, cs} ->
         conn
-        |> render("edit.html")
+        |> render("edit.html", changeset: cs)
     end
   end
 
@@ -57,6 +60,15 @@ defmodule Publit.OrganizationController do
     else
       _ ->
         []
+    end
+  end
+
+  defp set_org_params(params) do
+    if params["geom"] && params["geom"]["lat"] && params["geom"]["lng"] do
+      geom = params["geom"]
+      %{params | "geom" => %Geo.Point{ coordinates: {geom["lat"], geom["lng"]}, srid: nil} }
+    else
+      params
     end
   end
 end

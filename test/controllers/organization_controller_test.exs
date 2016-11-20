@@ -38,14 +38,30 @@ defmodule Publit.OrganizationControllerTest do
     test "OK html", %{conn: conn} do
       conn = put(conn, "/organizations/current", %{"organization" => %{
          "name" => "Other org name" } })
+
+      assert redirected_to(conn) == "/organizations/#{conn.assigns.current_organization.id}"
     end
 
-    test "OK", %{conn: conn} do
+    test "ERROR html", %{conn: conn} do
       conn = put(conn, "/organizations/current", %{"organization" => %{
-         "geom" => %{"lat" => "30", "lng" => "-120"} } })
+         "name" => "" } })
+
+      assert view_template(conn) == "edit.html"
+    end
+
+    test "OK json", %{conn: conn} do
+      conn = put(conn, "/organizations/current", %{"organization" => %{
+         "geom" => %{"lat" => "30", "lng" => "-120"} }, "format" => "json" })
 
       org = Poison.decode!(conn.resp_body)
       assert org["organization"]["coords"] == %{"lat" => "30", "lng"=> "-120"}
+    end
+
+    test "ERROR json", %{conn: conn} do
+      conn = put(conn, "/organizations/current", %{"organization" => %{
+         "geom" => %{"lat" => "30", "lng" => "-190"}, "name" => "" }, "format" => "json" })
+
+      assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
     end
   end
 end

@@ -89,16 +89,16 @@ msgstr "Nuevo Producto"
 msgid "Pizza with ham"
 msgstr "Pizza con jamon"
 
-#: web/controllers/product_controller.ex:30
+#: web/controllers/product_controller.ex:36
 msgid "Product created."
 msgstr "Producto creado."
 
-#: web/controllers/product_controller.ex:55
+#: web/controllers/product_controller.ex:58
 msgid "Product updated."
 msgstr "Producto actualizado."
 
-#: web/controllers/product_controller.ex:34
-#: web/controllers/product_controller.ex:59
+#: web/controllers/product_controller.ex:40
+#: web/controllers/product_controller.ex:62
 msgid "There are errors in the product."
 msgstr "Hay errores en el producto."
 
@@ -110,6 +110,18 @@ msgstr "Esta segur@ de eliminar el producto \"%{name}\"?"
 msgid "Delete"
 msgstr "Borrar"
 
-#: web/controllers/product_controller.ex:73
+#: web/controllers/product_controller.ex:76
 msgid "Product was deleted."
 msgstr "Producto eliminado."
+
+#: web/templates/organization/index.html.eex:1
+msgid "Organizations"
+msgstr ""
+
+#: web/plug/organization_auth.ex:35
+msgid "You don't have permission to access this page"
+msgstr ""
+
+#: web/templates/organization/show.html.eex:8
+msgid "Update Position"
+msgstr "Actualizar Posicion"

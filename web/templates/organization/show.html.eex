@@ -1,3 +1,60 @@
 <h2><%= @organization.name %></h2>
 
-<%= show_point @organization.geom %>
+
+<div id="coords">
+  <span><%= gettext("Latitude") %>:</span> {{ coords.lat }}
+  <span><%= gettext("Longitude") %>:</span> {{ coords.lng }}
+  <button class="btn btn-primary" @click="updateCoords()"><%= gettext("Update Position") %></button>
+</div>
+
+
+<script>
+var coords = <%= raw Poison.encode!(Publit.Organization.coords(@organization)) %>;
+var geoOptions = {
+  enableHighAccuracy: true,
+  maximumAge: Infinity,
+  timeout: Infinity
+};
+
+window.addEventListener("load", function load(event){
+  window.removeEventListener("load", load, false); //remove listener, no longer needed
+
+  new Vue({
+    el: '#coords',
+    data: function() {
+      return {coords: {lat: null, lng: null}}
+    },
+    methods: {
+      updateCoords: function() {
+        navigator.geolocation.getCurrentPosition(this.setPosition, this.error, geoOptions);
+      },
+      setPosition: function(position) {
+        var that = this;
+        var csrf = document.querySelector("meta[name=csrf]").content;
+        $.ajax({
+          url: "/organizations/current",
+          headers: {
+            "X-CSRF-TOKEN": csrf
+          },
+          data: {
+            organization: {geom: {lat: position.coords.latitude, lng: position.coords.longitude}},
+            format: "json"
+          },
+          dataType: "json",
+          type: "PUT"
+        })
+        .done(function(resp) {
+          that.coords = resp.organization.coords;
+        })
+      },
+      error: function() {}
+    },
+    mounted: function() {
+      this.coords = coords;
+    }
+  })
+
+
+},false);
+
+</script>

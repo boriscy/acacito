@@ -13,6 +13,7 @@ defmodule Publit.Plug.OrganizationAuth do
         {:ok, org} ->
           conn
           |> assign(:current_organization, org)
+          |> assign(:current_user_org, get_user_org(conn, org))
         :error ->
           conn
           |> put_flash(:error, "You need to login")
@@ -58,4 +59,10 @@ defmodule Publit.Plug.OrganizationAuth do
       _ -> :error
     end
   end
+
+  defp get_user_org(conn, org) do
+    conn.assigns.current_user.organizations
+    |> Enum.find(fn(uo) -> uo.organization_id == org.id end)
+  end
+
 end
