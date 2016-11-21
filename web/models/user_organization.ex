@@ -4,7 +4,7 @@ defmodule Publit.UserOrganization do
   """
   use Publit.Web, :model
 
-  alias Publit.{Repo, User, UserOrganization, UuidHelper}
+  alias Publit.{Repo, UserOrganization}
 
   @derive {Poison.Encoder, only: [:id, :organization_id, :active, :role, :tenant, :name]}
 
@@ -36,10 +36,10 @@ defmodule Publit.UserOrganization do
 
   defp add_org(user, org, params) do
     #Enum.map(user.organizations, fn(org) -> Ecto.Changeset.change(org) end) ++
-    user.organizations ++ [changeset(user, org, params)]
+    user.organizations ++ [changeset(org, params)]
   end
 
-  defp changeset(user, org, params) do
+  defp changeset(org, params) do
     %UserOrganization{}
     |> cast(params, [:role])
     |> put_change(:organization_id, org.id)
@@ -56,14 +56,14 @@ defmodule Publit.UserOrganization do
       nil ->
         {:error, user}
       idx ->
-        u_org = update_organization(user, Enum.at(user.organizations, idx), params)
+        u_org = update_organization(Enum.at(user.organizations, idx), params)
         Ecto.Changeset.change(user)
         |> put_embed(:organizations, List.update_at(user.organizations, idx, fn(_) -> u_org end))
         |> Repo.update()
     end
   end
 
-  defp update_organization(user, user_org, params) do
+  defp update_organization(user_org, params) do
     user_org
     |> cast(params, [:name, :role, :active])
     |> validate_required([:name, :role])

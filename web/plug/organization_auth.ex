@@ -16,7 +16,7 @@ defmodule Publit.Plug.OrganizationAuth do
           |> assign(:current_user_org, get_user_org(conn, org))
         :error ->
           conn
-          |> put_flash(:error, "You need to login")
+          |> put_flash(:error, gettext("You need to login"))
           |> clear_session()
           |> redirect(to: "/login")
           |> halt()

@@ -5,7 +5,7 @@ defmodule Publit.Organization do
   use Publit.Web, :model
   import Ecto.Query
 
-  alias Publit.{Organization, Product, Repo}
+  alias Publit.{Organization, Repo}
 
   @derive {Poison.Encoder, only: [:id, :name, :currency, :tenant, :info, :settings]}
 

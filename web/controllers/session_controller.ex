@@ -16,7 +16,7 @@ defmodule Publit.SessionController do
       {:ok, user} ->
         {conn, route} = set_organization(conn, user)
         conn
-        |> put_flash(:info, "Logged in correctly")
+        |> put_flash(:info, gettext("Logged in correctly"))
         |> put_session(:user_id, UserAuth.encrypt_user(user))
         |> redirect(to: route)
       {:error, cs} ->

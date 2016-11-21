@@ -48,10 +48,30 @@ defmodule Publit.Product do
   def update(product, params) do
     product
     |> cast(params, [:name, :description, :publish])
-    |> cast_attachments(params, [:image])
+    |> set_image(params)
     |> cast_embed(:variations)
     |> validate_required([:name])
     |> Repo.update()
+  end
+
+  def delete(product) do
+    if product.image do
+      try do
+        Publit.ProductImage.delete_all(product)
+      rescue
+        _ ->
+      end
+    end
+
+    Repo.delete(product)
+  end
+
+  defp set_image(cs, params) do
+    case params["image"] do
+      %Plug.Upload{path: _p} ->
+        cast_attachments(cs, params, [:image])
+      _ -> cs
+    end
   end
 
   @doc """

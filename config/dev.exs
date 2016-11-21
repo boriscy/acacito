@@ -21,7 +21,9 @@ config :publit, Publit.Endpoint,
 config :publit, Publit.Endpoint,
   live_reload: [
     patterns: [
-      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
+      ~r{priv/static/js/.*js$},
+      ~r{priv/static/css/.*css$},
+      ~r{priv/static/css/images/.*(png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
       ~r{web/views/.*(ex)$},
       ~r{web/templates/.*(eex)$}

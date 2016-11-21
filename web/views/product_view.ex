@@ -2,7 +2,11 @@ defmodule Publit.ProductView do
   use Publit.Web, :view
 
   def img_url(version, product) do
-    Publit.ProductImage.img_url(version, product)
+    if product.image do
+      Publit.ProductImage.img_url(version, product)
+    else
+      "/images/blank.jpg"
+    end
   end
 
   def encode_variations(cs) do

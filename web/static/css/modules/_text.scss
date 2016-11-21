@@ -1,0 +1,11 @@
+@import 'colors';
+
+@for $v from 5 to 20 {
+  .fs#{$v * 10}p {
+    font-size: #{$v * 10 + "%"}
+  }
+}
+
+.text-red {
+  color: $red;
+}

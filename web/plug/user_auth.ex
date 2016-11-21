@@ -1,6 +1,7 @@
 defmodule Publit.Plug.UserAuth do
   import Plug.Conn
   import Phoenix.Controller, only: [put_flash: 3, redirect: 2]
+  import Publit.Gettext
   alias Publit.{Repo, Endpoint, User}
 
   def init(default), do: default
@@ -14,7 +15,7 @@ defmodule Publit.Plug.UserAuth do
         :error ->
 
           conn
-          |> put_flash(:error, "You need to login")
+          |> put_flash(:error, gettext("You need to login"))
           |> redirect(to: "/login")
           |> halt()
       end

@@ -1,6 +1,6 @@
 defmodule Publit.ProductController do
   use Publit.Web, :controller
-  alias Publit.{Product, ProductImage}
+  alias Publit.{Product}
   plug :scrub_params, "product" when action in [:create, :update]
   # function imported on web.ex and created in Publit.Plug.OrganizationAuth
   plug :verify_admin_user, [path: "/products"] when action in [:create, :edit, :update, :delete]
@@ -71,7 +71,7 @@ defmodule Publit.ProductController do
       |> put_flash(:error, "Can't delete product that is published.")
       |> redirect(to: product_path(conn, :index))
     else
-      Repo.delete(conn.assigns.product)
+      Product.delete(conn.assigns.product)
       conn
       |> put_flash(:success, gettext("Product was deleted."))
       |> redirect(to: product_path(conn, :index))
@@ -82,7 +82,7 @@ defmodule Publit.ProductController do
   defp set_product(conn, _) do
     prod = Repo.get_by(Product, id: conn.params["id"], organization_id: conn.assigns.current_organization.id)
 
-    conn = assign(conn, :product, prod)
+    assign(conn, :product, prod)
   end
 
 end

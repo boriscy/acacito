@@ -137,3 +137,11 @@ msgstr ""
 #: web/templates/organization/show.html.eex:13
 msgid "Your position has been updated."
 msgstr ""
+
+#: web/plug/organization_auth.ex:19 web/plug/user_auth.ex:18
+msgid "You need to login"
+msgstr ""
+
+#: web/controllers/session_controller.ex:19
+msgid "Logged in correctly"
+msgstr ""

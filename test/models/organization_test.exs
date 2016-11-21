@@ -1,7 +1,7 @@
 defmodule Publit.OrganizationTest do
   use Publit.ModelCase
 
-  alias Publit.{Organization, User, Repo}
+  alias Publit.{Organization}
 
   @valid_attrs %{currency: "USD", name: "Home",  settings: %{theme: "dark"},
     info: %{address: "Samaipata", mobile: "73732677", age: 40, valid: true, list: [%{a: 1}, %{a: "String"}] }

@@ -1,7 +1,7 @@
 defmodule Publit.UserOrganizationTest do
   use Publit.ModelCase, async: false
 
-  alias Publit.{UserOrganization, Organization, User, Repo}
+  alias Publit.{UserOrganization}
 
   @org_attrs %{currency: "USD", name: "Home", tenant: "Publit", name: "Publit"}
 
