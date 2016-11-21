@@ -123,6 +123,18 @@ msgstr ""
 msgid "You don't have permission to access this page"
 msgstr ""
 
-#: web/templates/organization/show.html.eex:8
+#: web/templates/organization/show.html.eex:11
 msgid "Update Position"
+msgstr ""
+
+#: web/templates/organization/show.html.eex:9
+msgid "Latitude"
+msgstr ""
+
+#: web/templates/organization/show.html.eex:10
+msgid "Longitude"
+msgstr ""
+
+#: web/templates/organization/show.html.eex:13
+msgid "Your position has been updated."
 msgstr ""

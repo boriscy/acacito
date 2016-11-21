@@ -1,10 +1,17 @@
+<script src="https://maps.google.com/maps/api/js?libraries=places&key=AIzaSyDQwB6IOvELaaXQX1keoMuH-gaN3QbPRqM" type="text/javascript"></script>
 <h2><%= @organization.name %></h2>
 
+
+<div id="map" style="width:500px;height:500px">
+</div>
 
 <div id="coords">
   <span><%= gettext("Latitude") %>:</span> {{ coords.lat }}
   <span><%= gettext("Longitude") %>:</span> {{ coords.lng }}
-  <button class="btn btn-primary" @click="updateCoords()"><%= gettext("Update Position") %></button>
+  <button class="btn btn-primary" @click="setPosition()"><%= gettext("Update Position") %></button>
+  <div v-show="showSaved" class="alert alert-success">
+    <h4><%= gettext("Your position has been updated.") %></h4>
+  </div>
 </div>
 
 
@@ -16,41 +23,80 @@ var geoOptions = {
   timeout: Infinity
 };
 
+var csrf = document.querySelector("meta[name=csrf]").content;
+var ajaxSettings = {
+  url: "/organizations/current",
+  headers: {
+    "X-CSRF-TOKEN": csrf
+  },
+  dataType: "json",
+  type: "PUT"
+}
+
 window.addEventListener("load", function load(event){
   window.removeEventListener("load", load, false); //remove listener, no longer needed
 
   new Vue({
     el: '#coords',
     data: function() {
-      return {coords: {lat: null, lng: null}}
+      return {
+        coords: {lat: null, lng: null},
+        count: 1,
+        showSaved: false
+      }
     },
     methods: {
       updateCoords: function() {
         navigator.geolocation.getCurrentPosition(this.setPosition, this.error, geoOptions);
       },
-      setPosition: function(position) {
-        var that = this;
-        var csrf = document.querySelector("meta[name=csrf]").content;
-        $.ajax({
-          url: "/organizations/current",
-          headers: {
-            "X-CSRF-TOKEN": csrf
-          },
+      getPositionData: function(position) {
+        return {
           data: {
             organization: {geom: {lat: position.coords.latitude, lng: position.coords.longitude}},
             format: "json"
-          },
-          dataType: "json",
-          type: "PUT"
-        })
+          }
+        }
+      },
+      setPosition: function(position) {
+        var that = this;
+        var data = $.extend({}, ajaxSettings, {data: {organization: {geom: this.coords}, format: "json"} } )
+
+        $.ajax(data)
         .done(function(resp) {
           that.coords = resp.organization.coords;
-        })
+          that.showSaved = true,
+          setTimeout(function() {
+            that.showSaved = false
+          }, 3000)
+        });
       },
-      error: function() {}
+      //
+      success: function(position) {
+        if(this.count > 10) {
+        } else {
+          this.coords = {lat: position.coords.latitude, lng: position.coords.longitude};
+          var p = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          this.marker.setPosition(p);
+          this.marker.setMap(window.map);
+          window.map.setCenter(p);
+          this.count ++;
+        }
+        //this.setPosition()
+      },
+      error: function() {},
+      //
+      setMap: function() {
+        window.map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -18.1781863, lng: -63.87691515},
+          zoom: 16
+        });
+        this.marker = new google.maps.Marker();
+      }
     },
     mounted: function() {
       this.coords = coords;
+      this.setMap()
+      this.posWatch = navigator.geolocation.watchPosition(this.success, this.error, geoOptions)
     }
   })
 

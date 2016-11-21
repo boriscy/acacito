@@ -120,8 +120,20 @@ msgstr ""
 
 #: web/plug/organization_auth.ex:35
 msgid "You don't have permission to access this page"
-msgstr ""
+msgstr "No tiene privilegios para ver esta pagina"
 
-#: web/templates/organization/show.html.eex:8
+#: web/templates/organization/show.html.eex:11
 msgid "Update Position"
 msgstr "Actualizar Posicion"
+
+#: web/templates/organization/show.html.eex:9
+msgid "Latitude"
+msgstr "Latitud"
+
+#: web/templates/organization/show.html.eex:10
+msgid "Longitude"
+msgstr "Longitud"
+
+#: web/templates/organization/show.html.eex:13
+msgid "Your position has been updated."
+msgstr "Su posicion ha sido actualizada"
