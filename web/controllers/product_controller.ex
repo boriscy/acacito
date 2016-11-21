@@ -58,6 +58,8 @@ defmodule Publit.ProductController do
         |> put_flash(:success, gettext("Product updated."))
         |> redirect(to: product_path(conn, :show, product))
       {:error, changeset} ->
+        IO.inspect product_params
+        IO.inspect changeset
         conn
         |> put_flash(:error, gettext("There are errors in the product."))
         |> put_status(:unprocessable_entity)

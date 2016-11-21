@@ -18,7 +18,7 @@ msgstr "Direccion"
 msgid "Create Product"
 msgstr "Crear Producto"
 
-#: web/templates/product/index.html.eex:19
+#: web/templates/product/index.html.eex:20 web/templates/product/show.html.eex:7
 msgid "Edit"
 msgstr "Editar"
 
@@ -98,19 +98,20 @@ msgid "Product updated."
 msgstr "Producto actualizado."
 
 #: web/controllers/product_controller.ex:40
-#: web/controllers/product_controller.ex:62
+#: web/controllers/product_controller.ex:64
 msgid "There are errors in the product."
 msgstr "Hay errores en el producto."
 
-#: web/templates/product/index.html.eex:21
+#: web/templates/product/index.html.eex:22
+#: web/templates/product/show.html.eex:10
 msgid "Are you sure to delete the product \"%{name}\"?"
 msgstr "Esta segur@ de eliminar el producto \"%{name}\"?"
 
-#: web/templates/product/index.html.eex:20
+#: web/templates/product/index.html.eex:21 web/templates/product/show.html.eex:9
 msgid "Delete"
 msgstr "Borrar"
 
-#: web/controllers/product_controller.ex:76
+#: web/controllers/product_controller.ex:78
 msgid "Product was deleted."
 msgstr "Producto eliminado."
 
@@ -145,3 +146,19 @@ msgstr "Necesita ingresar"
 #: web/controllers/session_controller.ex:19
 msgid "Logged in correctly"
 msgstr "Ingreso correctamente"
+
+#: web/views/product_view.ex:25
+msgid "Publish"
+msgstr "Publicar"
+
+#: web/views/product_view.ex:14
+msgid "Published"
+msgstr "Pulicado"
+
+#: web/views/product_view.ex:23
+msgid "Unpublish"
+msgstr "Ocultar"
+
+#: web/views/product_view.ex:17
+msgid "Unpublished"
+msgstr "Oculto"
