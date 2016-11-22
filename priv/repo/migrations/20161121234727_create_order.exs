@@ -1,7 +1,7 @@
 defmodule Publit.Repo.Migrations.CreateOrder do
   use Ecto.Migration
 
-  def change do
+  def up do
     create table(:orders, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :user_id, references(:users, type: :uuid, null: false, on_delete: :delete_all), null: false
@@ -17,5 +17,12 @@ defmodule Publit.Repo.Migrations.CreateOrder do
     end
 
     create index(:orders, [:organization_id])
+    execute "CREATE INDEX details_on_orders ON orders USING GIN (details)"
   end
+
+  def down do
+    execute "DROP INDEX details_on_orders"
+    drop table(:orders)
+  end
+
 end

@@ -5,7 +5,7 @@ defmodule Publit.Organization do
   use Publit.Web, :model
   import Ecto.Query
 
-  alias Publit.{Organization, Repo}
+  alias Publit.{Organization, Repo, Product}
 
   @derive {Poison.Encoder, only: [:id, :name, :currency, :tenant, :info, :settings]}
 
@@ -19,7 +19,7 @@ defmodule Publit.Organization do
     field :geom, Geo.Geometry
     field :category, :string, default: "restaurant"
 
-    #has_many :products, Product
+    has_many :products, Product
 
     timestamps
   end

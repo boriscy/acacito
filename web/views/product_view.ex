@@ -13,7 +13,6 @@ defmodule Publit.ProductView do
     if product.publish do
       content_tag(:span, gettext("Published"), class: "label label-success #{opts[:fs]}")
     else
-      IO.inspect opts
       content_tag(:span, gettext("Unpublished"), class: "label label-danger #{opts[:fs]}")
     end
   end
@@ -41,7 +40,6 @@ defmodule Publit.ProductView do
   end
 
   defp variations_data(:changes, variations) do
-      #%{name: p.changes[:name], price: p.changes[:price], errors: get_errors(p)}
     Enum.map(variations, fn(p) ->
       Map.merge(p.data, p.changes)
       |> Map.put(:errors, get_errors(p))

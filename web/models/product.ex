@@ -36,15 +36,19 @@ defmodule Publit.Product do
   @doc """
   Creates a new product and checks validations
   """
+  @spec create(map) :: any
   def create(params) do
     %Product{}
-    |> cast(params, [:name, :description, :price, :organization_id])
+    |> cast(params, [:name, :description, :organization_id])
     |> cast_attachments(params, [:image])
     |> validate_required([:name, :organization_id])
     |> cast_embed(:variations)
     |> Repo.insert()
   end
 
+  @doc """
+  Updates a product attributes except organization_id
+  """
   def update(product, params) do
     product
     |> cast(params, [:name, :description, :publish])
