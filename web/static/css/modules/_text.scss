@@ -9,3 +9,10 @@
 .text-red {
   color: $red;
 }
+
+a.text-red:hover,
+a.text-red:visited,
+a.text-red:focus
+{
+  color: darken($red,10%);
+}
