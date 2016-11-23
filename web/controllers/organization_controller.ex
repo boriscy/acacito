@@ -12,28 +12,20 @@ defmodule Publit.OrganizationController do
     render(conn, "index.html", organizations: active_organizations(conn.assigns.current_user))
   end
 
-  def show(conn, %{"id" => id}) do
-    #user_org = conn.assigns.current_user.organizations
-    #|> Enum.find(fn(uo)-> uo.active && uo.organization_id == id end)
-
-    #case user_org do
-    #  nil -> redirect(conn, to: "/organizations")
-    #  user_org ->
-    #    org = Repo.get(Organization, user_org.organization_id)
+  # GET /organizations/:id
+  def show(conn, _params) do
     render(conn, "show.html", organization: conn.assigns.current_organization,
                               user_org: conn.assigns.current_user_org)
-    #end
   end
 
   # PUT /organizations/xyz
-  #def update(conn, %{"organization" => %{"geom" => geom}}) do
   def update(conn, %{"organization" => org_params, "format" => "json"}) do
     org_params = set_org_params(org_params)
     case Organization.update(conn.assigns.current_organization, org_params) do
       {:ok, org} ->
         conn
         |> render("show.json", organization: Organization.to_api(org))
-      {:error, org} ->
+      {:error, _cs} ->
         conn
         |> put_status(:unprocessable_entity)
         |> render("error.json", errors: [])

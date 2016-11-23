@@ -28,10 +28,23 @@ window.gettext = function(tra) {
   return translations[tra] || tra
 }
 
-import moment from "moment"
 
 import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+import moment from "moment"
+
+
 import productForm from './product/ProductForm.Comp.vue'
+
+
+import store from './store'
+import routes from './routes'
+
+const router = new VueRouter({
+  mode: 'history',
+  routes
+})
 
 
 switch(window.vueLoad) {
@@ -44,6 +57,12 @@ switch(window.vueLoad) {
         'product-form': productForm
       }
     })
+  break;
+  case 'operations':
+    new Vue({
+      store,
+      router
+    }).$mount('main')
   break;
 }
 

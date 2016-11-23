@@ -62,8 +62,6 @@ exports.config = {
       vue: 'vue/dist/vue.js'
     },
     globals: {
-      $: 'jquery',
-      jQuery: 'jquery',
       Vue: 'vue'
     }
   }

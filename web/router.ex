@@ -49,5 +49,7 @@ defmodule Publit.Router do
 
     get "/organizations/:id", OrganizationController, :show
     put "/organizations/current", OrganizationController, :update
+
+    get "/orders", OrderController, :index
   end
 end

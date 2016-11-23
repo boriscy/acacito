@@ -19,7 +19,8 @@
         <nav role="navigation">
           <span class="">Publit</span>
           <ul class="nav nav-pills pull-right">
-            <li><a href="/products">Productos</a></li>
+            <li><a href="/products"><%= gettext("Products") %></a></li>
+            <li><a href="/operations"><%= gettext("Operations") %></a></li>
           </ul>
         </nav>
       </header>
