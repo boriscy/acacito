@@ -12,11 +12,15 @@ defmodule Publit.Repo.Migrations.CreateOrder do
       add :messages, :jsonb, default: "[]"
       add :status, :string, null: false
       add :null_reason, :text
+      add :number, :integer
 
       timestamps()
     end
 
     create index(:orders, [:organization_id])
+    create index(:orders, [:user_id])
+    create index(:orders, [:inserted_at])
+    create index(:orders, [:updated_at])
     execute "CREATE INDEX details_on_orders ON orders USING GIN (details)"
   end
 

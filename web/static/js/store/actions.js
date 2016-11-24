@@ -2,9 +2,15 @@ import types from './mutation-types'
 import axios from 'axios'
 
 export const getOrders = ({commit}) => {
-  order.getOrders(orders => {
+  orders.getOrders(orders => {
     commit(types.FETCH_ORDERS, {orders})
   })
+}
+
+export const getOrder = ({commit}, ord_id) => {
+  orders.getOrder(order => {
+    commit(types.FETCH_ORDER, {order})
+  }, ord_id)
 }
 
 /*
@@ -12,10 +18,15 @@ export const getOrders = ({commit}) => {
  */
 const orders = {
   getOrders(cb) {
-    axios.get('/api/v1/orders')
+    axios.get('/api/orders')
     .then((res) => {
-      console.log(res)
       cb(res.data.orders)
+    })
+  },
+  getOrder(cb, id) {
+    axios.get(`/api/orders/${id}`)
+    .then((res) => {
+      cb(res.data.order)
     })
   }
 }

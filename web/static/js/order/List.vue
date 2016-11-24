@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{gettext("Orders")}}</h2>
-    HHIHIH
+    {{orders}} :: {{order}}
   </div>
 </template>
 
@@ -13,13 +13,15 @@ export default {
   name: 'OrderList',
   mixins: [translate, format],
   computed: mapGetters({
-    orders: 'orders'
+    orders: 'orders',
+    order: 'order'
   }),
   created() {
-    console.log('List created')
+    this.$store.dispatch('getOrder', 'abcdef')
+    this.$store.dispatch('getOrders')
   },
   mounted() {
-    console.log('mounted list');
+    console.log('mounted list', this);
   }
 }
 </script>

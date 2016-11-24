@@ -52,4 +52,12 @@ defmodule Publit.Router do
 
     get "/orders", OrderController, :index
   end
+
+  # Api that the organization accesses
+  scope "/api", Publit do
+    pipe_through [:api]
+
+    get "/orders", Api.OrderController, :index
+    get "/orders/:id", Api.OrderController, :show
+  end
 end

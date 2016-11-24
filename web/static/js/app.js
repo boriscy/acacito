@@ -47,7 +47,7 @@ const router = new VueRouter({
 })
 
 const path = window.location.pathname
-console.log('v', !!path.match(/orders/));
+
 
 switch(true) {
   case window.vueLoad == 'productForm':

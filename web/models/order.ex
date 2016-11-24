@@ -12,6 +12,7 @@ defmodule Publit.Order do
     field :status, :string, default: "pending"
     field :location, Geo.Geometry
     field :null_reason, :string
+    field :number, :integer
 
     embeds_many :details, OrderDetail, on_replace: :delete
     #field :messages, :list
@@ -31,7 +32,21 @@ defmodule Publit.Order do
     |> cast_embed(:details)
     |> set_and_validate_details()
     |> set_total()
+    |> set_number()
     |> Repo.insert
+  end
+
+  defp set_number(cs) do
+    dt = Ecto.DateTime.autogenerate()
+    d = Ecto.DateTime.to_date(dt)
+    q = from(o in Order, where: o.organization_id == ^cs.changes.organization_id
+     and fragment("date(?)", o.inserted_at) == ^d, select: count(o.id))
+
+    num = Repo.one(q) + 1
+
+    cs
+    |> put_change(:inserted_at, dt)
+    |> put_change(:number, num)
   end
 
   defp set_and_validate_details(cs) do

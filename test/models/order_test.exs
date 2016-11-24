@@ -34,6 +34,8 @@ defmodule Publit.OrderTest do
 
       {:ok, order} =  Order.create(params)
 
+      assert order.number == 1
+
       assert order.total == Decimal.new("71.0")
 
       assert order.details |> Enum.count() == 2
@@ -52,6 +54,27 @@ defmodule Publit.OrderTest do
       assert d2.name == p2.name
       assert d2.variation == v2.name
 
+    end
+
+    test "OK number" do
+      {user, org} = create_user_org(%{})
+      Repo.insert(%Order{user_id: user.id, organization_id: org.id})
+
+      [p1, p2] = create_products(org)
+      v1 = Enum.at(p1.variations, 1)
+      v2 = Enum.at(p2.variations, 0)
+
+      params = %{"user_id" => user.id, "organization_id" => org.id,
+      "location" => Geo.WKT.decode("POINT(30 -90)"),
+      "details" => %{
+          "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
+          "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
+        }
+      }
+
+      {:ok, order} =  Order.create(params)
+
+      assert order.number == 2
     end
   end
 end
