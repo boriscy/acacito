@@ -1,14 +1,17 @@
 <template>
   <div>
-    <h2>Orders</h2>
+    <h2>{{gettext("Orders")}}</h2>
+    HHIHIH
   </div>
 </template>
+
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import {translate, format} from '../mixins'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  mixins:[translate, format],
+  name: 'OrderList',
+  mixins: [translate, format],
   computed: mapGetters({
     orders: 'orders'
   }),
@@ -16,7 +19,7 @@ export default {
     console.log('List created')
   },
   mounted() {
-    console.log('Orders')
+    console.log('mounted list');
   }
 }
 </script>

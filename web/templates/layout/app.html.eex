@@ -20,7 +20,7 @@
           <span class="">Publit</span>
           <ul class="nav nav-pills pull-right">
             <li><a href="/products"><%= gettext("Products") %></a></li>
-            <li><a href="/operations"><%= gettext("Operations") %></a></li>
+            <li><a href="/orders"><%= gettext("Orders") %></a></li>
           </ul>
         </nav>
       </header>

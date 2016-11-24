@@ -17,9 +17,10 @@
     "moment": "^2.15.2",
     "phoenix": "file:deps/phoenix",
     "phoenix_html": "file:deps/phoenix_html",
-    "vue": "^2.1.0",
+    "vue": "2.1.0",
+    "vue-brunch": "1.2.3",
     "vue-router": "^2.0.2",
-    "vue-template-compiler": "^2.0.5",
+    "vue-template-compiler": "2.1.2",
     "vuex": "^2.0.0"
   },
   "devDependencies": {

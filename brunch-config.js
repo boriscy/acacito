@@ -60,9 +60,9 @@ exports.config = {
     enabled: true,
     aliases: {
       vue: 'vue/dist/vue.js'
-    },
+    }/*,
     globals: {
       Vue: 'vue'
-    }
+    }*/
   }
 };

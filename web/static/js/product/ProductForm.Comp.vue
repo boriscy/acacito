@@ -42,21 +42,21 @@ export default {
     }
   },
   methods: {
-    productName: function(field, idx) {
+    productName(field, idx) {
       return `product[variations][${idx}][${field}]`
     },
-    addLine: function() {
+    addLine() {
       this.variations.push({name: '', price: 0.0})
     },
-    removeLine: function(prod, index) {
+    removeLine(prod, index) {
       this.variations.splice(index, 1)
     },
-    getPlaceholder: function(index) {
+    getPlaceholder(index) {
       let ph = [gettext("Small"), gettext("Medium"), gettext("Big")][index]
 
       return ph ? ph : ""
     },
-    roundPrice: function(prod) {
+    roundPrice(prod) {
       prod.price = this.toFixed(+prod.price, 2)
     }
   },

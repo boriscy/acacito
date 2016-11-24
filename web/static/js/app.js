@@ -11,7 +11,7 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
+import 'phoenix_html'
 
 // Set all window defaults and global methods
 window.translations = {
@@ -32,11 +32,11 @@ window.gettext = function(tra) {
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import moment from "moment"
+Vue.use(VueRouter)
 
+import moment from 'moment'
 
 import productForm from './product/ProductForm.Comp.vue'
-
 
 import store from './store'
 import routes from './routes'
@@ -46,23 +46,23 @@ const router = new VueRouter({
   routes
 })
 
+const path = window.location.pathname
+console.log('v', !!path.match(/orders/));
 
-switch(window.vueLoad) {
-  case 'productForm':
+switch(true) {
+  case window.vueLoad == 'productForm':
     new Vue({
       el: '.product-variations',
-      mounted: function() {
-      },
       components: {
         'product-form': productForm
       }
     })
   break;
-  case 'operations':
+  case !!path.match(/orders/):
     new Vue({
       store,
       router
-    }).$mount('main')
+    }).$mount('#main')
   break;
 }
 

@@ -18,7 +18,7 @@ msgstr "Direccion"
 msgid "Create Product"
 msgstr "Crear Producto"
 
-#: web/templates/product/index.html.eex:20 web/templates/product/show.html.eex:7
+#: web/templates/product/index.html.eex:19 web/templates/product/show.html.eex:7
 msgid "Edit"
 msgstr "Editar"
 
@@ -49,7 +49,7 @@ msgstr "Nuevo Producto"
 msgid "Password"
 msgstr "Contrasenia"
 
-#: web/templates/product/index.html.eex:2
+#: web/templates/layout/app.html.eex:22 web/templates/product/index.html.eex:2
 msgid "Products"
 msgstr "Productos"
 
@@ -98,7 +98,7 @@ msgid "Product updated."
 msgstr "Producto actualizado."
 
 #: web/controllers/product_controller.ex:40
-#: web/controllers/product_controller.ex:64
+#: web/controllers/product_controller.ex:62
 msgid "There are errors in the product."
 msgstr "Hay errores en el producto."
 
@@ -111,13 +111,13 @@ msgstr "Esta segur@ de eliminar el producto \"%{name}\"?"
 msgid "Delete"
 msgstr "Borrar"
 
-#: web/controllers/product_controller.ex:78
+#: web/controllers/product_controller.ex:76
 msgid "Product was deleted."
 msgstr "Producto eliminado."
 
 #: web/templates/organization/index.html.eex:1
 msgid "Organizations"
-msgstr ""
+msgstr "Organizaciones"
 
 #: web/plug/organization_auth.ex:35
 msgid "You don't have permission to access this page"
@@ -147,7 +147,7 @@ msgstr "Necesita ingresar"
 msgid "Logged in correctly"
 msgstr "Ingreso correctamente"
 
-#: web/views/product_view.ex:25
+#: web/views/product_view.ex:24
 msgid "Publish"
 msgstr "Publicar"
 
@@ -155,10 +155,30 @@ msgstr "Publicar"
 msgid "Published"
 msgstr "Pulicado"
 
-#: web/views/product_view.ex:23
+#: web/views/product_view.ex:22
 msgid "Unpublish"
 msgstr "Ocultar"
 
-#: web/views/product_view.ex:17
+#: web/views/product_view.ex:16
 msgid "Unpublished"
 msgstr "Oculto"
+
+#: web/models/order.ex:48 web/models/order.ex:53
+msgid "Invalid product"
+msgstr "Producto invalido"
+
+#: web/templates/layout/order.html.eex:26
+msgid "New Orders"
+msgstr "Nueva Orden"
+
+#: web/templates/layout/app.html.eex:23
+msgid "Orders"
+msgstr "Ordenes"
+
+#: web/templates/layout/order.html.eex:27
+msgid "Processing Orders"
+msgstr "Ordenes en Proceso"
+
+#: web/templates/layout/order.html.eex:28
+msgid "Transporting Orders"
+msgstr "Ordenes en Transporte"
