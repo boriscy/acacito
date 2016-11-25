@@ -3,21 +3,21 @@ defmodule Publit.SessionController do
   plug :scrub_params, "user_auth" when action in [:create]
   plug :put_layout, "basic.html"
 
-  alias Publit.{UserAuth, Endpoint}
+  alias Publit.{UserAuthentication}
 
   # GET /login
   def index(conn, _params) do
-    render(conn, "index.html", changeset: UserAuth.changeset(), valid: true)
+    render(conn, "index.html", changeset: UserAuthentication.changeset(), valid: true)
   end
 
   # POST /login
   def create(conn, %{"user_auth" => user_auth_params}) do
-    case UserAuth.valid_user(user_auth_params) do
+    case UserAuthentication.valid_user(user_auth_params) do
       {:ok, user} ->
         {conn, route} = set_organization(conn, user)
         conn
         |> put_flash(:info, gettext("Logged in correctly"))
-        |> put_session(:user_id, UserAuth.encrypt_user(user))
+        |> put_session(:user_id, UserAuthentication.encrypt_user(user))
         |> redirect(to: route)
       {:error, cs} ->
         conn

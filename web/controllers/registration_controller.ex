@@ -1,6 +1,6 @@
 defmodule Publit.RegistrationController do
   use Publit.Web, :controller
-  alias Publit.{RegistrationService, UserAuth}
+  alias Publit.{RegistrationService, UserAuthentication}
 
   plug :scrub_params, "registration_service" when action in [:create]
   plug :put_layout, "basic.html"
@@ -17,7 +17,7 @@ defmodule Publit.RegistrationController do
     case RegistrationService.register(regis_params) do
       {:ok, %{org: org, user: user}} ->
         conn
-        |> put_session(:user_id, UserAuth.encrypt_user(user))
+        |> put_session(:user_id, UserAuthentication.encrypt_user(user))
         |> put_session(:organization_id, Phoenix.Token.sign(Publit.Endpoint, "organization_id", org.id))
         |> redirect(to: "/dashboard")
       {:error, registration} ->
