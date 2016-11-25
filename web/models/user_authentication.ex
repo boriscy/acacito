@@ -36,11 +36,11 @@ defmodule Publit.UserAuthentication do
   end
 
   @doc """
-  Recives a %User{} struct and creates a token
+  Recives a %User{} struct and creates a token wit just the id
   """
-  @spec encrypt_user(Struct.t) :: String.t
-  def encrypt_user(user) do
-    Phoenix.Token.sign(Publit.Endpoint, "user_id", user.id)
+  @spec encrypt_user_id(Struct.t) :: String.t
+  def encrypt_user_id(id) do
+    Phoenix.Token.sign(Publit.Endpoint, "user_id", id)
   end
 
   @doc """

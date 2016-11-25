@@ -17,7 +17,7 @@ defmodule Publit.RegistrationController do
     case RegistrationService.register(regis_params) do
       {:ok, %{org: org, user: user}} ->
         conn
-        |> put_session(:user_id, UserAuthentication.encrypt_user(user))
+        |> put_session(:user_id, UserAuthentication.encrypt_user_id(user.id))
         |> put_session(:organization_id, Phoenix.Token.sign(Publit.Endpoint, "organization_id", org.id))
         |> redirect(to: "/dashboard")
       {:error, registration} ->

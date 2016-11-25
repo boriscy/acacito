@@ -28,10 +28,10 @@ defmodule Publit.UserAuthenticationTest do
     assert cs.changes.email == "amaru@mail.com"
   end
 
-  test "encrypt_user" do
+  test "encrypt_user_id" do
     user = insert(:user)
 
-    token = UserAuthentication.encrypt_user(user)
+    token = UserAuthentication.encrypt_user_id(user.id)
     {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", token)
     assert user_id == user.id
   end
