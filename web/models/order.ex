@@ -13,6 +13,7 @@ defmodule Publit.Order do
     field :location, Geo.Geometry
     field :null_reason, :string
     field :number, :integer
+    field :currency, :string
 
     embeds_many :details, OrderDetail, on_replace: :delete
     #field :messages, :list
@@ -27,8 +28,8 @@ defmodule Publit.Order do
   """
   def create(params) do
     %Order{}
-    |> cast(params, [:user_id, :organization_id, :location])
-    |> validate_required([:user_id, :organization_id, :details, :location])
+    |> cast(params, [:user_id, :organization_id, :location, :currency])
+    |> validate_required([:user_id, :organization_id, :details, :location, :currency])
     |> cast_embed(:details)
     |> set_and_validate_details()
     |> set_total()

@@ -1,13 +1,17 @@
 <template>
   <div>
     <h2>{{gettext("Orders")}}</h2>
-    {{orders}} :: {{order}}
+
+    <div v-for="order in orders">
+      <Order :order="order"></Order>
+    </div>
   </div>
 </template>
 
 <script>
 import {translate, format} from '../mixins'
 import { mapGetters, mapActions } from 'vuex'
+import Order from './Order.vue'
 
 export default {
   name: 'OrderList',
@@ -16,12 +20,12 @@ export default {
     orders: 'orders',
     order: 'order'
   }),
-  created() {
-    this.$store.dispatch('getOrder', 'abcdef')
-    this.$store.dispatch('getOrders')
+  components: {
+    Order
   },
-  mounted() {
-    console.log('mounted list', this);
+  created() {
+    //this.$store.dispatch('getOrder', 'abcdef')
+    this.$store.dispatch('getOrders')
   }
 }
 </script>

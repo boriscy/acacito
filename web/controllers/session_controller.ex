@@ -1,6 +1,6 @@
 defmodule Publit.SessionController do
   use Publit.Web, :controller
-  plug :scrub_params, "user_auth" when action in [:create]
+  plug :scrub_params, "user_authentication" when action in [:create]
   plug :put_layout, "basic.html"
 
   alias Publit.{UserAuthentication}
@@ -11,7 +11,7 @@ defmodule Publit.SessionController do
   end
 
   # POST /login
-  def create(conn, %{"user_auth" => user_auth_params}) do
+  def create(conn, %{"user_authentication" => user_auth_params}) do
     case UserAuthentication.valid_user(user_auth_params) do
       {:ok, user} ->
         {conn, route} = set_organization(conn, user)

@@ -13,6 +13,7 @@ defmodule Publit.Repo.Migrations.CreateOrder do
       add :status, :string, null: false
       add :null_reason, :text
       add :number, :integer
+      add :currency, :string
 
       timestamps()
     end
