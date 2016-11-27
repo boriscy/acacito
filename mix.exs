@@ -42,7 +42,8 @@ defmodule Publit.Mixfile do
      {:comeonin, "~> 2.6"},
      {:geo, "~> 1.2"},
      {:arc_ecto, "0.5.0-rc1"},
-     {:ex_machina, "~> 1.0", only: [:dev, :test]}]
+     {:ex_machina, "~> 1.0", only: [:dev, :test]},
+     {:mock, "~> 0.2.0", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

@@ -9,18 +9,21 @@ defmodule Publit.Order do
     field :user_id, Ecto.UUID
     field :organization_id, Ecto.UUID
     field :total, :decimal
-    field :status, :string, default: "pending"
+    field :status, :string, default: "new"
     field :location, Geo.Geometry
     field :null_reason, :string
     field :number, :integer
     field :currency, :string
+    field :extra_data, :map, default: %{}
+    field :messages, {:array, :map}, default: []
+    field :log, {:array, :map}, default: []
 
     embeds_many :details, OrderDetail, on_replace: :delete
     #field :messages, :list
 
     timestamps()
   end
-  @statuses ["pending", "process", "deliver", "delivered", "null"]
+  @statuses ["new", "process", "deliver", "delivered", "null"]
 
 
   @doc """
@@ -34,7 +37,17 @@ defmodule Publit.Order do
     |> set_and_validate_details()
     |> set_total()
     |> set_number()
+    |> add_log(%{time: Ecto.DateTime.autogenerate(), message: "Creation", type: "create", user_id: params["user_id"]})
     |> Repo.insert
+  end
+
+  @doc"""
+  """
+  def move_to_process(order, user_id) do
+    Ecto.Changeset.change(order)
+    |> put_change(:status, "process")
+    |> add_log(%{type: "update", message: "Change to process", user_id: user_id})
+    |> Repo.update()
   end
 
   defp set_number(cs) do
@@ -48,6 +61,10 @@ defmodule Publit.Order do
     cs
     |> put_change(:inserted_at, dt)
     |> put_change(:number, num)
+  end
+
+  defp add_log(cs, msg) do
+    cs |> put_change(:log, List.insert_at(cs.data.log, -1, msg))
   end
 
   defp set_and_validate_details(cs) do

@@ -7,13 +7,16 @@ defmodule Publit.Repo.Migrations.CreateOrder do
       add :user_id, references(:users, type: :uuid, null: false, on_delete: :delete_all), null: false
       add :organization_id, references(:organizations, type: :uuid, null: false, on_delete: :delete_all), null: false
       add :total, :decimal
-      add :details, :jsonb, default: "[]"
       add :location, :geometry
+      add :details, :jsonb, default: "[]"
       add :messages, :jsonb, default: "[]"
+      add :log, :jsonb, default: "[]"
+      add :extra_data, :jsonb, default: "{}"
       add :status, :string, null: false
       add :null_reason, :text
       add :number, :integer
       add :currency, :string
+
 
       timestamps()
     end

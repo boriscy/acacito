@@ -1,12 +1,28 @@
 defmodule Publit.OrderTest do
   use Publit.ModelCase
   import Publit.Support.Session, only: [create_user_org: 1]
+  #import Mock
 
   alias Publit.{Order, ProductVariation}
 
   @valid_attrs %{details: %{}, location: "some content", total: "120.5", user_id: "7488a646-e31f-11e4-aace-600308960662"}
   @invalid_attrs %{}
 
+  defp create_order() do
+    {user, org} = create_user_org(%{})
+    [p1, p2] = create_products(org)
+    v1 = Enum.at(p1.variations, 1)
+    v2 = Enum.at(p2.variations, 0)
+    params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
+    "location" => Geo.WKT.decode("POINT(30 -90)"),
+    "details" => %{
+        "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
+        "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
+      }
+    }
+    {:ok, order} = Order.create(params)
+    order
+  end
   defp create_products(org) do
     p1 = insert(:product, organization_id: org.id, publish: true)
     p2 = insert(:product, name: "Super Salad", organization_id: org.id, publish: true,
@@ -16,6 +32,7 @@ defmodule Publit.OrderTest do
 
     [p1, p2]
   end
+
 
   describe "create" do
     test "OK" do
@@ -35,10 +52,9 @@ defmodule Publit.OrderTest do
       {:ok, order} =  Order.create(params)
 
       assert order.number == 1
-
       assert order.total == Decimal.new("71.0")
-
       assert order.currency == org.currency
+      assert order.status == "new"
 
       assert order.details |> Enum.count() == 2
 
@@ -77,6 +93,17 @@ defmodule Publit.OrderTest do
       {:ok, order} =  Order.create(params)
 
       assert order.number == 2
+    end
+
+  end
+
+  describe "Change status" do
+    test "change to process" do
+      ord = create_order()
+      assert Enum.count(ord.log) == 1
+
+      {:ok, ord} = Order.move_to_process(ord, Ecto.UUID.generate() )
+      assert Enum.count(ord.log) == 2
     end
   end
 end

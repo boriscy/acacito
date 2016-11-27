@@ -1,0 +1,33 @@
+@import 'colors';
+
+.no-margin {
+  margin: 0px;
+}
+
+.orders{
+  width: 450px;
+}
+
+.currency{
+  color: $money;
+}
+
+.order{
+  max-width: 400px;
+  .header{
+    display: flex;
+
+    .title{
+      width: 60%;
+      font-size: 1.3em;
+    }
+    .total{
+      width: 40%;
+      text-align: right;
+      .currency{
+        font-size: 1.5em;
+        color: $money;
+      }
+    }
+  }
+}

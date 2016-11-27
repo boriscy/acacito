@@ -2,8 +2,11 @@
   <div class="order">
 
     <div class="header">
-      <div class="title">{{formatNumber(order.number)}} - {{order.client}}</div>
-      <div clsss="total">{{formatCurrency(order.total)}}</div>
+      <div class="title">{{formatNum(order.number)}} - {{order.client}}</div>
+      <div class="total">
+        <div class="currency">{{currency()}} {{ formatNumber(order.total) }}</div>
+        <div class="time-ago">{{timeAgo(order.inserted_at)}}</div>
+      </div>
     </div>
 
     <div class="details">
@@ -12,20 +15,13 @@
         <span>
           {{det.name}} <strong>{{det.variation}}</strong>
         </span>
-
-        <div class="det-price">{{formatCurrency(det.price)}}<div>
       <div>
     </div>
   </div>
 
-  {{timeAgo(order.inserted_at)}}
-
 </template>
 
 <script>
-//import moment from 'moment'
-//window.moment = moment
-
 export default {
   name: 'Order',
   props: {
@@ -35,7 +31,7 @@ export default {
     }
   },
   methods: {
-    formatNumber(num) {
+    formatNum(num) {
       let str = String(num)
       switch(str.length) {
         case 1:
@@ -46,11 +42,14 @@ export default {
           return num
       }
     },
-    formatCurrency(num) {
-      return this.order.currency + ' ' + num
+    formatNumber(num) {
+      return num
     },
     timeAgo(t) {
       return moment.utc(t).fromNow()
+    },
+    currency(order) {
+      return window.currencies[this.order.currency]
     }
   }
 }

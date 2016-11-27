@@ -2,7 +2,7 @@
   <div>
     <h2>{{gettext("Orders")}}</h2>
 
-    <div v-for="order in orders">
+    <div v-for="order in orders" class="orders">
       <Order :order="order"></Order>
     </div>
   </div>

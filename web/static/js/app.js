@@ -28,6 +28,10 @@ window.gettext = function(tra) {
   return translations[tra] || tra
 }
 
+window.currencies = {
+  "BOB": "Bs"
+}
+
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
@@ -65,6 +69,9 @@ switch(true) {
     }).$mount('#main')
   break;
 }
+
+// set moment locale
+moment.locale(window.locale)
 
 // Import local files
 //
