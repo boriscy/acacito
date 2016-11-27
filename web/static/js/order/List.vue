@@ -1,31 +1,41 @@
 <template>
   <div>
-    <h2>{{gettext("Orders")}}</h2>
+    <h3>
+      {{gettext(title)}}
+      <span class="badge" v-bind:class="cssClass">{{orders.length}}</span>
+    </h3>
 
     <div v-for="order in orders" class="orders">
-      <Order :order="order"></Order>
+      <Order :order="order" v-bind:next="next"></Order>
     </div>
   </div>
 </template>
 
 <script>
 import {translate, format} from '../mixins'
-import { mapGetters, mapActions } from 'vuex'
 import Order from './Order.vue'
 
 export default {
   name: 'OrderList',
   mixins: [translate, format],
-  computed: mapGetters({
-    orders: 'orders',
-    order: 'order'
-  }),
   components: {
     Order
   },
+  props: {
+    orders: {
+      type: Array,
+      default: []
+    },
+    next: {
+      type: Boolean,
+      default: true
+    },
+    title: '',
+    cssClass: ''
+  },
   created() {
     //this.$store.dispatch('getOrder', 'abcdef')
-    this.$store.dispatch('getOrders')
+    //this.$store.dispatch('getOrders')
   }
 }
 </script>

@@ -102,8 +102,30 @@ defmodule Publit.OrderTest do
       ord = create_order()
       assert Enum.count(ord.log) == 1
 
-      {:ok, ord} = Order.move_to_process(ord, Ecto.UUID.generate() )
+      {:ok, ord} = Order.next_status(ord, Ecto.UUID.generate() )
       assert Enum.count(ord.log) == 2
+      assert ord.status == "process"
+
+      {:ok, ord} = Order.next_status(ord, Ecto.UUID.generate() )
+      assert Enum.count(ord.log) == 3
+      assert ord.status == "transport"
+    end
+
+    test "previous" do
+      ord = create_order()
+      assert Enum.count(ord.log) == 1
+
+      {:ok, ord} = Order.next_status(ord, Ecto.UUID.generate() )
+      assert Enum.count(ord.log) == 2
+      assert ord.status == "process"
+      log = ord.log |> List.last
+      assert log[:type] == "update_next"
+
+      {:ok, ord} = Order.previous_status(ord, Ecto.UUID.generate() )
+      assert Enum.count(ord.log) == 3
+      assert ord.status == "new"
+      log = ord.log |> List.last
+      assert log[:type] == "update_back"
     end
   end
 end

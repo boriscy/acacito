@@ -6,6 +6,7 @@
       <div class="total">
         <div class="currency">{{currency()}} {{ formatNumber(order.total) }}</div>
         <div class="time-ago">{{timeAgo(order.inserted_at)}}</div>
+        <a v-if="next" class="next" v-bind:class="nextStatus(order.status)">Next</a>
       </div>
     </div>
 
@@ -22,13 +23,20 @@
 </template>
 
 <script>
+import {translate, format} from '../mixins'
+
 export default {
   name: 'Order',
+  mixins: [translate, format],
   props: {
     order: {
       type:Object,
       required: true
-    }
+    },
+    next: {
+      type: Boolean,
+      default: true
+    },
   },
   methods: {
     formatNum(num) {
@@ -50,6 +58,17 @@ export default {
     },
     currency(order) {
       return window.currencies[this.order.currency]
+    },
+    // returns the next status for an Order
+    nextStatus(status) {
+      switch(status) {
+        case 'new':
+          return 'process'
+        case 'process':
+          return 'transport'
+        default:
+          return ''
+      }
     }
   }
 }

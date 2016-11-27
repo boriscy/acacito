@@ -4,11 +4,11 @@
   margin: 0px;
 }
 
-.orders{
+.orders {
   width: 450px;
 }
 
-.currency{
+.currency {
   color: $money;
 }
 
@@ -30,4 +30,16 @@
       }
     }
   }
+}
+.new {
+  background: $new;
+  color: white;
+}
+.process {
+  background: $process;
+  color: $dark;
+}
+.transport {
+  background: $transport;
+  color: white;
 }

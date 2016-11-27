@@ -3,7 +3,7 @@ defmodule Publit.Api.OrderController do
 
   # GET /api/orders
   def index(conn, _params) do
-    render(conn, "index.json", orders: [fake()])
+    render(conn, "index.json", orders: [fake(), fake(), fake("process"), fake("transport")])
   end
 
   # GET /api/orders/id
@@ -11,11 +11,12 @@ defmodule Publit.Api.OrderController do
     render(conn, "show.json", order: %{id: id, total: 12.3, name: "test"})
   end
 
-  defp fake do
+  defp fake(status \\ "new") do
     %{
       client: "Boris Barroso",
       number: 1,
       currency: "BOB",
+      status: status,
       details: [
         %{name: "Pizza", variation: "Grande", price: Decimal.new("60"), quantity: Decimal.new("1")}
       ],

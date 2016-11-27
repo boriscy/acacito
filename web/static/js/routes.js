@@ -1,7 +1,7 @@
-import OrderList from './order/List.vue'
+import OrderContainer from './order/Container.vue'
 
 export default [
   {
-    path: '/orders', component: OrderList
+    path: '/orders', component: OrderContainer
   }
 ]

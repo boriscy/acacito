@@ -23,7 +23,7 @@ defmodule Publit.Order do
 
     timestamps()
   end
-  @statuses ["new", "process", "deliver", "delivered", "null"]
+  @statuses ["new", "process", "transport", "delivered", "null"]
 
 
   @doc """
@@ -42,13 +42,32 @@ defmodule Publit.Order do
   end
 
   @doc"""
+  Changes the status of an order to the next
   """
-  def move_to_process(order, user_id) do
+  def next_status(%Order{status: "new"} = order, user_id) do
+    update_status(order, "process", message: "Change status to process", type: "update_next", user_id: user_id)
+  end
+  def next_status(%Order{status: "process"} = order, user_id) do
+    update_status(order, "transport", message: "Change status to transport", type: "update_next", user_id: user_id)
+  end
+  def next_status(%Order{status: "transport"} = order, user_id) do
+    update_status(order, "delivered", message: "Change status to delivered", type: "update_next", user_id: user_id)
+  end
+
+  @doc"""
+  Move to previous status
+  """
+  def previous_status(%Order{status: "process"} = order, user_id) do
+    update_status(order, "new", message: "Back to status new", user_id: user_id, type: "update_back")
+  end
+
+  defp update_status(order, status, opts) do
     Ecto.Changeset.change(order)
-    |> put_change(:status, "process")
-    |> add_log(%{type: "update", message: "Change to process", user_id: user_id})
+    |> put_change(:status, status)
+    |> add_log(%{type: opts[:type], message: opts[:message], user_id: opts[:user_id], time: Ecto.DateTime.autogenerate() })
     |> Repo.update()
   end
+
 
   defp set_number(cs) do
     dt = Ecto.DateTime.autogenerate()
