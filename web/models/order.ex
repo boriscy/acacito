@@ -26,6 +26,14 @@ defmodule Publit.Order do
   @statuses ["new", "process", "transport", "delivered", "null"]
 
 
+  @doc"""
+  return orders with status "new", "process" and "transport"
+  """
+  def all(organization_id) do
+    q = from o in Order, where: o.status in ^["new", "process", "transport"] and o.organization_id == ^organization_id
+    Repo.all(q)
+  end
+
   @doc """
   Creates a new order with details
   """

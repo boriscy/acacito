@@ -12,16 +12,16 @@
   color: $money;
 }
 
-.order{
+.order {
   max-width: 400px;
   .header{
     display: flex;
 
-    .title{
+    .title {
       width: 60%;
       font-size: 1.3em;
     }
-    .total{
+    .total {
       width: 40%;
       text-align: right;
       .currency{

@@ -2,21 +2,27 @@ import types from './mutation-types'
 import axios from 'axios'
 
 export const getOrders = ({commit}) => {
-  orders.getOrders(orders => {
+  methods.getOrders(orders => {
     commit(types.FETCH_ORDERS, {orders})
   })
 }
 
 export const getOrder = ({commit}, ord_id) => {
-  orders.getOrder(order => {
+  methods.getOrder(order => {
     commit(types.FETCH_ORDER, {order})
   }, ord_id)
+}
+
+export const moveNext = ({commit}, data) => {
+  methods.moveNext(orders => {
+    commit(types.FETCH_ORDERS, {orders})
+  }, data)
 }
 
 /*
  * Utility methods to make ajax requests
  */
-const orders = {
+const methods = {
   getOrders(cb) {
     axios.get('/api/orders')
     .then((res) => {
@@ -28,5 +34,24 @@ const orders = {
     .then((res) => {
       cb(res.data.order)
     })
+  },
+  moveNext(cb, data) {
+    let {order, orders} = data
+    let idx = orders.findIndex(o => { return o.id == order.id})
+
+    console.log('B', orders)
+    switch(data.order.status) {
+      case 'new':
+        order.status = 'process'
+      break;
+      case 'process':
+        order.status = 'transport'
+      break;
+    }
+
+    orders.splice(idx, 1)
+    orders.unshift(order)
+
+    cb(data.orders)
   }
 }

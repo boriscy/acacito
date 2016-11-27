@@ -13,6 +13,7 @@ defmodule Publit.Api.OrderController do
 
   defp fake(status \\ "new") do
     %{
+      id: Ecto.UUID.generate(),
       client: "Boris Barroso",
       number: 1,
       currency: "BOB",

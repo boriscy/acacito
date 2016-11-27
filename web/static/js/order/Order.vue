@@ -6,7 +6,9 @@
       <div class="total">
         <div class="currency">{{currency()}} {{ formatNumber(order.total) }}</div>
         <div class="time-ago">{{timeAgo(order.inserted_at)}}</div>
-        <a v-if="next" class="next" v-bind:class="nextStatus(order.status)">Next</a>
+        <a v-if="next" class="next" v-bind:class="nextStatus(order.status)" @click="moveNext()">
+          Next
+        </a>
       </div>
     </div>
 
@@ -69,6 +71,12 @@ export default {
         default:
           return ''
       }
+    },
+    moveNext() {
+      this.$store.dispatch('moveNext', {
+        order: this.order,
+        orders: this.$store.state.orders.all
+      })
     }
   }
 }
