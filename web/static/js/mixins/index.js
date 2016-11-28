@@ -4,6 +4,9 @@ import moment from 'moment'
 export const translate = {
   methods: {
     gettext: function(trans) {
+      if(!window.translations[trans]) {
+        console.warn(`No translation for: ${trans}`)
+      }
       return window.translations[trans] || trans
     }
   }

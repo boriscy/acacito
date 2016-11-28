@@ -1,6 +1,5 @@
 <template>
   <div class="order">
-
     <div class="header">
       <div class="left">
         {{formatNum(order.number)}} - {{order.client}}
@@ -19,12 +18,11 @@
         <div class="currency">{{currency()}} {{ formatNumber(order.total) }}</div>
         <div class="time-ago">{{timeAgo(order.inserted_at)}}</div>
         <a v-if="next" @click="moveNext()">
-          <i class="icon-right-circled next process-next"></i>
+          <i class="icon-right-circled next transport-next"></i>
         </a>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -32,7 +30,7 @@ import {translate, format} from '../mixins'
 import orderMixin from './orderMixin'
 
 export default {
-  name: 'Order',
+  name: 'Process',
   mixins: [translate, format, orderMixin]
 }
 </script>

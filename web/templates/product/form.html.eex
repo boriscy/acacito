@@ -7,7 +7,7 @@
   </div>
 
   <div class="product-variations">
-    <!-- web/static/js/product/ProductForm.Comp.vue -->
+    <!-- web/static/js/product/Form.vue -->
     <product-form></product-form>
   </div>
 

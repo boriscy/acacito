@@ -6,7 +6,7 @@
     </h3>
 
     <div v-for="order in orders">
-      <Order :order="order" v-bind:next="next"></Order>
+      <component :order="order" v-bind:next="next" v-bind:is="orderComp"></component>
     </div>
   </div>
 </template>
@@ -25,6 +25,9 @@ export default {
     orders: {
       type: Array,
       default: []
+    },
+    orderComp: {
+      type: Object
     },
     next: {
       type: Boolean,
