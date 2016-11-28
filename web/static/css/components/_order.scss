@@ -1,27 +1,49 @@
 @import 'colors';
 
+body{
+  background: #EFEFEF;
+}
+
 .no-margin {
   margin: 0px;
 }
 
-.orders {
-  width: 450px;
+.orders-container {
+  display: flex;
+  .orders {
+    border-radius: 4px;
+    margin: 8px;
+    background: $white;
+    padding: 10px;
+    box-shadow: 1px 1px 4px $grayLight;
+    width: 350px;
+
+    >.title {
+      margin: 4px 0px 10px;
+      text-align: center;
+      .badge {
+        min-width: 2.5em;
+      }
+    }
+  }
 }
+
 
 .currency {
   color: $money;
 }
 
 .order {
-  max-width: 400px;
+  border-bottom: 1px solid $grayLighter;
+
   .header{
     display: flex;
 
-    .title {
+    .left {
       width: 60%;
       font-size: 1.3em;
     }
-    .total {
+    .right {
       width: 40%;
       text-align: right;
       .currency{
@@ -30,7 +52,19 @@
       }
     }
   }
+  .next {
+    border-radius: 50%;
+    font-size: 3.5em;
+    cursor: pointer;
+  }
+  .process-next {
+    color: $process;
+  }
+  .transport-next {
+    color: $transport;
+  }
 }
+
 .new {
   background: $new;
   color: white;

@@ -36,6 +36,7 @@ msgstr "Imagen"
 msgid "Login"
 msgstr "Ingresar"
 
+#: web/templates/layout/translations.html.eex:6
 #: web/templates/product/form.html.eex:4
 msgid "Name"
 msgstr "Nombre"
@@ -163,22 +164,51 @@ msgstr "Ocultar"
 msgid "Unpublished"
 msgstr "Oculto"
 
-#: web/models/order.ex:48 web/models/order.ex:53
+#: web/models/order.ex:108 web/models/order.ex:113
 msgid "Invalid product"
 msgstr "Producto invalido"
 
-#: web/templates/layout/order.html.eex:26
+#: web/templates/layout/translations.html.eex:3
 msgid "New Orders"
-msgstr "Nueva Orden"
+msgstr "Nuevas Ordenes"
 
 #: web/templates/layout/app.html.eex:23
 msgid "Orders"
 msgstr "Ordenes"
 
-#: web/templates/layout/order.html.eex:27
-msgid "Processing Orders"
-msgstr "Ordenes en Proceso"
-
-#: web/templates/layout/order.html.eex:28
+#: web/templates/layout/translations.html.eex:5
 msgid "Transporting Orders"
 msgstr "Ordenes en Transporte"
+
+#: web/templates/layout/translations.html.eex:4
+msgid "Orders in Process"
+msgstr "Ordenes en Proceso"
+
+#: web/templates/layout/translations.html.eex:8
+msgid "Add line"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:12
+msgid "Big"
+msgstr "Grande"
+
+#: web/templates/layout/translations.html.eex:11
+msgid "Medium"
+msgstr "Medio"
+
+#: web/templates/layout/translations.html.eex:7
+msgid "Price"
+msgstr "Precio"
+
+#: web/templates/layout/translations.html.eex:9
+msgid "Remove"
+msgstr "Eliminar"
+
+#: web/templates/layout/translations.html.eex:13
+msgid "Variations"
+msgstr "Variaciones"
+
+#, fuzzy
+#: web/templates/layout/translations.html.eex:10
+msgid "Small"
+msgstr "Pequenio"

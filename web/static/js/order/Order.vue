@@ -2,24 +2,28 @@
   <div class="order">
 
     <div class="header">
-      <div class="title">{{formatNum(order.number)}} - {{order.client}}</div>
-      <div class="total">
+      <div class="left">
+        {{formatNum(order.number)}} - {{order.client}}
+
+        <div class="details">
+          <div v-for="det in order.details">
+            <span class="det-quantity">{{det.quantity}}</span>
+            <span>
+              {{det.name}} <strong>{{det.variation}}</strong>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
         <div class="currency">{{currency()}} {{ formatNumber(order.total) }}</div>
         <div class="time-ago">{{timeAgo(order.inserted_at)}}</div>
-        <a v-if="next" class="next" v-bind:class="nextStatus(order.status)" @click="moveNext()">
-          Next
+        <a v-if="next" @click="moveNext()">
+          <i class="icon-right-circled next" v-bind:class="nextStatus(order.status) + '-next'"></i>
         </a>
       </div>
     </div>
 
-    <div class="details">
-      <div v-for="det in order.details">
-        <span class="det-quantity">{{det.quantity}}</span>
-        <span>
-          {{det.name}} <strong>{{det.variation}}</strong>
-        </span>
-      <div>
-    </div>
   </div>
 
 </template>

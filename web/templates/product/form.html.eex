@@ -39,5 +39,5 @@
 
 <script>
   window.productVariations = <%= raw encode_variations(@changeset) %>
-  window.vueLoad = 'productForm'
+  window.vueLoad = 'ProductForm'
 </script>

@@ -1,0 +1,16 @@
+<script>
+window.translations = {
+  "New Orders": '<%= gettext("New Orders") %>',
+  "Processing Orders": '<%= gettext("Orders in Process") %>',
+  "Transporting Orders": '<%= gettext("Transporting Orders") %>',
+  "Name": '<%= gettext("Name") %>',
+  "Price": '<%= gettext("Price") %>',
+  "Add line": '<%= gettext("Add line") %>',
+  "Remove": '<%= gettext("Remove") %>',
+  "Small": '<%= gettext("Small") %>',
+  "Medium": '<%= gettext("Medium") %>',
+  "Big": '<%= gettext("Big") %>',
+  "Variations": '<%= gettext("Variations") %>'
+
+}
+</script>

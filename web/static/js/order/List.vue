@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <h3>
+  <div class="orders">
+    <h3 class="title">
       {{gettext(title)}}
       <span class="badge" v-bind:class="cssClass">{{orders.length}}</span>
     </h3>
 
-    <div v-for="order in orders" class="orders">
+    <div v-for="order in orders">
       <Order :order="order" v-bind:next="next"></Order>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="orders-container">
     <NewOrders :orders="newOrders" title="New Orders" css-class="new">
     </NewOrders>
 

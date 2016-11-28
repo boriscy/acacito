@@ -12,7 +12,7 @@
 
       <div v-bind:class="hasError(prodVar, 'name')" class="name col">
         <input type="text" v-model="prodVar.name"  v-bind:name="productName('name', index)"
-        class="form-control" v-bind:placeholder="getPlaceholder(index)"/>
+          class="form-control" v-bind:placeholder="getPlaceholder(index)"/>
         <span class="help-block">{{readError(prodVar, 'name')}}</span>
       </div>
       <div v-bind:class="hasError(prodVar, 'price')" class="price col">
@@ -34,11 +34,11 @@
 import {translate, format} from '../mixins'
 
 export default {
-  name: 'productForm',
-  mixins:[translate, format],
+  name: 'ProductForm',
+  mixins: [translate, format],
   data: function() {
     return {
-      variations: [{name: 'Test', price: 0}]
+      variations: [{}]
     }
   },
   methods: {
@@ -52,7 +52,7 @@ export default {
       this.variations.splice(index, 1)
     },
     getPlaceholder(index) {
-      let ph = [gettext("Small"), gettext("Medium"), gettext("Big")][index]
+      let ph = [this.gettext("Small"), this.gettext("Medium"), this.gettext("Big")][index]
 
       return ph ? ph : ""
     },
@@ -61,6 +61,7 @@ export default {
     }
   },
   mounted: function() {
+    console.log('mounted', window.productVariations);
     this.variations = window.productVariations
   }
 }

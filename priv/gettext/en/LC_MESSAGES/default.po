@@ -36,6 +36,7 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
+#: web/templates/layout/translations.html.eex:6
 #: web/templates/product/form.html.eex:4
 msgid "Name"
 msgstr ""
@@ -163,11 +164,11 @@ msgstr ""
 msgid "Unpublished"
 msgstr ""
 
-#: web/models/order.ex:48 web/models/order.ex:53
+#: web/models/order.ex:108 web/models/order.ex:113
 msgid "Invalid product"
 msgstr ""
 
-#: web/templates/layout/order.html.eex:26
+#: web/templates/layout/translations.html.eex:3
 msgid "New Orders"
 msgstr ""
 
@@ -175,10 +176,39 @@ msgstr ""
 msgid "Orders"
 msgstr ""
 
-#: web/templates/layout/order.html.eex:27
-msgid "Processing Orders"
+#: web/templates/layout/translations.html.eex:5
+msgid "Transporting Orders"
 msgstr ""
 
-#: web/templates/layout/order.html.eex:28
-msgid "Transporting Orders"
+#: web/templates/layout/translations.html.eex:4
+msgid "Orders in Process"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:8
+msgid "Add line"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:12
+msgid "Big"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:11
+msgid "Medium"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:7
+msgid "Price"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:9
+msgid "Remove"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:13
+msgid "Variations"
+msgstr ""
+
+#, fuzzy
+#: web/templates/layout/translations.html.eex:10
+msgid "Small"
 msgstr ""

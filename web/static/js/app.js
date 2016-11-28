@@ -14,20 +14,6 @@
 import 'phoenix_html'
 
 // Set all window defaults and global methods
-window.translations = {
-  "Name": "Nombre",
-  "Price": "Precio",
-  "Add line": "Nueva linea",
-  "Remove": "Eliminar",
-  "Small": "Pequeña",
-  "Medium": "Mediana",
-  "Big": "Grande",
-  "Variations": "Variaciones"
-}
-window.gettext = function(tra) {
-  return translations[tra] || tra
-}
-
 window.currencies = {
   "BOB": "Bs"
 }
@@ -40,7 +26,7 @@ Vue.use(VueRouter)
 
 import moment from 'moment'
 
-import productForm from './product/ProductForm.Comp.vue'
+import ProductForm from './product/Form.vue'
 
 import store from './store'
 import routes from './routes'
@@ -54,11 +40,11 @@ const path = window.location.pathname
 
 
 switch(true) {
-  case window.vueLoad == 'productForm':
+  case window.vueLoad == 'ProductForm':
     new Vue({
       el: '.product-variations',
       components: {
-        'product-form': productForm
+        'product-form': ProductForm
       }
     })
   break;

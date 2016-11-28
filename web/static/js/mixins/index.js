@@ -4,7 +4,7 @@ import moment from 'moment'
 export const translate = {
   methods: {
     gettext: function(trans) {
-      return gettext(trans)
+      return window.translations[trans] || trans
     }
   }
 }
