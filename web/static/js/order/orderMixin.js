@@ -8,6 +8,9 @@ export default {
       type: Boolean,
       default: true
     },
+    nextProcess: {
+      default: 'process-next'
+    }
   },
   methods: {
     formatNum(num) {

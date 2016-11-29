@@ -3,7 +3,7 @@
 
     <div class="header">
       <div class="left">
-        {{formatNum(order.number)}} - {{order.client}}
+        <div class="title">{{formatNum(order.number)}} - {{order.client}}</div>
 
         <div class="details">
           <div v-for="det in order.details">
@@ -13,13 +13,16 @@
             </span>
           </div>
         </div>
+
+        <slot name="transport"></slot>
+
       </div>
 
       <div class="right">
         <div class="currency">{{currency()}} {{ formatNumber(order.total) }}</div>
         <div class="time-ago">{{timeAgo(order.inserted_at)}}</div>
         <a v-if="next" @click="moveNext()">
-          <i class="icon-right-circled next process-next"></i>
+          <i class="icon-right-circled next" v-bind:class="nextProcess"></i>
         </a>
       </div>
     </div>

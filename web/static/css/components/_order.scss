@@ -41,12 +41,26 @@ body{
 
     .left {
       width: 60%;
-      font-size: 1.3em;
+      .title {
+        font-size: 1.3em;
+      }
+      .transport-data {
+        .call {
+          font-weight: bold;
+          font-size: 1.15em;
+          display: inline-block;
+          padding: 0.3em 0;
+          cursor: pointer;
+        }
+        [class*=icon] {
+          font-size: 1.3em;
+        }
+      }
     }
     .right {
       width: 40%;
       text-align: right;
-      .currency{
+      .currency {
         font-size: 1.5em;
         color: $money;
       }

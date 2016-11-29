@@ -1,36 +1,29 @@
 <template>
-  <div class="order">
-    <div class="header">
-      <div class="left">
-        {{formatNum(order.number)}} - {{order.client}}
-
-        <div class="details">
-          <div v-for="det in order.details">
-            <span class="det-quantity">{{det.quantity}}</span>
-            <span>
-              {{det.name}} <strong>{{det.variation}}</strong>
-            </span>
-          </div>
-        </div>
+  <Order :order="order" nextProcess="transport-next">
+    <div slot="transport" class="transport-data">
+      <div v-if="order.transport.start">
+        <i class="icon-cab"></i>
+        {{timeAgo(order.transport.start)}}
       </div>
-
-      <div class="right">
-        <div class="currency">{{currency()}} {{ formatNumber(order.total) }}</div>
-        <div class="time-ago">{{timeAgo(order.inserted_at)}}</div>
-        <a v-if="next" @click="moveNext()">
-          <i class="icon-right-circled next transport-next"></i>
-        </a>
+      <div v-if="!order.transport.start">
+        <a class="call">{{gettext("Call Transport")}}</a>
       </div>
     </div>
-  </div>
+  </Order>
 </template>
 
 <script>
+import Order from './Order.vue'
 import {translate, format} from '../mixins'
 import orderMixin from './orderMixin'
 
 export default {
   name: 'Process',
-  mixins: [translate, format, orderMixin]
+  mixins: [translate, format, orderMixin],
+  components: {
+    Order: Order
+  },
+  mounted() {
+  }
 }
 </script>

@@ -212,3 +212,7 @@ msgstr ""
 #: web/templates/layout/translations.html.eex:10
 msgid "Small"
 msgstr ""
+
+#: web/templates/layout/translations.html.eex:14
+msgid "Call Transport"
+msgstr ""

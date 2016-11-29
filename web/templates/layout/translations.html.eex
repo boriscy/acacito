@@ -10,6 +10,7 @@ window.translations = {
   "Small": '<%= gettext("Small") %>',
   "Medium": '<%= gettext("Medium") %>',
   "Big": '<%= gettext("Big") %>',
-  "Variations": '<%= gettext("Variations") %>'
+  "Variations": '<%= gettext("Variations") %>',
+  "Call Transport": '<%= gettext("Call Transport") %>'
 }
 </script>

@@ -14,7 +14,7 @@ defmodule Publit.Order do
     field :null_reason, :string
     field :number, :integer
     field :currency, :string
-    field :extra_data, :map, default: %{}
+    field :transport, :map, default: %{}
     field :messages, {:array, :map}, default: []
     field :log, {:array, :map}, default: []
 

@@ -11,12 +11,11 @@ defmodule Publit.Repo.Migrations.CreateOrder do
       add :details, :jsonb, default: "[]"
       add :messages, :jsonb, default: "[]"
       add :log, :jsonb, default: "[]"
-      add :extra_data, :jsonb, default: "{}"
+      add :transport, :jsonb, default: "{}"
       add :status, :string, null: false
       add :null_reason, :text
       add :number, :integer
       add :currency, :string
-
 
       timestamps()
     end
@@ -26,6 +25,7 @@ defmodule Publit.Repo.Migrations.CreateOrder do
     create index(:orders, [:inserted_at])
     create index(:orders, [:updated_at])
     execute "CREATE INDEX details_on_orders ON orders USING GIN (details)"
+    execute "CREATE INDEX transport_on_orders ON orders USING GIN (transport)"
   end
 
   def down do
