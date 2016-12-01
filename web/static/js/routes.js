@@ -2,6 +2,6 @@ import OrderContainer from './order/Container.vue'
 
 export default [
   {
-    path: '/orders', component: OrderContainer
+    path: '/work_area', component: OrderContainer
   }
 ]

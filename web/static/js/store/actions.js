@@ -37,10 +37,7 @@ const methods = {
   },
   moveNext(cb, data) {
     let {order, orders} = data
-    let idx = orders.findIndex(o => {
-      console.log(o.id, order.id);
-      return o.id == order.id
-    })
+    let idx = orders.findIndex(o => { return o.id == order.id })
     switch(order.status) {
       case 'new':
         order.status = 'process'

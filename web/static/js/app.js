@@ -50,7 +50,7 @@ switch(true) {
       }
     })
   break;
-  case !!path.match(/orders/):
+  case !!path.match(/work_area/):
     new Vue({
       store,
       router

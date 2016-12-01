@@ -27,7 +27,7 @@ defmodule Publit.SessionControllerTest do
   describe "POST /login" do
     test "OK", %{conn: conn, user: user, org: org} do
       conn = conn
-      |> post("/login", %{"user_auth" => %{"email" => "amaru@mail.com", "password" => "demo1234"} })
+      |> post("/login", %{"user_authentication" => %{"email" => "amaru@mail.com", "password" => "demo1234"} })
 
       assert redirected_to(conn) == "/dashboard"
       {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
@@ -42,7 +42,7 @@ defmodule Publit.SessionControllerTest do
       user = insert(:user, email: "other@mail.com")
 
       conn = build_conn()
-      |> post("/login", %{"user_auth" => %{"email" => "other@mail.com", "password" => "demo1234"} })
+      |> post("/login", %{"user_authentication" => %{"email" => "other@mail.com", "password" => "demo1234"} })
 
       assert redirected_to(conn) == "/organizations"
       {:ok, u_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
@@ -52,7 +52,7 @@ defmodule Publit.SessionControllerTest do
 
     test "Error", %{conn: conn} do
       conn = conn
-      |> post("/login", %{"user_auth" => %{"email" => "amaru@mail.com", "password" => "demo12"} })
+      |> post("/login", %{"user_authentication" => %{"email" => "amaru@mail.com", "password" => "demo12"} })
 
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
       assert conn.private.phoenix_flash["error"]

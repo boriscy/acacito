@@ -86,4 +86,11 @@ defmodule Publit.Product do
      where: p.organization_id == ^org_id,
      order_by: [asc: p.name])
   end
+
+  def published(org_id) do
+    Repo.all(from p in Product,
+     where: p.organization_id == ^org_id and p.publish == true,
+     order_by: [asc: p.name])
+  end
+
 end

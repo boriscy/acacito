@@ -1,8 +1,8 @@
-defmodule Publit.OrderController do
+defmodule Publit.WorkAreaController do
   use Publit.Web, :controller
-  plug :put_layout, "order.html"
+  plug :put_layout, "work_area.html"
 
-  # GET /operations
+  # GET /work_area
   def index(conn, _params) do
     render(conn, "index.html")
   end

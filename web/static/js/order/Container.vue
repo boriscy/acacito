@@ -45,6 +45,15 @@ export default {
 
       const chName = window.location.search ? window.location.search.match(/chan=(\w+)/)[1] : 'a'
       this.channel = this.socket.channel(`organizations:${chName}`)
+
+      if(chName != 'amaru') {
+        console.log('subscribe to amaru');
+        this.channel2 = this.socket.channel('organizations:amaru')
+        this.channel2.on('move:next', msg => {
+          console.log('amaru channel', msg);
+        })
+        this.channel2.join()
+      }
       this.channel.join()
 
       // Listen to channel
@@ -75,6 +84,7 @@ export default {
     }
   },
   created() {
+    console.log('created');
     this.$store.dispatch('getOrders')
     this.setChannel()
   }

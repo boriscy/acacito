@@ -1,4 +1,4 @@
-defmodule Publit.OrderControllerTest do
+defmodule Publit.WorkAreaControllerTest do
   use Publit.ConnCase
 
   setup do
@@ -8,9 +8,9 @@ defmodule Publit.OrderControllerTest do
     %{conn: conn}
   end
 
-  describe "GET /orders" do
+  describe "GET /work_area" do
     test "OK", %{conn: conn} do
-      conn = get(conn, "/orders")
+      conn = get(conn, "/work_area")
 
       assert view_template(conn) == "index.html"
       assert conn.status == Plug.Conn.Status.code(:ok)
