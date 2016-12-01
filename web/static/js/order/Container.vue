@@ -12,6 +12,8 @@
   </div>
 </template>
 <script>
+import {Socket} from 'phoenix'
+
 import OrderList from './List.vue'
 import Order from './Order.vue'
 import OrderProcess from './Process.vue'
@@ -22,7 +24,8 @@ export default {
   data() {
     return {
       orderComp: Order,
-      processComp: OrderProcess
+      processComp: OrderProcess,
+      channel: null
     }
   },
   components: {
@@ -35,8 +38,45 @@ export default {
     processOrders: 'processOrders',
     transportOrders: 'transportOrders'
   }),
+  methods: {
+    setChannel() {
+      this.socket = new Socket("/socket", {})
+      this.socket.connect()
+
+      const chName = window.location.search ? window.location.search.match(/chan=(\w+)/)[1] : 'a'
+      this.channel = this.socket.channel(`organizations:${chName}`)
+      this.channel.join()
+
+      // Listen to channel
+      this.channel.on('move:next', msg => {
+        this.$store.dispatch('moveNext', {
+          order: msg.order,
+          orders: this.$store.state.orders.all
+        })
+      })
+
+
+      let user = `user-${Math.floor(Math.random() * 100000)}`
+      this.socket = new Socket("/socket", {})
+      /*{
+        user: user,
+        logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
+      })*/
+      this.socket.connect()
+      //this.socket.onOpen( ev => console.log("OPEN", ev) )
+      //this.socket.onError( ev => console.log("ERROR", ev) )
+      //this.socket.onClose( e => console.log("CLOSE", e))
+
+
+
+      window.eventHub.$on('move:next', (data) => {
+        this.channel.push('move:next', {order: data.order})
+      })
+    }
+  },
   created() {
     this.$store.dispatch('getOrders')
+    this.setChannel()
   }
 }
 </script>

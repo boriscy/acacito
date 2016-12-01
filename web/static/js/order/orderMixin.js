@@ -1,3 +1,5 @@
+import {Socket} from 'phoenix'
+
 export default {
   props: {
     order: {
@@ -10,6 +12,12 @@ export default {
     },
     nextProcess: {
       default: 'process-next'
+    }
+  },
+  data() {
+    return {
+      socket: null,
+      channel: null
     }
   },
   methods: {
@@ -45,10 +53,7 @@ export default {
       }
     },
     moveNext() {
-      this.$store.dispatch('moveNext', {
-        order: this.order,
-        orders: this.$store.state.orders.all
-      })
+      window.eventHub.$emit('move:next', {order: this.order})
     }
   }
 }

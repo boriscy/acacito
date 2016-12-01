@@ -2,7 +2,8 @@ defmodule Publit.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", Publit.RoomChannel
+  channel "orders:*", Publit.OrderChannel
+  channel "organizations:*", Publit.OrganizationChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

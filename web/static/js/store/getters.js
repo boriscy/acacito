@@ -2,7 +2,6 @@ export const orders = state => {
   return state.orders.all
 }
 
-
 export const newOrders = state => {
   return state.orders.all.filter(ord => { return ord.status == 'new' })
 }

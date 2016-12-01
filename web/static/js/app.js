@@ -24,6 +24,8 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
+window.eventHub = new Vue()
+
 import moment from 'moment'
 
 import ProductForm from './product/Form.vue'

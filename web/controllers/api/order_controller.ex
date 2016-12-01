@@ -3,10 +3,11 @@ defmodule Publit.Api.OrderController do
 
   # GET /api/orders
   def index(conn, _params) do
-    render(conn, "index.json", orders: [fake(), fake(),
-      fake(status: "process"),
-      fake(status: "process", trans_start: minutes_ago(2), trans_end: nil, trans_type: "car"),
-      fake(status: "transport")
+    {:ok, a} = Agent.start(fn() -> 1 end)
+    render(conn, "index.json", orders: [fake(a), fake(a),
+      fake(a, status: "process"),
+      fake(a, status: "process", trans_start: minutes_ago(2), trans_end: nil, trans_type: "car"),
+      fake(a, status: "transport")
     ])
   end
 
@@ -15,11 +16,14 @@ defmodule Publit.Api.OrderController do
     render(conn, "show.json", order: %{id: id, total: 12.3, name: "test"})
   end
 
-  defp fake(opts \\ []) do
+  defp fake(a, opts \\ []) do
+    num = Agent.get(a, &(&1) )
+    Agent.update(a, &(&1 + 1))
+
     %{
-      id: Ecto.UUID.generate(),
+      id: "#{num}-aa",
       client: "Boris Barroso",
-      number: 1,
+      number: num,
       currency: "BOB",
       status: opts[:status] || "new",
       details: [

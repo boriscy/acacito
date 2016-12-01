@@ -37,10 +37,11 @@ const methods = {
   },
   moveNext(cb, data) {
     let {order, orders} = data
-    let idx = orders.findIndex(o => { return o.id == order.id})
-
-    console.log('B', orders)
-    switch(data.order.status) {
+    let idx = orders.findIndex(o => {
+      console.log(o.id, order.id);
+      return o.id == order.id
+    })
+    switch(order.status) {
       case 'new':
         order.status = 'process'
       break;
@@ -48,7 +49,6 @@ const methods = {
         order.status = 'transport'
       break;
     }
-
     orders.splice(idx, 1)
     orders.unshift(order)
 
