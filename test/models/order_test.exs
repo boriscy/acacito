@@ -95,6 +95,37 @@ defmodule Publit.OrderTest do
       assert order.number == 2
     end
 
+    test "ERROR" do
+      {user, org} = create_user_org(%{})
+      [p1, p2] = create_products(org)
+      v1 = Enum.at(p1.variations, 1)
+      v2 = Enum.at(p2.variations, 0)
+
+      params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
+      "location" => Geo.WKT.decode("POINT(30 -90)"),
+      "details" => %{
+          "0" => %{"product_id" => Ecto.UUID.generate, "variation_id" => v1.id, "quantity" => "1"},
+          "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
+        }
+      }
+
+      assert {:error, cs} = Order.create(params)
+      det = cs.changes.details |> Enum.at(0)
+      assert det.errors[:product_id]
+
+      params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
+      "location" => Geo.WKT.decode("POINT(30 -90)"),
+      "details" => %{
+          "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
+          "1" => %{"product_id" => p2.id, "variation_id" => Ecto.UUID.generate(), "quantity" => "2"}
+        }
+      }
+
+      assert {:error, cs} = Order.create(params)
+      det = cs.changes.details |> Enum.at(1)
+      assert det.errors[:product_id]
+    end
+
   end
 
   describe "Change status" do

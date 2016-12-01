@@ -38,15 +38,20 @@ defmodule Publit.Order do
   Creates a new order with details
   """
   def create(params) do
-    %Order{}
+    cs = %Order{}
     |> cast(params, [:user_id, :organization_id, :location, :currency])
     |> validate_required([:user_id, :organization_id, :details, :location, :currency])
     |> cast_embed(:details)
     |> set_and_validate_details()
-    |> set_total()
-    |> set_number()
-    |> add_log(%{time: Ecto.DateTime.autogenerate(), message: "Creation", type: "create", user_id: params["user_id"]})
-    |> Repo.insert
+    if cs.valid? do
+      cs
+      |> set_total()
+      |> set_number()
+      |> add_log(%{time: Ecto.DateTime.autogenerate(), message: "Creation", type: "create", user_id: params["user_id"]})
+      |> Repo.insert()
+    else
+      {:error, cs}
+    end
   end
 
   @doc"""
@@ -104,18 +109,17 @@ defmodule Publit.Order do
   end
 
   defp set_product_and_variation(det_cs, products) do
-    case Enum.find(products, fn(p) -> p.id == det_cs.changes.product_id end) do
-      nil -> add_error(det_cs, :product_id, gettext("Invalid product"))
-      prod ->
-        det_cs = put_change(det_cs, :name, prod.name)
-        case Enum.find(prod.variations, fn(var) -> var.id == det_cs.changes.variation_id end) do
-          nil ->
-            add_error(det_cs, :product_id, gettext("Invalid product"))
-          var ->
-            det_cs
-            |> put_change(:variation, var.name)
-            |> put_change(:price, var.price)
-        end
+    with prod <- Enum.find(products, fn(p) -> p.id == det_cs.changes.product_id end),
+      true <- !is_nil(prod),
+      var <- Enum.find(prod.variations, fn(var) -> var.id == det_cs.changes.variation_id end),
+      true <- !is_nil(var) do
+        det_cs
+        |> put_change(:name, prod.name)
+        |> put_change(:variation, var.name)
+        |> put_change(:price, var.price)
+    else
+      false ->
+        add_error(det_cs, :product_id, gettext("Invalid product"))
     end
   end
 

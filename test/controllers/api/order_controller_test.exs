@@ -1,7 +1,7 @@
 defmodule Publit.Api.OrderControllerTest do
   use Publit.ConnCase
 
-  describe "" do
+  describe "POST /api/orders" do
 
   end
 end
