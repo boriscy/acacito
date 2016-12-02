@@ -10,7 +10,7 @@ defmodule Publit.Order do
     field :organization_id, Ecto.UUID
     field :total, :decimal
     field :status, :string, default: "new"
-    field :location, Geo.Geometry
+    field :location, Geo.Geometry # Location is stored
     field :null_reason, :string
     field :number, :integer
     field :currency, :string
@@ -74,13 +74,19 @@ defmodule Publit.Order do
     update_status(order, "new", message: "Back to status new", user_id: user_id, type: "update_back")
   end
 
+  def to_api(order) do
+    {lat, lng} = order.location.coordinates
+    order
+    |> Map.delete(:__meta__)
+    |> Map.put(:location, Geo.JSON.encode(order.location))
+  end
+
   defp update_status(order, status, opts) do
     Ecto.Changeset.change(order)
     |> put_change(:status, status)
     |> add_log(%{type: opts[:type], message: opts[:message], user_id: opts[:user_id], time: Ecto.DateTime.autogenerate() })
     |> Repo.update()
   end
-
 
   defp set_number(cs) do
     dt = Ecto.DateTime.autogenerate()

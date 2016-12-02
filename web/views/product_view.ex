@@ -46,10 +46,10 @@ defmodule Publit.ProductView do
     end)
   end
 
-  defp get_errors(p) do
-    Enum.map(p.errors, fn({k, v}) ->
-      msg = translate_error({elem(v, 0), elem(v, 1)})
-      {k, msg}
-    end) |> Enum.into(%{})
-  end
+  #defp get_errors(p) do
+  #  Enum.map(p.errors, fn({k, v}) ->
+  #    msg = translate_error({elem(v, 0), elem(v, 1)})
+  #    {k, msg}
+  #  end) |> Enum.into(%{})
+  #end
 end

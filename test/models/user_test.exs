@@ -29,6 +29,13 @@ defmodule Publit.UserTest do
       assert cs.errors[:email]
       assert cs.errors[:password]
     end
+
+    test "email taken" do
+      assert {:ok, _user} = User.create(@valid_attrs)
+
+      assert {:error, cs} = User.create(@valid_attrs)
+      assert cs.errors[:email]
+    end
   end
 
 end

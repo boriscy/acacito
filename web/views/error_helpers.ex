@@ -44,4 +44,11 @@ defmodule Publit.ErrorHelpers do
       Gettext.dgettext(Publit.Gettext, "errors", msg, opts)
     end
   end
+
+  def get_errors(cs) do
+    Enum.map(cs.errors, fn({k, v}) ->
+      msg = translate_error({elem(v, 0), elem(v, 1)})
+      {k, msg}
+    end) |> Enum.into(%{})
+  end
 end

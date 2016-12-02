@@ -59,5 +59,7 @@ defmodule Publit.Router do
 
     get "/orders", Api.OrderController, :index
     get "/orders/:id", Api.OrderController, :show
+
+    post "/orders", Api.OrderController, :create
   end
 end
