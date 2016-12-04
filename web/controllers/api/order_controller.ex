@@ -13,7 +13,7 @@ defmodule Publit.Api.OrderController do
     ])
   end
 
-  # GET /api/orders/id
+  # GET /api/orders/:id
   def show(conn, %{"id" => id}) do
     render(conn, "show.json", order: %{id: id, total: 12.3, name: "test"})
   end

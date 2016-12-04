@@ -16,7 +16,7 @@ defmodule Publit.ErrorHelpers do
   end
 
   def has_error(form, field) do
-    if error = form.source.errors[field] do
+    if form.source.errors[field] do
       "has-error"
     end
   end

@@ -1,13 +1,16 @@
 defmodule Publit.Api.OrderControllerTest do
   use Publit.ConnCase
-  alias Publit.{Order, ProductVariation}
+  alias Publit.{Order, ProductVariation, Endpoint}
+  require Publit.Gettext
 
   setup do
+    {user, org} = create_user_org()
     conn = build_conn
-    |> set_user_org_conn()
+    |> put_req_header("user_token", Phoenix.Token.sign(Endpoint, salt(), user.id))
 
-    %{conn: conn}
+    %{conn: conn, user: user, org: org}
   end
+  defp salt, do: Application.get_env(:publit, Publit.Endpoint)[:secret_key_base]
 
   defp create_order(user, org) do
     [p1, p2] = create_products(org)
@@ -33,8 +36,7 @@ defmodule Publit.Api.OrderControllerTest do
     [p1, p2]
   end
 
-  defp order_params(conn) do
-    %{current_user: user, current_organization: org} = conn.assigns
+  defp order_params(user, org) do
     [p1, p2] = create_products(org)
     v1 = Enum.at(p1.variations, 1)
     v2 = Enum.at(p2.variations, 0)
@@ -49,21 +51,32 @@ defmodule Publit.Api.OrderControllerTest do
   end
 
   describe "POST /api/orders" do
-    test "OK",%{conn: conn} do
-      conn = post(conn, "/api/orders", %{"order" => order_params(conn)})
+    test "OK", %{conn: conn, user: user, org: org} do
+      conn = post(conn, "/api/orders", %{"order" => order_params(user, org)})
 
       assert conn.status == 200
       ord = Poison.decode!(conn.resp_body)["order"]
       assert ord["location"] == %{"coordinates" => [-120, 30], "type" => "Point"}
     end
 
-    test "ERROR",%{conn: conn} do
-      order_p = order_params(conn) |> Map.delete("location")
+    test "ERROR",%{conn: conn, user: user, org: org} do
+      order_p = order_params(user, org) |> Map.delete("location")
       conn = post(conn, "/api/orders", %{"order" => order_p})
 
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
       json = Poison.decode!(conn.resp_body)
       assert json["errors"]["location"]
+    end
+
+    test "unauthorized" do
+      conn = build_conn |> put_req_header("user_token", Phoenix.Token.sign(Endpoint, salt(), Ecto.UUID.generate()))
+
+      conn = post(conn, "/api/orders", %{"order" => %{}})
+
+      assert conn.status == Plug.Conn.Status.code(:unauthorized)
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["message"] == Publit.Gettext.gettext("You need to login")
     end
   end
 end

@@ -13,7 +13,7 @@ defmodule Publit.ProductImage do
   def storage_dir(_, _), do: "priv/static/#{public_dir()}"
   def __storage, do: Arc.Storage.Local
 
-  def filename(:big, {file, prod}) do
+  def filename(:big, {_file, prod}) do
     "#{partial_name(prod)}-big"
   end
   def filename(:thumb, {file, prod}) do

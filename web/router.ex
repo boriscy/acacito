@@ -21,6 +21,10 @@ defmodule Publit.Router do
     plug Publit.Plug.OrganizationAuth
   end
 
+  pipeline :user_api_auth do
+    plug Publit.Plug.Api.UserAuth
+  end
+
   scope "/", Publit do
     pipe_through [:browser] # Use the default browser stack
 
@@ -55,7 +59,7 @@ defmodule Publit.Router do
 
   # Api that the organization accesses
   scope "/api", Publit do
-    pipe_through [:api]
+    pipe_through [:api, :user_api_auth]
 
     get "/orders", Api.OrderController, :index
     get "/orders/:id", Api.OrderController, :show
