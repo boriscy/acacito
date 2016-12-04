@@ -11,7 +11,7 @@ defmodule Publit.Product do
     field :price, :decimal
     field :publish, :boolean, default: false
     field :currency, :string, default: "BOB"
-    #field :tags, :list
+    field :tags, Array
     field :unit, :string
     field :image, Publit.ProductImage.Type
     field :extra_info, :map, default: %{}
@@ -24,6 +24,10 @@ defmodule Publit.Product do
     embeds_many :variations, ProductVariation, on_replace: :delete
 
     timestamps()
+  end
+
+  def cast() do
+
   end
 
   @doc """
@@ -39,7 +43,7 @@ defmodule Publit.Product do
   @spec create(map) :: any
   def create(params) do
     %Product{}
-    |> cast(params, [:name, :description, :organization_id])
+    |> cast(params, [:name, :description, :organization_id, :tags])
     |> cast_attachments(params, [:image])
     |> validate_required([:name, :organization_id])
     |> cast_embed(:variations)
@@ -51,7 +55,7 @@ defmodule Publit.Product do
   """
   def update(product, params) do
     product
-    |> cast(params, [:name, :description, :publish])
+    |> cast(params, [:name, :description, :publish, :tags])
     |> set_image(params)
     |> cast_embed(:variations)
     |> validate_required([:name])

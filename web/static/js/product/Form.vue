@@ -1,32 +1,44 @@
 <template>
-  <div class="prouct-variations">
-    <div class="title">{{gettext("Variations")}}</div>
+  <div>
+    <div class="prouct-variations">
+      <div class="title">{{gettext("Variations")}}</div>
 
-    <div class="flex">
-      <div class="name header">{{gettext("Name")}}</div>
-      <div class="price header">{{gettext("Price")}}</div>
+      <div class="flex">
+        <label class="name header">{{gettext("Name")}}</label>
+        <label class="price header">{{gettext("Price")}}</label>
+      </div>
+
+      <div class="flex" v-for="(prodVar, index) in variations">
+        <input type="hidden" v-bind:value="prodVar.id" v-bind:name="productName('id', index)"/>
+
+        <div v-bind:class="hasError(prodVar, 'name')" class="name col">
+          <input type="text" v-model="prodVar.name"  v-bind:name="productName('name', index)"
+            class="form-control" v-bind:placeholder="getPlaceholder(index)"/>
+          <span class="help-block">{{readError(prodVar, 'name')}}</span>
+        </div>
+        <div v-bind:class="hasError(prodVar, 'price')" class="price col">
+          <input type="number" v-model="prodVar.price" v-bind:name="productName('price', index)"
+          class="form-control" step="0.01" @blur="roundPrice(prodVar)" placeholder="0.00"/>
+          <span class="help-block">{{readError(prodVar, 'price')}}</span>
+        </div>
+        <div class="col remove">
+          <button class="btn btn-danger btn-sm remove" @click.prevent="removeLine(prodVar, index)" v-show="index != 0">
+            {{gettext("Remove")}}
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-primary" @click.prevent="addLine()">{{gettext("Add line")}}</button>
     </div>
-
-    <div class="flex" v-for="(prodVar, index) in variations">
-      <input type="hidden" v-bind:value="prodVar.id" v-bind:name="productName('id', index)"/>
-
-      <div v-bind:class="hasError(prodVar, 'name')" class="name col">
-        <input type="text" v-model="prodVar.name"  v-bind:name="productName('name', index)"
-          class="form-control" v-bind:placeholder="getPlaceholder(index)"/>
-        <span class="help-block">{{readError(prodVar, 'name')}}</span>
+    <br/>
+    <div class="form-group">
+      <label>
+        {{gettext("Tags")}}
+      </label>
+      <span class="text-muted">({{gettext("Separate tags with commas")}})
+      <div id="tags">
       </div>
-      <div v-bind:class="hasError(prodVar, 'price')" class="price col">
-        <input type="number" v-model="prodVar.price" v-bind:name="productName('price', index)"
-        class="form-control" step="0.01" @blur="roundPrice(prodVar)" placeholder="0.00"/>
-        <span class="help-block">{{readError(prodVar, 'price')}}</span>
-      </div>
-      <div class="col remove">
-        <button class="btn btn-danger btn-sm remove" @click.prevent="removeLine(prodVar, index)" v-show="index != 0">
-          {{gettext("Remove")}}
-        </button>
-      </div>
+      <div class="clearfix"></div>
     </div>
-    <button class="btn btn-primary" @click.prevent="addLine()">{{gettext("Add line")}}</button>
   </div>
 </template>
 
@@ -36,9 +48,13 @@ import {translate, format} from '../mixins'
 export default {
   name: 'ProductForm',
   mixins: [translate, format],
+  components: {
+  },
   data: function() {
     return {
-      variations: [{}]
+      variations: [{}],
+      tags: [],
+      klass: {}
     }
   },
   methods: {
@@ -61,8 +77,11 @@ export default {
     }
   },
   mounted: function() {
-    console.log('mounted', window.productVariations);
     this.variations = window.productVariations
+    this.tags = new Taggle('tags', {
+      hiddenInputName: 'product[tags][]',
+      tags: window.tags || []
+    })
   }
 }
 </script>

@@ -11,12 +11,6 @@
     <product-form></product-form>
   </div>
 
-  <div>
-    <%= label f, :tags, gettext("Tags") %>
-    <input id="tags" class="form-control"/>
-    <%= error_tag f, :tags %>
-  </div>
-
   <div class="form-group <%= has_error(f, :image) %>">
     <%= label f, :image, gettext("Image") %>
     <%= file_input f, :image, class: "form-control" %>
@@ -38,6 +32,7 @@
 
 
 <script>
-  window.productVariations = <%= raw encode_variations(@changeset) %>
-  window.vueLoad = 'ProductForm'
+  window.productVariations = <%= raw encode_variations(@changeset) %>;
+  window.tags = <%= raw encode_tags(@changeset) %>;
+  window.vueLoad = 'ProductForm';
 </script>

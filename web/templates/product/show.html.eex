@@ -18,7 +18,6 @@
 
 <img src="<%= img_url(:big, @product) %>" />
 
-
 <div>
   <%= for pv <- @product.variations do %>
     <div class="price fs120p">
@@ -30,4 +29,10 @@
   <p class="description">
     <%= @product.description %>
   </p>
+</div>
+
+<div>
+  <%= for tag <- @product.tags do %>
+   <span class="tag"><%= tag %></span>
+  <% end %>
 </div>

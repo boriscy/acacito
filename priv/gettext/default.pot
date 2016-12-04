@@ -28,7 +28,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: web/templates/product/form.html.eex:21
+#: web/templates/product/form.html.eex:15
 msgid "Image"
 msgstr ""
 
@@ -67,7 +67,7 @@ msgstr ""
 msgid "Shop name"
 msgstr ""
 
-#: web/templates/product/form.html.eex:15
+#: web/templates/layout/translations.html.eex:15
 msgid "Tags"
 msgstr ""
 
@@ -79,7 +79,7 @@ msgstr ""
 msgid "You have entered invalid data please fix the errors"
 msgstr ""
 
-#: web/templates/product/form.html.eex:28
+#: web/templates/product/form.html.eex:22
 msgid "Description"
 msgstr ""
 
@@ -142,6 +142,7 @@ msgid "Your position has been updated."
 msgstr ""
 
 #: web/plug/organization_auth.ex:19 web/plug/user_auth.ex:18
+#: web/views/api/session_view.ex:5
 msgid "You need to login"
 msgstr ""
 
@@ -165,7 +166,7 @@ msgstr ""
 msgid "Unpublished"
 msgstr ""
 
-#: web/models/order.ex:108 web/models/order.ex:113
+#: web/models/order.ex:128
 msgid "Invalid product"
 msgstr ""
 
@@ -215,4 +216,8 @@ msgstr ""
 
 #: web/templates/layout/translations.html.eex:14
 msgid "Call Transport"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:16
+msgid "Separate tags with commas"
 msgstr ""

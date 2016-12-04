@@ -27,7 +27,7 @@ msgstr "Editar"
 msgid "Email"
 msgstr "Email"
 
-#: web/templates/product/form.html.eex:21
+#: web/templates/product/form.html.eex:15
 msgid "Image"
 msgstr "Imagen"
 
@@ -66,7 +66,7 @@ msgstr "Registre su venta"
 msgid "Shop name"
 msgstr "Nombre de la venta"
 
-#: web/templates/product/form.html.eex:15
+#: web/templates/layout/translations.html.eex:15
 msgid "Tags"
 msgstr "Etiquetas"
 
@@ -78,7 +78,7 @@ msgstr "Actualizar producto"
 msgid "You have entered invalid data please fix the errors"
 msgstr "Ingreso datos invalidos por favor corrija los errores"
 
-#: web/templates/product/form.html.eex:28
+#: web/templates/product/form.html.eex:22
 msgid "Description"
 msgstr "Descripcion"
 
@@ -141,6 +141,7 @@ msgid "Your position has been updated."
 msgstr "Su posicion ha sido actualizada"
 
 #: web/plug/organization_auth.ex:19 web/plug/user_auth.ex:18
+#: web/views/api/session_view.ex:5
 msgid "You need to login"
 msgstr "Necesita ingresar"
 
@@ -164,7 +165,7 @@ msgstr "Ocultar"
 msgid "Unpublished"
 msgstr "Oculto"
 
-#: web/models/order.ex:108 web/models/order.ex:113
+#: web/models/order.ex:128
 msgid "Invalid product"
 msgstr "Producto invalido"
 
@@ -186,7 +187,7 @@ msgstr "Ordenes en Proceso"
 
 #: web/templates/layout/translations.html.eex:8
 msgid "Add line"
-msgstr ""
+msgstr "Adicionar linea"
 
 #: web/templates/layout/translations.html.eex:12
 msgid "Big"
@@ -215,3 +216,7 @@ msgstr "Pequenio"
 #: web/templates/layout/translations.html.eex:14
 msgid "Call Transport"
 msgstr "Llamar Transporte"
+
+#: web/templates/layout/translations.html.eex:16
+msgid "Separate tags with commas"
+msgstr "Separe las etiquetas con comas"

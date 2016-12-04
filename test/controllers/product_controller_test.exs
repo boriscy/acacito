@@ -97,6 +97,7 @@ defmodule Publit.ProductControllerTest do
       prod = insert(:product, organization_id: conn.assigns.current_organization.id)
       [pvar1 | _] = prod.variations
       conn = put(conn, "/products/#{prod.id}", %{"product" => %{"name" => "New name",
+        "tags" => %{"0" => "multiple", "1" => "other"},
         "variations" => %{"0" =>
           %{"name" => "New variation", "price" => "111.5", "id" => pvar1.id} } } } )
 
@@ -106,6 +107,7 @@ defmodule Publit.ProductControllerTest do
       prod = Repo.get(Product, prod.id)
 
       assert prod.name == "New name"
+      assert prod.tags == ["multiple", "other"]
       [pv1] = prod.variations
 
       assert pv1.id == pvar1.id

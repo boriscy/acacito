@@ -11,6 +11,8 @@ window.translations = {
   "Medium": "<%= gettext("Medium") %>",
   "Big": "<%= gettext("Big") %>",
   "Variations": "<%= gettext("Variations") %>",
-  "Call Transport": "<%= gettext("Call Transport") %>"
+  "Call Transport": "<%= gettext("Call Transport") %>",
+  "Tags": "<%= gettext("Tags") %>",
+  "Separate tags with commas": "<%= gettext("Separate tags with commas") %>"
 }
 </script>
