@@ -35,8 +35,10 @@
         {{gettext("Tags")}}
       </label>
       <span class="text-muted">({{gettext("Separate tags with commas")}})
-      <div id="tags">
+
+      <div id="tags" class="tag-container" v-bind:class="tagActiveClass">
       </div>
+
       <div class="clearfix"></div>
     </div>
   </div>
@@ -44,6 +46,14 @@
 
 <script>
 import {translate, format} from '../mixins'
+
+Taggle.prototype._setInputWidth = function(width) {
+  if(width) {
+    width = width - 10
+  }
+  this.input.style.width = (width || 10) + 'px'
+}
+
 
 export default {
   name: 'ProductForm',
@@ -54,7 +64,8 @@ export default {
     return {
       variations: [{}],
       tags: [],
-      klass: {}
+      klass: {},
+      tagActiveClass: ''
     }
   },
   methods: {
@@ -74,6 +85,14 @@ export default {
     },
     roundPrice(prod) {
       prod.price = this.toFixed(+prod.price, 2)
+    },
+    setInputEvents(input) {
+      input.onblur = function(event) {
+        this.tagActiveClass = '';
+      }
+      input.onfocus = function(event) {
+        this.tagActiveClass = 'active'
+      }
     }
   },
   mounted: function() {
@@ -82,6 +101,7 @@ export default {
       hiddenInputName: 'product[tags][]',
       tags: window.tags || []
     })
+    this.setInputEvents(this.tags.getInput())
   }
 }
 </script>

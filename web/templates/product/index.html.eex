@@ -36,6 +36,12 @@
             bs.
           </div>
         <% end %>
+        <div>
+          <%= for tag <- product.tags do %>
+           <span class="tag"><%= tag %></span>
+          <% end %>
+        </div>
+
         <p class="description">
           <%= product.description %>
         </p>

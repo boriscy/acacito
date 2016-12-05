@@ -9,7 +9,7 @@ defmodule Publit.Repo.Migrations.CreateProduct do
       add :price, :decimal, precision: 12, scale: 2, default: 0.0
       add :publish, :boolean, default: false, null: false
       add :currency, :string
-      add :tags, {:array, :string}
+      add :tags, {:array, :string}, default: []
       add :unit, :string
       add :image, :string
       add :extra_info, :map, default: "{}"
