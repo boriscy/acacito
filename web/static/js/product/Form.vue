@@ -36,8 +36,7 @@
       </label>
       <span class="text-muted">({{gettext("Separate tags with commas")}})
 
-      <div id="tags" class="tag-container" v-bind:class="tagActiveClass">
-      </div>
+      <Tag :suggestions="['sopa', 'tomate', 'choclo', 'verdura', 'vegano']" :selected="tags" input-name="product[tags][]"></Tag>
 
       <div class="clearfix"></div>
     </div>
@@ -45,27 +44,21 @@
 </template>
 
 <script>
+import Tag from '../autocomplete/Tag.vue'
 import {translate, format} from '../mixins'
-
-Taggle.prototype._setInputWidth = function(width) {
-  if(width) {
-    width = width - 10
-  }
-  this.input.style.width = (width || 10) + 'px'
-}
 
 
 export default {
   name: 'ProductForm',
   mixins: [translate, format],
   components: {
+    Tag: Tag
   },
   data: function() {
     return {
       variations: [{}],
       tags: [],
-      klass: {},
-      tagActiveClass: ''
+      klass: {}
     }
   },
   methods: {
@@ -85,23 +78,11 @@ export default {
     },
     roundPrice(prod) {
       prod.price = this.toFixed(+prod.price, 2)
-    },
-    setInputEvents(input) {
-      input.onblur = function(event) {
-        this.tagActiveClass = '';
-      }
-      input.onfocus = function(event) {
-        this.tagActiveClass = 'active'
-      }
     }
   },
   mounted: function() {
     this.variations = window.productVariations
-    this.tags = new Taggle('tags', {
-      hiddenInputName: 'product[tags][]',
-      tags: window.tags || []
-    })
-    this.setInputEvents(this.tags.getInput())
+    this.tags = window.tags
   }
 }
 </script>
