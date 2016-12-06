@@ -36,7 +36,7 @@
       </label>
       <span class="text-muted">({{gettext("Separate tags with commas")}})
 
-      <Tag :suggestions="['sopa', 'tomate', 'choclo', 'verdura', 'vegano']" :selected="tags" input-name="product[tags][]"></Tag>
+      <Tag :suggestions="allTags" :selected="tags" input-name="product[tags][]"></Tag>
 
       <div class="clearfix"></div>
     </div>
@@ -58,7 +58,8 @@ export default {
     return {
       variations: [{}],
       tags: [],
-      klass: {}
+      klass: {},
+      allTags: []
     }
   },
   methods: {
@@ -83,6 +84,7 @@ export default {
   mounted: function() {
     this.variations = window.productVariations
     this.tags = window.tags
+    this.allTags = window.allTags
   }
 }
 </script>

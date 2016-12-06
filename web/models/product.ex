@@ -97,4 +97,9 @@ defmodule Publit.Product do
      order_by: [asc: p.name])
   end
 
+  def all_tags(org_id) do
+    Repo.all(from p in Product, select: fragment("DISTINCT(UNNEST(tags)) AS tags"),
+    where: p.organization_id == ^org_id ,order_by: [asc: fragment("tags")]  )
+  end
+
 end

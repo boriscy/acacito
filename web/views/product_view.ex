@@ -49,6 +49,10 @@ defmodule Publit.ProductView do
     Poison.encode!(data)
   end
 
+  def all_tags(conn) do
+    Publit.Product.all_tags(conn.assigns.current_organization.id)
+  end
+
   defp variations_data(:changes, variations) do
     Enum.map(variations, fn(p) ->
       Map.merge(p.data, p.changes)

@@ -34,5 +34,6 @@
 <script>
   window.productVariations = <%= raw encode_variations(@changeset) %>;
   window.tags = <%= raw encode_tags(@changeset) %>;
+  window.allTags = <%= raw Poison.encode!(all_tags(@conn)) %>;
   window.vueLoad = 'ProductForm';
 </script>
