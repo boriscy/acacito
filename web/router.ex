@@ -57,6 +57,12 @@ defmodule Publit.Router do
     get "/work_area", WorkAreaController, :index
   end
 
+  scope "/api", Publit do
+    pipe_through [:api]
+
+    post "/client_registration", Api.ClientRegistrationController, :create
+  end
+
   # Api that the organization accesses
   scope "/api", Publit do
     pipe_through [:api, :user_api_auth]

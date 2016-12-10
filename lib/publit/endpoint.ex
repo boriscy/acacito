@@ -38,5 +38,7 @@ defmodule Publit.Endpoint do
     key: "_publit_key",
     signing_salt: "nRSDCIQL"
 
+  plug CORSPlug
+
   plug Publit.Router
 end

@@ -84,7 +84,6 @@ export default {
     }
   },
   created() {
-    console.log('created');
     this.$store.dispatch('getOrders')
     this.setChannel()
   }

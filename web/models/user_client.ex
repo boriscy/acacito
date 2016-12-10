@@ -1,7 +1,6 @@
-defmodule Publit.User do
+defmodule Publit.UserClient do
   use Publit.Web, :model
-  alias Publit.{User, UserOrganization, Repo}
-
+  alias Publit.{UserClient, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
 
@@ -12,45 +11,35 @@ defmodule Publit.User do
     field :encrypted_password, :string
     field :locale, :string, default: "es"
     field :settings, :map, default: %{}
-    field :extra_data, :map, default: %{}
+    field :mobile_number, :string
+    field :type, :string, default: "client"
 
     field :password, :string, virtual: true
 
-    embeds_many :organizations, UserOrganization, on_replace: :delete
-
     timestamps()
   end
-  @derive {Poison.Encoder, only: [:id, :full_name, :email]}
+  @derive {Poison.Encoder, only: [:id, :full_name, :email, :mobile_number]}
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
   def create_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:email, :full_name, :password])
-    |> validate_required([:email, :password])
+    |> cast(params, [:email, :full_name, :password, :mobile_number])
+    |> validate_required([:email, :password, :full_name, :mobile_number])
     |> validate_format(:email, @email_reg)
     |> validate_length(:password, min: 8)
     |> unique_constraint(:email)
   end
 
   def create(params) do
-    cs = create_changeset(%User{}, params)
+    cs = create_changeset(%UserClient{}, params)
 
     if cs.valid? do
-      cs = generate_encrypted_password(cs)
+      cs = Publit.User.generate_encrypted_password(cs)
       Repo.insert(cs)
     else
       {:error , cs}
-    end
-  end
-
-  def generate_encrypted_password(cs) do
-    case cs do
-      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
-        put_change(cs, :encrypted_password, Comeonin.Bcrypt.hashpwsalt(password))
-      _ ->
-        cs
     end
   end
 
