@@ -61,6 +61,7 @@ defmodule Publit.Router do
     pipe_through [:api]
 
     post "/client_registration", Api.ClientRegistrationController, :create
+    resources "/login", Api.LoginController, only: [:create, :delete]
   end
 
   # Api that the organization accesses
