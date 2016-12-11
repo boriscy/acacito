@@ -11,7 +11,7 @@ defmodule Publit.Product do
     field :price, :decimal
     field :publish, :boolean, default: false
     field :currency, :string, default: "BOB"
-    field :tags, Array
+    field :tags, Array, default: []
     field :unit, :string
     field :image, Publit.ProductImage.Type
     field :extra_info, :map, default: %{}

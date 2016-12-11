@@ -4,7 +4,7 @@ defmodule Publit.UserClientTest do
   alias Publit.UserClient
 
   @valid_attrs %{full_name: "Amaru Barroso", email: "amaru@mail.com", password: "demo1234", mobile_number: "73732655", type: "jejeje"}
-  @invalid_attrs %{email: "to"}
+  @invalid_attrs %{email: "to", mobile_number: "22"}
 
   describe "create" do
     test "OK" do

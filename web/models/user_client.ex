@@ -3,6 +3,7 @@ defmodule Publit.UserClient do
   alias Publit.{UserClient, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
+  @number_reg ~r|^\d{8}$|
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "users" do
@@ -28,6 +29,7 @@ defmodule Publit.UserClient do
     |> cast(params, [:email, :full_name, :password, :mobile_number])
     |> validate_required([:email, :password, :full_name, :mobile_number])
     |> validate_format(:email, @email_reg)
+    |> validate_format(:mobile_number, @number_reg)
     |> validate_length(:password, min: 8)
     |> unique_constraint(:email)
   end

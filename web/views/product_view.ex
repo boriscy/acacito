@@ -43,10 +43,10 @@ defmodule Publit.ProductView do
     data = if cs.changes == %{} do
       cs.data.tags
     else
-      cs.changes.tags
+      cs.changes[:tags]
     end
 
-    Poison.encode!(data)
+    Poison.encode!(data || [])
   end
 
   def all_tags(conn) do

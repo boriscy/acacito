@@ -17,7 +17,8 @@ defmodule Publit.Api.ClientRegistrationControllerTest do
       conn = post(conn, "/api/client_registration", %{"user" => @valid_params})
 
       assert conn.status == 200
-      user = Poison.decode!(conn.resp_body)["user"]
+      json = Poison.decode!(conn.resp_body)
+      assert json["token"]
     end
 
     test "ERROR",%{conn: conn} do
