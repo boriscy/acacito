@@ -29,7 +29,9 @@ defmodule Publit.OrganizationTest do
 
       assert org.name == "A new name"
       assert org.currency == "BOB"
+      assert org.open == false
     end
+
   end
 
   describe "update" do
@@ -46,11 +48,38 @@ defmodule Publit.OrganizationTest do
 
     test "OK geom" do
       org = insert(:organization, currency: "USD")
-      p = Geo.WKT.decode("POINT(30 -90)")
+      p = %{"coordinates" => [-100, 30], "type" => "Point"}
       {:ok, org} = Organization.update(org, %{name: "Changes to name", geom: p})
 
-      assert org.geom
+      assert org.geom == %Geo.Point{coordinates: {-100, 30}, srid: nil}
     end
+
+    test "tags" do
+      attrs = @valid_attrs
+      org = insert(:organization, currency: "USD")
+      tags = [%{text: "vegan", count: 3}, %{text: "vegetarian", count: 5}]
+      Organization.update(org, %{"tags" => tags})
+
+      assert org.tags == [%{text: "vegan"}]
+    end
+  end
+
+  test "to_api" do
+    org = %Organization{
+      name: "Org 1",
+      address: "Near here",
+      category: "cat 1",
+      currency: "ABC",
+      geom: %Geo.Point{coordinates: {-17.8145819, -63.1560853}, srid: nil}
+    }
+
+    assert Organization.to_api(org) == %{
+      name: "Org 1",
+      address: "Near here",
+      category: "cat 1",
+      currency: "ABC",
+      pos: %{"coordinates" => [-17.8145819, -63.1560853], "type" => "Point"}
+    }
   end
 
 end

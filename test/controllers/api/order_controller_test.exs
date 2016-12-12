@@ -1,6 +1,6 @@
 defmodule Publit.Api.OrderControllerTest do
   use Publit.ConnCase
-  alias Publit.{Order, ProductVariation, Endpoint}
+  alias Publit.{ProductVariation, Endpoint}
   require Publit.Gettext
 
   setup do
@@ -12,20 +12,20 @@ defmodule Publit.Api.OrderControllerTest do
   end
   defp salt, do: Application.get_env(:publit, Publit.Endpoint)[:secret_key_base]
 
-  defp create_order(user, org) do
-    [p1, p2] = create_products(org)
-    v1 = Enum.at(p1.variations, 1)
-    v2 = Enum.at(p2.variations, 0)
-    params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
-    "location" => Geo.WKT.decode("POINT(30 -90)"),
-    "details" => %{
-        "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
-        "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-      }
-    }
-    {:ok, order} = Order.create(params)
-    order
-  end
+  #defp create_order(user, org) do
+  #  [p1, p2] = create_products(org)
+  #  v1 = Enum.at(p1.variations, 1)
+  #  v2 = Enum.at(p2.variations, 0)
+  #  params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
+  #  "location" => Geo.WKT.decode("POINT(30 -90)"),
+  #  "details" => %{
+  #      "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
+  #      "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
+  #    }
+  #  }
+  #  {:ok, order} = Order.create(params)
+  #  order
+  #end
   defp create_products(org) do
     p1 = insert(:product, organization_id: org.id, publish: true)
     p2 = insert(:product, name: "Super Salad", organization_id: org.id, publish: true,

@@ -20,7 +20,6 @@ defmodule Publit.OrganizationController do
 
   # PUT /organizations/xyz
   def update(conn, %{"organization" => org_params, "format" => "json"}) do
-    org_params = set_org_params(org_params)
     case Organization.update(conn.assigns.current_organization, org_params) do
       {:ok, org} ->
         conn
@@ -44,6 +43,7 @@ defmodule Publit.OrganizationController do
     end
   end
 
+  # List of the current user active organizations
   defp active_organizations(user) do
     with u_orgs <- Enum.filter(user.organizations, &(&1.active)),
       ids <- u_orgs |> Enum.map(&(&1.organization_id)) do
@@ -55,12 +55,4 @@ defmodule Publit.OrganizationController do
     end
   end
 
-  defp set_org_params(params) do
-    if params["geom"] && params["geom"]["lat"] && params["geom"]["lng"] do
-      geom = params["geom"]
-      %{params | "geom" => %Geo.Point{ coordinates: {geom["lat"], geom["lng"]}, srid: nil} }
-    else
-      params
-    end
-  end
 end

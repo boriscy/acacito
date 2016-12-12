@@ -57,6 +57,7 @@ defmodule Publit.Router do
     get "/work_area", WorkAreaController, :index
   end
 
+  # Unauthorized API
   scope "/api", Publit do
     pipe_through [:api]
 
@@ -72,5 +73,8 @@ defmodule Publit.Router do
     get "/orders/:id", Api.OrderController, :show
 
     post "/orders", Api.OrderController, :create
+
+    post "/search", Api.SearchController, :search
   end
+
 end

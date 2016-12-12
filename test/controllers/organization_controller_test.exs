@@ -40,10 +40,10 @@ defmodule Publit.OrganizationControllerTest do
 
     test "OK json", %{conn: conn} do
       conn = put(conn, "/organizations/current", %{"organization" => %{
-         "geom" => %{"lat" => "30", "lng" => "-120"} }, "format" => "json" })
+         "geom" => %{"coordinates" => ["-120", "30"], "type" => "Point"} }, "format" => "json" })
 
       org = Poison.decode!(conn.resp_body)
-      assert org["organization"]["coords"] == %{"lat" => "30", "lng"=> "-120"}
+      assert org["organization"]["pos"] == %{"coordinates" => ["-120", "30"], "type" => "Point"}
     end
 
     test "ERROR json", %{conn: conn} do

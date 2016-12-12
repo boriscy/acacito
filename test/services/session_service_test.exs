@@ -7,7 +7,7 @@ defmodule Publit.SessionServiceTest do
     {:ok, pid1} = SessionService.start_link(%{key: :ama, name: "Amaru", expires_in: 1000})
 
     assert pid1 == Process.whereis(:ama)
-    assert %SessionService{key: :ama, name: "Amaru", expires_in: 1000, ref: ref} = SessionService.get(:ama)
+    assert %SessionService{key: :ama, name: "Amaru", expires_in: 1000, ref: _ref} = SessionService.get(:ama)
 
     assert {:error, {:already_started, _pid}} = SessionService.start_link(%{key: :ama, name: "Amaru"})
 

@@ -18,6 +18,8 @@ defmodule Publit.Organization do
     field :settings, :map, default: %{}
     field :geom, Geo.Geometry
     field :category, :string, default: "restaurant"
+    field :open, :boolean, default: false
+    field :tags, Array, default: []
 
     has_many :products, Product
 
@@ -43,7 +45,7 @@ defmodule Publit.Organization do
   """
   def update(org, params) do
     org
-    |> cast(params, [:name, :address, :geom])
+    |> cast(params, [:name, :address, :geom, :tags])
     |> validate_required([:name, :currency])
     |> Repo.update()
   end
@@ -78,23 +80,42 @@ defmodule Publit.Organization do
     end
   end
 
+  @doc """
+  returns data to encode json for the API
+  """
   def to_api(org) do
     %{
       name: org.name,
       currency: org.currency,
       address: org.address,
-      coords: coords(org),
+      pos: coords(org),
       category: org.category
     }
   end
 
   def coords(org) do
     case org.geom do
-      nil -> %{lat: nil, lng: nil}
-      p ->
-        {lat,lng} = p.coordinates
-        %{lat: lat, lng: lng}
+      nil -> %{"coordinates" => [nil, nil], "type" => "Point"}
+      p -> Geo.JSON.encode(org.geom)
     end
+  end
+
+  @doc """
+  """
+  def set_tags(org_id) do
+   {:ok, id} = Ecto.UUID.dump(org_id)
+    sql = """
+    with tags as (
+      select unnest(p.tags) as tag from products p
+      where p.organization_id = $1
+    ),
+    res as (
+      select count(tag) as tot, tag from tags
+      group by tag
+    )
+    select tag, tot from res
+    """
+    Ecto.Adapters.SQL.query(Repo, sql, [id])
   end
 
 end
