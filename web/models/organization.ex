@@ -20,6 +20,7 @@ defmodule Publit.Organization do
     field :category, :string, default: "restaurant"
     field :open, :boolean, default: false
     field :tags, Array, default: []
+    field :rating, :integer, default: 0
 
     has_many :products, Product
 
@@ -45,7 +46,7 @@ defmodule Publit.Organization do
   """
   def update(org, params) do
     org
-    |> cast(params, [:name, :address, :geom, :tags])
+    |> cast(params, [:name, :address, :geom])
     |> validate_required([:name, :currency])
     |> Repo.update()
   end
