@@ -1,6 +1,5 @@
 defmodule Publit.SearchService do
   import Ecto.Adapters.SQL
-  import Ecto.Query
   alias Publit.{Repo}
 
   @base_sql """
@@ -62,8 +61,8 @@ defmodule Publit.SearchService do
       {sql, val.args}
     end)
 
-    sql = Enum.map(a, fn({sql, args}) -> sql end) |> Enum.join(" ")
-    args = Enum.map(a, fn({sql, arg}) -> convert(arg) end)
+    sql = Enum.map(a, fn({sql, _args}) -> sql end) |> Enum.join(" ")
+    args = Enum.map(a, fn({_sql, arg}) -> convert(arg) end)
 
     {sql || "", args}
   end

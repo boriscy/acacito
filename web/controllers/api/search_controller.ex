@@ -6,7 +6,7 @@ defmodule Publit.Api.SearchController do
   # POST /api/search
   def search(conn, %{"search" => search_params}) do
     rows = SearchService.search(search_params)
-    
+
     render(conn, "search.json", results: rows)
   end
 end

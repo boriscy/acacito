@@ -16,4 +16,5 @@ defmodule Publit.Api.LoginController do
         |> render("errors.json", cs: cs)
     end
   end
+
 end

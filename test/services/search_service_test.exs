@@ -69,5 +69,19 @@ defmodule Publit.SearchServiceTest do
       org = List.first(rows)
       assert org.name == "org 3"
     end
+
+
+    test "only rating" do
+      create_orgs
+
+      rows = SearchService.search(%{
+        "coordinates" => [-18.1778,-63.8748],
+        "radius" => "2", "rating" => "4"
+      })
+
+      assert Enum.count(rows) == 1
+      org = List.first(rows)
+      assert org.name == "org 1"
+    end
   end
 end
