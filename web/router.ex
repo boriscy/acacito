@@ -63,6 +63,7 @@ defmodule Publit.Router do
 
     post "/client_registration", Api.ClientRegistrationController, :create
     resources "/login", Api.LoginController, only: [:create, :delete]
+    get "/valid_token/:token", Api.LoginController, :valid_token
   end
 
   # Api that the organization accesses

@@ -17,4 +17,17 @@ defmodule Publit.Api.LoginController do
     end
   end
 
+
+  # GET /api/valid_token/:token
+  def valid_token(conn, %{"token" => token}) do
+    case Phoenix.Token.verify(Publit.Endpoint, "user_id", token) do
+      {:ok, _token} ->
+        render(conn, "valid_token.json", valid: true)
+      {:error, :invalid} ->
+        conn
+        |> put_status(:unauthorized)
+        |> render("valid_token.json", valid: false)
+    end
+  end
+
 end

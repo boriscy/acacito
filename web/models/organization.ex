@@ -21,6 +21,8 @@ defmodule Publit.Organization do
     field :open, :boolean, default: false
     field :tags, Array, default: []
     field :rating, :integer, default: 0
+    field :description, :string
+    #field :image, :string
 
     has_many :products, Product
 
@@ -35,7 +37,7 @@ defmodule Publit.Organization do
   """
   def create(params) do
     %Organization{}
-    |> cast(params, [:name, :currency, :address])
+    |> cast(params, [:name, :currency, :address, :description])
     |> validate_required([:name, :currency])
     |> validate_inclusion(:currency, @currencies)
     |> Repo.insert()
@@ -46,8 +48,8 @@ defmodule Publit.Organization do
   """
   def update(org, params) do
     org
-    |> cast(params, [:name, :address, :geom])
-    |> validate_required([:name, :currency])
+    |> cast(params, [:name, :address, :geom, :description])
+    |> validate_required([:name, :currency, :geom])
     |> Repo.update()
   end
 

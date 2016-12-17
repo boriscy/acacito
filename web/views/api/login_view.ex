@@ -9,6 +9,10 @@ defmodule Publit.Api.LoginView do
     %{errors: get_errors(cs)}
   end
 
+  def render("valid_token.json", %{valid: valid}) do
+    %{valid: valid}
+  end
+
   def to_api(user) do
     user
     |> Map.take([:id, :full_name, :email, :locale, :mobile_number, :type])

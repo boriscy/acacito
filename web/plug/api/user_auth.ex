@@ -23,8 +23,8 @@ defmodule Publit.Plug.Api.UserAuth do
   end
 
   defp get_user(conn) do
-    with [user_token] <- get_req_header(conn, "user_token"),
-      {:ok, user_id} <- Phoenix.Token.verify(Endpoint, salt(), user_token),
+    with [user_token] <- get_req_header(conn, "authorization"),
+      {:ok, user_id} <- Phoenix.Token.verify(Endpoint, "user_id", user_token),
       {:ok, user_id} <- Ecto.UUID.cast(user_id),
       user <- Repo.get(User, user_id),
       false <- is_nil(user) do

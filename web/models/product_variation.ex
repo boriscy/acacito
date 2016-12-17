@@ -5,8 +5,8 @@ defmodule Publit.ProductVariation do
 
   embedded_schema do
     field :name, :string
-    field :price, :decimal, default: nil
     field :description, :string
+    field :price, :decimal, default: nil
   end
 
   @doc """

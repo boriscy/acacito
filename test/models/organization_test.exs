@@ -4,6 +4,7 @@ defmodule Publit.OrganizationTest do
   alias Publit.{Organization}
 
   @valid_attrs %{currency: "USD", name: "Home",  settings: %{theme: "dark"},
+   description: "One of the finest places in Samaipata",
     info: %{address: "Samaipata", mobile: "73732677", age: 40, valid: true, list: [%{a: 1}, %{a: "String"}] }
   }
   @invalid_attrs %{}
@@ -14,6 +15,7 @@ defmodule Publit.OrganizationTest do
 
       assert org.id
       assert org.name == "Home"
+      assert org.description == "One of the finest places in Samaipata"
     end
 
     test "ERROR" do
@@ -39,7 +41,8 @@ defmodule Publit.OrganizationTest do
       org = insert(:organization, currency: "USD")
       assert org.currency == "USD"
 
-      {:ok, org} = Organization.update(org, %{name: "Changes to name", currency: "BOB", address: "The other address"})
+      {:ok, org} = Organization.update(org, %{name: "Changes to name", currency: "BOB", address: "The other address",
+        geom: %{"coordinates" => [-63, -18], "type" => "Point"}})
 
       assert org.name == "Changes to name"
       assert org.address == "The other address"

@@ -48,4 +48,21 @@ defmodule Publit.Api.SearchControllerTest do
       assert json["results"] |> Enum.count() == 3
     end
   end
+
+
+  describe "POST /api/serch Authorization header" do
+    test "OK" do
+      create_orgs()
+      user = insert(:user)
+      token = Publit.UserAuthentication.encrypt_user_id(user.id)
+      conn = build_conn |> put_req_header("authorization", token)
+
+      conn = post(conn, "/api/search", %{"search" => %{"radius" => "2", "coordinates" => [-18.1778,-63.8748]}})
+
+      assert conn.status == 200
+      json = Poison.decode!(conn.resp_body)
+      assert json["results"] |> Enum.count() == 3
+
+    end
+  end
 end

@@ -19,14 +19,14 @@ defmodule Publit.SearchService do
   defp map_results(rows) do
     Enum.map(rows, fn(row) ->
       [id, name, geom, tags, address, open, rating] = row
-      %{id: id, name: name, coors: Geo.JSON.encode(geom),
+      %{id: id, name: name, coords: Geo.JSON.encode(geom),
         tags: tags, address: address, open: open, rating: rating}
     end)
   end
 
   defp get_sql_and_params(params) do
     %{"coordinates" => [lng, lat], "radius" => rad} = params
-    arr = [lng, lat, String.to_integer(rad)]
+    arr = [lng, lat, String.to_integer("#{rad}")]
 
     tags_m = case get_tags(params["tags"]) do
       {:ok, tags} -> %{sql: " and t->>'text' = any($tags)", args: tags, replace: "$tags"}
