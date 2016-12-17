@@ -3,7 +3,7 @@ defmodule Publit.SearchService do
   alias Publit.{Repo}
 
   @base_sql """
-  select o.id::text, o.name, o.geom, o.tags, o.address, o.open, o.rating
+  select o.id::text, o.name, o.geom, o.tags, o.address, o.open, o.rating, o.description
   from organizations o, jsonb_array_elements(tags) as t
   where o.open = true and ST_Distance_Sphere(o.geom, ST_MakePoint($1, $2)) <= $3 * 1000
   """
@@ -18,9 +18,10 @@ defmodule Publit.SearchService do
 
   defp map_results(rows) do
     Enum.map(rows, fn(row) ->
-      [id, name, geom, tags, address, open, rating] = row
+      [id, name, geom, tags, address, open, rating, desc] = row
       %{id: id, name: name, coords: Geo.JSON.encode(geom),
-        tags: tags, address: address, open: open, rating: rating}
+        tags: tags, address: address, open: open, rating: rating,
+        description: desc}
     end)
   end
 
@@ -34,7 +35,7 @@ defmodule Publit.SearchService do
     end
 
     rating_m = if String.valid?(params["rating"]) && Regex.match?(~r/^[0-5]{1}$/, params["rating"]) do
-      %{sql: " and o.rating >= $rating", args: String.to_integer(params["rating"]), replace: "$rating"}
+      %{sql: " and (o.rating->>'value')::decimal >= $rating", args: String.to_integer(params["rating"]), replace: "$rating"}
     else
       %{sql: nil}
     end

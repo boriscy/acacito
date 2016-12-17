@@ -20,14 +20,18 @@ defmodule Publit.SearchServiceTest do
   def create_orgs do
     [
       # summa pacha
-      create_org(%{name: "org 1", geom: coords(-63.876047,-18.1787804), rating: 4, tags: [%{text: "vegetariano", count: 10}, %{text: "vegano", count: 7}] }),
+      create_org(%{name: "org 1", geom: coords(-63.876047,-18.1787804), rating: %{value: 4, count: 4},
+        tags: [%{text: "vegetariano", count: 10}, %{text: "vegano", count: 7}], description: "Aaaa" }),
       #
-      create_org(%{name: "org 2", geom: coords(-63.8732718,-18.1767489), rating: 3, tags: [%{text: "carne", count: 15}, %{text: "vegetariano", count: 1}, %{text: "parrilla", count: 5}] }),
+      create_org(%{name: "org 2", geom: coords(-63.8732718,-18.1767489), rating: %{value: 3, count: 2},
+        tags: [%{text: "carne", count: 15}, %{text: "vegetariano", count: 1}, %{text: "parrilla", count: 5}], description: "B" }),
       # Achira
-      create_org(%{name: "org 3", geom: coords(-63.8210238,-18.1650556), rating: 5, tags: [%{text: "pizza", count: 20}, %{text: "pasta", count: 5}] }),
-      create_org(%{name: "org 4", geom: coords(-63.8660898,-18.1781923), rating: 2, tags: [%{text: "pollo", count: 4}] }),
+      create_org(%{name: "org 3", geom: coords(-63.8210238,-18.1650556), rating: %{value: 5, count: 2},
+        tags: [%{text: "pizza", count: 20}, %{text: "pasta", count: 5}] }),
+      create_org(%{name: "org 4", geom: coords(-63.8660898,-18.1781923), rating: %{value: 2.2, count: 4},
+        tags: [%{text: "pollo", count: 4}] }),
       # Timboy
-      create_org(%{name: "org 5", geom: coords(-63.8732718,-18.1767489), rating: 3, tags: [] })
+      create_org(%{name: "org 5", geom: coords(-63.8732718,-18.1767489), rating: %{value: 3, count: 10}, tags: [] })
     ]
   end
 
@@ -58,7 +62,7 @@ defmodule Publit.SearchServiceTest do
     end
 
     test "rating" do
-      create_orgs
+      orgs = create_orgs
 
       rows = SearchService.search(%{
         "coordinates" => [-63.8748, -18.1778],
@@ -86,7 +90,7 @@ defmodule Publit.SearchServiceTest do
       assert org.coords == %{"coordinates" => [-63.876047, -18.1787804], "type" => "Point"}
       assert org.id
       assert org.open == true
-      assert org.rating == 4
+      assert org.rating == %{"count" => 4, "value" => 4}
       assert org.address
       assert org.tags == [%{"count" => 10, "text" => "vegetariano"}, %{"count" => 7, "text" => "vegano"}]
     end

@@ -57,14 +57,6 @@ defmodule Publit.OrganizationTest do
       assert org.geom == %Geo.Point{coordinates: {-100, 30}, srid: nil}
     end
 
-    #test "tags" do
-    #  attrs = @valid_attrs
-    #  org = insert(:organization, currency: "USD")
-    #  tags = [%{text: "vegan", count: 3}, %{text: "vegetarian", count: 5}]
-    #  {:ok, org} = Organization.update(org, %{"tags" => tags})
-
-    #  assert org.tags == [%{text: "vegan"}]
-    #end
   end
 
   test "to_api" do
@@ -73,7 +65,8 @@ defmodule Publit.OrganizationTest do
       address: "Near here",
       category: "cat 1",
       currency: "ABC",
-      geom: %Geo.Point{coordinates: {-17.8145819, -63.1560853}, srid: nil}
+      geom: %Geo.Point{coordinates: {-17.8145819, -63.1560853}, srid: nil},
+      description: "A good place"
     }
 
     assert Organization.to_api(org) == %{
@@ -81,7 +74,8 @@ defmodule Publit.OrganizationTest do
       address: "Near here",
       category: "cat 1",
       currency: "ABC",
-      pos: %{"coordinates" => [-17.8145819, -63.1560853], "type" => "Point"}
+      pos: %{"coordinates" => [-17.8145819, -63.1560853], "type" => "Point"},
+      description: "A good place"
     }
   end
 

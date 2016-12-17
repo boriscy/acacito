@@ -60,8 +60,9 @@ Order.create(%{"organization_id" => org.id, details: %{
 {:ok, org} = Repo.insert(%Organization{
   name: "La Chakana",
   address: "Plaza principal samaipata",
+  description: "Un lugar cerca del centro de samaipata con comida internacional de la mejor calidad",
   open: true,
-  rating: 4,
+  rating: %{count: 3, value: 4.2 },
   geom: %Geo.Point{coordinates: {-63.8784321, -18.1798758}, srid: nil},
   tags: [%{text: "carne", count: 10}, %{text: "vegetariano", count: 2}]
 })
@@ -69,6 +70,7 @@ Order.create(%{"organization_id" => org.id, details: %{
 {:ok, prod} = Product.create(%{
   name: "Goulash",
   organization_id: org.id,
+  publish: true,
   image: %Plug.Upload{content_type: "", filename: "goulash.jpg", path: "/home/boris/Pictures/comida/goulash.jpg"},
   tags: ["sopa", "vegetariano"],
   description: "Chicken breasts are filled with Gouda cheese and caramelized onions, rolled in seasoned coating mix, and baked until golden brown.",
@@ -78,6 +80,7 @@ Order.create(%{"organization_id" => org.id, details: %{
 {:ok, prod} = Product.create(%{
   name: "Pollo con chanpiniones",
   organization_id: org.id,
+  publish: true,
   image: %Plug.Upload{filename: "pollo-1.jpg", path: "/home/boris/Pictures/comida/pollo-1.jpg"},
   tags: ["pollo", "champiniones"],
   description: "Chicken breasts are filled with Gouda cheese and caramelized onions, rolled in seasoned coating mix, and baked until golden brown.",
@@ -87,7 +90,8 @@ Order.create(%{"organization_id" => org.id, details: %{
 {:ok, prod} = Product.create(%{
   name: "Stromboli",
   organization_id: org.id,
-  image: %Plug.Upload{content_type: "", filename: "goulash.jpg", path: "/home/boris/Pictures/comida/goulash.jpg"},
+  publish: true,
+  image: %Plug.Upload{content_type: "", filename: "stromboli.jpg", path: "/home/boris/Pictures/comida/stromboli.jpg"},
   tags: ["carne", "stromboli"],
   description: "The best of 3 worlds. Rich, good and quick! This pie can be made in either an 8 or 9 inch pie pan.",
   variations: [%{name: nil, price: Decimal.new("30")}]

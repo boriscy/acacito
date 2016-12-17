@@ -20,7 +20,7 @@ defmodule Publit.Organization do
     field :category, :string, default: "restaurant"
     field :open, :boolean, default: false
     field :tags, Array, default: []
-    field :rating, :integer, default: 0
+    field :rating, :map, default: %{}
     field :description, :string
     #field :image, :string
 
@@ -92,7 +92,8 @@ defmodule Publit.Organization do
       currency: org.currency,
       address: org.address,
       pos: coords(org),
-      category: org.category
+      category: org.category,
+      description: org.description
     }
   end
 
