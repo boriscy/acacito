@@ -52,17 +52,45 @@ Order.create(%{"organization_id" => org.id, details: %{
   }
 })
 """
+org = Repo.get_by(Organization, name: "Tierra Libre")
+if org do
+  {:ok, prod} = Product.create(%{
+    name: "Camaron al Ajo",
+    organization_id: org.id,
+    publish: true,
+    image: %Plug.Upload{content_type: "", filename: "camaron-ajo.jpg", path: "/home/boris/Pictures/comida/camaron-ajo.jpg"},
+    tags: ["mar", "camarones"],
+    description: "Chicken breasts are filled with Gouda cheese and caramelized onions, rolled in seasoned coating mix, and baked until golden brown.",
+    variations: [%{name: nil, price: Decimal.new("30")}]
+  })
 
+  {:ok, prod} = Product.create(%{
+    name: "Pollo Parmessano",
+    organization_id: org.id,
+    publish: true,
+    image: %Plug.Upload{filename: "pollo-a-parmesano.jpg", path: "/home/boris/Pictures/comida/pollo-a-parmesano.jpg"},
+    tags: ["pollo", "queso", "comida italiana"],
+    description: "Chicken breasts are filled with Gouda cheese and caramelized onions, rolled in seasoned coating mix, and baked until golden brown.",
+    variations: [%{name: nil, price: Decimal.new("45")}]
+  })
 
-
+  {:ok, prod} = Product.create(%{
+    name: "Sopa Tierra Libre",
+    organization_id: org.id,
+    publish: true,
+    image: %Plug.Upload{content_type: "", filename: "sopa-1.jpg", path: "/home/boris/Pictures/comida/sopa-1.jpg"},
+    tags: ["sopa", "carne"],
+    description: "The best of 3 worlds. Rich, good and quick! This pie can be made in either an 8 or 9 inch pie pan.",
+    variations: [%{name: nil, price: Decimal.new("30")}]
+  })
+end
 
 
 {:ok, org} = Repo.insert(%Organization{
   name: "La Chakana",
   address: "Plaza principal samaipata",
   description: "Un lugar cerca del centro de samaipata con comida internacional de la mejor calidad",
-  open: true,
-  rating: %{count: 3, value: 4.2 },
+  open: true, rating: 4.2,  rating_count: 3,
   geom: %Geo.Point{coordinates: {-63.8784321, -18.1798758}, srid: nil},
   tags: [%{text: "carne", count: 10}, %{text: "vegetariano", count: 2}]
 })

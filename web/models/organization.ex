@@ -20,9 +20,10 @@ defmodule Publit.Organization do
     field :category, :string, default: "restaurant"
     field :open, :boolean, default: false
     field :tags, Array, default: []
-    field :rating, :map, default: %{}
+    field :rating, :decimal
+    field :rating_count, :integer
     field :description, :string
-    #field :image, :string
+    #field :images, :map
 
     has_many :products, Product
 
@@ -114,11 +115,16 @@ defmodule Publit.Organization do
       where p.organization_id = $1
     ),
     res as (
-      select count(tag) as tot, tag from tags
+      select count(tag) as count, tag from tags
       group by tag
+      order by count desc
+      limit 5
     )
-    select tag, tot from res
+    update organizations
+    set tags = (select json_agg(row_to_json(res)) from res)
+    where id = $1
     """
+
     Ecto.Adapters.SQL.query(Repo, sql, [id])
   end
 
