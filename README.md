@@ -10,11 +10,3 @@ config :arc,
   bucket: {:system, "AWS_S3_BUCKET"}, # if using Amazon S3
 ```
 
-```sql
-create or replace function update_org_tags(uuid)
-returns void as $$
-begin
-
-end;
-$$ LANGUAGE plpgsql;
-```
