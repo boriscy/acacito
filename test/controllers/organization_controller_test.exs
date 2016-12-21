@@ -26,7 +26,7 @@ defmodule Publit.OrganizationControllerTest do
   describe "PUT /organizations/:id" do
     test "OK html", %{conn: conn} do
       conn = put(conn, "/organizations/current", %{"organization" => %{
-         "name" => "Other org name" } })
+         "name" => "Other org name", "geom" => %{"coordinates" => [10, 10], "type" => "Point"} } })
 
       assert redirected_to(conn) == "/organizations/#{conn.assigns.current_organization.id}"
     end

@@ -1,6 +1,6 @@
 defmodule Publit.Api.ProductControllerTest do
   use Publit.ConnCase
-  alias Publit.{User, Product}
+  alias Publit.{User}
 
   setup do
     conn = build_conn

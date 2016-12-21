@@ -10,7 +10,7 @@ defmodule Publit.OrderTest do
 
   defp create_order() do
     {user, org} = create_user_org(%{})
-    [p1, p2] = create_products(org)
+    [p1, p2] = create_products2(org)
     v1 = Enum.at(p1.variations, 1)
     v2 = Enum.at(p2.variations, 0)
     params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
@@ -23,7 +23,7 @@ defmodule Publit.OrderTest do
     {:ok, order} = Order.create(params)
     order
   end
-  defp create_products(org) do
+  defp create_products2(org) do
     p1 = insert(:product, organization_id: org.id, publish: true)
     p2 = insert(:product, name: "Super Salad", organization_id: org.id, publish: true,
      variations: [
@@ -37,7 +37,7 @@ defmodule Publit.OrderTest do
   describe "create" do
     test "OK" do
       {user, org} = create_user_org(%{})
-      [p1, p2] = create_products(org)
+      [p1, p2] = create_products2(org)
       v1 = Enum.at(p1.variations, 1)
       v2 = Enum.at(p2.variations, 0)
 
@@ -79,7 +79,7 @@ defmodule Publit.OrderTest do
       {user, org} = create_user_org(%{})
       Repo.insert(%Order{user_id: user.id, organization_id: org.id})
 
-      [p1, p2] = create_products(org)
+      [p1, p2] = create_products2(org)
       v1 = Enum.at(p1.variations, 1)
       v2 = Enum.at(p2.variations, 0)
 
@@ -98,7 +98,7 @@ defmodule Publit.OrderTest do
 
     test "ERROR" do
       {user, org} = create_user_org(%{})
-      [p1, p2] = create_products(org)
+      [p1, p2] = create_products2(org)
       v1 = Enum.at(p1.variations, 1)
       v2 = Enum.at(p2.variations, 0)
 

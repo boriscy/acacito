@@ -19,6 +19,7 @@ defmodule Publit.OrganizationController do
   end
 
   # PUT /organizations/xyz
+  # render json
   def update(conn, %{"organization" => org_params, "format" => "json"}) do
     case Organization.update(conn.assigns.current_organization, org_params) do
       {:ok, org} ->
@@ -39,6 +40,7 @@ defmodule Publit.OrganizationController do
         |> redirect(to: organization_path(conn, :show, org))
       {:error, cs} ->
         conn
+        |> put_status(:unprocessable_entity)
         |> render("edit.html", changeset: cs)
     end
   end

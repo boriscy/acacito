@@ -63,7 +63,7 @@ defmodule Publit.SearchServiceTest do
     end
 
     test "rating" do
-      orgs = create_orgs
+      _orgs = create_orgs
 
       rows = SearchService.search(%{
         "coordinates" => [-63.8748, -18.1778],
