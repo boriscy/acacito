@@ -97,6 +97,14 @@ defmodule Publit.Product do
      order_by: [asc: p.name])
   end
 
+  @doc """
+  Returns one product that is published and belongs to an organization
+  """
+  def get(org_id, prod_id) do
+    Repo.one(from p in Product,
+     where: p.organization_id == ^org_id and p.publish == true and p.id == ^prod_id)
+  end
+
   def all_tags(org_id) do
     Repo.all(from p in Product, select: fragment("DISTINCT(UNNEST(tags)) AS tags"),
     where: p.organization_id == ^org_id ,order_by: [asc: fragment("tags")]  )

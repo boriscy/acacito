@@ -9,5 +9,14 @@ defmodule Publit.Api.ProductView do
 
   def to_api(prod) do
     Map.drop(prod, [:__meta__, :organization])
+    |> Map.put(:image, get_image(prod))
+  end
+
+  def get_image(prod) do
+    if prod.image do
+      Publit.ProductImage.img_url(:big, prod)
+    else
+      nil
+    end
   end
 end

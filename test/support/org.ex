@@ -7,7 +7,10 @@ defmodule Publit.Support.Org do
   def create_products(org) do
     products
     |> Enum.map(fn(prod) -> Map.merge(prod, %{description: prod.name <> " Rico", organization_id: org.id}) end)
-    |> Enum.each(fn(prod) -> Repo.insert(prod) end)
+    |> Enum.map(fn(prod) ->
+      {:ok, prod} = Repo.insert(prod)
+      prod
+    end)
   end
 
   defp products do

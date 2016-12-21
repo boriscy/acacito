@@ -24,6 +24,7 @@ defmodule Publit.ModelCase do
       import Publit.ModelCase
 
       import Publit.Factory
+      import Publit.Support.Org
     end
   end
 
