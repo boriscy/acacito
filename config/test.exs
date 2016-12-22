@@ -17,7 +17,8 @@ config :publit, Publit.Repo,
   database: "publit_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox,
-  extensions: [{Geo.PostGIS.Extension, []}]
+  types: Publit.PostgresTypes
+  #extensions: [{Geo.PostGIS.Extension, []}]
 
 config :arc,
   storage: Arc.Storage.Local

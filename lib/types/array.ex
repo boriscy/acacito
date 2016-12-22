@@ -1,4 +1,4 @@
-defmodule Array do
+defmodule Publit.Array do
   @behaviour Ecto.Type
   def type, do: :array
 

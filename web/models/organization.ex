@@ -19,7 +19,7 @@ defmodule Publit.Organization do
     field :geom, Geo.Geometry
     field :category, :string, default: "restaurant"
     field :open, :boolean, default: false
-    field :tags, Array, default: []
+    field :tags, Publit.Array, default: []
     field :rating, :decimal
     field :rating_count, :integer
     field :description, :string
