@@ -43,18 +43,13 @@ export default {
       this.socket = new Socket("/socket", {})
       this.socket.connect()
 
-      const chName = window.location.search ? window.location.search.match(/chan=(\w+)/)[1] : 'a'
+      const chName = window.organization.id
       this.channel = this.socket.channel(`organizations:${chName}`)
 
-      if(chName != 'amaru') {
-        console.log('subscribe to amaru');
-        this.channel2 = this.socket.channel('organizations:amaru')
-        this.channel2.on('move:next', msg => {
-          console.log('amaru channel', msg);
-        })
-        this.channel2.join()
-      }
       this.channel.join()
+        .receive("ok", resp => {
+          console.log("Channel join msg:", resp)
+        })
 
       // Listen to channel
       this.channel.on('move:next', msg => {
@@ -64,6 +59,9 @@ export default {
         })
       })
 
+      this.channel.on("change", payload => {
+        console.log('Change:', payload)
+      })
 
       let user = `user-${Math.floor(Math.random() * 100000)}`
       this.socket = new Socket("/socket", {})

@@ -22,6 +22,9 @@
     <script>
     window.vueLoad = 'orders';
     window.locale = '<%= @conn.assigns.current_user.locale %>';
+    window.organization = <%= raw Poison.encode!(@conn.assigns.current_organization) %>;
+
+    localStorage.setItem('authToken', "<%= @token %>");
     </script>
     <!--<script src="https://maps.google.com/maps/api/js?libraries=places&key=AIzaSyDQwB6IOvELaaXQX1keoMuH-gaN3QbPRqM" type="text/javascript"></script>-->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

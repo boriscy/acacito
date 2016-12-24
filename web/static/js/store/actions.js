@@ -19,12 +19,14 @@ export const moveNext = ({commit}, data) => {
   }, data)
 }
 
+import auth from './api/auth'
+
 /*
  * Utility methods to make ajax requests
  */
 const methods = {
   getOrders(cb) {
-    axios.get('/api/orders')
+    auth.get('/api/orders')
     .then((res) => {
       cb(res.data.orders)
     })

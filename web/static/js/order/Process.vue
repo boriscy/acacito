@@ -23,7 +23,6 @@ export default {
   components: {
     Order: Order
   },
-  mounted() {
-  }
+  mounted() {}
 }
 </script>
