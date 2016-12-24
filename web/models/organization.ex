@@ -112,13 +112,13 @@ defmodule Publit.Organization do
     sql = """
     with tags as (
       select unnest(p.tags) as tag from products p
-      where p.organization_id = $1
+      where p.publish = true and p.organization_id = $1
     ),
     res as (
       select count(tag) as count, tag from tags
       group by tag
       order by count desc
-      limit 5
+      limit 10
     )
     update organizations
     set tags = (select json_agg(row_to_json(res)) from res)

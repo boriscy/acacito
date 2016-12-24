@@ -2,7 +2,8 @@ defmodule Publit.Product do
   use Publit.Web, :model
   use Arc.Ecto.Schema
   import Ecto.Query
-  alias Publit.{Product, Repo, ProductVariation}
+  alias Publit.{Product, Repo, ProductVariation, Organization}
+  alias Ecto.Multi
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "products" do
@@ -54,12 +55,23 @@ defmodule Publit.Product do
   Updates a product attributes except organization_id
   """
   def update(product, params) do
-    product
+    cs = product
     |> cast(params, [:name, :description, :publish, :tags])
     |> set_image(params)
     |> cast_embed(:variations)
     |> validate_required([:name])
-    |> Repo.update()
+
+    case cs.valid? do
+      true ->
+        multi = Multi.new
+        |> Multi.update(:product, cs)
+        |> Multi.run(:tags, fn(_) -> Organization.set_tags(cs.data.organization_id) end)
+
+        case Repo.transaction(multi) do
+          {:ok, res} -> {:ok, res.product}
+          {:error, res} -> {:error, cs}
+        end
+    end
   end
 
   def delete(product) do
