@@ -1,39 +1,55 @@
-<%= form_for @changeset, @action, [multipart: true], fn f -> %>
+<div class="product-form flex">
+  <%= form_for @changeset, @action, [multipart: true], fn f -> %>
 
-  <div class="form-group <%= has_error(f, :name) %>">
-    <%= label f, :name, gettext("Name") %>
-    <%= text_input f, :name, class: "form-control", placeholder: gettext("Pizza with ham") %>
-    <%= error_tag f, :name %>
-  </div>
+    <div class="form-group <%= has_error(f, :name) %>">
+      <%= label f, :name, gettext("Name") %>
+      <%= text_input f, :name, class: "form-control", placeholder: gettext("Pizza with ham"), "v-model": "form.name", value: nil %>
+      <%= error_tag f, :name %>
+    </div>
 
-  <div class="product-variations">
-    <!-- web/static/js/product/Form.vue -->
-    <product-form></product-form>
-  </div>
+    <div class="product-variations">
+      <!-- web/static/js/product/Form.vue -->
+      <product-variations :product="form"></product-variations>
+    </div>
 
-  <div class="form-group <%= has_error(f, :image) %>">
-    <%= label f, :image, gettext("Image") %>
-    <%= file_input f, :image, class: "form-control" %>
-    <%= error_tag f, :image %>
-  </div>
+    <div class="form-group">
+      <label>
+        <%= gettext("Tags") %>
+      </label>
+      <span class="text-muted">(<%= gettext("Separate tags with commas") %>)
+
+      <tag :suggestions="allTags" :selected="form.tags" pname="$parent.form.tags" input-name="product[tags][]"></tag>
+
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="form-group <%= has_error(f, :image) %>">
+      <%= label f, :image, gettext("Image") %>
+      <%= file_input f, :image, class: "form-control", "@change": "previewImage($event)" %>
+      <%= error_tag f, :image %>
+    </div>
 
 
-  <div class="form-group <%= has_error(f, :description) %>">
-    <%= label f, :description, text: gettext("Description") %>
-    <%= textarea f, :description, class: "form-control" %>
-    <%= error_tag f, :description %>
-  </div>
+    <div class="form-group <%= has_error(f, :description) %>">
+      <%= label f, :description, text: gettext("Description") %>
+      <%= textarea f, :description, class: "form-control", value: "", "v-model": "form.description" %>
+      <%= error_tag f, :description %>
+    </div>
 
-  <div class="form-group text-center button">
-    <button class="btn btn-success btn-lg btn-block"><%= @button_text %></button>
-  </div>
+    <div class="form-group text-center button">
+      <button class="btn btn-success btn-lg btn-block"><%= @button_text %></button>
+    </div>
 
-<% end %>
+  <% end %>
 
+  <product-preview :product="form" ref="preview"></product-preview>
+
+</div>
 
 <script>
-  window.productVariations = <%= raw encode_variations(@changeset) %>;
+  window.product = <%= raw encode_product(@changeset) %>
   window.tags = <%= raw encode_tags(@changeset) %>;
   window.allTags = <%= raw Poison.encode!(all_tags(@conn)) %>;
+  window.organization = <%= raw Poison.encode!(@conn.assigns.current_organization) %>;
   window.vueLoad = 'ProductForm';
 </script>

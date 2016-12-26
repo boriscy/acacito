@@ -49,6 +49,13 @@ defmodule Publit.ProductView do
     Poison.encode!(data || [])
   end
 
+  def encode_product(cs) do
+    Map.merge(cs.data, cs.changes)
+    |> Map.drop([:__struct__, :__meta__, :organization])
+    |> Map.put(:image, Publit.Api.ProductView.get_image(cs.data))
+    |> Poison.encode!()
+  end
+
   def all_tags(conn) do
     Publit.Product.all_tags(conn.assigns.current_organization.id)
   end

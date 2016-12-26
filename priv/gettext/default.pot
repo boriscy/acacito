@@ -28,7 +28,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: web/templates/product/form.html.eex:15
+#: web/templates/product/form.html.eex:27
 msgid "Image"
 msgstr ""
 
@@ -37,8 +37,8 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:6
-#: web/templates/product/form.html.eex:4
+#: web/templates/layout/translations.html.eex:10
+#: web/templates/product/form.html.eex:5
 msgid "Name"
 msgstr ""
 
@@ -68,6 +68,7 @@ msgid "Shop name"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:15
+#: web/templates/product/form.html.eex:17
 msgid "Tags"
 msgstr ""
 
@@ -79,7 +80,7 @@ msgstr ""
 msgid "You have entered invalid data please fix the errors"
 msgstr ""
 
-#: web/templates/product/form.html.eex:22
+#: web/templates/product/form.html.eex:34
 msgid "Description"
 msgstr ""
 
@@ -87,7 +88,7 @@ msgstr ""
 msgid "New Product"
 msgstr ""
 
-#: web/templates/product/form.html.eex:5
+#: web/templates/product/form.html.eex:6
 msgid "Pizza with ham"
 msgstr ""
 
@@ -170,7 +171,7 @@ msgstr ""
 msgid "Invalid product"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:3
+#: web/templates/layout/translations.html.eex:8
 msgid "New Orders"
 msgstr ""
 
@@ -178,46 +179,55 @@ msgstr ""
 msgid "Orders"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:5
+#: web/templates/layout/translations.html.eex:16
 msgid "Transporting Orders"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:4
+#: web/templates/layout/translations.html.eex:9
 msgid "Orders in Process"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:8
+#: web/templates/layout/translations.html.eex:3
 msgid "Add line"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:12
+#: web/templates/layout/translations.html.eex:4
 msgid "Big"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:11
+#: web/templates/layout/translations.html.eex:7
 msgid "Medium"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:7
+#: web/templates/layout/translations.html.eex:11
 msgid "Price"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:9
+#: web/templates/layout/translations.html.eex:12
 msgid "Remove"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:13
+#: web/templates/layout/translations.html.eex:17
 msgid "Variations"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:10
+#: web/templates/layout/translations.html.eex:14
 msgid "Small"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:14
+#: web/templates/layout/translations.html.eex:5
 msgid "Call Transport"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:16
+#: web/templates/layout/translations.html.eex:13
+#: web/templates/product/form.html.eex:19
 msgid "Separate tags with commas"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:18
+msgid "Variation name"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:6
+msgid "Enter tags"
 msgstr ""

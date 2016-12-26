@@ -28,7 +28,9 @@ window.eventHub = new Vue()
 
 import moment from 'moment'
 
-import ProductForm from './product/Form.vue'
+import ProductVariations from './product/ProductVariations.vue'
+import ProductPreview from './product/ProductPreview.vue'
+import Tag from './autocomplete/Tag.vue'
 
 import store from './store'
 import routes from './routes'
@@ -44,9 +46,25 @@ const path = window.location.pathname
 switch(true) {
   case window.vueLoad == 'ProductForm':
     new Vue({
-      el: '.product-variations',
+      el: '.product-form',
       components: {
-        'product-form': ProductForm
+        'product-variations': ProductVariations,
+        'product-preview': ProductPreview,
+        tag: Tag
+      },
+      data() {
+        return {
+          form: {variations: [], name: ''},
+          allTags: window.allTags
+        }
+      },
+      methods: {
+        previewImage(e) {
+          this.$refs.preview.previewImage(e)
+        }
+      },
+      mounted() {
+        this.form = window.product
       }
     })
   break;

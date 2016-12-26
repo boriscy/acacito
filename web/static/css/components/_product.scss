@@ -81,3 +81,38 @@
     padding: 0.2em 0em;
   }
 }
+
+.product-preview {
+  background: white;
+  width: 750px;
+  padding: 1rem;
+  .title {
+    font-size: 2rem;
+  }
+  img.product-image {
+    width:100%;
+  }
+  .product {
+    border-bottom: 1px solid #efefef;
+    margin-bottom: 1.5em;
+    padding-bottom: 1.5em;
+  }
+  .left {
+    width: 40%;
+    padding-right: 0.2rem;
+  }
+  .right {
+    width: 60%;
+  }
+
+  button {
+    font-size: 1.1em;
+    text-transform: none;
+    margin-bottom: 0.4em;
+    width: 100%;
+  }
+  .price {
+    font-size: 1.1em;
+    font-weigth: normal;
+  }
+}

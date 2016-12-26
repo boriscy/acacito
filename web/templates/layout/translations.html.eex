@@ -1,18 +1,20 @@
 <script>
 window.translations = {
+  "Add line": "<%= gettext("Add line") %>",
+  "Big": "<%= gettext("Big") %>",
+  "Call Transport": "<%= gettext("Call Transport") %>",
+  "Enter tags": "<%= gettext("Enter tags") %>",
+  "Medium": "<%= gettext("Medium") %>",
   "New Orders": "<%= gettext("New Orders") %>",
   "Orders in Process": "<%= gettext("Orders in Process") %>",
-  "Transporting Orders": "<%= gettext("Transporting Orders") %>",
   "Name": "<%= gettext("Name") %>",
   "Price": "<%= gettext("Price") %>",
-  "Add line": "<%= gettext("Add line") %>",
   "Remove": "<%= gettext("Remove") %>",
+  "Separate tags with commas": "<%= gettext("Separate tags with commas") %>",
   "Small": "<%= gettext("Small") %>",
-  "Medium": "<%= gettext("Medium") %>",
-  "Big": "<%= gettext("Big") %>",
-  "Variations": "<%= gettext("Variations") %>",
-  "Call Transport": "<%= gettext("Call Transport") %>",
   "Tags": "<%= gettext("Tags") %>",
-  "Separate tags with commas": "<%= gettext("Separate tags with commas") %>"
+  "Transporting Orders": "<%= gettext("Transporting Orders") %>",
+  "Variations": "<%= gettext("Variations") %>",
+  "Variation name": "<%= gettext("Variation name") %>"
 }
 </script>

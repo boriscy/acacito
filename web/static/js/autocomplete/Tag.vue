@@ -1,9 +1,9 @@
 <template>
-  <div id="tags" class="tag-container" v-bind:class="tagActiveClass" style="position: relative;">
+  <div class="tag-container" v-bind:class="tagActiveClass">
     <ul class="dropdown-menu w100" v-bind:style="{display: openSuggestion ? 'block' : ''}">
       <li v-for="(suggestion, index) in matches"
           v-bind:class="{'active': isActive(index)}"
-          @click="suggestionClick($index)"
+          @mousedown="selectTag(index)"
         >
         <a href="#">{{ suggestion }}</a>
       </li>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import {translate} from '../mixins'
+
 Taggle.prototype._setInputWidth = function(width) {
   if(width) {
     width = width - 10
@@ -20,6 +22,7 @@ Taggle.prototype._setInputWidth = function(width) {
 }
 
 export default {
+  mixins: [translate],
   data() {
     return {
       open: false,
@@ -27,21 +30,24 @@ export default {
       tag: null,
       selection: '',
       input: null,
-      tagActiveClass: ''
+      tagActiveClass: '',
+      parentTagsName: null
     }
   },
   props: {
     suggestions: {
-      type: Array,
-      required: true
+      type: Array
     },
     selected: {
       type: Array,
-      default: []
+      default: () => {return []}
     },
     inputName: {
       type: String,
       default: 'tags[]'
+    },
+    pname: {
+      type: String
     }
   },
   computed: {
@@ -55,7 +61,6 @@ export default {
       })
     },
     openSuggestion() {
-      //console.log('open', this.selection !== '', this.matches.length > 0, this.open);
       return this.selection !== '' &&
         this.matches.length > 0 &&
         this.open === true
@@ -85,25 +90,49 @@ export default {
         this.current = 0
       }
     },
-    suggestionClick(index) {
+    focusTag() {
+      this.input.focus()
+    },
+    selectTag(index) {
       this.selection = this.matches[index]
+      this.tag.add(this.selection)
       this.open = false
     },
-    //Events for input autocomplete
-    setEvents() {
-      this.input = this.tag.getInput()
+    getParent(path) {
+      let curr = this
+      let arr = path.split('.')
+      this.parentTagsName = arr.pop()
+      arr.forEach((v) => {
+        curr = curr[v]
+      })
 
-      this.input.onblur = () => {
+      return curr
+    },
+    //Events for input autocomplete
+    setInputEvents() {
+      this.input = this.tag.getInput()
+      this.input.placeholder = this.gettext("Enter tags")
+      this.input.tabIndex = 0
+      setTimeout(() => {
+        document.querySelector('.taggle_input').focus()
+      }, 2000)
+
+      this.input.onblur = (e) => {
         this.tagActiveClass = ''
         this.open = false
+        return e
       }
-      this.input.focus = () => { this.tagActiveClass = 'active' }
+      this.input.focus = (e) => {
+        this.tagActiveClass = 'active'
+        return e
+      }
 
       const that = this
       this.input.onkeyup = function(event) {
         switch (event.keyCode) {
           // enter
           case 13:
+            event.preventDefault()
             that.enter()
           break
           // up
@@ -129,14 +158,30 @@ export default {
     }
   },
   mounted() {
+    const that = this
+    if(this.pname) {
+      setTimeout(() => {
+        this.parentOb = this.getParent(this.pname)
+      }, 100)
+    }
+    this.tags = this.selection || []
     setTimeout(() => {
-      this.tag = new Taggle('tags', {
+      this.tag = new Taggle(this.$el, {
         hiddenInputName: this.inputName,
         tags: this.selected || [],
         clearOnBlur: false,
-        submitKeys: [188]
+        focusInputOnContainerClick: true,
+        submitKeys: [188],
+        onTagAdd: (e, tag) => {
+          if(that.pname) {
+            console.log(that.parentOb);
+            that.tags.push(tag)
+            that.parentOb[that.parentTagsName] = that.tags
+          }
+        }
       })
-      this.setEvents()
+
+      this.setInputEvents()
     }, 50)
   }
 }

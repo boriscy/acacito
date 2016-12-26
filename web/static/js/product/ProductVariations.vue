@@ -4,11 +4,11 @@
       <div class="title">{{gettext("Variations")}}</div>
 
       <div class="flex">
-        <label class="name header">{{gettext("Name")}}</label>
+        <label class="name header">{{gettext("Variation name")}}</label>
         <label class="price header">{{gettext("Price")}}</label>
       </div>
 
-      <div class="flex" v-for="(prodVar, index) in variations">
+      <div class="flex" v-for="(prodVar, index) in product.variations">
         <input type="hidden" v-bind:value="prodVar.id" v-bind:name="productName('id', index)"/>
 
         <div v-bind:class="hasError(prodVar, 'name')" class="name col">
@@ -29,37 +29,19 @@
       </div>
       <button class="btn btn-primary" @click.prevent="addLine()">{{gettext("Add line")}}</button>
     </div>
-    <br/>
-    <div class="form-group">
-      <label>
-        {{gettext("Tags")}}
-      </label>
-      <span class="text-muted">({{gettext("Separate tags with commas")}})
-
-      <Tag :suggestions="allTags" :selected="tags" input-name="product[tags][]"></Tag>
-
-      <div class="clearfix"></div>
-    </div>
   </div>
 </template>
 
 <script>
-import Tag from '../autocomplete/Tag.vue'
 import {translate, format} from '../mixins'
 
 
 export default {
-  name: 'ProductForm',
   mixins: [translate, format],
-  components: {
-    Tag: Tag
-  },
-  data: function() {
-    return {
-      variations: [{}],
-      tags: [],
-      klass: {},
-      allTags: []
+  props: {
+    product: {
+      type: Object,
+      required: true
     }
   },
   methods: {
@@ -80,11 +62,6 @@ export default {
     roundPrice(prod) {
       prod.price = this.toFixed(+prod.price, 2)
     }
-  },
-  mounted: function() {
-    this.variations = window.productVariations
-    this.tags = window.tags
-    this.allTags = window.allTags
   }
 }
 </script>

@@ -9,9 +9,8 @@ defmodule Publit.WorkAreaController do
   end
 
   #
-  def publish(conn, _params) do
-    org = Publit.Repo.get_by(Publit.Organization, name: "Tierra Libre")
-    Publit.OrganizationChannel.bc(org)
+  def publish(conn, params) do
+    Publit.OrganizationChannel.broadcast_data(%{id: params["id"], name: params["name"] || "JOJO"})
     text conn, "Ola"
   end
 end

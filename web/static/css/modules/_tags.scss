@@ -17,6 +17,7 @@ $gray: #8a8a8a;
   border: 1px solid #cccccc;
   box-sizing: border-box;
   background: white;
+  position: relative;
 }
 
 .tag-container.active {
@@ -38,6 +39,10 @@ $gray: #8a8a8a;
   outline: none;
   font-size: 16px;
   font-weight: 300;
+  border-bottom: 1px solid gray;
+  &:focus {
+    border-bottom: 1px solid #66afe9;
+  }
 }
 
 .taggle_list li {

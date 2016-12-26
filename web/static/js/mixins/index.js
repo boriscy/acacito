@@ -12,6 +12,13 @@ export const translate = {
   }
 }
 
+const defaults = {
+  format: {
+    decs: 2,
+    numSep: " "
+  }
+}
+
 export const format = {
   methods: {
     user: function(id, field = 'full_name') {
@@ -36,7 +43,7 @@ export const format = {
       }
       return (Math.round(val * Math.pow(10, decs)) / Math.pow(10, decs)).toFixed(decs)
     },
-    numberFormat: function(val, decs = defaults.format.decs, sep = defaults.format.numSep) {
+    formatNumber: function(val, decs = defaults.format.decs, sep = defaults.format.numSep) {
       let sepa = `$1${sep}`
       return this.toFixed(val, decs).replace(/(\d)(?=(\d{3})+\.)/g, sepa)
     },
