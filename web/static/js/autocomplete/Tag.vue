@@ -1,6 +1,20 @@
 <template>
-  <div class="tag-container" v-bind:class="tagActiveClass">
-    <ul class="dropdown-menu w100" v-bind:style="{display: openSuggestion ? 'block' : ''}">
+  <div class="v-tags"tabindex="0" @focus="activate()">
+    <ul class="tags" :class="contActiveClass" >
+      <li class="tag" v-for="(tag, idx) in selected" :class="{selected: selectedTag == tag}">
+        {{tag}}
+        <input type="hidden" :name="inputName" :value="tag" />
+        <span class="remove" @click="remove(tag, idx)">x</span>
+      </li>
+      <li>
+        <input v-model="input" class="tag-input" ref="input"
+        @focus="focus()" @blur="blur()"
+        @keydown.up.prevent="up()" @keydown.down.prevent="down()"
+        @keyup.enter.prevent="enter()" @keyup.delete="back()"/>
+      </li>
+    </ul>
+
+    <ul class="dropdown-menu w100" :style="{display: (inputFocus && matches.length) ? 'block' : 'none'}">
       <li v-for="(suggestion, index) in matches"
           v-bind:class="{'active': isActive(index)}"
           @mousedown="selectTag(index)"
@@ -8,18 +22,12 @@
         <a href="#">{{ suggestion }}</a>
       </li>
     </ul>
+
   </div>
 </template>
 
 <script>
 import {translate} from '../mixins'
-
-Taggle.prototype._setInputWidth = function(width) {
-  if(width) {
-    width = width - 10
-  }
-  this.input.style.width = (width || 10) + 'px'
-}
 
 export default {
   mixins: [translate],
@@ -29,14 +37,17 @@ export default {
       current: 0,
       tag: null,
       selection: '',
-      input: null,
-      tagActiveClass: '',
+      inputFocus: false,
+      input: '',
+      contActiveClass: '',
+      selectedTag: '',
       parentTagsName: null
     }
   },
   props: {
     suggestions: {
-      type: Array
+      type: Array,
+      default: []
     },
     selected: {
       type: Array,
@@ -52,13 +63,15 @@ export default {
   },
   computed: {
     matches() {
-      let values = this.tag ? this.tag.tag.values : []
-
-      return this.suggestions
-      .filter((str) => { return values.indexOf(str) == -1 })
-      .slice(0, 10).filter((str) => {
-        return str.indexOf(this.selection) >= 0
-      })
+      const txt = this.input.trim()
+      if(txt == '') {
+        return []
+      } else {
+        return this.suggestions
+        .filter((str) => { return this.selected.indexOf(str) == -1 })
+        .filter((str) => { return str.indexOf(this.input) > -1 })
+        .slice(0, 10)
+      }
     },
     openSuggestion() {
       return this.selection !== '' &&
@@ -67,10 +80,15 @@ export default {
     }
   },
   methods: {
+    activate() {
+      this.$refs.input.focus()
+    },
+    remove(tag, idx) {
+      this.selected.splice(idx, 1)
+    },
     enter() {
-      this.selection = this.matches[this.current]
-      this.tag.add([this.selection])
-      this.open = false
+      this.selected.push(this.matches[this.current])
+      this.input = ''
     },
     up() {
       if(this.current > 0)
@@ -79,6 +97,22 @@ export default {
     down() {
       if(this.current < this.suggestions.length - 1)
         this.current++
+    },
+    back() {
+      const l = this.selected.length;
+      if(this.input == '' && this.selectedTag == '' && l > 0) {
+        this.selectedTag = this.selected[l - 1]
+      } else if(this.input == '' && l > 0) {
+        console.log('remove', this.selectedTag);
+      }
+    },
+    focus() {
+      this.inputFocus = true
+      this.contActiveClass = 'active'
+    },
+    blur() {
+      this.inputFocus = false
+      this.contActiveClass = ''
     },
     isActive(index) {
       return index === this.current
@@ -107,82 +141,15 @@ export default {
       })
 
       return curr
-    },
-    //Events for input autocomplete
-    setInputEvents() {
-      this.input = this.tag.getInput()
-      this.input.placeholder = this.gettext("Enter tags")
-      this.input.tabIndex = 0
-      setTimeout(() => {
-        document.querySelector('.taggle_input').focus()
-      }, 2000)
-
-      this.input.onblur = (e) => {
-        this.tagActiveClass = ''
-        this.open = false
-        return e
-      }
-      this.input.focus = (e) => {
-        this.tagActiveClass = 'active'
-        return e
-      }
-
-      const that = this
-      this.input.onkeyup = function(event) {
-        switch (event.keyCode) {
-          // enter
-          case 13:
-            event.preventDefault()
-            that.enter()
-          break
-          // up
-          case 38:
-            event.preventDefault()
-            that.up()
-          break
-          // down
-          case 40:
-            event.preventDefault()
-            that.down()
-          break
-          default:
-            that.change()
-        }
-      }
-      this.input.keydown = function(event) {
-        switch (event.keyCode) {
-          case 38:
-            event.preventDefault()
-        }
-      }
     }
   },
   mounted() {
-    const that = this
     if(this.pname) {
       setTimeout(() => {
         this.parentOb = this.getParent(this.pname)
       }, 100)
     }
     this.tags = this.selection || []
-    setTimeout(() => {
-      this.tag = new Taggle(this.$el, {
-        hiddenInputName: this.inputName,
-        tags: this.selected || [],
-        clearOnBlur: false,
-        focusInputOnContainerClick: true,
-        submitKeys: [188],
-        onTagAdd: (e, tag) => {
-          if(that.pname) {
-            console.log(that.parentOb);
-            that.tags.push(tag)
-            that.parentOb[that.parentTagsName] = that.tags
-          }
-        }
-      })
-
-      this.setInputEvents()
-    }, 50)
   }
 }
 </script>

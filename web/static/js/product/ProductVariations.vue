@@ -49,10 +49,10 @@ export default {
       return `product[variations][${idx}][${field}]`
     },
     addLine() {
-      this.variations.push({name: '', price: 0.0})
+      this.product.variations.push({name: '', price: 0.0})
     },
     removeLine(prod, index) {
-      this.variations.splice(index, 1)
+      this.product.variations.splice(index, 1)
     },
     getPlaceholder(index) {
       let ph = [this.gettext("Small"), this.gettext("Medium"), this.gettext("Big")][index]
