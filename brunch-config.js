@@ -62,8 +62,7 @@ exports.config = {
       vue: 'vue/dist/vue.js'
     },
     globals: {
-      moment: 'moment',
-      Taggle: 'taggle'
+      moment: 'moment'
     }
   }
 };

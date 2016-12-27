@@ -9,8 +9,8 @@
       <li>
         <input v-model="input" class="tag-input" ref="input"
         @focus="focus()" @blur="blur()"
-        @keydown.up.prevent="up()" @keydown.down.prevent="down()"
-        @keyup.enter.prevent="enter()" @keyup.delete="back()"/>
+        @keydown.up.prevent="up()" @keydown.down.prevent="down()" @keydown.delete="back()"
+        @keyup.prevent="selectKey($event)"/>
       </li>
     </ul>
 
@@ -44,6 +44,13 @@ export default {
       parentTagsName: null
     }
   },
+  watch: {
+    input: function() {
+      if(this.input.trim() != '' && this.selectedTag != '') {
+        this.selectedTag = ''
+      }
+    }
+  },
   props: {
     suggestions: {
       type: Array,
@@ -59,6 +66,10 @@ export default {
     },
     pname: {
       type: String
+    },
+    separator: {
+      type: String,
+      default: ','
     }
   },
   computed: {
@@ -77,7 +88,18 @@ export default {
       return this.selection !== '' &&
         this.matches.length > 0 &&
         this.open === true
-    }
+    },
+    separatorCode() {
+      let val = ''
+      const codes = {',': 188, '-': 189, '.': 190, '/': 191, '|': 220}
+
+      if(val = codes[this.separator]) {
+        return  val
+      } else {
+        this.separator.charCodeAt(0)
+      }
+    },
+    separatorRegexp() { return new RegExp(this.separator, 'g') }
   },
   methods: {
     activate() {
@@ -87,7 +109,9 @@ export default {
       this.selected.splice(idx, 1)
     },
     enter() {
-      this.selected.push(this.matches[this.current])
+      if(this.matches[this.current]) {
+        this.selected.push(this.matches[this.current])
+      }
       this.input = ''
     },
     up() {
@@ -100,10 +124,13 @@ export default {
     },
     back() {
       const l = this.selected.length;
+
       if(this.input == '' && this.selectedTag == '' && l > 0) {
         this.selectedTag = this.selected[l - 1]
       } else if(this.input == '' && l > 0) {
-        console.log('remove', this.selectedTag);
+        const idx = this.selected.indexOf(this.input)
+        this.selected.splice(idx, 1)
+        this.selectedTag = ''
       }
     },
     focus() {
@@ -113,6 +140,29 @@ export default {
     blur() {
       this.inputFocus = false
       this.contActiveClass = ''
+      this.selectedTag = ''
+    },
+    selectKey(event) {
+      switch (event.keyCode) {
+        case 13:
+          this.enter()
+          break;
+        case this.separatorCode:
+          this.addTag()
+        default:
+
+      }
+    },
+    addTag() {
+      const tag = this.input.trim()
+      .toLowerCase().replace(this.separatorRegexp, '')
+
+      if(tag != '' && this.selected.indexOf(tag) == -1) {
+        this.selected.push(tag)
+        this.input = ''
+      } else {
+        this.input = ''
+      }
     },
     isActive(index) {
       return index === this.current
