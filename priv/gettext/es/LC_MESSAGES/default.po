@@ -230,3 +230,11 @@ msgstr "Nombre de variacion"
 #: web/templates/layout/translations.html.eex:6
 msgid "Enter tags"
 msgstr "Ingrese etiquetas"
+
+#: web/templates/product/form.html.eex:37
+msgid "View examples"
+msgstr "Ver ejemplos"
+
+#: web/templates/product/form.html.eex:36
+msgid "You can format the text"
+msgstr "Puede darle formato al texto"

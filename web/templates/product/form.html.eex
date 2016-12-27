@@ -1,5 +1,5 @@
 <div class="product-form flex">
-  <%= form_for @changeset, @action, [multipart: true], fn f -> %>
+  <%= form_for @changeset, @action, [multipart: true, style: "width: 900px"], fn f -> %>
 
     <div class="form-group <%= has_error(f, :name) %>">
       <%= label f, :name, gettext("Name") %>
@@ -31,8 +31,12 @@
 
 
     <div class="form-group <%= has_error(f, :description) %>">
-      <%= label f, :description, text: gettext("Description") %>
-      <%= textarea f, :description, class: "form-control", value: "", "v-model": "form.description" %>
+      <%= label f, :description, gettext("Description") %>
+      <span class-text="muted">
+        <%= gettext("You can format the text") %>,
+        <a class="pointer"><%= gettext("View examples") %></a>
+      </span>
+      <%= textarea f, :description, class: "form-control", value: "", rows: 7, "v-model": "form.description" %>
       <%= error_tag f, :description %>
     </div>
 
@@ -53,3 +57,5 @@
   window.organization = <%= raw Poison.encode!(@conn.assigns.current_organization) %>;
   window.vueLoad = 'ProductForm';
 </script>
+<style>
+</style>

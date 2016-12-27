@@ -17,7 +17,7 @@
       <span class="tag" v-for="tag in product.tags">{{tag}}</span>
     </div>
 
-    <div class="description">{{product.description}}</div>
+    <div v-html="descriptionMD"></div>
 
   </div>
 
@@ -26,10 +26,20 @@
 <script>
 import {format} from '../mixins'
 
+const md = new Markdown('commonmark', {html: false});
+
+
 export default {
   mixins: [format],
   computed: {
-    imagePath() { return this.product.image }
+    imagePath() { return this.product.image },
+    descriptionMD() {
+      if(this.product.description) {
+        return md.render(this.product.description)
+      } else {
+        return ''
+      }
+    }
   },
   props:{
     product: {

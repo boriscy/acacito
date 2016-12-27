@@ -10,6 +10,7 @@ defmodule Publit.Api.ProductView do
   def to_api(prod) do
     Map.drop(prod, [:__meta__, :organization])
     |> Map.put(:image, get_image(prod))
+    |> Map.put(:descriptionHTML, prod.extra_info["descriptionHTML"])
   end
 
   def get_image(prod) do

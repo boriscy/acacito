@@ -45,6 +45,7 @@ defmodule Publit.Mixfile do
      {:poison, "~> 3.0", override: true},
      {:arc_ecto, "0.5.0"},
      {:cors_plug, "~> 1.1"},
+     {:earmark, "~> 1.0"},
      {:ex_machina, "~> 1.0", only: [:dev, :test]},
      {:mock, "~> 0.2.0", only: :test}]
   end

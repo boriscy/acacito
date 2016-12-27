@@ -27,10 +27,6 @@ defmodule Publit.Product do
     timestamps()
   end
 
-  def cast() do
-
-  end
-
   @doc """
   Builds and empte product
   """
@@ -48,6 +44,7 @@ defmodule Publit.Product do
     |> cast_attachments(params, [:image])
     |> validate_required([:name, :organization_id])
     |> cast_embed(:variations)
+    |> markdown(:description)
     |> Repo.insert()
   end
 
@@ -60,6 +57,7 @@ defmodule Publit.Product do
     |> set_image(params)
     |> cast_embed(:variations)
     |> validate_required([:name])
+    |> markdown(:description)
 
     case cs.valid? do
       true ->
@@ -91,6 +89,18 @@ defmodule Publit.Product do
       %Plug.Upload{path: _p} ->
         cast_attachments(cs, params, [:image])
       _ -> cs
+    end
+  end
+
+  defp markdown(cs, field) do
+    if cs.changes[field] do
+      data = Map.merge(cs.data.extra_info, cs.changes[:extra_info] || %{})
+      {:safe, esc_text} = Phoenix.HTML.html_escape(cs.changes[field])
+      data = Map.put(data, "#{field}HTML", Earmark.to_html(esc_text))
+
+      put_change(cs, :extra_info, data)
+    else
+      cs
     end
   end
 

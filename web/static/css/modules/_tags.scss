@@ -7,7 +7,9 @@ $gray: #8a8a8a;
   border-radius: 2px;
   border: 1px solid $grayLight;
   background: $grayLighter;
-  padding: 2px 4px;
+  padding: 0px 4px;
+  margin: 0 3px 3px 0;
+  display: inline-block;
 }
 
 // Tag component

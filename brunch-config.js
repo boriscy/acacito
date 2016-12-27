@@ -62,7 +62,8 @@ exports.config = {
       vue: 'vue/dist/vue.js'
     },
     globals: {
-      moment: 'moment'
+      moment: 'moment',
+      Markdown: 'markdown-it'
     }
   }
 };
