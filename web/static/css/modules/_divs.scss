@@ -22,3 +22,9 @@
     width: #{$v * 10 + "%"}
   }
 }
+
+.img-max-full {
+  img {
+    max-width: 100%;
+  }
+}

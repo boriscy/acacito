@@ -22,6 +22,7 @@ defmodule Publit.Api.OrderController do
   def create(conn, %{"order" => order_params}) do
     case Order.create(order_params) do
       {:ok, order} ->
+        Publit.OrganizationChannel.broadcast_order(order)
         render(conn, "show.json", order: Order.to_api(order))
       {:error, cs} ->
         conn

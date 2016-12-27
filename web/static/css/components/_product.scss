@@ -84,8 +84,10 @@
 
 .product-preview {
   background: white;
-  width: 750px;
+  max-width: 375px;
+  width: 375px;
   padding: 1rem;
+  margin-left: 1rem;
   .title {
     font-size: 2rem;
   }

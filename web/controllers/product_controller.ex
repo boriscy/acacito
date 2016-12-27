@@ -2,6 +2,7 @@ defmodule Publit.ProductController do
   use Publit.Web, :controller
   alias Publit.{Product}
   plug :scrub_params, "product" when action in [:create, :update]
+  plug :put_layout, "app_full.html" when action in [:new, :create, :edit, :update]
   # function imported on web.ex and created in Publit.Plug.OrganizationAuth
   plug :verify_admin_user, [path: "/products"] when action in [:create, :edit, :update, :delete]
   plug :set_product when action in [:show, :edit, :update, :delete]

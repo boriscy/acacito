@@ -26,7 +26,7 @@ defmodule Publit.ProductTest do
       assert {:ok, product} = Product.create(valid_attrs())
 
       assert product.tags == ["pizza", "cheese"]
-      assert product.extra_info["descriptionHTML"] == "<p>This should be <strong>strong</strong></p>\n"
+      assert product.description == "This should be **strong**"
       assert Enum.count(product.variations) == 3
       p1 = Enum.at(product.variations, 0)
       assert p1.description == "Small size 10 x 10"
@@ -72,7 +72,7 @@ defmodule Publit.ProductTest do
 
       assert p2.name == "A new name"
       assert p2.tags == ["multiple", "other"]
-      assert p2.extra_info["descriptionHTML"] == "<p>A new <em>italic</em> text</p>\n"
+      assert p2.description == "A new *italic* text"
       refute p2.organization_id == attrs["organization_id"]
 
       vars = p2.variations

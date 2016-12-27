@@ -34,7 +34,7 @@
       <%= label f, :description, gettext("Description") %>
       <span class-text="muted">
         <%= gettext("You can format the text") %>,
-        <a class="pointer"><%= gettext("View examples") %></a>
+        <a class="pointer" @click="$refs.modal.open()"><%= gettext("View examples") %></a>
       </span>
       <%= textarea f, :description, class: "form-control", value: "", rows: 7, "v-model": "form.description" %>
       <%= error_tag f, :description %>
@@ -47,6 +47,22 @@
   <% end %>
 
   <product-preview :product="form" ref="preview"></product-preview>
+
+  <modal ref="modal">
+    <div slot="title"><%= gettext("Description example") %></div>
+    <div slot="body">
+      <div class="flex">
+        <div style="width: 49%">
+          <label><%= gettext("Escriba para probar") %></label>
+          <textarea rows="10" cols="50" v-model="demoMd" style="width: 100%">
+          </textarea>
+        </div>
+        <div style="width: 49%;padding: 4px">
+          <p v-html="demoMdHTML" class="img-max-full"></p>
+        </div>
+      </div>
+    </div>
+  </modal>
 
 </div>
 

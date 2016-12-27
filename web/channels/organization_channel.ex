@@ -22,8 +22,8 @@ defmodule Publit.OrganizationChannel do
     {:noreply, socket}
   end
 
-  def broadcast_data(data) do
-    Publit.Endpoint.broadcast("organizations:" <> data.id, "change", data)
+  def broadcast_order(order) do
+    Publit.Endpoint.broadcast("organizations:" <> order.organization_id, "change", order)
   end
 
 end

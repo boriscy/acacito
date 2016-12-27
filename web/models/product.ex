@@ -44,7 +44,6 @@ defmodule Publit.Product do
     |> cast_attachments(params, [:image])
     |> validate_required([:name, :organization_id])
     |> cast_embed(:variations)
-    |> markdown(:description)
     |> Repo.insert()
   end
 
@@ -57,7 +56,6 @@ defmodule Publit.Product do
     |> set_image(params)
     |> cast_embed(:variations)
     |> validate_required([:name])
-    |> markdown(:description)
 
     case cs.valid? do
       true ->
@@ -67,8 +65,9 @@ defmodule Publit.Product do
 
         case Repo.transaction(multi) do
           {:ok, res} -> {:ok, res.product}
-          {:error, res} -> {:error, cs}
+          {:error, _res} -> {:error, cs}
         end
+      false -> {:error, cs}
     end
   end
 
@@ -92,6 +91,7 @@ defmodule Publit.Product do
     end
   end
 
+  # Convert to markdown a field
   defp markdown(cs, field) do
     if cs.changes[field] do
       data = Map.merge(cs.data.extra_info, cs.changes[:extra_info] || %{})

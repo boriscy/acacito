@@ -50,10 +50,28 @@ defmodule Publit.ProductView do
   end
 
   def encode_product(cs) do
-    Map.merge(cs.data, cs.changes)
+    m = Map.merge(cs.data, cs.changes)
     |> Map.drop([:__struct__, :__meta__, :organization])
     |> Map.put(:image, Publit.Api.ProductView.get_image(cs.data))
-    |> Poison.encode!()
+    if cs.valid? do
+      m |> Poison.encode!()
+    else
+      m
+      |> Map.put(:errors, Enum.into(cs.errors, %{}, fn({key, val}) -> {key, translate_error(val)} end) )
+      |> Map.put(:variations, Enum.map(cs.changes.variations, fn(vari) -> encode_variation(vari)  end) )
+      |> Poison.encode!()
+    end
+  end
+
+  def encode_variation(cs) do
+    vari = Map.merge(cs.data, cs.changes)
+    |> Map.drop([:__struct__, :__meta__])
+
+    if cs.valid? do
+      vari
+    else
+      Map.put(vari, :errors, Enum.into(cs.errors, %{}, fn({key, val}) -> {key, translate_error(val)} end) )
+    end
   end
 
   def all_tags(conn) do

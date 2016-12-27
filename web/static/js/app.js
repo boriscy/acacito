@@ -28,10 +28,6 @@ window.eventHub = new Vue()
 
 import moment from 'moment'
 
-import ProductVariations from './product/ProductVariations.vue'
-import ProductPreview from './product/ProductPreview.vue'
-import Tag from './autocomplete/Tag.vue'
-
 import store from './store'
 import routes from './routes'
 
@@ -42,30 +38,13 @@ const router = new VueRouter({
 
 const path = window.location.pathname
 
+import prodForm from './product/productForm'
 
 switch(true) {
   case window.vueLoad == 'ProductForm':
     new Vue({
       el: '.product-form',
-      components: {
-        'product-variations': ProductVariations,
-        'product-preview': ProductPreview,
-        tag: Tag
-      },
-      data() {
-        return {
-          form: {variations: [], name: ''},
-          allTags: window.allTags
-        }
-      },
-      methods: {
-        previewImage(e) {
-          this.$refs.preview.previewImage(e)
-        }
-      },
-      mounted() {
-        this.form = window.product
-      }
+      mixins: [prodForm]
     })
   break;
   case !!path.match(/work_area/):
