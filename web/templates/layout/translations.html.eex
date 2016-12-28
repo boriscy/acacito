@@ -8,6 +8,7 @@ window.translations = {
   "New Orders": "<%= gettext("New Orders") %>",
   "Orders in Process": "<%= gettext("Orders in Process") %>",
   "Name": "<%= gettext("Name") %>",
+  "New order": "<%= gettext("New order") %>",
   "Price": "<%= gettext("Price") %>",
   "Remove": "<%= gettext("Remove") %>",
   "Separate tags with commas": "<%= gettext("Separate tags with commas") %>",

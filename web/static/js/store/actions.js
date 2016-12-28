@@ -19,6 +19,11 @@ export const moveNext = ({commit}, data) => {
   }, data)
 }
 
+
+export const addOrder = ({commit}, order) => {
+  commit(types.ADD_ORDER, {order})
+}
+
 import auth from './api/auth'
 
 /*

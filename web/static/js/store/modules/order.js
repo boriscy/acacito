@@ -1,17 +1,20 @@
-import types from './mutation-types'
+import types from '../mutation-types'
 
 // initial state
 const state = {
-  all: [],
-  one: {}
+  orders: [],
+  order: {}
 }
 
 const mutations = {
   [types.FETCH_ORDERS] (state, {orders}) {
-    state.all = orders
+    state.orders = orders
   },
   [types.FETCH_ORDER] (state, {order}) {
-    state.one = order
+    state.order = order
+  },
+  [types.ADD_ORDER] (state, {order}) {
+    state.orders.push(order)
   }
 }
 

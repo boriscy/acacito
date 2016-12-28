@@ -1,6 +1,6 @@
 defmodule Publit.Order do
   use Publit.Web, :model
-  alias Publit.{Order, OrderDetail, Product, Repo}
+  alias Publit.{Order, User, OrderDetail, Product, Repo}
   import Ecto.Query
   import Publit.Gettext
 
@@ -143,6 +143,15 @@ defmodule Publit.Order do
     end)
 
     put_change(cs, :total, tot)
+  end
+
+  def active(organization_id) do
+    q = from o in Order, join: u in User,
+    select: %{id: o.id, details: o.details, client: u.full_name, location: o.location,
+     inserted_at: o.inserted_at, updated_at: o.updated_at, total: o.total,
+     status: o.status, number: o.number},
+    where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport"] and o.user_id == u.id
+    Repo.all(q)
   end
 
 end

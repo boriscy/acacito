@@ -1,19 +1,19 @@
 export const orders = state => {
-  return state.orders.all
+  return state.order.orders
 }
 
 export const newOrders = state => {
-  return state.orders.all.filter(ord => { return ord.status == 'new' })
+  return state.order.orders.filter(ord => { return ord.status == 'new' })
 }
 
 export const processOrders = state => {
-  return state.orders.all.filter(ord => { return ord.status == 'process' })
+  return state.order.orders.filter(ord => { return ord.status == 'process' })
 }
 
 export const transportOrders = state => {
-  return state.orders.all.filter(ord => { return ord.status == 'transport' })
+  return state.order.orders.filter(ord => { return ord.status == 'transport' })
 }
 
 export const order = state => {
-  return state.orders.one
+  return state.order.order
 }

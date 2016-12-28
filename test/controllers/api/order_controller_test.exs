@@ -27,7 +27,7 @@ defmodule Publit.Api.OrderControllerTest do
     v1 = Enum.at(p1.variations, 1)
     v2 = Enum.at(p2.variations, 0)
 
-    %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
+    %{"organization_id" => org.id, "currency" => org.currency,
     "location" => %{"coordinates" => [-120, 30], "type" => "Point"},
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},

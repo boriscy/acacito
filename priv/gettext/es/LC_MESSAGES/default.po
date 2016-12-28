@@ -50,7 +50,9 @@ msgstr "Nuevo Producto"
 msgid "Password"
 msgstr "Contrasenia"
 
-#: web/templates/layout/app.html.eex:22 web/templates/product/index.html.eex:2
+#: web/templates/layout/app.html.eex:22
+#: web/templates/layout/app_full.html.eex:22
+#: web/templates/product/index.html.eex:2
 msgid "Products"
 msgstr "Productos"
 
@@ -66,7 +68,7 @@ msgstr "Registre su venta"
 msgid "Shop name"
 msgstr "Nombre de la venta"
 
-#: web/templates/layout/translations.html.eex:15
+#: web/templates/layout/translations.html.eex:16
 #: web/templates/product/form.html.eex:17
 msgid "Tags"
 msgstr "Etiquetas"
@@ -91,16 +93,16 @@ msgstr "Nuevo Producto"
 msgid "Pizza with ham"
 msgstr "Pizza con jamon"
 
-#: web/controllers/product_controller.ex:36
+#: web/controllers/product_controller.ex:37
 msgid "Product created."
 msgstr "Producto creado."
 
-#: web/controllers/product_controller.ex:58
+#: web/controllers/product_controller.ex:59
 msgid "Product updated."
 msgstr "Producto actualizado."
 
-#: web/controllers/product_controller.ex:40
-#: web/controllers/product_controller.ex:62
+#: web/controllers/product_controller.ex:41
+#: web/controllers/product_controller.ex:63
 msgid "There are errors in the product."
 msgstr "Hay errores en el producto."
 
@@ -113,7 +115,7 @@ msgstr "Esta segur@ de eliminar el producto \"%{name}\"?"
 msgid "Delete"
 msgstr "Borrar"
 
-#: web/controllers/product_controller.ex:76
+#: web/controllers/product_controller.ex:77
 msgid "Product was deleted."
 msgstr "Producto eliminado."
 
@@ -175,10 +177,11 @@ msgid "New Orders"
 msgstr "Nuevas Ordenes"
 
 #: web/templates/layout/app.html.eex:23
+#: web/templates/layout/app_full.html.eex:23
 msgid "Orders"
 msgstr "Ordenes"
 
-#: web/templates/layout/translations.html.eex:16
+#: web/templates/layout/translations.html.eex:17
 msgid "Transporting Orders"
 msgstr "Ordenes en Transporte"
 
@@ -198,19 +201,19 @@ msgstr "Grande"
 msgid "Medium"
 msgstr "Medio"
 
-#: web/templates/layout/translations.html.eex:11
+#: web/templates/layout/translations.html.eex:12
 msgid "Price"
 msgstr "Precio"
 
-#: web/templates/layout/translations.html.eex:12
+#: web/templates/layout/translations.html.eex:13
 msgid "Remove"
 msgstr "Eliminar"
 
-#: web/templates/layout/translations.html.eex:17
+#: web/templates/layout/translations.html.eex:18
 msgid "Variations"
 msgstr "Variaciones"
 
-#: web/templates/layout/translations.html.eex:14
+#: web/templates/layout/translations.html.eex:15
 msgid "Small"
 msgstr "Pequenio"
 
@@ -218,12 +221,12 @@ msgstr "Pequenio"
 msgid "Call Transport"
 msgstr "Llamar Transporte"
 
-#: web/templates/layout/translations.html.eex:13
+#: web/templates/layout/translations.html.eex:14
 #: web/templates/product/form.html.eex:19
 msgid "Separate tags with commas"
 msgstr "Separe las etiquetas con comas"
 
-#: web/templates/layout/translations.html.eex:18
+#: web/templates/layout/translations.html.eex:19
 msgid "Variation name"
 msgstr "Nombre de variacion"
 
@@ -238,3 +241,15 @@ msgstr "Ver ejemplos"
 #: web/templates/product/form.html.eex:36
 msgid "You can format the text"
 msgstr "Puede darle formato al texto"
+
+#: web/templates/product/form.html.eex:52
+msgid "Description example"
+msgstr ""
+
+#: web/templates/product/form.html.eex:56
+msgid "Escriba para probar"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:11
+msgid "New order"
+msgstr "Nueva orden"

@@ -18,9 +18,11 @@ import OrderList from './List.vue'
 import Order from './Order.vue'
 import OrderProcess from './Process.vue'
 import { mapGetters, mapActions } from 'vuex'
+import {translate} from '../mixins'
 
 export default {
   name: 'OrderContainer',
+  mixins: [translate],
   data() {
     return {
       orderComp: Order,
@@ -59,16 +61,13 @@ export default {
         })
       })
 
-      this.channel.on("change", payload => {
-        console.log('Change:', payload)
+      this.channel.on('new:order', order => {
+        new Notification(this.gettext("New order"))
+        this.$store.dispatch('addOrder', order)
       })
 
       let user = `user-${Math.floor(Math.random() * 100000)}`
       this.socket = new Socket("/socket", {})
-      /*{
-        user: user,
-        logger: ((kind, msg, data) => { console.log(`${kind}: ${msg}`, data) })
-      })*/
       this.socket.connect()
       //this.socket.onOpen( ev => console.log("OPEN", ev) )
       //this.socket.onError( ev => console.log("ERROR", ev) )
@@ -84,6 +83,9 @@ export default {
   created() {
     this.$store.dispatch('getOrders')
     this.setChannel()
+    Notification.requestPermission().then(function(result) {
+      console.log(result)
+    });
   }
 }
 </script>

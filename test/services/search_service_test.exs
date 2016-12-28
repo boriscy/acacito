@@ -73,6 +73,14 @@ defmodule Publit.SearchServiceTest do
       assert Enum.count(rows) == 1
       org = List.first(rows)
       assert org.name == "org 3"
+      assert org.currency == "BOB"
+      assert org.tags == [%{"count" => 20, "text" => "pizza"}, %{"count" => 5, "text" => "pasta"}]
+      assert org.description == nil
+      assert org.open
+      assert org.rating == %Decimal{coef: 50, exp: -1, sign: 1}
+      assert org.rating_count == 2
+      assert org.id
+      assert org.coords
     end
 
 

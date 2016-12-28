@@ -5,12 +5,8 @@ defmodule Publit.Api.OrderController do
 
   # GET /api/orders
   def index(conn, _params) do
-    {:ok, a} = Agent.start(fn() -> 1 end)
-    render(conn, "index.json", orders: [fake(a), fake(a),
-      fake(a, status: "process"),
-      fake(a, status: "process", trans_start: minutes_ago(2), trans_end: nil, trans_type: "car"),
-      fake(a, status: "transport")
-    ])
+    org_id = conn.assigns.current_organization.id
+    render(conn, "index.json", orders: Order.active(org_id))
   end
 
   # GET /api/orders/:id
@@ -20,6 +16,7 @@ defmodule Publit.Api.OrderController do
 
   # POST /api/orders
   def create(conn, %{"order" => order_params}) do
+    order_params = order_params |> Map.put("user_id", conn.assigns.current_user.id)
     case Order.create(order_params) do
       {:ok, order} ->
         Publit.OrganizationChannel.broadcast_order(order)
@@ -31,28 +28,4 @@ defmodule Publit.Api.OrderController do
     end
   end
 
-  defp fake(a, opts \\ []) do
-    num = Agent.get(a, &(&1) )
-    Agent.update(a, &(&1 + 1))
-
-    %{
-      id: "#{num}-aa",
-      client: "Boris Barroso",
-      number: num,
-      currency: "BOB",
-      status: opts[:status] || "new",
-      details: [
-        %{name: "Pizza", variation: "Grande", price: Decimal.new("60"), quantity: Decimal.new("1")}
-      ],
-      transport: %{
-        start: opts[:trans_start], end: opts[:trans_end], tran_type: opts[:trans_type], user_id: opts[:trans_user_id]
-      },
-      inserted_at: minutes_ago(5),
-      total: Decimal.new("60")
-    }
-  end
-
-  defp minutes_ago(m) do
-    Ecto.DateTime.from_unix!(DateTime.to_unix(DateTime.utc_now()) - m * 60, :seconds)
-  end
 end
