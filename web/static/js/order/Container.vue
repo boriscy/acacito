@@ -62,7 +62,9 @@ export default {
       })
 
       this.channel.on('new:order', order => {
-        new Notification(this.gettext("New order"))
+        const msg = `${this.gettext("New order")}: ${order.client} (${order.total})`
+        new Notification(msg)
+        this.sound.play()
         this.$store.dispatch('addOrder', order)
       })
 
@@ -83,6 +85,8 @@ export default {
   created() {
     this.$store.dispatch('getOrders')
     this.setChannel()
+
+    this.sound = new Audio('/sounds/alert1.mp3');
     Notification.requestPermission().then(function(result) {
       console.log(result)
     });
