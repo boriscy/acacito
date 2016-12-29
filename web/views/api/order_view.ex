@@ -11,7 +11,6 @@ defmodule Publit.Api.OrderView do
   end
 
   def render("show.json", %{order: order}) do
-    IO.puts "render show"
     %{order: to_api(order)}
   end
 
@@ -23,7 +22,7 @@ defmodule Publit.Api.OrderView do
     order
     |> Map.drop([:__meta__, :__struct__])
     |> Map.put(:location, Geo.JSON.encode(order.location))
-    |> Map.put(:transport, encode_transport(order))
+    |> Map.put(:organization, Publit.OrganizationView.to_api(order.organization))
   end
 
   defp encode_transport(order) do

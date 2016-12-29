@@ -32,7 +32,7 @@ defmodule Publit.Api.OrderControllerTest do
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
         "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-      }
+      }, "transport" => %{"calculated_price" => "3"}
     }
   end
 
@@ -45,7 +45,8 @@ defmodule Publit.Api.OrderControllerTest do
       ord = json["order"]
       assert ord["location"] == %{"coordinates" => [-120, 30], "type" => "Point"}
 
-      assert json["organization"]["name"] == org.name
+      assert json["order"]["organization"]["name"] == org.name
+      assert json["order"]["organization"]["currency"] == "BOB"
     end
 
     test "ERROR",%{conn: conn, org: org} do

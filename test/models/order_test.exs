@@ -94,6 +94,7 @@ defmodule Publit.OrderTest do
       {:ok, order} =  Order.create(params)
 
       assert order.number == 2
+      assert order.organization.name == "Publit"
     end
 
     test "ERROR" do
