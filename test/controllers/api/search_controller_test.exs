@@ -12,7 +12,7 @@ defmodule Publit.Api.SearchControllerTest do
   defp create_org(params) do
     Repo.insert(%Organization{
       name: params[:name],
-      geom: params[:geom],
+      location: params[:location],
       tags: params[:tags],
       rating: params[:rating] || 1,
       open: true,
@@ -26,14 +26,14 @@ defmodule Publit.Api.SearchControllerTest do
   def create_orgs do
     [
       # summa pacha
-      create_org(%{name: "org 1", geom: coords(-18.1787804,-63.876047), rating: 4, tags: [%{text: "vegetariano", count: 10}, %{text: "vegano", count: 7}] }),
+      create_org(%{name: "org 1", location: coords(-18.1787804,-63.876047), rating: 4, tags: [%{text: "vegetariano", count: 10}, %{text: "vegano", count: 7}] }),
       #
-      create_org(%{name: "org 2", geom: coords(-18.1767489,-63.8732718), rating: 3, tags: [%{text: "carne", count: 15}, %{text: "vegetariano", count: 1}, %{text: "parrilla", count: 5}] }),
+      create_org(%{name: "org 2", location: coords(-18.1767489,-63.8732718), rating: 3, tags: [%{text: "carne", count: 15}, %{text: "vegetariano", count: 1}, %{text: "parrilla", count: 5}] }),
       # Achira
-      create_org(%{name: "org 3", geom: coords(-18.1650556,-63.8210238), rating: 5, tags: [%{text: "pizza", count: 20}, %{text: "pasta", count: 5}] }),
-      create_org(%{name: "org 4", geom: coords(-18.1781923,-63.8660898), rating: 2, tags: [%{text: "pollo", count: 4}] }),
+      create_org(%{name: "org 3", location: coords(-18.1650556,-63.8210238), rating: 5, tags: [%{text: "pizza", count: 20}, %{text: "pasta", count: 5}] }),
+      create_org(%{name: "org 4", location: coords(-18.1781923,-63.8660898), rating: 2, tags: [%{text: "pollo", count: 4}] }),
       # Timboy
-      create_org(%{name: "org 5", geom: coords(-18.1767489,-63.8732718), rating: 3, tags: [] })
+      create_org(%{name: "org 5", location: coords(-18.1767489,-63.8732718), rating: 3, tags: [] })
     ]
   end
 

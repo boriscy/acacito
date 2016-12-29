@@ -1,25 +1,24 @@
 defmodule Publit.Order do
   use Publit.Web, :model
-  alias Publit.{Order, User, OrderDetail, Product, Repo}
+  alias Publit.{Order, OrderTransport, User, OrderDetail, Product, Organization, Repo}
   import Ecto.Query
   import Publit.Gettext
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "orders" do
     field :user_id, Ecto.UUID
-    field :organization_id, Ecto.UUID
     field :total, :decimal
     field :status, :string, default: "new"
     field :location, Geo.Geometry # Location is stored
     field :null_reason, :string
     field :number, :integer
     field :currency, :string
-    field :transport, :map, default: %{}
     field :messages, {:array, :map}, default: []
     field :log, {:array, :map}, default: []
 
+    embeds_one :transport, OrderTransport, on_replace: :delete
     embeds_many :details, OrderDetail, on_replace: :delete
-    #field :messages, :list
+    belongs_to :organization, Organization, type: :binary_id
 
     timestamps()
   end
@@ -39,12 +38,15 @@ defmodule Publit.Order do
   """
   def create(params) do
     cs = %Order{}
-    |> cast(params, [:user_id, :organization_id, :location, :currency])
-    |> validate_required([:user_id, :organization_id, :details, :location, :currency])
+    |> cast(params, [:user_id, :location, :currency, :organization_id])
+    |> validate_required([:user_id, :details, :location, :currency])
     |> cast_embed(:details)
     |> set_and_validate_details()
+    |> put_assoc(:organization, Repo.get(Organization, params["organization_id"]) )
+    |> set_transport()
+
     if cs.valid? do
-      cs
+      cs = cs
       |> set_total()
       |> set_number()
       |> add_log(%{time: Ecto.DateTime.autogenerate(), message: "Creation", type: "create", user_id: params["user_id"]})
@@ -53,6 +55,7 @@ defmodule Publit.Order do
       {:error, cs}
     end
   end
+
 
   @doc"""
   Changes the status of an order to the next
@@ -74,13 +77,6 @@ defmodule Publit.Order do
     update_status(order, "new", message: "Back to status new", user_id: user_id, type: "update_back")
   end
 
-  def to_api(order) do
-    {lat, lng} = order.location.coordinates
-    order
-    |> Map.delete(:__meta__)
-    |> Map.put(:location, Geo.JSON.encode(order.location))
-  end
-
   defp update_status(order, status, opts) do
     Ecto.Changeset.change(order)
     |> put_change(:status, status)
@@ -91,7 +87,8 @@ defmodule Publit.Order do
   defp set_number(cs) do
     dt = Ecto.DateTime.autogenerate()
     d = Ecto.DateTime.to_date(dt)
-    q = from(o in Order, where: o.organization_id == ^cs.changes.organization_id
+    {:ok, org_id} = Ecto.UUID.cast(cs.params["organization_id"])
+    q = from(o in Order, where: o.organization_id == ^org_id
      and fragment("date(?)", o.inserted_at) == ^d, select: count(o.id))
 
     num = Repo.one(q) + 1
@@ -131,8 +128,7 @@ defmodule Publit.Order do
 
   defp get_products(cs) do
     ids = cs.changes.details |> Enum.map(fn(det) -> det.changes.product_id end)
-
-    q = from p in Product, where: p.id in ^ids and p.organization_id == ^cs.changes.organization_id and p.publish == true
+    q = from p in Product, where: p.id in ^ids and p.organization_id == ^cs.params["organization_id"] and p.publish == true
     Repo.all(q)
   end
 
@@ -143,6 +139,20 @@ defmodule Publit.Order do
     end)
 
     put_change(cs, :total, tot)
+  end
+
+  defp set_transport(cs) do
+    if cs.changes.organization_id do
+      p = Map.merge(cs.params["transport"] || %{"calculated_price" => ""}, %{
+        "start_location" => Geo.JSON.encode(cs.changes.organization.data.location),
+        "end_location" => cs.params["location"]
+      })
+      cs = Map.put(cs, :params, Map.merge(cs.params, %{"transport" => p}) )
+
+      cs = cast_embed(cs, :transport)
+    else
+      cs
+    end
   end
 
   def active(organization_id) do

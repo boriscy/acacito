@@ -22,7 +22,7 @@ defmodule Publit.Api.OrderControllerTest do
     [p1, p2]
   end
 
-  defp order_params(user, org) do
+  defp order_params(org) do
     [p1, p2] = create_products2(org)
     v1 = Enum.at(p1.variations, 1)
     v2 = Enum.at(p2.variations, 0)
@@ -37,16 +37,19 @@ defmodule Publit.Api.OrderControllerTest do
   end
 
   describe "POST /api/orders" do
-    test "OK", %{conn: conn, user: user, org: org} do
-      conn = post(conn, "/api/orders", %{"order" => order_params(user, org)})
+    test "OK", %{conn: conn, org: org} do
+      conn = post(conn, "/api/orders", %{"order" => order_params(org)})
 
       assert conn.status == 200
-      ord = Poison.decode!(conn.resp_body)["order"]
+      json = Poison.decode!(conn.resp_body)
+      ord = json["order"]
       assert ord["location"] == %{"coordinates" => [-120, 30], "type" => "Point"}
+
+      assert json["organization"]["name"] == org.name
     end
 
-    test "ERROR",%{conn: conn, user: user, org: org} do
-      order_p = order_params(user, org) |> Map.delete("location")
+    test "ERROR",%{conn: conn, org: org} do
+      order_p = order_params(org) |> Map.delete("location")
       conn = post(conn, "/api/orders", %{"order" => order_p})
 
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)

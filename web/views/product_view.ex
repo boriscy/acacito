@@ -35,10 +35,6 @@ defmodule Publit.ProductView do
     Poison.encode!(data)
   end
 
-  defp variations_data(:data, variations) do
-    Enum.map(variations, fn(p) -> %{id: p.id, name: p.name, price: p.price} end)
-  end
-
   def encode_tags(cs) do
     data = if cs.changes == %{} do
       cs.data.tags
@@ -76,6 +72,10 @@ defmodule Publit.ProductView do
 
   def all_tags(conn) do
     Publit.Product.all_tags(conn.assigns.current_organization.id)
+  end
+
+  defp variations_data(:data, variations) do
+    Enum.map(variations, fn(p) -> %{id: p.id, name: p.name, price: p.price} end)
   end
 
   defp variations_data(:changes, variations) do

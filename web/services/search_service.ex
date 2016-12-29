@@ -3,10 +3,10 @@ defmodule Publit.SearchService do
   alias Publit.{Repo}
 
   @base_sql """
-  select o.id::text, o.name, o.geom, o.tags, o.address, o.open, o.rating,
+  select o.id::text, o.name, o.location, o.tags, o.address, o.open, o.rating,
   o.rating_count, o.description, o.currency
   from organizations o, jsonb_array_elements(tags) as t
-  where o.open = true and ST_Distance_Sphere(o.geom, ST_MakePoint($1, $2)) <= $3 * 1000
+  where o.open = true and ST_Distance_Sphere(o.location, ST_MakePoint($1, $2)) <= $3 * 1000
   """
 
   def search(params) do
@@ -19,8 +19,8 @@ defmodule Publit.SearchService do
 
   defp map_results(rows) do
     Enum.map(rows, fn(row) ->
-      [id, name, geom, tags, address, open, rating, rating_count, desc, curr] = row
-      %{id: id, name: name, coords: Geo.JSON.encode(geom),
+      [id, name, location, tags, address, open, rating, rating_count, desc, curr] = row
+      %{id: id, name: name, coords: Geo.JSON.encode(location),
         tags: tags, address: address, open: open, rating: rating, rating_count: rating_count,
         description: desc, currency: curr}
     end)

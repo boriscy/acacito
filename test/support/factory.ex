@@ -16,7 +16,8 @@ defmodule Publit.Factory do
     %Publit.Organization{
       name: "Publit",
       currency: "BOB",
-      address: "Calle 1 Near Here"
+      address: "Calle 1 Near Here",
+      location: Geo.JSON.decode(%{"coordinates" => [-18.18, -63.87], "type" => "Point"})
     }
   end
 

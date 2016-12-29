@@ -20,7 +20,7 @@ defmodule Publit.Api.OrderController do
     case Order.create(order_params) do
       {:ok, order} ->
         Publit.OrganizationChannel.broadcast_order(order)
-        render(conn, "show.json", order: Order.to_api(order))
+        render(conn, "show.json", order: order)
       {:error, cs} ->
         conn
         |> put_status(:unprocessable_entity)

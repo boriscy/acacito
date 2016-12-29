@@ -18,8 +18,9 @@ defmodule Publit.OrderTest do
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
         "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-      }
+      }, "transport" => %{"calculated_price" => "7"}
     }
+
     {:ok, order} = Order.create(params)
     order
   end
@@ -46,10 +47,10 @@ defmodule Publit.OrderTest do
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-        }
+        }, "transport" => %{"calculated_price" => "5"}
       }
 
-      {:ok, order} =  Order.create(params)
+      {:ok, order} = Order.create(params)
 
       assert order.location == %Geo.Point{coordinates: {-100, 30}, srid: nil}
       assert order.number == 1
@@ -72,7 +73,6 @@ defmodule Publit.OrderTest do
       assert d2.variation_id == v2.id
       assert d2.name == p2.name
       assert d2.variation == v2.name
-
     end
 
     test "OK number" do
@@ -84,11 +84,11 @@ defmodule Publit.OrderTest do
       v2 = Enum.at(p2.variations, 0)
 
       params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
-      "location" => Geo.WKT.decode("POINT(30 -90)"),
+      "location" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-        }
+        }, "transport" => %{"calculated_price" => "3"}
       }
 
       {:ok, order} =  Order.create(params)

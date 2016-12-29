@@ -52,14 +52,14 @@ window.addEventListener("load", function load(event){
       getPositionData: function(position) {
         return {
           data: {
-            organization: {geom: {lat: position.coords.latitude, lng: position.coords.longitude}},
+            organization: {location: {lat: position.coords.latitude, lng: position.coords.longitude}},
             format: "json"
           }
         }
       },
       setPosition: function(position) {
         var that = this;
-        var data = $.extend({}, ajaxSettings, {data: {organization: {geom: this.coords}, format: "json"} } )
+        var data = $.extend({}, ajaxSettings, {data: {organization: {location: this.coords}, format: "json"} } )
 
         $.ajax(data)
         .done(function(resp) {

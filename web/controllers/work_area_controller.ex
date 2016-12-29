@@ -9,9 +9,4 @@ defmodule Publit.WorkAreaController do
     render(conn, "index.html", token: token, orgtoken: orgtoken)
   end
 
-  #
-  def publish(conn, params) do
-    Publit.OrganizationChannel.broadcast_data(%{id: params["id"], name: params["name"] || "JOJO"})
-    text conn, "Ola"
-  end
 end

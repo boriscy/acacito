@@ -42,19 +42,19 @@ defmodule Publit.OrganizationTest do
       assert org.currency == "USD"
 
       {:ok, org} = Organization.update(org, %{name: "Changes to name", currency: "BOB", address: "The other address",
-        geom: %{"coordinates" => [-63, -18], "type" => "Point"}})
+        location: %{"coordinates" => [-63, -18], "type" => "Point"}})
 
       assert org.name == "Changes to name"
       assert org.address == "The other address"
       assert org.currency == "USD"
     end
 
-    test "OK geom" do
+    test "OK location" do
       org = insert(:organization, currency: "USD")
       p = %{"coordinates" => [-100, 30], "type" => "Point"}
-      {:ok, org} = Organization.update(org, %{name: "Changes to name", geom: p})
+      {:ok, org} = Organization.update(org, %{name: "Changes to name", location: p})
 
-      assert org.geom == %Geo.Point{coordinates: {-100, 30}, srid: nil}
+      assert org.location == %Geo.Point{coordinates: {-100, 30}, srid: nil}
     end
 
   end
@@ -65,7 +65,7 @@ defmodule Publit.OrganizationTest do
       address: "Near here",
       category: "cat 1",
       currency: "ABC",
-      geom: %Geo.Point{coordinates: {-17.8145819, -63.1560853}, srid: nil},
+      location: %Geo.Point{coordinates: {-17.8145819, -63.1560853}, srid: nil},
       description: "A good place"
     }
 
