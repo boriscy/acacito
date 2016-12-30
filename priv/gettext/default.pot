@@ -169,7 +169,7 @@ msgstr ""
 msgid "Unpublished"
 msgstr ""
 
-#: web/models/order.ex:128
+#: web/models/order.ex:125
 msgid "Invalid product"
 msgstr ""
 
@@ -253,4 +253,8 @@ msgstr ""
 
 #: web/templates/layout/translations.html.eex:11
 msgid "New order"
+msgstr ""
+
+#: web/controllers/api/order_controller.ex:20
+msgid "Could not find the order"
 msgstr ""

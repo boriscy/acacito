@@ -69,4 +69,47 @@ defmodule Publit.Api.OrderControllerTest do
       assert json["message"] == Publit.Gettext.gettext("You need to login")
     end
   end
+
+  describe "GET /api/orders/:id" do
+    test "OK", %{conn: conn, user: user, org: org} do
+      ord = create_order(user, org)
+
+      conn = get(conn, "/api/orders/#{ord.id}")
+
+      json = Poison.decode!(conn.resp_body)
+      assert json["order"]["id"] == ord.id
+      assert json["order"]["details"] |> Enum.count() == 2
+
+      assert json["order"]["organization"]["id"] == org.id
+      assert json["order"]["organization"]["name"] == org.name
+    end
+
+    test "not found", %{conn: conn} do
+      conn = get(conn, "/api/orders/#{Ecto.UUID.generate()}")
+
+      assert conn.status == Plug.Conn.Status.code(:not_found)
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["error"]
+    end
+  end
+
+
+  describe "GET /api/user_orders/:user_id" do
+    test "OK", %{conn: conn, user: user, org: org} do
+      create_order(user, org)
+
+      conn = get(conn, "/api/user_orders/#{user.id}")
+
+      json = Poison.decode!(conn.resp_body)
+      assert json["orders"] |> Enum.count() == 1
+      ord = List.first json["orders"]
+
+      assert ord["details"] |> Enum.count() == 2
+
+      assert ord["organization"]["id"] == org.id
+      assert ord["organization"]["name"] == org.name
+    end
+  end
+
 end

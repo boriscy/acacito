@@ -14,8 +14,19 @@ defmodule Publit.Api.OrderView do
     %{order: to_api(order)}
   end
 
+  def render("orders.json", %{orders: orders}) do
+    orders = Enum.map(orders, &to_api/1)
+
+    %{orders: orders}
+  end
+
   def render("errors.json", %{cs: cs}) do
-    %{errors: get_errors(cs)}
+    err = Map.put(get_errors(cs), :transport_errors, get_errors(cs.changes.transport))
+    %{errors: err}
+  end
+
+  def render("not_found.json", %{msg: msg}) do
+    %{error: msg}
   end
 
   def to_api(order) do
@@ -24,18 +35,6 @@ defmodule Publit.Api.OrderView do
     |> Map.put(:location, Geo.JSON.encode(order.location))
     |> Map.put(:organization, Publit.OrganizationView.to_api(order.organization))
   end
-
-  defp encode_transport(order) do
-    IO.inspect order.transport
-    order.transport
-  end
-
-  #defp get_user_and_org(order) do
-  #  q = from u in User, join: o in Organization,
-  #  select: %{user: u, org: o}, where: u.id == ^order.user_id and o.id == ^order.organization_id
-
-  #  Repo.one(q)
-  #end
 
   def encode_with_user(order) do
     user = Repo.get(User, order.user_id)

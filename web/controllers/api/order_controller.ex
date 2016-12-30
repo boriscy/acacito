@@ -9,9 +9,21 @@ defmodule Publit.Api.OrderController do
     render(conn, "index.json", orders: Order.active(org_id))
   end
 
+  # GET /api/user_orders
+  def user_orders(conn, %{"user_id" => user_id}) do
+    render(conn, "orders.json", orders: Order.user_orders(user_id))
+  end
+
   # GET /api/orders/:id
   def show(conn, %{"id" => id}) do
-    render(conn, "show.json", order: %{id: id, total: 12.3, name: "test"})
+    case (Repo.get(Order, id) |> Repo.preload(:organization)) do
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> render("not_found.json", msg: gettext("Could not find the order"))
+      order ->
+        render(conn, "show.json", order: order)
+    end
   end
 
   # POST /api/orders

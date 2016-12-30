@@ -75,6 +75,8 @@ defmodule Publit.Router do
     pipe_through [:api, :user_api_auth]
 
     post "/orders", Api.OrderController, :create
+    get "/orders/:id", Api.OrderController, :show
+    get "/user_orders/:user_id", Api.OrderController, :user_orders
 
     post "/search", Api.SearchController, :search
     get "/:organization_id/products", Api.ProductController, :products
@@ -82,7 +84,6 @@ defmodule Publit.Router do
     scope "/" do
       pipe_through [:organization_api_auth]
       get "/orders", Api.OrderController, :index
-      get "/orders/:id", Api.OrderController, :show
     end
 
   end

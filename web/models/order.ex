@@ -155,13 +155,25 @@ defmodule Publit.Order do
     end
   end
 
+  # Query methods
+  @doc """
+  Returns the active orders ["new", "process", "transport"] for the current organization
+  """
   def active(organization_id) do
     q = from o in Order, join: u in User,
     select: %{id: o.id, details: o.details, client: u.full_name, location: o.location,
      inserted_at: o.inserted_at, updated_at: o.updated_at, total: o.total,
      status: o.status, number: o.number},
     where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport"] and o.user_id == u.id
+
     Repo.all(q)
   end
+
+  def user_orders(user_id) do
+    q = from o in Order, where: o.user_id == ^user_id, order_by: [desc: o.inserted_at]
+
+    Repo.all(q) |> Repo.preload(:organization)
+  end
+
 
 end

@@ -8,11 +8,12 @@ defmodule Publit.OrderDetail do
     field :variation_id, :binary
     field :quantity, :decimal, default: 1
     field :price, :decimal, default: nil
+    field :image, :string
   end
 
   def changeset(cs, params) do
     cs
-    |> cast(params, [:product_id, :variation_id, :quantity])
+    |> cast(params, [:product_id, :variation_id, :quantity, :image])
     |> validate_required([:product_id, :variation_id, :quantity])
     |> validate_number(:quantity, greater_than: Decimal.new("0"))
   end
