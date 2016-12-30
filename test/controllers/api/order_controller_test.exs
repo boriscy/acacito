@@ -99,7 +99,7 @@ defmodule Publit.Api.OrderControllerTest do
     test "OK", %{conn: conn, user: user, org: org} do
       create_order(user, org)
 
-      conn = get(conn, "/api/user_orders/#{user.id}")
+      conn = get(conn, "/api/user_orders")
 
       json = Poison.decode!(conn.resp_body)
       assert json["orders"] |> Enum.count() == 1

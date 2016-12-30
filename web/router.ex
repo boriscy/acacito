@@ -76,7 +76,7 @@ defmodule Publit.Router do
 
     post "/orders", Api.OrderController, :create
     get "/orders/:id", Api.OrderController, :show
-    get "/user_orders/:user_id", Api.OrderController, :user_orders
+    get "/user_orders", Api.OrderController, :user_orders
 
     post "/search", Api.SearchController, :search
     get "/:organization_id/products", Api.ProductController, :products

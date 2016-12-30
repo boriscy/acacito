@@ -10,7 +10,9 @@ defmodule Publit.Api.OrderController do
   end
 
   # GET /api/user_orders
-  def user_orders(conn, %{"user_id" => user_id}) do
+  def user_orders(conn, _params) do
+    user_id = conn.assigns.current_user.id
+
     render(conn, "orders.json", orders: Order.user_orders(user_id))
   end
 
