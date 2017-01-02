@@ -174,20 +174,20 @@ msgstr "Producto invalido"
 
 #: web/templates/layout/translations.html.eex:8
 msgid "New Orders"
-msgstr "Nuevas Ordenes"
+msgstr "Nuevos Pedidos"
 
 #: web/templates/layout/app.html.eex:23
 #: web/templates/layout/app_full.html.eex:23
 msgid "Orders"
-msgstr "Ordenes"
+msgstr "Pedidos"
 
 #: web/templates/layout/translations.html.eex:17
 msgid "Transporting Orders"
-msgstr "Ordenes en Transporte"
+msgstr "Pedidos en Transporte"
 
 #: web/templates/layout/translations.html.eex:9
 msgid "Orders in Process"
-msgstr "Ordenes en Proceso"
+msgstr "Pedidos en Proceso"
 
 #: web/templates/layout/translations.html.eex:3
 msgid "Add line"
@@ -252,8 +252,8 @@ msgstr ""
 
 #: web/templates/layout/translations.html.eex:11
 msgid "New order"
-msgstr "Nueva orden"
+msgstr "Nuevo pedido"
 
 #: web/controllers/api/order_controller.ex:20
 msgid "Could not find the order"
-msgstr "No se pudo encontrar la orden"
+msgstr "No se pudo encontrar el pedido"
