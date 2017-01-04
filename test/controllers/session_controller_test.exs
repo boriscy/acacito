@@ -60,6 +60,24 @@ defmodule Publit.SessionControllerTest do
   end
 
   describe "logout" do
+    test "OK no active organizations" do
+      user = insert(:user, email: "other@mail.com")
 
+      conn = build_conn()
+      |> post("/login", %{"user_authentication" => %{"email" => "other@mail.com", "password" => "demo1234"} })
+
+      assert redirected_to(conn) == "/organizations"
+      {:ok, u_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
+
+      assert u_id == user.id
+
+      assert get_session(conn, "user_id")
+
+      conn = delete(conn, "/logout")
+
+      refute get_session(conn, "user_id")
+
+      assert redirected_to(conn) == "/login"
+    end
   end
 end

@@ -35,10 +35,6 @@ export default {
     },
     title: '',
     cssClass: ''
-  },
-  created() {
-    //this.$store.dispatch('getOrder', 'abcdef')
-    //this.$store.dispatch('getOrders')
   }
 }
 </script>

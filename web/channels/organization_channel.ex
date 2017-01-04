@@ -17,13 +17,12 @@ defmodule Publit.OrganizationChannel do
   end
 
   def handle_out(event, payload, socket) do
-    IO.inspect payload
     push socket, event, payload
     {:noreply, socket}
   end
 
   def broadcast_order(order) do
-    ord = Publit.Api.OrderView.encode_with_user(order)
+    ord = Publit.Api.OrgOrderView.to_api(order)
     Publit.Endpoint.broadcast("organizations:" <> order.organization_id, "new:order", ord)
   end
 

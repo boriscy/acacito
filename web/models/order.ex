@@ -6,7 +6,6 @@ defmodule Publit.Order do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "orders" do
-    field :user_id, Ecto.UUID
     field :total, :decimal
     field :status, :string, default: "new"
     field :location, Geo.Geometry # Location is stored
@@ -18,6 +17,8 @@ defmodule Publit.Order do
 
     embeds_one :transport, OrderTransport, on_replace: :delete
     embeds_many :details, OrderDetail, on_replace: :delete
+
+    belongs_to :user, User, type: :binary_id
     belongs_to :organization, Organization, type: :binary_id
 
     timestamps()
@@ -46,7 +47,7 @@ defmodule Publit.Order do
     |> set_transport()
 
     if cs.valid? do
-      cs = cs
+      cs
       |> set_total()
       |> set_number()
       |> add_log(%{time: Ecto.DateTime.autogenerate(), message: "Creation", type: "create", user_id: params["user_id"]})
@@ -147,9 +148,9 @@ defmodule Publit.Order do
         "start_location" => Geo.JSON.encode(cs.changes.organization.data.location),
         "end_location" => cs.params["location"]
       })
-      cs = Map.put(cs, :params, Map.merge(cs.params, %{"transport" => p}) )
-
-      cs = cast_embed(cs, :transport)
+      cs
+      |> Map.put(:params, Map.merge(cs.params, %{"transport" => p}) )
+      |> cast_embed(:transport)
     else
       cs
     end
@@ -160,13 +161,10 @@ defmodule Publit.Order do
   Returns the active orders ["new", "process", "transport"] for the current organization
   """
   def active(organization_id) do
-    q = from o in Order, join: u in User,
-    select: %{id: o.id, details: o.details, client: u.full_name, location: o.location,
-     inserted_at: o.inserted_at, updated_at: o.updated_at, total: o.total,
-     status: o.status, number: o.number},
-    where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport"] and o.user_id == u.id
+    q = from o in Order,
+    where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport"]
 
-    Repo.all(q)
+    Repo.all(q) |> Repo.preload(:user)
   end
 
   def user_orders(user_id) do

@@ -35,7 +35,7 @@ defmodule Publit.Router do
     get "/", HomeController, :index
     get "/login", SessionController, :index
     post "/login", SessionController, :create
-    delete "/logout", SessionController, :destroy
+    delete "/logout", SessionController, :delete
 
     resources "/users", UserController
     resources "/registration", RegistrationController, only: [:index, :create]
@@ -74,16 +74,19 @@ defmodule Publit.Router do
   scope "/api", Publit do
     pipe_through [:api, :user_api_auth]
 
-    post "/orders", Api.OrderController, :create
-    get "/orders/:id", Api.OrderController, :show
-    get "/user_orders", Api.OrderController, :user_orders
+    resources "/orders", Api.OrderController
+    #post "/orders", Api.OrderController, :create
+    #get "/orders/:id", Api.OrderController, :show
+    #get "/user_orders", Api.OrderController, :user_orders
 
     post "/search", Api.SearchController, :search
     get "/:organization_id/products", Api.ProductController, :products
 
+    # Authorized only for organizations
     scope "/" do
       pipe_through [:organization_api_auth]
-      get "/orders", Api.OrderController, :index
+      resources "/org_orders", Api.OrgOrderController, only: [:index, :show]
+      put "/org_orders/:id/move_next", Api.OrgOrderController, :move_next
     end
 
   end

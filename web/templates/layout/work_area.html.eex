@@ -15,6 +15,7 @@
 
   <body class="no-margin">
     <main role="main" id="main" class="orders">
+      <%= link(gettext("Products"), to: "/products", class: "work-area-back-link") %>
       <%= render @view_module, @view_template, assigns %>
     </main>
 

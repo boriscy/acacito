@@ -27,6 +27,13 @@ defmodule Publit.SessionController do
     end
   end
 
+  # DELETE /logout
+  def delete(conn, _params) do
+    conn
+    |> delete_session(:user_id)
+    |> redirect(to: "/login")
+  end
+
   defp set_organization(conn, user) do
     case Enum.find(user.organizations, &(&1.active)) do
       nil ->

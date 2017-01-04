@@ -5,6 +5,7 @@ defmodule Publit.User do
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
 
+  @derive {Poison.Encoder, only: [:id, :full_name, :email, :locale]}
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "users" do
     field :email, :string
@@ -20,7 +21,6 @@ defmodule Publit.User do
 
     timestamps()
   end
-  @derive {Poison.Encoder, only: [:id, :full_name, :email]}
 
   @doc """
   Builds a changeset based on the `struct` and `params`.

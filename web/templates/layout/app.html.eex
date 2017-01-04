@@ -18,9 +18,12 @@
       <header class="header">
         <nav role="navigation">
           <span class="">Publit</span>
-          <ul class="nav nav-pills pull-right">
+          <ul class="nav nav-pills pull-right menu-links">
             <li><a href="/products"><%= gettext("Products") %></a></li>
             <li><a href="/work_area"><%= gettext("Orders") %></a></li>
+            <li>
+              <%= link(gettext("Logout"), to: "/logout", method: :delete) %>
+            </li>
           </ul>
         </nav>
       </header>
