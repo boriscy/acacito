@@ -31,6 +31,7 @@ defmodule Publit.Api.OrgOrderView do
     order
     |> Map.drop([:__meta__, :__struct__, :organization])
     |> Map.put(:location, Geo.JSON.encode(order.location))
+    |> Map.put(:user, Publit.UserView.to_api(order.user))
   end
 
   def encode_with_user(order) do
