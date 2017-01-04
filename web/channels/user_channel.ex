@@ -10,7 +10,8 @@ defmodule Publit.UserChannel do
     {:noreply, socket}
   end
 
-  def broadcast_user(data) do
-    Publit.Endpoint.broadcast("users:" <> data.user_id, "new:data", data)
+  def broadcast_order(order) do
+    order = Publit.Api.OrderView.to_api(order)
+    Publit.Endpoint.broadcast("users:" <> order.user_id, "order:updated", order)
   end
 end

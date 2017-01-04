@@ -1,6 +1,6 @@
 defmodule Publit.Api.OrgOrderView do
   use Publit.Web, :view
-  alias Publit.{User, Organization, Repo}
+  alias Publit.{User, Repo}
   #import Publit.ErrorHelpers, only: [get_errors: 1]
 
   def render("index.json", %{orders: orders}) do

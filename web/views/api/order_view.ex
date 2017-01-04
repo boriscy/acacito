@@ -1,5 +1,6 @@
 defmodule Publit.Api.OrderView do
   use Publit.Web, :view
+  alias Publit.{Organization, Repo}
 
   def render("index.json", %{orders: orders}) do
     orders = Enum.map(orders, &to_api/1)
@@ -21,6 +22,11 @@ defmodule Publit.Api.OrderView do
   end
 
   def to_api(order) do
+    order = case order.organization do
+      %Ecto.Association.NotLoaded{} -> order |> Repo.preload(:organization)
+      %Organization{} -> order
+    end
+
     order
     |> Map.drop([:__meta__, :__struct__, :user])
     |> Map.put(:location, Geo.JSON.encode(order.location))

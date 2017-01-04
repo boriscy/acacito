@@ -23,7 +23,7 @@ defmodule Publit.Order do
 
     timestamps()
   end
-  @statuses ["new", "process", "transport", "delivered", "null"]
+  @statuses ["new", "process", "transport", "delivered", "nulled"]
 
 
   @doc"""

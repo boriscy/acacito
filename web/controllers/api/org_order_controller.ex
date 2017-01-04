@@ -1,6 +1,6 @@
 defmodule Publit.Api.OrgOrderController do
   use Publit.Web, :controller
-  alias Publit.{Order, Repo}
+  alias Publit.{Order, Repo, UserChannel}
 
   # GET /api/org_orders
   def index(conn, _params) do
@@ -27,6 +27,7 @@ defmodule Publit.Api.OrgOrderController do
 
         case Order.next_status(ord, user_id) do
           {:ok, order} ->
+            UserChannel.broadcast_order(order)
             render(conn, "show.json", order: order)
           _ ->
             render(conn, "error.json")
