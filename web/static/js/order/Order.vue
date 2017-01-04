@@ -3,7 +3,7 @@
 
     <div class="header">
       <div class="left">
-        <div class="title">{{formatNum(order.number)}} - {{order.client}}</div>
+        <div class="title">{{formatNum(order.number)}} - {{user.full_name}}</div>
 
         <div class="details">
           <div v-for="det in order.details">
@@ -36,6 +36,9 @@ import orderMixin from './orderMixin'
 
 export default {
   name: 'Order',
-  mixins: [translate, format, orderMixin]
+  mixins: [translate, format, orderMixin],
+  computed: {
+    user() { return this.order.user }
+  }
 }
 </script>

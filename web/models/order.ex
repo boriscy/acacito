@@ -15,8 +15,8 @@ defmodule Publit.Order do
     field :messages, {:array, :map}, default: []
     field :log, {:array, :map}, default: []
 
-    embeds_one :transport, OrderTransport, on_replace: :delete
-    embeds_many :details, OrderDetail, on_replace: :delete
+    embeds_one :transport, OrderTransport#, on_replace: :delete
+    embeds_many :details, OrderDetail#, on_replace: :delete
 
     belongs_to :user, User, type: :binary_id
     belongs_to :organization, Organization, type: :binary_id

@@ -21,7 +21,7 @@ const defaults = {
 
 export const format = {
   methods: {
-    user(id, field = 'full_name') {
+    getUser(id, field = 'full_name') {
       if(!field) {
         return users[id]
       } else {

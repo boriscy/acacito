@@ -4,6 +4,7 @@ import axios from 'axios'
 ///////////////////////////////////////////////////
 // Orders
 import orderApi from './api/order'
+
 export const getOrders = ({commit}) => {
   orderApi.getOrders(orders => {
     commit(types.FETCH_ORDERS, {orders})
@@ -16,14 +17,14 @@ export const getOrder = ({commit}, ord_id) => {
   }, ord_id)
 }
 
-export const moveNext = ({commit}, data) => {
-  orderApi.moveNext(orders => {
-    commit(types.FETCH_ORDERS, {orders})
-  }, data)
+export const moveNext = ({commit}, order) => {
+  orderApi.moveNext(data => {
+    commit(types.UPDATE_ORDER, data)
+  }, order)
 }
 
-export const addOrder = ({commit}, order) => {
-  commit(types.ADD_ORDER, {order})
+export const addOrder = ({commit}, data) => {
+  commit(types.ADD_ORDER, data)
 }
 
 //////////////////////////////////

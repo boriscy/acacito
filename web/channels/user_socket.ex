@@ -2,7 +2,7 @@ defmodule Publit.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "orders:*", Publit.OrderChannel
+  channel "users:*", Publit.UserChannel
   channel "organizations:*", Publit.OrganizationChannel
 
   ## Transports

@@ -53,8 +53,7 @@ export default {
       }
     },
     moveNext() {
-      this.$store.dispatch('moveNext')
-      //window.eventHub.$emit('move:next', {order: this.order})
+      this.$store.dispatch('moveNext', this.order)
     }
   }
 }
