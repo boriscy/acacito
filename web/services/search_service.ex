@@ -35,16 +35,28 @@ defmodule Publit.SearchService do
       _ -> %{sql: nil}
     end
 
-    rating_m = if String.valid?(params["rating"]) && Regex.match?(~r/^[0-5]{1}$/, params["rating"]) do
-      %{sql: " and o.rating >= $rating", args: String.to_integer(params["rating"]), replace: "$rating"}
-    else
-      %{sql: nil}
+    rating_m = case get_rating(params["rating"]) do
+      nil ->
+        %{sql: nil}
+      rating ->
+        %{sql: " and round(o.rating) >= $rating", args: rating, replace: "$rating"}
     end
 
     {sql, args} = map_sql_and_params([tags_m, rating_m])
     sql = @base_sql <> sql <> " group by o.id"
 
     {sql, arr ++ args}
+  end
+
+  defp get_rating(rating) do
+    cond do
+      is_integer(rating) ->
+        rating
+      String.valid?(rating) && Regex.match?(~r/^[0-5]{1}$/, rating) ->
+        String.to_integer(rating)
+      true ->
+        nil
+    end
   end
 
   defp get_tags(tags) do

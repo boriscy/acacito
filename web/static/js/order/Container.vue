@@ -87,7 +87,7 @@ export default {
     this.$store.dispatch('getOrders')
     this.setChannel()
 
-    this.sound = new Audio('/sounds/alert1.mp3');
+    this.sound = new Audio('/sounds/alert1.mp3')
     Notification.requestPermission().then(function(result) {
       console.log(result)
     });

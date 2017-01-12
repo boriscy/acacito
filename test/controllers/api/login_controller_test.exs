@@ -2,7 +2,6 @@ defmodule Publit.Api.LoginControllerTest do
   use Publit.ConnCase
   alias Publit.{UserClient, UserAuthentication}
 
-
   setup do
     %{conn: build_conn()}
   end
