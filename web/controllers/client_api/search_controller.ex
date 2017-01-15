@@ -1,4 +1,4 @@
-defmodule Publit.Api.SearchController do
+defmodule Publit.ClientApi.SearchController do
   use Publit.Web, :controller
   plug :scrub_params, "search"
   alias Publit.{SearchService}

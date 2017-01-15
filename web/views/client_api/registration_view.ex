@@ -1,4 +1,4 @@
-defmodule Publit.Api.ClientRegistrationView do
+defmodule Publit.ClientApi.RegistrationView do
   use Publit.Web, :view
 
   def render("show.json", %{user: user, token: token}) do

@@ -65,7 +65,6 @@ defmodule Publit.Router do
   scope "/api", Publit do
     pipe_through [:api]
 
-    post "/client_registration", Api.ClientRegistrationController, :create
     resources "/login", Api.LoginController, only: [:create, :delete]
     get "/valid_token/:token", Api.LoginController, :valid_token
   end
@@ -79,7 +78,6 @@ defmodule Publit.Router do
     #get "/orders/:id", Api.OrderController, :show
     #get "/user_orders", Api.OrderController, :user_orders
 
-    post "/search", Api.SearchController, :search
     get "/:organization_id/products", Api.ProductController, :products
 
     # Authorized only for organizations
@@ -88,6 +86,30 @@ defmodule Publit.Router do
       resources "/org_orders", Api.OrgOrderController, only: [:index, :show]
       put "/org_orders/:id/move_next", Api.OrgOrderController, :move_next
     end
+
+  end
+
+  pipeline :client_user_auth do
+    plug Publit.Plug.ClientApi.UserAuth
+  end
+
+  # API for clients
+  scope "client_api", Publit do
+    # Unauthorized API
+    pipe_through [:api]
+    post "/login", ClientApi.SessionController, :create
+    delete "/login", ClientApi.SessionController, :delete
+    get "/valid_token/:token", ClientApi.SessionController, :valid_token
+    post "/registration", ClientApi.RegistrationController, :create
+    # Authorized API
+    scope "/" do
+      pipe_through [:client_user_auth]
+      post "/search", ClientApi.SearchController, :search
+    end
+  end
+
+  # API for transport
+  scope "/trans_api", Publit do
 
   end
 

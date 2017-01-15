@@ -12,10 +12,10 @@ defmodule Publit.Repo.Migrations.CreateOrder do
       add :messages, :jsonb, default: "[]"
       add :log, :jsonb, default: "[]"
       add :transport, :jsonb, default: "{}"
-      add :status, :string, null: false
+      add :status, :text, null: false
       add :null_reason, :text
       add :number, :integer
-      add :currency, :string
+      add :currency, :text
 
       timestamps()
     end

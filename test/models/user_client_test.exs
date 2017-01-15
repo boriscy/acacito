@@ -13,7 +13,6 @@ defmodule Publit.UserClientTest do
       assert user.encrypted_password
       assert user.email == "amaru@mail.com"
       assert user.mobile_number == "73732655"
-      assert user.type == "client"
     end
 
     test "Error invalid email, blank password" do
@@ -29,4 +28,3 @@ defmodule Publit.UserClientTest do
   end
 
 end
-

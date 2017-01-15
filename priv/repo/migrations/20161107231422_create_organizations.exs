@@ -6,16 +6,16 @@ defmodule Publit.Repo.Migrations.CreateOrganizations do
 
     create table(:organizations, primary_key: false) do
       add :id, :uuid, primary_key: true
-      add :name, :string
-      add :currency, :string
-      add :address, :string
+      add :name, :text
+      add :currency, :text
+      add :address, :text
       add :info, :map, default: "{}"
       add :settings, :map, default: "{}"
       add :location, :geometry
-      add :category, :string
+      add :category, :text
       add :verified, :boolean, default: false
 
-      timestamps
+      timestamps()
     end
   end
 

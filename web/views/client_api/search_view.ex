@@ -1,4 +1,4 @@
-defmodule Publit.Api.SearchView do
+defmodule Publit.ClientApi.SearchView do
   use Publit.Web, :view
   #import Publit.ErrorHelpers, only: [get_errors: 1]
 
@@ -10,4 +10,3 @@ defmodule Publit.Api.SearchView do
     %{errors: get_errors(cs)}
   end
 end
-

@@ -6,7 +6,7 @@ defmodule Publit.UserAuthentication do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Publit.{UserAuthentication, User, Repo}
+  alias Publit.{UserAuthentication, User, UserClient, Repo}
 
   embedded_schema do
     field :email
@@ -24,9 +24,21 @@ defmodule Publit.UserAuthentication do
   """
   @spec valid_user(map) :: tuple
   def valid_user(params) do
+    valid_user(User, params)
+  end
+
+  @doc """
+  Validates user_client with params = %{"email" => "user@mail.com", "password" => "a-password"}
+  """
+  @spec valid_user_client(map) :: tuple
+  def valid_user_client(params) do
+    valid_user(UserClient, params)
+  end
+
+  defp valid_user(schema, params) do
     email = String.trim(params["email"] || "")
 
-    with user <- Repo.get_by(User, email: email),
+    with user <- Repo.get_by(schema, email: email),
       false <- is_nil(user),
       true <- valid_password?(user, params["password"]) do
         {:ok, user}

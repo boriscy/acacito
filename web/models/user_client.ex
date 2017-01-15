@@ -6,14 +6,13 @@ defmodule Publit.UserClient do
   @number_reg ~r|^\d{8}$|
 
   @primary_key {:id, :binary_id, autogenerate: true}
-  schema "users" do
+  schema "user_clients" do
     field :email, :string
     field :full_name, :string
     field :encrypted_password, :string
     field :locale, :string, default: "es"
     field :settings, :map, default: %{}
     field :mobile_number, :string
-    field :type, :string, default: "client"
 
     field :password, :string, virtual: true
 

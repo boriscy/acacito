@@ -1,4 +1,4 @@
-defmodule Publit.Api.ClientRegistrationController do
+defmodule Publit.ClientApi.RegistrationController do
   use Publit.Web, :controller
   plug :scrub_params, "user" when action in [:create]
   alias Publit.{UserClient, UserAuthentication}

@@ -1,10 +1,10 @@
-defmodule Publit.Api.SearchControllerTest do
+defmodule Publit.ClientApi.SearchControllerTest do
   use Publit.ConnCase
-  alias Publit.{User, Organization}
+  alias Publit.{UserClient, Organization}
 
   setup do
-    conn = build_conn
-    |> assign(:current_user, %User{full_name: "Amaru", id: "781d55f4-e055-4098-a0f5-fd4852db8db0"})
+    conn = build_conn()
+    |> assign(:current_user_client, %UserClient{full_name: "Amaru", id: "781d55f4-e055-4098-a0f5-fd4852db8db0"})
 
     %{conn: conn}
   end
@@ -37,11 +37,11 @@ defmodule Publit.Api.SearchControllerTest do
     ]
   end
 
-  describe "POST /api/search" do
+  describe "POST /client_api/search" do
     test "radius 2 km", %{conn: conn} do
       create_orgs()
 
-      conn = post(conn, "/api/search", %{"search" => %{"radius" => "2", "coordinates" => [-18.1778,-63.8748]}})
+      conn = post(conn, "/client_api/search", %{"search" => %{"radius" => "2", "coordinates" => [-18.1778,-63.8748]}})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -50,14 +50,14 @@ defmodule Publit.Api.SearchControllerTest do
   end
 
 
-  describe "POST /api/serch Authorization header" do
+  describe "POST /client_api/serch Authorization header" do
     test "OK" do
       create_orgs()
-      user = insert(:user)
+      user = insert(:user_client)
       token = Publit.UserAuthentication.encrypt_user_id(user.id)
-      conn = build_conn |> put_req_header("authorization", token)
+      conn = build_conn() |> put_req_header("authorization", token)
 
-      conn = post(conn, "/api/search", %{"search" => %{"radius" => "2", "coordinates" => [-18.1778,-63.8748]}})
+      conn = post(conn, "/client_api/search", %{"search" => %{"radius" => "2", "coordinates" => [-18.1778,-63.8748]}})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)

@@ -12,6 +12,14 @@ defmodule Publit.Factory do
     }
   end
 
+  def user_client_factory do
+    %Publit.UserClient{
+      email: "amaru@mail.com",
+      password: "demo1234",
+      encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
+    }
+  end
+
   def organization_factory do
     %Publit.Organization{
       name: "Publit",

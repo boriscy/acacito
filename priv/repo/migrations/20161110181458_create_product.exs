@@ -4,14 +4,14 @@ defmodule Publit.Repo.Migrations.CreateProduct do
   def change do
     create table(:products, primary_key: false) do
       add :id, :uuid, primary_key: true
-      add :name, :string, null: false
+      add :name, :text, null: false
       add :description, :text
       add :price, :decimal, precision: 12, scale: 2, default: 0.0
       add :publish, :boolean, default: false, null: false
-      add :currency, :string
-      add :tags, {:array, :string}, default: []
-      add :unit, :string
-      add :image, :string
+      add :currency, :text
+      add :tags, {:array, :text}, default: []
+      add :unit, :text
+      add :image, :text
       add :extra_info, :map, default: "{}"
 
       add :pos, :smallint, default: 1

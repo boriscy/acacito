@@ -7,12 +7,12 @@ defmodule Publit.Repo.Migrations.CreateUser do
     create table(:users, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :email, :citext, null: false
-      add :full_name, :string
-      add :encrypted_password, :string
+      add :full_name, :text
+      add :encrypted_password, :text
       add :organizations, :map, default: "[]"
       add :settings, :map, default: "{}"
       add :extra_data, :map, default: "{}"
-      add :locale, :string
+      add :locale, :text
 
       timestamps()
     end

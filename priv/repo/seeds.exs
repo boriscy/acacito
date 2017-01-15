@@ -138,3 +138,7 @@ Repo.insert(%UserClient{
   full_name: "Laura Gutierrez", email: "laura@mail.com", encrypted_password: pass,
   mobile_number: "77889923"
 })
+
+
+
+Ecto.Adapters.SQL.query(Repo, "UPDATE products SET publish=true")
