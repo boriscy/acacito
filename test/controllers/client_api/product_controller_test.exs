@@ -1,10 +1,10 @@
-defmodule Publit.Api.ProductControllerTest do
+defmodule Publit.ClientApi.ProductControllerTest do
   use Publit.ConnCase
-  alias Publit.{User}
+  alias Publit.{UserClient}
 
   setup do
     conn = build_conn()
-    |> assign(:current_user, %User{full_name: "Amaru", id: "781d55f4-e055-4098-a0f5-fd4852db8db0"})
+    |> assign(:current_user_client, %UserClient{full_name: "Amaru", id: "781d55f4-e055-4098-a0f5-fd4852db8db0"})
 
     %{conn: conn}
   end
@@ -15,7 +15,7 @@ defmodule Publit.Api.ProductControllerTest do
       org = insert(:organization)
       create_products(org)
 
-      conn = get(conn, "/api/#{org.id}/products")
+      conn = get(conn, "/client_api/#{org.id}/products")
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)

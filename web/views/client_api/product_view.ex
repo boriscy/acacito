@@ -1,4 +1,4 @@
-defmodule Publit.Api.ProductView do
+defmodule Publit.ClientApi.ProductView do
   use Publit.Web, :view
 
   def render("products.json", %{products: products}) do

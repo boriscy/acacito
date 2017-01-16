@@ -73,7 +73,6 @@ defmodule Publit.Router do
   scope "/api", Publit.Api do
     pipe_through [:api, :user_api_auth]
 
-    get "/:organization_id/products", ProductController, :products
 
     # Authorized only for organizations
     scope "/" do
@@ -100,6 +99,7 @@ defmodule Publit.Router do
     scope "/" do
       pipe_through [:client_user_auth]
 
+      get "/:organization_id/products", ProductController, :products
       post "/search", SearchController, :search
       resources "/orders", OrderController
     end

@@ -3,10 +3,10 @@ defmodule Publit.SearchService do
   alias Publit.{Repo}
 
   @base_sql """
-  select o.id::text, o.name, o.location, o.tags, o.address, o.open, o.rating,
+  SELECT o.id::text, o.name, o.location, o.tags, o.address, o.open, o.rating,
   o.rating_count, o.description, o.currency
-  from organizations o, jsonb_array_elements(tags) as t
-  where o.open = true and ST_Distance_Sphere(o.location, ST_MakePoint($1, $2)) <= $3 * 1000
+  FROM organizations o, JSONB_ARRAY_ELEMENTS(tags) as t
+  WHERE o.open = true AND ST_Distance_Sphere(o.location, ST_MakePoint($1, $2)) <= $3 * 1000
   """
 
   def search(params) do
