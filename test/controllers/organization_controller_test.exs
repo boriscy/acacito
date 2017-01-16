@@ -3,11 +3,11 @@ defmodule Publit.OrganizationControllerTest do
 
   defp user_conn do
     {user, _org} = create_user_org()
-    build_conn |> assign(:current_user, user)
+    build_conn() |> assign(:current_user, user)
   end
 
   setup do
-    conn = build_conn
+    conn = build_conn()
     |> set_user_org_conn(%{email: "other@mail.com"})
 
     %{conn: conn}

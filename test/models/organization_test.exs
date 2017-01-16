@@ -7,7 +7,7 @@ defmodule Publit.OrganizationTest do
    description: "One of the finest places in Samaipata",
     info: %{address: "Samaipata", mobile: "73732677", age: 40, valid: true, list: [%{a: 1}, %{a: "String"}] }
   }
-  @invalid_attrs %{}
+  #@invalid_attrs %{}
 
   describe "create" do
     test "OK" do

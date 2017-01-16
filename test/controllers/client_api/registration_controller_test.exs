@@ -3,7 +3,7 @@ defmodule Publit.ClientApi.RegistrationControllerTest do
   require Publit.Gettext
 
   setup do
-    %{conn: build_conn()}
+    %{conn: build_conn() }
   end
 
   @valid_params %{

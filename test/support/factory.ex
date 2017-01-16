@@ -6,8 +6,10 @@ defmodule Publit.Factory do
 
   def user_factory do
     %Publit.User{
-      email: "amaru@mail.com",
+      email: "lucas@mail.com",
       password: "demo1234",
+      full_name: "Lucas Estrella",
+      mobile_number: "73731234",
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
     }
   end
@@ -15,7 +17,9 @@ defmodule Publit.Factory do
   def user_client_factory do
     %Publit.UserClient{
       email: "amaru@mail.com",
+      full_name: "Amaru Barroso",
       password: "demo1234",
+      mobile_number: "73731234",
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
     }
   end

@@ -3,7 +3,7 @@ defmodule Publit.UserOrganizationTest do
 
   alias Publit.{UserOrganization}
 
-  @org_attrs %{currency: "USD", name: "Home", tenant: "Publit", name: "Publit"}
+  #@org_attrs %{currency: "USD", name: "Home", tenant: "Publit", name: "Publit"}
 
   describe "add" do
     test "OK" do

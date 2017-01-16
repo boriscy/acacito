@@ -1,6 +1,6 @@
 defmodule Publit.Order do
   use Publit.Web, :model
-  alias Publit.{Order, OrderTransport, User, OrderDetail, Product, Organization, Repo}
+  alias Publit.{Order, OrderTransport, UserClient, OrderDetail, Product, Organization, Repo}
   import Ecto.Query
   import Publit.Gettext
 
@@ -18,7 +18,8 @@ defmodule Publit.Order do
     embeds_one :transport, OrderTransport#, on_replace: :delete
     embeds_many :details, OrderDetail#, on_replace: :delete
 
-    belongs_to :user, User, type: :binary_id
+    belongs_to :user_client, UserClient, type: :binary_id
+    #belongs_to :user_transport, UserTransport, type: :binary_id
     belongs_to :organization, Organization, type: :binary_id
 
     timestamps()
@@ -39,8 +40,8 @@ defmodule Publit.Order do
   """
   def create(params) do
     cs = %Order{}
-    |> cast(params, [:user_id, :location, :currency, :organization_id])
-    |> validate_required([:user_id, :details, :location, :currency])
+    |> cast(params, [:user_client_id, :location, :currency, :organization_id])
+    |> validate_required([:user_client_id, :details, :location, :currency])
     |> cast_embed(:details)
     |> set_and_validate_details()
     |> put_assoc(:organization, Repo.get(Organization, params["organization_id"]) )
@@ -164,11 +165,11 @@ defmodule Publit.Order do
     q = from o in Order,
     where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport"]
 
-    Repo.all(q) |> Repo.preload(:user)
+    Repo.all(q) |> Repo.preload(:user_client)
   end
 
-  def user_orders(user_id) do
-    q = from o in Order, where: o.user_id == ^user_id, order_by: [desc: o.inserted_at]
+  def user_orders(user_client_id) do
+    q = from o in Order, where: o.user_client_id == ^user_client_id, order_by: [desc: o.inserted_at]
 
     Repo.all(q) |> Repo.preload(:organization)
   end

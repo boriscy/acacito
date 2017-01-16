@@ -2,7 +2,7 @@ defmodule Publit.WorkAreaControllerTest do
   use Publit.ConnCase
 
   setup do
-    conn = build_conn
+    conn = build_conn()
     |> set_user_org_conn()
 
     %{conn: conn}

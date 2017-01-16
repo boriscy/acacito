@@ -38,7 +38,7 @@ defmodule Publit.SearchServiceTest do
 
   describe "search" do
     test "radius 2" do
-      create_orgs
+      create_orgs()
 
       rows = SearchService.search(%{
         "coordinates" => [-63.8748, -18.1778],
@@ -50,7 +50,7 @@ defmodule Publit.SearchServiceTest do
     end
 
     test "radius 2 tags" do
-      create_orgs
+      create_orgs()
 
       rows = SearchService.search(%{
         "coordinates" => [-63.8748, -18.1778],
@@ -63,7 +63,7 @@ defmodule Publit.SearchServiceTest do
     end
 
     test "rating" do
-      _orgs = create_orgs
+      create_orgs()
 
       rows = SearchService.search(%{
         "coordinates" => [-63.8748, -18.1778],
@@ -84,7 +84,7 @@ defmodule Publit.SearchServiceTest do
     end
 
     test "rating integer" do
-      _orgs = create_orgs
+      create_orgs()
 
       rows = SearchService.search(%{
         "coordinates" => [-63.8748, -18.1778],
@@ -105,7 +105,7 @@ defmodule Publit.SearchServiceTest do
     end
 
     test "only rating" do
-      create_orgs
+      create_orgs()
 
       rows = SearchService.search(%{
         "coordinates" => [-63.8748, -18.1778],

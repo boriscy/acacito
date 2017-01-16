@@ -14,6 +14,7 @@ defmodule Publit.User do
     field :locale, :string, default: "es"
     field :settings, :map, default: %{}
     field :extra_data, :map, default: %{}
+    field :mobile_number, :string
 
     field :password, :string, virtual: true
 
@@ -27,7 +28,7 @@ defmodule Publit.User do
   """
   def create_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:email, :full_name, :password])
+    |> cast(params, [:email, :full_name, :password, :mobile_number])
     |> validate_required([:email, :password])
     |> validate_format(:email, @email_reg)
     |> validate_length(:password, min: 8)

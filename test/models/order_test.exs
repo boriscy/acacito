@@ -5,15 +5,16 @@ defmodule Publit.OrderTest do
 
   alias Publit.{Order, ProductVariation}
 
-  @valid_attrs %{details: %{}, location: "some content", total: "120.5", user_id: "7488a646-e31f-11e4-aace-600308960662"}
-  @invalid_attrs %{}
+  #@valid_attrs %{details: %{}, location: "some content", total: "120.5", user_id: "7488a646-e31f-11e4-aace-600308960662"}
+  #@invalid_attrs %{}
 
   defp create_order() do
-    {user, org} = create_user_org(%{})
+    org = insert(:organization)
+    user_client = insert(:user_client)
     [p1, p2] = create_products2(org)
     v1 = Enum.at(p1.variations, 1)
     v2 = Enum.at(p2.variations, 0)
-    params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
+    params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
     "location" => %{"coordinates" => [-100, 30], "type" => "Point"},
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
@@ -37,12 +38,13 @@ defmodule Publit.OrderTest do
 
   describe "create" do
     test "OK" do
-      {user, org} = create_user_org(%{})
+      org = insert(:organization)
+      user_client = insert(:user_client)
       [p1, p2] = create_products2(org)
       v1 = Enum.at(p1.variations, 1)
       v2 = Enum.at(p2.variations, 0)
 
-      params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
+      params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "location" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
@@ -76,14 +78,15 @@ defmodule Publit.OrderTest do
     end
 
     test "OK number" do
-      {user, org} = create_user_org(%{})
-      Repo.insert(%Order{user_id: user.id, organization_id: org.id})
+      org = insert(:organization)
+      user_client = insert(:user_client)
+      Repo.insert(%Order{user_client_id: user_client.id, organization_id: org.id})
 
       [p1, p2] = create_products2(org)
       v1 = Enum.at(p1.variations, 1)
       v2 = Enum.at(p2.variations, 0)
 
-      params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
+      params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "location" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},

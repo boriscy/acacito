@@ -3,7 +3,7 @@ defmodule Publit.RegistrationControllerTest do
   alias Publit.{RegistrationService, User, Organization}
 
   setup do
-    %{conn: build_conn}
+    %{conn: build_conn() }
   end
 
   describe "GET /registration" do

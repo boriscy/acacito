@@ -12,6 +12,6 @@ defmodule Publit.UserChannel do
 
   def broadcast_order(order) do
     order = Publit.Api.OrderView.to_api(order)
-    Publit.Endpoint.broadcast("users:" <> order.user_id, "order:updated", order)
+    Publit.Endpoint.broadcast("users:" <> order.user_client_id, "order:updated", order)
   end
 end

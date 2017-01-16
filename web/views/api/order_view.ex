@@ -1,6 +1,7 @@
 defmodule Publit.Api.OrderView do
   use Publit.Web, :view
-  alias Publit.{Organization, Repo}
+  alias Publit.{UserClient, Repo}
+  #import Publit.ErrorHelpers, only: [get_errors: 1]
 
   def render("index.json", %{orders: orders}) do
     orders = Enum.map(orders, &to_api/1)
@@ -22,15 +23,21 @@ defmodule Publit.Api.OrderView do
   end
 
   def to_api(order) do
-    order = case order.organization do
-      %Ecto.Association.NotLoaded{} -> order |> Repo.preload(:organization)
-      %Organization{} -> order
+    order = case order.user_client do
+      %Ecto.Association.NotLoaded{} -> order |> Repo.preload(:user_client)
+      %UserClient{} -> order
     end
 
     order
-    |> Map.drop([:__meta__, :__struct__, :user])
+    |> Map.drop([:__meta__, :__struct__, :organization])
     |> Map.put(:location, Geo.JSON.encode(order.location))
-    |> Map.put(:organization, Publit.OrganizationView.to_api(order.organization))
+    |> Map.put(:user_client, Publit.UserView.to_api(order.user_client))
   end
 
+  def encode_with_user(order) do
+    order = order |> Repo.preload(:user_client)
+
+    Map.drop(order, [:__struct__, :__meta__, :location])
+    |> Map.put(:location, Geo.JSON.encode(order.location))
+  end
 end

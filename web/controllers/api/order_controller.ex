@@ -1,19 +1,17 @@
 defmodule Publit.Api.OrderController do
   use Publit.Web, :controller
-  plug :scrub_params, "order" when action in [:create]
-  alias Publit.{Order}
+  alias Publit.{Order, Repo, UserChannel}
 
-
-  # GET /api/orders
+  # GET /api/org_orders
   def index(conn, _params) do
-    user_id = conn.assigns.current_user.id
+    org_id = conn.assigns.current_organization.id
 
-    render(conn, "index.json", orders: Order.user_orders(user_id))
+    render(conn, "index.json", orders: Order.active(org_id))
   end
 
-  # GET /api/orders/:id
+  # GET /api/org_order/:id
   def show(conn, %{"id" => id}) do
-    case (Repo.get(Order, id) |> Repo.preload(:organization)) do
+    case (get_order(conn, id)) do
       nil ->
         render_not_found(conn)
       order ->
@@ -21,29 +19,22 @@ defmodule Publit.Api.OrderController do
     end
   end
 
-  # POST /api/orders
-  def create(conn, %{"order" => order_params}) do
-    order_params = order_params |> Map.put("user_id", conn.assigns.current_user.id)
-    case Order.create(order_params) do
-      {:ok, order} ->
-        Publit.OrganizationChannel.broadcast_order(order)
-        render(conn, "show.json", order: order)
-      {:error, cs} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render("errors.json", cs: cs)
-    end
-  end
-
-  # PUT /api/orders/:id/move_next
+  # PUT /api/org_orders/:id/move_next
   def move_next(conn, %{"id" => id}) do
-    case Repo.get(Order, id) do
-      nil -> render_not_found(conn)
-      order ->
-        case Order.next_status(order, conn.assigns.current_user.id) do
+    with ord <- get_order(conn, id),
+      false <- is_nil(ord) do
+        user_id = conn.assigns.current_user.id
+
+        case Order.next_status(ord, user_id) do
           {:ok, order} ->
-            render(conn, "show_org.json", order: order)
+            UserChannel.broadcast_order(order)
+            render(conn, "show.json", order: order)
+          _ ->
+            render(conn, "error.json")
         end
+    else
+      _ ->
+        render_not_found(conn)
     end
   end
 
@@ -53,4 +44,9 @@ defmodule Publit.Api.OrderController do
     |> render("not_found.json", msg: args.msg)
   end
 
+  defp get_order(conn, id) do
+    org_id = conn.assigns.current_organization.id
+
+    Repo.get_by(Order, id: id, organization_id: org_id) |> Repo.preload(:user_client)
+  end
 end

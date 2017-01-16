@@ -3,7 +3,7 @@ defmodule Publit.Api.ProductControllerTest do
   alias Publit.{User}
 
   setup do
-    conn = build_conn
+    conn = build_conn()
     |> assign(:current_user, %User{full_name: "Amaru", id: "781d55f4-e055-4098-a0f5-fd4852db8db0"})
 
     %{conn: conn}

@@ -3,7 +3,7 @@ defmodule Publit.ProductTest do
 
   alias Publit.{Product}
 
-  @valid_attrs %{"name" => "Pizza", "price" => "40.5"}
+  #@valid_attrs %{"name" => "Pizza", "price" => "40.5"}
 
   def org do
     insert(:organization)
@@ -16,7 +16,7 @@ defmodule Publit.ProductTest do
   ]
 
   defp valid_attrs do
-    %{"name" => "Pizza", "price" => "40.5", "organization_id" => org.id,
+    %{"name" => "Pizza", "price" => "40.5", "organization_id" => org().id,
       "tags" => ["pizza", "cheese"],
       "variations" => @variations, "description" => "This should be **strong**"}
   end
@@ -41,7 +41,7 @@ defmodule Publit.ProductTest do
 
     test "Invalid varition" do
       attrs = %{
-        "name" => "Pizza", "price" => "40.5", "organization_id" => org.id,
+        "name" => "Pizza", "price" => "40.5", "organization_id" => org().id,
         "variations" => [%{"price"=> "-20", "name" => "Small", "description" => "Small size 10 x 10"}]
       }
 

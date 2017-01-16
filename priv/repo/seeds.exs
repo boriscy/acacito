@@ -140,5 +140,4 @@ Repo.insert(%UserClient{
 })
 
 
-
 Ecto.Adapters.SQL.query(Repo, "UPDATE products SET publish=true")

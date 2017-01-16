@@ -4,7 +4,7 @@ defmodule Publit.Support.Org do
   """
   alias Publit.{Repo, Product, Order, ProductVariation}
 
-  def create_order(user, org) do
+  def create_order(user_client, org) do
     prods = create_products(org)
     p1 = Enum.at(prods, 0)
     p2 = Enum.at(prods, 1)
@@ -12,7 +12,7 @@ defmodule Publit.Support.Org do
     v1 = Enum.at(p1.variations, 0)
     v2 = Enum.at(p2.variations, 1)
 
-    params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
+    params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
     "location" => %{"coordinates" => [-100, 30], "type" => "Point"},
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},

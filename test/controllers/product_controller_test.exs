@@ -4,7 +4,7 @@ defmodule Publit.ProductControllerTest do
   alias Publit.{Repo, Product}
 
   setup do
-    conn = build_conn
+    conn = build_conn()
     |> set_user_org_conn()
 
     %{conn: conn}
@@ -83,7 +83,7 @@ defmodule Publit.ProductControllerTest do
     end
 
     test "Admin user" do
-      conn = build_conn |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
+      conn = build_conn() |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
 
       conn = post(conn, "/products", %{"product" => @valid_attrs})
 
@@ -125,7 +125,7 @@ defmodule Publit.ProductControllerTest do
     end
 
     test "Admin user" do
-      conn = build_conn |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
+      conn = build_conn() |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
       p_id = Ecto.UUID.generate()
 
       conn = put(conn, "/products/#{p_id}", %{"product" => %{"name" => "New name",
@@ -161,7 +161,7 @@ defmodule Publit.ProductControllerTest do
     end
 
     test "Admin user" do
-      conn = build_conn |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
+      conn = build_conn() |> set_user_org_conn(%{role: "user", email: "other@mail.com"})
       p_id = Ecto.UUID.generate()
 
       conn = delete(conn, "/products/#{p_id}")

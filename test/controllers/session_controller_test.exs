@@ -8,7 +8,7 @@ defmodule Publit.SessionControllerTest do
       organization_id: org.id, name: org.name
     }])
 
-    conn = build_conn
+    conn = build_conn()
 
     %{conn: conn, user: user, org: org}
   end
@@ -27,7 +27,7 @@ defmodule Publit.SessionControllerTest do
   describe "POST /login" do
     test "OK", %{conn: conn, user: user, org: org} do
       conn = conn
-      |> post("/login", %{"user_authentication" => %{"email" => "amaru@mail.com", "password" => "demo1234"} })
+      |> post("/login", %{"user_authentication" => %{"email" => "lucas@mail.com", "password" => "demo1234"} })
 
       assert redirected_to(conn) == "/dashboard"
       {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))

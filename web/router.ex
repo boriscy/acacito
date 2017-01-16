@@ -70,21 +70,16 @@ defmodule Publit.Router do
   end
 
   # Api that the organization accesses
-  scope "/api", Publit do
+  scope "/api", Publit.Api do
     pipe_through [:api, :user_api_auth]
 
-    resources "/orders", Api.OrderController
-    #post "/orders", Api.OrderController, :create
-    #get "/orders/:id", Api.OrderController, :show
-    #get "/user_orders", Api.OrderController, :user_orders
-
-    get "/:organization_id/products", Api.ProductController, :products
+    get "/:organization_id/products", ProductController, :products
 
     # Authorized only for organizations
     scope "/" do
       pipe_through [:organization_api_auth]
-      resources "/org_orders", Api.OrgOrderController, only: [:index, :show]
-      put "/org_orders/:id/move_next", Api.OrgOrderController, :move_next
+      resources "/orders", OrderController, only: [:index, :show]
+      put "/orders/:id/move_next", OrderController, :move_next
     end
 
   end
@@ -94,17 +89,19 @@ defmodule Publit.Router do
   end
 
   # API for clients
-  scope "client_api", Publit do
+  scope "/client_api", Publit.ClientApi do
     # Unauthorized API
     pipe_through [:api]
-    post "/login", ClientApi.SessionController, :create
-    delete "/login", ClientApi.SessionController, :delete
-    get "/valid_token/:token", ClientApi.SessionController, :valid_token
-    post "/registration", ClientApi.RegistrationController, :create
+    post "/login", SessionController, :create
+    delete "/login", SessionController, :delete
+    get "/valid_token/:token", SessionController, :valid_token
+    post "/registration", RegistrationController, :create
     # Authorized API
     scope "/" do
       pipe_through [:client_user_auth]
-      post "/search", ClientApi.SearchController, :search
+
+      post "/search", SearchController, :search
+      resources "/orders", OrderController
     end
   end
 

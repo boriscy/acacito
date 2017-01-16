@@ -35,8 +35,6 @@ defmodule Publit.Organization do
 
   def changeset(mod, params) do
     IO.puts "Changeset org"
-    IO.inspect mod
-    IO.inspect params
     mod
   end
 

@@ -4,7 +4,6 @@ defmodule Publit.Repo.Migrations.CreateOrder do
   def up do
     create table(:orders, primary_key: false) do
       add :id, :uuid, primary_key: true
-      add :user_id, references(:users, type: :uuid, null: false, on_delete: :delete_all), null: false
       add :organization_id, references(:organizations, type: :uuid, null: false, on_delete: :delete_all), null: false
       add :total, :decimal
       add :location, :geometry
@@ -21,7 +20,6 @@ defmodule Publit.Repo.Migrations.CreateOrder do
     end
 
     create index(:orders, [:organization_id])
-    create index(:orders, [:user_id])
     create index(:orders, [:inserted_at])
     create index(:orders, [:updated_at])
     execute "CREATE INDEX details_on_orders ON orders USING GIN (details)"

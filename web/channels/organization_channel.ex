@@ -22,7 +22,7 @@ defmodule Publit.OrganizationChannel do
   end
 
   def broadcast_order(order) do
-    ord = Publit.Api.OrgOrderView.to_api(order)
+    ord = Publit.Api.OrderView.to_api(order)
     Publit.Endpoint.broadcast("organizations:" <> order.organization_id, "new:order", ord)
   end
 

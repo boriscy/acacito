@@ -3,7 +3,7 @@ defmodule Publit.DashboardControllerTest do
 
   # https://github.com/elixir-lang/plug/blob/master/test/plug/session/cookie_test.exs
   setup do
-    conn = build_conn
+    conn = build_conn()
     |> set_user_org_conn()
 
     %{conn: conn}
