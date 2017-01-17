@@ -11,7 +11,6 @@ defmodule Publit.SearchService do
 
   def search(params) do
     {sql, params} = get_sql_and_params(params)
-
     case query(Repo, sql, params) do
       {:ok, res} -> map_results(res.rows)
     end

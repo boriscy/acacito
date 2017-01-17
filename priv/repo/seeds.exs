@@ -41,7 +41,7 @@ pass = Comeonin.Bcrypt.hashpwsalt("demo1234")
   image: %Plug.Upload{content_type: "", filename: "camaron-ajo.jpg", path: "/home/boris/Pictures/comida/camaron-ajo.jpg"},
   tags: ["mar", "camarones"],
   description: "Chicken breasts are filled with Gouda cheese and caramelized onions, rolled in seasoned coating mix, and baked until golden brown.",
-  variations: [%{name: nil, price: Decimal.new("30")}]
+  variations: [%{name: nil, price: Decimal.new("70")}]
 })
 
 {:ok, prod} = Product.create(%{
@@ -132,11 +132,11 @@ Repo.insert(%UserClient{
 })
 Repo.insert(%UserClient{
   full_name: "Alvaro Luna", email: "alvaro@mail.com", encrypted_password: pass,
-  mobile_number: "77889923"
+  mobile_number: "77889924"
 })
 Repo.insert(%UserClient{
   full_name: "Laura Gutierrez", email: "laura@mail.com", encrypted_password: pass,
-  mobile_number: "77889923"
+  mobile_number: "77889925"
 })
 
 

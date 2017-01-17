@@ -18,12 +18,12 @@ import OrderList from './List.vue'
 import Order from './Order.vue'
 import OrderProcess from './Process.vue'
 import { mapGetters, mapActions } from 'vuex'
-import {translate} from '../mixins'
+import {translate, format} from '../mixins'
 import types from '../store/mutation-types'
 
 export default {
   name: 'OrderContainer',
-  mixins: [translate],
+  mixins: [translate, format],
   data() {
     return {
       orderComp: Order,
@@ -42,6 +42,10 @@ export default {
     transportOrders: 'transportOrders'
   }),
   methods: {
+    createMessage(order) {
+      return `${this.gettext('New order')}, ${order.user_client.full_name}: ${this.currency(order.currency)}
+      ${this.formatNumber(order.total)}`
+    },
     setChannel() {
       this.socket = new Socket("/socket", {})
       this.socket.connect()
@@ -63,10 +67,9 @@ export default {
       })
 
       this.channel.on('new:order', order => {
-        const msg = `${this.gettext("New order")}: ${order.user.full_name} (${order.total})`
-        new Notification(msg)
-        this.sound.play()
         this.$store.commit(types.ADD_ORDER, {order: order})
+        this.sound.play()
+        new Notification(this.createMessage(order))
       })
 
       let user = `user-${Math.floor(Math.random() * 100000)}`

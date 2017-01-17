@@ -4,7 +4,7 @@ defmodule Publit.Repo.Migrations.CreateUserTransports do
   def change do
     create table(:user_transports, primary_key: false) do
       add :id, :uuid, primary_key: true
-      add :email, :citext, null: false
+      add :email, :citext
       add :full_name, :text
       add :encrypted_password, :text
       add :settings, :map, default: "{}"
@@ -15,6 +15,7 @@ defmodule Publit.Repo.Migrations.CreateUserTransports do
       timestamps()
     end
 
-    create index(:user_transports, [:mobile_number])
+    create index(:user_transports, [:email], unique: true)
+    create index(:user_transports, [:mobile_number], unique: true)
   end
 end

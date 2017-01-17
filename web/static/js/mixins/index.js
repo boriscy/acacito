@@ -74,6 +74,18 @@ export const format = {
             return '&#039;'
         }
       })
+    },
+    currency(cur) {
+      switch(cur) {
+        case 'BOB':
+          return 'Bs.'
+        case 'USD':
+          return '$'
+        case 'EUR':
+          return 'E'
+        default:
+          return 'Bs.'
+      }
     }
   }
 }

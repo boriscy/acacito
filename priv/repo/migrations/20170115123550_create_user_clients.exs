@@ -15,6 +15,7 @@ defmodule Publit.Repo.Migrations.CreateUserClients do
       timestamps()
     end
 
-    create index(:user_clients, [:mobile_number])
+    create index(:user_clients, [:email], unique: true)
+    create index(:user_clients, [:mobile_number], unique: true)
   end
 end
