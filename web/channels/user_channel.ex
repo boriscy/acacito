@@ -14,4 +14,9 @@ defmodule Publit.UserChannel do
     order = Publit.ClientApi.OrderView.to_api(order)
     Publit.Endpoint.broadcast("users:" <> order.user_client_id, "order:updated", order)
   end
+
+  def broadcast_je(data) do
+    uc = Publit.Repo.get_by(Publit.UserClient, email: "amaru@mail.com")
+    Publit.Endpoint.broadcast("users:" <> uc.id, "je", data)
+  end
 end

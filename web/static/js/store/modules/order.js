@@ -22,7 +22,6 @@ const mutations = {
     if(idx > -1) {
       Object.assign(state.orders[idx], order)
     }
-    console.log('Ord', order)
   }
 }
 
