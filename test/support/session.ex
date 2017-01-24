@@ -30,8 +30,9 @@ defmodule Publit.Support.Session do
     org = insert(:organization, params[:org] || %{})
     role = params[:role] || "admin"
     email = params[:email] || "amaru@mail.com"
+    mn = params[:mobile_number] || "77112233"
 
-    user = insert(:user, email: email, organizations: [
+    user = insert(:user, email: email, mobile_number: mn, organizations: [
       %Publit.UserOrganization{role: role, organization_id: org.id, name: org.name, active: true}
     ])
 

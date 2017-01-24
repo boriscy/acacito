@@ -1,7 +1,7 @@
 defmodule Publit.ClientApi.SessionController do
   use Publit.Web, :controller
   plug :scrub_params, "login" when action in [:create]
-  alias Publit.{UserAuthentication, UserClient}
+  alias Publit.{UserAuthentication}
 
 
   # POST /client_api/login

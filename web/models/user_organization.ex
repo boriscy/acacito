@@ -14,7 +14,7 @@ defmodule Publit.UserOrganization do
     field :role, :string, default: "user"
     field :name, :string
 
-    timestamps
+    timestamps()
   end
 
   @roles ~w(admin user)

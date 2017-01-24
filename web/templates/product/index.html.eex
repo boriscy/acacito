@@ -12,9 +12,12 @@
     <div class="product">
       <div class="header">
         <div class="flex">
-          <h3 class="title">
-            <%= link product.name, to: product_path(@conn, :show, product) %>
-          </h3>
+          <div class="title">
+            <div>
+              <%= link product.name, to: product_path(@conn, :show, product) %>
+            </div>
+            <small><%= product.category %></small>
+          </div>
           <div class="actions">
             <%= link gettext("Edit"), to: product_path(@conn, :edit, product) %>
             &nbsp;

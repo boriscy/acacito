@@ -39,7 +39,7 @@ defmodule Publit.SessionControllerTest do
     end
 
     test "OK no active organizations" do
-      user = insert(:user, email: "other@mail.com")
+      user = insert(:user, email: "other@mail.com", mobile_number: "99887766")
 
       conn = build_conn()
       |> post("/login", %{"user_authentication" => %{"email" => "other@mail.com", "password" => "demo1234"} })
@@ -61,7 +61,7 @@ defmodule Publit.SessionControllerTest do
 
   describe "logout" do
     test "OK no active organizations" do
-      user = insert(:user, email: "other@mail.com")
+      user = insert(:user, email: "other@mail.com", mobile_number: "99887766")
 
       conn = build_conn()
       |> post("/login", %{"user_authentication" => %{"email" => "other@mail.com", "password" => "demo1234"} })

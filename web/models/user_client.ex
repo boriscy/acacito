@@ -1,5 +1,6 @@
 defmodule Publit.UserClient do
   use Publit.Web, :model
+  use Publit.Firebase
   alias Publit.{UserClient, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
@@ -12,6 +13,7 @@ defmodule Publit.UserClient do
     field :encrypted_password, :string
     field :locale, :string, default: "es"
     field :settings, :map, default: %{}
+    field :extra_data, :map, default: %{}
     field :mobile_number, :string
 
     field :password, :string, virtual: true

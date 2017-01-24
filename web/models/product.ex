@@ -19,6 +19,7 @@ defmodule Publit.Product do
     field :pos, :integer, default: 1
     field :has_inventory, :boolean, default: true
     field :moderated, :boolean, default: false, null: false
+    field :category, :string
 
     belongs_to :organization, Publit.Organization, type: :binary_id
 
@@ -40,7 +41,7 @@ defmodule Publit.Product do
   @spec create(map) :: any
   def create(params) do
     %Product{}
-    |> cast(params, [:name, :description, :organization_id, :tags])
+    |> cast(params, [:name, :description, :organization_id, :tags, :category])
     |> cast_attachments(params, [:image])
     |> validate_required([:name, :organization_id])
     |> cast_embed(:variations)
@@ -52,7 +53,7 @@ defmodule Publit.Product do
   """
   def update(product, params) do
     cs = product
-    |> cast(params, [:name, :description, :publish, :tags])
+    |> cast(params, [:name, :description, :publish, :tags, :category])
     |> set_image(params)
     |> cast_embed(:variations)
     |> validate_required([:name])
@@ -76,7 +77,7 @@ defmodule Publit.Product do
       try do
         Publit.ProductImage.delete_all(product)
       rescue
-        _ ->
+        _ -> nil
       end
     end
 

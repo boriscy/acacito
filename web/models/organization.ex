@@ -27,7 +27,7 @@ defmodule Publit.Organization do
 
     has_many :products, Product
 
-    timestamps
+    timestamps()
   end
 
   @currencies ~w(USD BOB)

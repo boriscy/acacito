@@ -10,6 +10,7 @@ defmodule Publit.UserTest do
     test "OK" do
       {:ok, user} = User.create(@valid_attrs)
 
+      assert %User{} = user
       assert user.encrypted_password
       assert user.email == "amaru@mail.com"
     end

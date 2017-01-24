@@ -1,10 +1,12 @@
 defmodule Publit.UserTransport do
   use Publit.Web, :model
-  alias Publit.{UserClient, Repo}
+  use Publit.Firebase
+  alias Publit.{UserTransport, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
   @number_reg ~r|^\d{8}$|
 
+  @derive {Poison.Encoder, only: [:id, :full_name, :email, :mobile_number]}
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "user_transports" do
     field :email, :string
@@ -12,13 +14,13 @@ defmodule Publit.UserTransport do
     field :encrypted_password, :string
     field :locale, :string, default: "es"
     field :settings, :map, default: %{}
+    field :extra_data, :map, default: %{}
     field :mobile_number, :string
 
     field :password, :string, virtual: true
 
     timestamps()
   end
-  @derive {Poison.Encoder, only: [:id, :full_name, :email, :mobile_number]}
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
@@ -34,7 +36,7 @@ defmodule Publit.UserTransport do
   end
 
   def create(params) do
-    cs = create_changeset(%UserClient{}, params)
+    cs = create_changeset(%UserTransport{}, params)
 
     if cs.valid? do
       cs = Publit.User.generate_encrypted_password(cs)
@@ -45,4 +47,3 @@ defmodule Publit.UserTransport do
   end
 
 end
-

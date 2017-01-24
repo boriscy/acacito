@@ -2,7 +2,7 @@ defmodule Publit.OrganizationControllerTest do
   use Publit.ConnCase
 
   defp user_conn do
-    {user, _org} = create_user_org()
+    {user, _org} = create_user_org(%{mobile_number: "66778899"})
     build_conn() |> assign(:current_user, user)
   end
 

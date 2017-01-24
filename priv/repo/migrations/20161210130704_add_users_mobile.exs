@@ -6,7 +6,7 @@ defmodule Publit.Repo.Migrations.AddUsersType do
       add :mobile_number, :text
     end
 
-    create index(:users, [:mobile_number])
+    create index(:users, [:mobile_number], unique: true)
   end
 
 end

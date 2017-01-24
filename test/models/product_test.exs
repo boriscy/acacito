@@ -17,6 +17,7 @@ defmodule Publit.ProductTest do
 
   defp valid_attrs do
     %{"name" => "Pizza", "price" => "40.5", "organization_id" => org().id,
+      "category" => "Pizza",
       "tags" => ["pizza", "cheese"],
       "variations" => @variations, "description" => "This should be **strong**"}
   end
@@ -25,6 +26,7 @@ defmodule Publit.ProductTest do
     test "OK" do
       assert {:ok, product} = Product.create(valid_attrs())
 
+      assert product.category == "Pizza"
       assert product.tags == ["pizza", "cheese"]
       assert product.description == "This should be **strong**"
       assert Enum.count(product.variations) == 3
@@ -62,6 +64,7 @@ defmodule Publit.ProductTest do
       attrs = %{
         "name" => "A new name", "organization_id" => Ecto.UUID.generate(),
         "tags" => %{"0" => "multiple", "1" => "other"}, "description" => "A new *italic* text",
+        "category" => "Product category",
         "variations" =>
         [%{"price"=> "22", "name" => "Small", "description" => "Small size 10 x 10", "id" => pv1.id},
          %{"price"=> "30.5", "name" => "Medium Esp", "description" => "Medium size 15 x 15", "id" => pv2.id},
@@ -72,6 +75,7 @@ defmodule Publit.ProductTest do
 
       assert p2.name == "A new name"
       assert p2.tags == ["multiple", "other"]
+      assert p2.category == "Product category"
       assert p2.description == "A new *italic* text"
       refute p2.organization_id == attrs["organization_id"]
 
