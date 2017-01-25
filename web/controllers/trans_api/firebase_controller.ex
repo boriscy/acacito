@@ -1,14 +1,16 @@
-defmodule Publit.ClientApi.SessionController do
+defmodule Publit.TransApi.FirebaseController do
   use Publit.Web, :controller
   plug :scrub_params, "login" when action in [:create]
-  alias Publit.{UserAuthentication}
+  alias Publit.{UserTransport}
 
-  # POST /client_api/login
-  def create(conn, %{"login" => login_params}) do
-    case UserAuthentication.valid_user_client(login_params) do
+
+  # PUT /trans_api/firebase/:user_id
+  def update(conn, %{"id" => id, "token" => token}) do
+    user = conn.assigns.current_user_transport
+
+    case UserTransport.update_fb_token(user, token) do
       {:ok, user} ->
-        token = UserAuthentication.encrypt_user_id(user.id)
-        render(conn, "show.json", user: user, token: token)
+        render(conn, "show.json", user: user)
       {:error, cs} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -16,7 +18,7 @@ defmodule Publit.ClientApi.SessionController do
     end
   end
 
-  # GET /client_api/valid_token/:token
+  # GET /trans_api/valid_token/:token
   def valid_token(conn, %{"token" => token}) do
     case Phoenix.Token.verify(Publit.Endpoint, "user_id", token) do
       {:ok, _user_id} ->

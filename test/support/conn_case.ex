@@ -33,6 +33,7 @@ defmodule Publit.ConnCase do
       import Publit.Support.Session
       import Publit.Support.Org
 
+      import Publit.Gettext
       # The default endpoint for testing
       @endpoint Publit.Endpoint
     end

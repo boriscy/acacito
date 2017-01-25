@@ -44,7 +44,7 @@ defmodule Publit.UserClientTest do
       assert user.extra_data["fb_token_updated_at"] == t
     end
 
-    test "does not override " do
+    test "does not override" do
       {:ok, user} = Repo.insert(%UserClient{
         full_name: "Amaru Barroso", mobile_number: "12345678", email: "amaru@mail.com",
         encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234"),

@@ -24,6 +24,16 @@ defmodule Publit.Factory do
     }
   end
 
+  def user_transport_factory do
+    %Publit.UserTransport{
+      email: "juan@mail.com",
+      full_name: "Juan Perez",
+      password: "demo1234",
+      mobile_number: "66778899",
+      encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
+    }
+  end
+
   def organization_factory do
     %Publit.Organization{
       name: "Publit",

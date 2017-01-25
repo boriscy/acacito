@@ -1,11 +1,12 @@
-defmodule Publit.ClientApi.SessionController do
+defmodule Publit.TransApi.SessionController do
   use Publit.Web, :controller
   plug :scrub_params, "login" when action in [:create]
   alias Publit.{UserAuthentication}
 
-  # POST /client_api/login
+
+  # POST /trans_api/login
   def create(conn, %{"login" => login_params}) do
-    case UserAuthentication.valid_user_client(login_params) do
+    case UserAuthentication.valid_user_transport(login_params) do
       {:ok, user} ->
         token = UserAuthentication.encrypt_user_id(user.id)
         render(conn, "show.json", user: user, token: token)
@@ -16,7 +17,7 @@ defmodule Publit.ClientApi.SessionController do
     end
   end
 
-  # GET /client_api/valid_token/:token
+  # GET /trans_api/valid_token/:token
   def valid_token(conn, %{"token" => token}) do
     case Phoenix.Token.verify(Publit.Endpoint, "user_id", token) do
       {:ok, _user_id} ->

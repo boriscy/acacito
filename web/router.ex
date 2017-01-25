@@ -83,7 +83,7 @@ defmodule Publit.Router do
 
   end
 
-  pipeline :client_user_auth do
+  pipeline :user_client_auth do
     plug Publit.Plug.ClientApi.UserAuth
   end
 
@@ -97,7 +97,7 @@ defmodule Publit.Router do
     post "/registration", RegistrationController, :create
     # Authorized API
     scope "/" do
-      pipe_through [:client_user_auth]
+      pipe_through [:user_client_auth]
 
       get "/:organization_id/products", ProductController, :products
       post "/search", SearchController, :search
@@ -105,9 +105,22 @@ defmodule Publit.Router do
     end
   end
 
-  # API for transport
-  scope "/trans_api", Publit do
 
+  pipeline :user_transport_auth do
+    plug Publit.Plug.TransApi.UserAuth
+  end
+  # API for transport
+  scope "/trans_api", Publit.TransApi do
+    post "/login", SessionController, :create
+    delete "/login", SessionController, :delete
+    get "/valid_token/:token", SessionController, :valid_token
+
+
+    scope "/" do
+      pipe_through [:user_transport_auth]
+
+      resources "/firebase", FirebaseController, only: [:update]
+    end
   end
 
 end

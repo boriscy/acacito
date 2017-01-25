@@ -1,6 +1,6 @@
 defmodule Publit.UserAuthenticationTest do
   use Publit.ConnCase
-  alias Publit.{UserAuthentication}
+  alias Publit.{UserAuthentication, UserTransport}
 
   test "changeset" do
     user = UserAuthentication.changeset(%{"email" => "amaru@mail.com", "password" => "demo1234"})
@@ -34,5 +34,15 @@ defmodule Publit.UserAuthenticationTest do
     token = UserAuthentication.encrypt_user_id(user.id)
     {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", token)
     assert user_id == user.id
+  end
+
+  test "valid_user_transport" do
+    user = insert(:user_transport)
+
+    assert {:ok, user} = UserAuthentication.valid_user_transport(%{"email" => user.email, "password" => "demo1234"})
+    assert %UserTransport{} = user
+
+    assert {:ok, user} = UserAuthentication.valid_user_transport(%{"email" => user.mobile_number, "password" => "demo1234"})
+    assert %UserTransport{} = user
   end
 end

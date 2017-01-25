@@ -6,7 +6,7 @@ defmodule Publit.UserAuthentication do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Publit.{UserAuthentication, User, UserClient, Repo}
+  alias Publit.{UserAuthentication, User, UserClient, UserTransport, Repo}
 
   embedded_schema do
     field :email
@@ -33,6 +33,18 @@ defmodule Publit.UserAuthentication do
   @spec valid_user_client(map) :: tuple
   def valid_user_client(params) do
     valid_user(UserClient, params)
+  end
+
+  def valid_user_transport(params) do
+    email_or_mobile = String.trim(params["email"] || "")
+
+    with user <- UserTransport.get_by_email_or_mobile(email_or_mobile),
+      false <- is_nil(user),
+      true <- valid_password?(user, params["password"]) do
+        {:ok, user}
+    else
+      _ -> {:error, changeset(params)}
+    end
   end
 
   defp valid_user(schema, params) do

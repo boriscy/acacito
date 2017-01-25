@@ -135,9 +135,13 @@ Repo.insert(%UserClient{
   mobile_number: "77889924"
 })
 Repo.insert(%UserClient{
-  full_name: "Laura Gutierrez", email: "laura@mail.com", encrypted_password: pass,
+  full_name: "Violeta Barroso", email: "violeta@mail.com", encrypted_password: pass,
   mobile_number: "77889925"
 })
 
+Repo.insert(%UserTransport{
+  full_name: "Juan Perez", email: "juan@mail.com", encrypted_password: pass,
+  mobile_number: "66778899"
+})
 
 Ecto.Adapters.SQL.query(Repo, "UPDATE products SET publish=true")
