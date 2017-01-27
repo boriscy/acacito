@@ -1,7 +1,7 @@
 defmodule Publit.Plug.TransApi.UserAuth do
   import Plug.Conn
   import Phoenix.Controller, only: [put_flash: 3, redirect: 2, render: 3]
-  alias Publit.{Repo, Endpoint, UserClient}
+  alias Publit.{Repo, Endpoint, UserTransport}
 
   def init(default), do: default
 

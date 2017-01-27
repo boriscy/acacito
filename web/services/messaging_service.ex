@@ -30,19 +30,6 @@ defmodule Publit.MessagingService do
     end)
   end
 
-  def message2(token, data) do
-    headers = [{"Authorization", "key=#{server_key}"}, {"Content-Type", "application/json"}]
-    body = Poison.encode!(%{to: token, data: data})
-
-    resp = HTTPoison.post!(@messaging_url, body, headers)
-
-    IO.inspect resp
-    if resp.status_code != 200 do
-      IO.puts "Send message"
-    end
-  end
-
-
   def server_key do
     System.get_env["FIREBASE_SERVER_KEY"]
   end

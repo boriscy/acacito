@@ -81,3 +81,9 @@ msgstr "debe ser mayor o igual que %{number}"
 
 msgid "must be equal to %{number}"
 msgstr "debe ser igual a %{number}"
+
+msgid "Invalid email"
+msgstr "Email invalido"
+
+msgid "Invalid password"
+msgstr "Contrasenia invalida"

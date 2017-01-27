@@ -19,7 +19,7 @@ msgstr ""
 msgid "Create Product"
 msgstr ""
 
-#: web/templates/product/index.html.eex:19 web/templates/product/show.html.eex:7
+#: web/templates/product/index.html.eex:22 web/templates/product/show.html.eex:7
 msgid "Edit"
 msgstr ""
 
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: web/templates/product/form.html.eex:27
+#: web/templates/product/form.html.eex:33
 msgid "Image"
 msgstr ""
 
@@ -53,6 +53,7 @@ msgstr ""
 
 #: web/templates/layout/app.html.eex:22
 #: web/templates/layout/app_full.html.eex:22
+#: web/templates/layout/work_area.html.eex:18
 #: web/templates/product/index.html.eex:2
 msgid "Products"
 msgstr ""
@@ -70,7 +71,7 @@ msgid "Shop name"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:16
-#: web/templates/product/form.html.eex:17
+#: web/templates/product/form.html.eex:23
 msgid "Tags"
 msgstr ""
 
@@ -82,7 +83,7 @@ msgstr ""
 msgid "You have entered invalid data please fix the errors"
 msgstr ""
 
-#: web/templates/product/form.html.eex:34
+#: web/templates/product/form.html.eex:40
 msgid "Description"
 msgstr ""
 
@@ -107,12 +108,12 @@ msgstr ""
 msgid "There are errors in the product."
 msgstr ""
 
-#: web/templates/product/index.html.eex:22
+#: web/templates/product/index.html.eex:25
 #: web/templates/product/show.html.eex:10
 msgid "Are you sure to delete the product \"%{name}\"?"
 msgstr ""
 
-#: web/templates/product/index.html.eex:21 web/templates/product/show.html.eex:9
+#: web/templates/product/index.html.eex:24 web/templates/product/show.html.eex:9
 msgid "Delete"
 msgstr ""
 
@@ -124,7 +125,7 @@ msgstr ""
 msgid "Organizations"
 msgstr ""
 
-#: web/plug/organization_auth.ex:35
+#: web/plug/organization_auth.ex:31
 msgid "You don't have permission to access this page"
 msgstr ""
 
@@ -144,7 +145,7 @@ msgstr ""
 msgid "Your position has been updated."
 msgstr ""
 
-#: web/plug/organization_auth.ex:19 web/plug/user_auth.ex:18
+#: web/plug/organization_auth.ex:17 web/plug/user_auth.ex:18
 #: web/views/api/session_view.ex:5
 msgid "You need to login"
 msgstr ""
@@ -169,7 +170,7 @@ msgstr ""
 msgid "Unpublished"
 msgstr ""
 
-#: web/models/order.ex:125
+#: web/models/order.ex:127
 msgid "Invalid product"
 msgstr ""
 
@@ -223,7 +224,7 @@ msgid "Call Transport"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:14
-#: web/templates/product/form.html.eex:19
+#: web/templates/product/form.html.eex:25
 msgid "Separate tags with commas"
 msgstr ""
 
@@ -235,19 +236,19 @@ msgstr ""
 msgid "Enter tags"
 msgstr ""
 
-#: web/templates/product/form.html.eex:37
+#: web/templates/product/form.html.eex:43
 msgid "View examples"
 msgstr ""
 
-#: web/templates/product/form.html.eex:36
+#: web/templates/product/form.html.eex:42
 msgid "You can format the text"
 msgstr ""
 
-#: web/templates/product/form.html.eex:52
+#: web/templates/product/form.html.eex:58
 msgid "Description example"
 msgstr ""
 
-#: web/templates/product/form.html.eex:56
+#: web/templates/product/form.html.eex:62
 msgid "Escriba para probar"
 msgstr ""
 
@@ -255,6 +256,15 @@ msgstr ""
 msgid "New order"
 msgstr ""
 
-#: web/controllers/api/order_controller.ex:20
+#: web/controllers/api/order_controller.ex:41
+#: web/controllers/client_api/order_controller.ex:50
 msgid "Could not find the order"
+msgstr ""
+
+#: web/templates/product/form.html.eex:11
+msgid "Category"
+msgstr ""
+
+#: web/templates/layout/app.html.eex:25
+msgid "Logout"
 msgstr ""

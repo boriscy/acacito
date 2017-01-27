@@ -32,18 +32,28 @@ defmodule Publit.UserAuthentication do
   """
   @spec valid_user_client(map) :: tuple
   def valid_user_client(params) do
-    valid_user(UserClient, params)
+    email_or_mobile = String.trim(params["email"] || "")
+
+    with user <- UserClient.get_by_email_or_mobile(email_or_mobile),
+      {:user, false} <- {:user, is_nil(user)},
+      {:pass, true} <- {:pass, valid_password?(user, params["password"])} do
+        {:ok, user}
+    else
+      {:user, _} -> {:error, changeset(params) |> add_error(:email, "Invalid email")}
+      {:pass, _} -> {:error, changeset(params) |> add_error(:password, "Invalid password") }
+    end
   end
 
   def valid_user_transport(params) do
     email_or_mobile = String.trim(params["email"] || "")
 
     with user <- UserTransport.get_by_email_or_mobile(email_or_mobile),
-      false <- is_nil(user),
-      true <- valid_password?(user, params["password"]) do
+      {:user, false} <- {:user, is_nil(user)},
+      {:pass, true} <- {:pass, valid_password?(user, params["password"])} do
         {:ok, user}
     else
-      _ -> {:error, changeset(params)}
+      {:user, _} -> {:error, changeset(params) |> add_error(:email, "Invalid email")}
+      {:pass, _} -> {:error, changeset(params) |> add_error(:password, "Invalid password") }
     end
   end
 

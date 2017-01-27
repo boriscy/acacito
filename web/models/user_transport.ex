@@ -46,10 +46,4 @@ defmodule Publit.UserTransport do
     end
   end
 
-  def get_by_email_or_mobile(email_or_mobile) do
-    q = from ut in UserTransport, where: ut.email == ^email_or_mobile or ut.mobile_number == ^email_or_mobile
-
-    Repo.one(q)
-  end
-
 end
