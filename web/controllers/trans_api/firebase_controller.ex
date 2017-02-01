@@ -5,7 +5,7 @@ defmodule Publit.TransApi.FirebaseController do
 
 
   # PUT /trans_api/firebase/:user_id
-  def update(conn, %{"id" => id, "token" => token}) do
+  def update(conn, %{"id" => _id, "token" => token}) do
     user = conn.assigns.current_user_transport
 
     case UserTransport.update_fb_token(user, token) do

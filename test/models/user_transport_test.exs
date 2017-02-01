@@ -4,7 +4,7 @@ defmodule Publit.UserTransportTest do
   alias Publit.UserTransport
 
   @valid_attrs %{full_name: "Julio Juarez", email: "julio@mail.com",
-   password: "demo1234", mobile_number: "73732655", type: "jejeje"}
+   password: "demo1234", mobile_number: "73732655", plate: "TUK123"}
   @invalid_attrs %{email: "to", mobile_number: "22"}
 
   describe "create" do
@@ -99,5 +99,39 @@ defmodule Publit.UserTransportTest do
       assert user1 == user2
     end
   end
+
+  describe "update_position" do
+    #@valid_pos %{"accuracy" => 8, "altitude" => 1687, "heading" => -1, "latitude" => -63.8736857, "longitude" => -63.8736867, "speed" => 20}
+    test "OK" do
+      pos = %{"coordinates" => [-17.8145819, -63.1560853], "type" => "Point"}
+      user = insert(:user_transport)
+
+      assert user.pos == nil
+
+      assert {:ok, _user} = UserTransport.update_position(user, %{"pos" => pos})
+    end
+
+    test "invalid" do
+      pos = %{"coordinates" => [-182.8145819, -63.1560853], "type" => "Point"}
+      user = insert(:user_transport)
+
+      assert {:error, _cs} = UserTransport.update_position(user, %{"pos" => pos})
+
+      pos = %{"coordinates" => [182.8145819, -63.1560853], "type" => "Point"}
+
+      assert {:error, _cs} = UserTransport.update_position(user, %{"pos" => pos})
+
+      pos = %{"coordinates" => [82.8145819, -93.1560853], "type" => "Point"}
+
+      assert {:error, _cs} = UserTransport.update_position(user, %{"pos" => pos})
+
+      pos = %{"coordinates" => [182.8145819, 93.1560853], "type" => "Point"}
+
+      assert {:error, cs} = UserTransport.update_position(user, %{"pos" => pos})
+
+      assert cs.errors[:pos]
+    end
+  end
+
 
 end

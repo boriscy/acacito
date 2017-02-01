@@ -16,6 +16,8 @@ defmodule Publit.UserTransport do
     field :settings, :map, default: %{}
     field :extra_data, :map, default: %{}
     field :mobile_number, :string
+    field :plate, :string
+    field :pos, Geo.Geometry
 
     field :password, :string, virtual: true
 
@@ -27,8 +29,8 @@ defmodule Publit.UserTransport do
   """
   def create_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:email, :full_name, :password, :mobile_number])
-    |> validate_required([:email, :password, :full_name, :mobile_number])
+    |> cast(params, [:mobile_number, :email, :full_name, :password, :plate])
+    |> validate_required([:email, :password, :full_name, :mobile_number, :plate])
     |> validate_format(:email, @email_reg)
     |> validate_format(:mobile_number, @number_reg)
     |> validate_length(:password, min: 8)
@@ -43,6 +45,26 @@ defmodule Publit.UserTransport do
       Repo.insert(cs)
     else
       {:error , cs}
+    end
+  end
+
+  #@type update_position(%UserTransport, map) tuple
+  def update_position(user, params) do
+    user
+    |> cast(params, [:pos])
+    |> valid_position()
+    |> Repo.update()
+  end
+
+  defp valid_position(cs) do
+    with %Geo.Point{coordinates: {lng, lat}} <- cs.changes.pos,
+      {:num, true} <- {:num, (is_number(lng) && is_number(lat) )},
+      {:range, true} <- {:range, (lng >= -180 && lng <= 180 && lat >= -90 && lat <= 90)}
+       do
+        cs
+    else
+      _ ->
+        add_error(cs, :pos, "Invalid position")
     end
   end
 

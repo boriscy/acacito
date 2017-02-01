@@ -11,11 +11,18 @@ defmodule Publit.Repo.Migrations.CreateUserTransports do
       add :extra_data, :map, default: "{}"
       add :locale, :text
       add :mobile_number, :text
+      add :pos, :geometry
+      add :plate, :text
 
       timestamps()
     end
 
-    create index(:user_transports, [:email], unique: true)
+    #create index(:user_transports, [:email], unique: true)
     create index(:user_transports, [:mobile_number], unique: true)
+    execute("CREATE INDEX user_transports_on_pos ON user_transports USING GIST (pos)")
+  end
+
+  def down do
+    drop table(:user_transports)
   end
 end

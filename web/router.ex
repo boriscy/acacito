@@ -83,18 +83,19 @@ defmodule Publit.Router do
 
   end
 
+  ######################################################
   pipeline :user_client_auth do
     plug Publit.Plug.ClientApi.UserAuth
   end
 
   # API for clients
   scope "/client_api", Publit.ClientApi do
-    # Unauthorized API
     pipe_through [:api]
     post "/login", SessionController, :create
     delete "/login", SessionController, :delete
     get "/valid_token/:token", SessionController, :valid_token
     post "/registration", RegistrationController, :create
+
     # Authorized API
     scope "/" do
       pipe_through [:user_client_auth]
@@ -106,18 +107,25 @@ defmodule Publit.Router do
   end
 
 
+  ######################################################
   pipeline :user_transport_auth do
     plug Publit.Plug.TransApi.UserAuth
   end
+
   # API for transport
   scope "/trans_api", Publit.TransApi do
+    pipe_through [:api]
     post "/login", SessionController, :create
     delete "/login", SessionController, :delete
     get "/valid_token/:token", SessionController, :valid_token
 
 
+    # Authorized API
     scope "/" do
       pipe_through [:user_transport_auth]
+
+      post "/position", PositionController, :position
+      post "/order_position", PositionController, :order
 
       resources "/firebase", FirebaseController, only: [:update]
     end

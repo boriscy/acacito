@@ -12,7 +12,7 @@ defmodule Publit.MessagingService do
   @messaging_url "https://fcm.googleapis.com/fcm/send"
 
   def message(token, data) do
-    headers = [{"Authorization", "key=#{server_key}"}, {"Content-Type", "application/json"}]
+    headers = [{"Authorization", "key=#{server_key()}"}, {"Content-Type", "application/json"}]
     body = Poison.encode!(%{to: token, data: data})
 
     Task.Supervisor.start_child(Publit.Messaging.Supervisor, fn() ->
@@ -21,7 +21,8 @@ defmodule Publit.MessagingService do
         resp = HTTPoison.post!(@messaging_url, body, headers)
 
         if resp.status_code != 200 do
-          IO.puts "Send message"
+          # TODO log messages
+          IO.puts "Error message"
         end
       rescue
         HTTPoison.Error ->

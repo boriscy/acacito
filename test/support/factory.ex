@@ -30,6 +30,7 @@ defmodule Publit.Factory do
       full_name: "Juan Perez",
       password: "demo1234",
       mobile_number: "66778899",
+      plate: "HUT321",
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
     }
   end

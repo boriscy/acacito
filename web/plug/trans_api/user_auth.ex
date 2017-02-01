@@ -7,7 +7,7 @@ defmodule Publit.Plug.TransApi.UserAuth do
 
   def call(conn, _default) do
     if !conn.assigns[:current_user_transport] do
-      case get_user_client(conn) do
+      case get_user_transport(conn) do
         {:ok, user} ->
           conn
           |> assign(:current_user_transport, user)
@@ -22,7 +22,7 @@ defmodule Publit.Plug.TransApi.UserAuth do
     end
   end
 
-  defp get_user_client(conn) do
+  defp get_user_transport(conn) do
     with [user_token] <- get_req_header(conn, "authorization"),
       {:ok, user_id} <- Phoenix.Token.verify(Endpoint, "user_id", user_token),
       {:ok, user_id} <- Ecto.UUID.cast(user_id),
