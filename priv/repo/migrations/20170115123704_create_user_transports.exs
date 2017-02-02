@@ -13,6 +13,7 @@ defmodule Publit.Repo.Migrations.CreateUserTransports do
       add :mobile_number, :text
       add :pos, :geometry
       add :plate, :text
+      add :status, :text, default: "off"
 
       timestamps()
     end

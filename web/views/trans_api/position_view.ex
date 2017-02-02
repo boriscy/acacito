@@ -14,7 +14,7 @@ defmodule Publit.TransApi.PositionView do
   end
 
   defp encode_user_pos(user) do
-    %{id: user.id, mobile_number: user.mobile_number, email: user.email,
+    %{id: user.id, mobile_number: user.mobile_number, email: user.email, status: user.status,
       pos: Geo.JSON.encode(user.pos)}
   end
 end

@@ -18,11 +18,13 @@ defmodule Publit.UserTransport do
     field :mobile_number, :string
     field :plate, :string
     field :pos, Geo.Geometry
+    field :status, :string, default: "off"
 
     field :password, :string, virtual: true
 
     timestamps()
   end
+  @statuses ["off", "listen", "order"]
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
@@ -48,11 +50,24 @@ defmodule Publit.UserTransport do
     end
   end
 
+  def update() do
+
+  end
+
   #@type update_position(%UserTransport, map) tuple
   def update_position(user, params) do
     user
     |> cast(params, [:pos])
+    |> validate_required([:pos])
     |> valid_position()
+    |> Repo.update()
+  end
+
+  def update_status(user, params) do
+    user
+    |> cast(params, [:status])
+    |> validate_required([:status])
+    |> validate_inclusion(:status, ["off", "listen"])
     |> Repo.update()
   end
 

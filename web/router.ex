@@ -124,8 +124,9 @@ defmodule Publit.Router do
     scope "/" do
       pipe_through [:user_transport_auth]
 
-      post "/position", PositionController, :position
-      post "/order_position", PositionController, :order
+      put "/position", PositionController, :udpate_position
+      put "/update_status", PositionController, :udpate_status
+      put "/order_position", PositionController, :order_position
 
       resources "/firebase", FirebaseController, only: [:update]
     end

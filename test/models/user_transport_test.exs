@@ -5,7 +5,7 @@ defmodule Publit.UserTransportTest do
 
   @valid_attrs %{full_name: "Julio Juarez", email: "julio@mail.com",
    password: "demo1234", mobile_number: "73732655", plate: "TUK123"}
-  @invalid_attrs %{email: "to", mobile_number: "22"}
+  @invalid_attrs %{email: "to", mobile_number: "22", status: "invalid status"}
 
   describe "create" do
     test "OK" do
@@ -15,6 +15,7 @@ defmodule Publit.UserTransportTest do
       assert user.encrypted_password
       assert user.email == "julio@mail.com"
       assert user.mobile_number == "73732655"
+      assert user.status == "off"
     end
 
     test "Error invalid email, blank password" do
@@ -137,6 +138,24 @@ defmodule Publit.UserTransportTest do
       assert {:error, _cs} = UserTransport.update_position(user, %{"pos" => %{}})
     end
 
+
+  end
+
+  describe "update_status" do
+    test "OK" do
+      user = insert(:user_transport)
+      assert user.status == "off"
+
+      assert {:ok, user} = UserTransport.update_status(user, %{"status" => "listen"})
+      assert user.status == "listen"
+    end
+
+    test "ERROR" do
+      user = insert(:user_transport)
+      assert {:error, cs} = UserTransport.update_status(user, %{"status" => "order"})
+
+      assert cs.errors[:status]
+    end
   end
 
 
