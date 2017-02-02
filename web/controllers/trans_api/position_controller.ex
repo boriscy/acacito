@@ -1,11 +1,18 @@
 defmodule Publit.TransApi.PositionController do
   use Publit.Web, :controller
   plug :scrub_params, "position"
+  alias Publit.{UserTransport}
 
   # POST /trans_api/position
   def position(conn, %{"position" => position}) do
-IO.inspect position
-    text(conn, "Hola position")
+    case UserTransport.update_position(conn.assigns.current_user_transport, position) do
+      {:ok, user} ->
+        render(conn, "position.json", user: user)
+      {:error, cs} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render("errors.json", cs: cs)
+    end
   end
 
   @doc """

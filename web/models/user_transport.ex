@@ -57,7 +57,8 @@ defmodule Publit.UserTransport do
   end
 
   defp valid_position(cs) do
-    with %Geo.Point{coordinates: {lng, lat}} <- cs.changes.pos,
+    with {:pos, true} <- {:pos, !!cs.changes[:pos]},
+      %Geo.Point{coordinates: {lng, lat}} <- cs.changes.pos,
       {:num, true} <- {:num, (is_number(lng) && is_number(lat) )},
       {:range, true} <- {:range, (lng >= -180 && lng <= 180 && lat >= -90 && lat <= 90)}
        do

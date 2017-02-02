@@ -108,7 +108,7 @@ defmodule Publit.UserTransportTest do
 
       assert user.pos == nil
 
-      assert {:ok, _user} = UserTransport.update_position(user, %{"pos" => pos})
+      assert {:ok, _user} = UserTransport.update_position(user, %{"pos" => pos, "speed" => 30})
     end
 
     test "invalid" do
@@ -131,6 +131,12 @@ defmodule Publit.UserTransportTest do
 
       assert cs.errors[:pos]
     end
+
+    test "invalid no pos" do
+      user = insert(:user_transport)
+      assert {:error, _cs} = UserTransport.update_position(user, %{"pos" => %{}})
+    end
+
   end
 
 

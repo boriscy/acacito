@@ -8,13 +8,27 @@ defmodule Publit.TransApi.PositionControllerTest do
     %{conn: conn}
   end
 
-  @pos_attrs %{}
-
   describe "POST /trans_api/position" do
     test "OK", %{conn: conn} do
-      conn = post(conn, "/trans_api/position", @pos_attrs)
+
+      data = %{"altitude" => 1687, "pos" => %{"type" => "Point",
+        "coordinates" => [-17.8145819, -63.1560853]},  "speed" => 23}
+
+      conn = post(conn, "/trans_api/position", %{"position" =>  data})
 
       json = Poison.decode!(conn.resp_body)
+      user = conn.assigns[:current_user_transport]
+
+      assert json["user"]["id"] == user.id
+      assert json["user"]["mobile_number"] == user.mobile_number
+      assert json["user"]["pos"] == %{"coordinates" => [-17.8145819, -63.1560853], "type" => "Point"}
+    end
+
+    test "ERROR", %{conn: conn} do
+      conn = post(conn, "/trans_api/position", %{"position" => %{}})
+
+      json = Poison.decode!(conn.resp_body)
+      assert json["errors"]["pos"]
     end
   end
 end
