@@ -109,7 +109,10 @@ defmodule Publit.UserTransportTest do
 
       assert user.pos == nil
 
-      assert {:ok, _user} = UserTransport.update_position(user, %{"pos" => pos, "speed" => 30})
+      assert {:ok, user} = UserTransport.update_position(user, %{"pos" => pos, "speed" => 30})
+
+      assert user.pos == %Geo.Point{coordinates: {-17.8145819, -63.1560853}, srid: nil}
+      assert user.status == "listen"
     end
 
     test "invalid" do
@@ -138,22 +141,22 @@ defmodule Publit.UserTransportTest do
       assert {:error, _cs} = UserTransport.update_position(user, %{"pos" => %{}})
     end
 
-
   end
 
-  describe "update_status" do
+  describe "stop_tracking" do
     test "OK" do
-      user = insert(:user_transport)
-      assert user.status == "off"
-
-      assert {:ok, user} = UserTransport.update_status(user, %{"status" => "listen"})
+      user = insert(:user_transport, %{status: "listen"})
       assert user.status == "listen"
+
+      {:ok, user} = UserTransport.stop_tracking(user)
+      assert user.status == "off"
     end
 
     test "ERROR" do
-      user = insert(:user_transport)
-      assert {:error, cs} = UserTransport.update_status(user, %{"status" => "order"})
+      user = insert(:user_transport, %{status: "order"})
+      assert user.status == "order"
 
+      {:error, cs} = UserTransport.stop_tracking(user)
       assert cs.errors[:status]
     end
   end

@@ -118,17 +118,18 @@ defmodule Publit.Router do
     post "/login", SessionController, :create
     delete "/login", SessionController, :delete
     get "/valid_token/:token", SessionController, :valid_token
+    get "/valid_token_user/:token", SessionController, :valid_token_user
 
 
     # Authorized API
     scope "/" do
       pipe_through [:user_transport_auth]
 
-      put "/position", PositionController, :udpate_position
-      put "/update_status", PositionController, :udpate_status
+      put "/position", PositionController, :position
       put "/order_position", PositionController, :order_position
+      put "/stop_tracking", PositionController, :stop_tracking
 
-      resources "/firebase", FirebaseController, only: [:update]
+      put "/firebase", FirebaseController, :update
     end
   end
 

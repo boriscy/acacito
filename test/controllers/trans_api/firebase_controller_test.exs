@@ -15,9 +15,9 @@ defmodule Publit.TransApi.FirebaseControllerTest do
     u
   end
 
-  describe "PUT /trans_api/firebase/user" do
+  describe "PUT /trans_api/firebase" do
     test "OK", %{conn: conn} do
-      conn = put(conn, "/trans_api/firebase/user", %{"token" => "demo4321"})
+      conn = put(conn, "/trans_api/firebase", %{"token" => "demo4321"})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -27,7 +27,7 @@ defmodule Publit.TransApi.FirebaseControllerTest do
 
     test "ERROR" do
       conn = build_conn()
-      conn = put(conn, "/trans_api/firebase/user", %{"token" => "demo4321"})
+      conn = put(conn, "/trans_api/firebase", %{"token" => "demo4321"})
 
       assert conn.status == Plug.Conn.Status.code(:unauthorized)
       json = Poison.decode!(conn.resp_body)

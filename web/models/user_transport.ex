@@ -6,7 +6,7 @@ defmodule Publit.UserTransport do
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
   @number_reg ~r|^\d{8}$|
 
-  @derive {Poison.Encoder, only: [:id, :full_name, :email, :mobile_number]}
+  @derive {Poison.Encoder, only: [:id, :full_name, :email, :mobile_number, :status]}
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "user_transports" do
     field :email, :string
@@ -58,17 +58,22 @@ defmodule Publit.UserTransport do
   def update_position(user, params) do
     user
     |> cast(params, [:pos])
+    |> put_change(:status, "listen")
     |> validate_required([:pos])
     |> valid_position()
     |> Repo.update()
   end
 
-  def update_status(user, params) do
-    user
-    |> cast(params, [:status])
-    |> validate_required([:status])
-    |> validate_inclusion(:status, ["off", "listen"])
-    |> Repo.update()
+  def stop_tracking(user) do
+    if user.status == "listen" do
+      user
+      |> change()
+      |> put_change(:status, "off")
+      |> Repo.update()
+    else
+      cs = user |> change() |> add_error(:status, "Invalid status")
+      {:error, cs}
+    end
   end
 
   defp valid_position(cs) do

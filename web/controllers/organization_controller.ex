@@ -48,7 +48,8 @@ defmodule Publit.OrganizationController do
   # List of the current user active organizations
   defp active_organizations(user) do
     with u_orgs <- Enum.filter(user.organizations, &(&1.active)),
-      ids <- u_orgs |> Enum.map(&(&1.organization_id)) do
+      ids <- u_orgs |> Enum.map(&(&1.organization_id)),
+      true <- is_list(ids) do
         q = from(o in Organization, where: o.id in ^ids)
         Repo.all(q)
     else
