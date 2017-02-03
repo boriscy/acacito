@@ -23,6 +23,6 @@ defmodule Publit.OrganizationView do
   def to_api(org) do
     org
     |> Map.drop([:__meta__, :__struct__, :settings, :products])
-    |> Map.put(:location, Geo.JSON.encode(org.location))
+    |> Map.put(:pos, Geo.JSON.encode(org.pos))
   end
 end

@@ -3,7 +3,7 @@
 
     <div class="header">
       <div class="left">
-        <div class="title">{{formatNum(order.number)}} - {{user_client.full_name}}</div>
+        <div class="title">{{formatNum(order.num)}} - {{user_client.full_name}}</div>
 
         <div class="details">
           <div v-for="det in order.details">

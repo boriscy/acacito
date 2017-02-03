@@ -8,9 +8,9 @@ defmodule Publit.Order do
   schema "orders" do
     field :total, :decimal
     field :status, :string, default: "new"
-    field :location, Geo.Geometry # Location is stored
+    field :pos, Geo.Geometry # Location is stored
     field :null_reason, :string
-    field :number, :integer
+    field :num, :integer
     field :currency, :string
     field :messages, {:array, :map}, default: []
     field :log, {:array, :map}, default: []
@@ -40,8 +40,8 @@ defmodule Publit.Order do
   """
   def create(params) do
     cs = %Order{}
-    |> cast(params, [:user_client_id, :location, :currency, :organization_id])
-    |> validate_required([:user_client_id, :details, :location, :currency])
+    |> cast(params, [:user_client_id, :pos, :currency, :organization_id])
+    |> validate_required([:user_client_id, :details, :pos, :currency])
     |> cast_embed(:details)
     |> set_and_validate_details()
     |> put_assoc(:organization, Repo.get(Organization, params["organization_id"]) )
@@ -50,7 +50,7 @@ defmodule Publit.Order do
     if cs.valid? do
       cs
       |> set_total()
-      |> set_number()
+      |> set_num()
       |> add_log(%{time: Ecto.DateTime.autogenerate(), message: "Creation", type: "create", user_id: params["user_id"]})
       |> Repo.insert()
     else
@@ -86,7 +86,7 @@ defmodule Publit.Order do
     |> Repo.update()
   end
 
-  defp set_number(cs) do
+  defp set_num(cs) do
     dt = Ecto.DateTime.autogenerate()
     d = Ecto.DateTime.to_date(dt)
     {:ok, org_id} = Ecto.UUID.cast(cs.params["organization_id"])
@@ -97,7 +97,7 @@ defmodule Publit.Order do
 
     cs
     |> put_change(:inserted_at, dt)
-    |> put_change(:number, num)
+    |> put_change(:num, num)
   end
 
   defp add_log(cs, msg) do
@@ -146,8 +146,8 @@ defmodule Publit.Order do
   defp set_transport(cs) do
     if cs.changes.organization_id do
       p = Map.merge(cs.params["transport"] || %{"calculated_price" => ""}, %{
-        "start_location" => Geo.JSON.encode(cs.changes.organization.data.location),
-        "end_location" => cs.params["location"]
+        "start_pos" => Geo.JSON.encode(cs.changes.organization.data.pos),
+        "end_pos" => cs.params["pos"]
       })
       cs
       |> Map.put(:params, Map.merge(cs.params, %{"transport" => p}) )

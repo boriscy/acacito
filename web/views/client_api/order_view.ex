@@ -29,7 +29,7 @@ defmodule Publit.ClientApi.OrderView do
 
     order
     |> Map.drop([:__meta__, :__struct__, :user_client])
-    |> Map.put(:location, Geo.JSON.encode(order.location))
+    |> Map.put(:pos, Geo.JSON.encode(order.pos))
     |> Map.put(:organization, Publit.OrganizationView.to_api(order.organization))
   end
 

@@ -6,7 +6,7 @@ defmodule Publit.SearchServiceTest do
   defp create_org(params) do
     Repo.insert(%Organization{
       name: params[:name],
-      location: params[:location],
+      pos: params[:pos],
       tags: params[:tags],
       rating: params[:rating] || 1,
       rating_count: params[:rating_count],
@@ -21,18 +21,18 @@ defmodule Publit.SearchServiceTest do
   def create_orgs do
     [
       # summa pacha
-      create_org(%{name: "org 1", location: coords(-63.876047,-18.1787804), rating: 4, rating_count: 4,
+      create_org(%{name: "org 1", pos: coords(-63.876047,-18.1787804), rating: 4, rating_count: 4,
         tags: [%{text: "vegetariano", count: 10}, %{text: "vegano", count: 7}], description: "Aaaa" }),
       #
-      create_org(%{name: "org 2", location: coords(-63.8732718,-18.1767489), rating: 3, rating_count: 2,
+      create_org(%{name: "org 2", pos: coords(-63.8732718,-18.1767489), rating: 3, rating_count: 2,
         tags: [%{text: "carne", count: 15}, %{text: "vegetariano", count: 1}, %{text: "parrilla", count: 5}], description: "B" }),
       # Achira
-      create_org(%{name: "org 3", location: coords(-63.8210238,-18.1650556), rating: 5, rating_count: 2,
+      create_org(%{name: "org 3", pos: coords(-63.8210238,-18.1650556), rating: 5, rating_count: 2,
         tags: [%{text: "pizza", count: 20}, %{text: "pasta", count: 5}] }),
-      create_org(%{name: "org 4", location: coords(-63.8660898,-18.1781923), rating: 2.2, rating_count: 4,
+      create_org(%{name: "org 4", pos: coords(-63.8660898,-18.1781923), rating: 2.2, rating_count: 4,
         tags: [%{text: "pollo", count: 4}] }),
       # Timboy
-      create_org(%{name: "org 5", location: coords(-63.8732718,-18.1767489), rating: 3, rating_count: 10, tags: [] })
+      create_org(%{name: "org 5", pos: coords(-63.8732718,-18.1767489), rating: 3, rating_count: 10, tags: [] })
     ]
   end
 

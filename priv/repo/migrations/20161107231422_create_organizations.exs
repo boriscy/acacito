@@ -11,7 +11,7 @@ defmodule Publit.Repo.Migrations.CreateOrganizations do
       add :address, :text
       add :info, :map, default: "{}"
       add :settings, :map, default: "{}"
-      add :location, :geometry
+      add :pos, :geometry
       add :category, :text
       add :verified, :boolean, default: false
 

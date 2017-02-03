@@ -16,7 +16,7 @@ defmodule Publit.Organization do
     field :address, :string
     field :info, :map, default: %{}
     field :settings, :map, default: %{}
-    field :location, Geo.Geometry
+    field :pos, Geo.Geometry
     field :category, :string, default: "restaurant"
     field :open, :boolean, default: false
     field :tags, Publit.Array, default: []
@@ -55,8 +55,8 @@ defmodule Publit.Organization do
   """
   def update(org, params) do
     org
-    |> cast(params, [:name, :address, :location, :description])
-    |> validate_required([:name, :currency, :location])
+    |> cast(params, [:name, :address, :pos, :description])
+    |> validate_required([:name, :currency, :pos])
     |> Repo.update()
   end
 
@@ -105,9 +105,9 @@ defmodule Publit.Organization do
   end
 
   def coords(org) do
-    case org.location do
+    case org.pos do
       nil -> %{"coordinates" => [nil, nil], "type" => "Point"}
-      p -> Geo.JSON.encode(org.location)
+      p -> Geo.JSON.encode(org.pos)
     end
   end
 

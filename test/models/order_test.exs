@@ -5,7 +5,7 @@ defmodule Publit.OrderTest do
 
   alias Publit.{Order, ProductVariation}
 
-  #@valid_attrs %{details: %{}, location: "some content", total: "120.5", user_id: "7488a646-e31f-11e4-aace-600308960662"}
+  #@valid_attrs %{details: %{}, pos: "some content", total: "120.5", user_id: "7488a646-e31f-11e4-aace-600308960662"}
   #@invalid_attrs %{}
 
   defp create_order() do
@@ -15,7 +15,7 @@ defmodule Publit.OrderTest do
     v1 = Enum.at(p1.variations, 1)
     v2 = Enum.at(p2.variations, 0)
     params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
-    "location" => %{"coordinates" => [-100, 30], "type" => "Point"},
+    "pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
         "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -45,7 +45,7 @@ defmodule Publit.OrderTest do
       v2 = Enum.at(p2.variations, 0)
 
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
-      "location" => %{"coordinates" => [-100, 30], "type" => "Point"},
+      "pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -54,8 +54,8 @@ defmodule Publit.OrderTest do
 
       {:ok, order} = Order.create(params)
 
-      assert order.location == %Geo.Point{coordinates: {-100, 30}, srid: nil}
-      assert order.number == 1
+      assert order.pos == %Geo.Point{coordinates: {-100, 30}, srid: nil}
+      assert order.num == 1
       assert order.total == Decimal.new("71.0")
       assert order.currency == org.currency
       assert order.status == "new"
@@ -77,7 +77,7 @@ defmodule Publit.OrderTest do
       assert d2.variation == v2.name
     end
 
-    test "OK number" do
+    test "OK num" do
       org = insert(:organization)
       user_client = insert(:user_client)
       Repo.insert(%Order{user_client_id: user_client.id, organization_id: org.id})
@@ -87,7 +87,7 @@ defmodule Publit.OrderTest do
       v2 = Enum.at(p2.variations, 0)
 
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
-      "location" => %{"coordinates" => [-100, 30], "type" => "Point"},
+      "pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -96,7 +96,7 @@ defmodule Publit.OrderTest do
 
       {:ok, order} =  Order.create(params)
 
-      assert order.number == 2
+      assert order.num == 2
       assert order.organization.name == "Publit"
     end
 
@@ -107,7 +107,7 @@ defmodule Publit.OrderTest do
       v2 = Enum.at(p2.variations, 0)
 
       params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
-      "location" => Geo.WKT.decode("POINT(30 -90)"),
+      "pos" => Geo.WKT.decode("POINT(30 -90)"),
       "details" => %{
           "0" => %{"product_id" => Ecto.UUID.generate, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -119,7 +119,7 @@ defmodule Publit.OrderTest do
       assert det.errors[:product_id]
 
       params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
-      "location" => Geo.WKT.decode("POINT(30 -90)"),
+      "pos" => Geo.WKT.decode("POINT(30 -90)"),
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => Ecto.UUID.generate(), "quantity" => "2"}

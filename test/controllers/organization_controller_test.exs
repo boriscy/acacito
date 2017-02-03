@@ -26,7 +26,7 @@ defmodule Publit.OrganizationControllerTest do
   describe "PUT /organizations/:id" do
     test "OK html", %{conn: conn} do
       conn = put(conn, "/organizations/current", %{"organization" => %{
-         "name" => "Other org name", "location" => %{"coordinates" => [10, 10], "type" => "Point"} } })
+         "name" => "Other org name", "pos" => %{"coordinates" => [10, 10], "type" => "Point"} } })
 
       assert redirected_to(conn) == "/organizations/#{conn.assigns.current_organization.id}"
     end
@@ -40,7 +40,7 @@ defmodule Publit.OrganizationControllerTest do
 
     test "OK json", %{conn: conn} do
       conn = put(conn, "/organizations/current", %{"organization" => %{
-         "location" => %{"coordinates" => ["-120", "30"], "type" => "Point"} }, "format" => "json" })
+         "pos" => %{"coordinates" => ["-120", "30"], "type" => "Point"} }, "format" => "json" })
 
       org = Poison.decode!(conn.resp_body)
       assert org["organization"]["pos"] == %{"coordinates" => ["-120", "30"], "type" => "Point"}
@@ -48,7 +48,7 @@ defmodule Publit.OrganizationControllerTest do
 
     test "ERROR json", %{conn: conn} do
       conn = put(conn, "/organizations/current", %{"organization" => %{
-         "location" => %{"lat" => "30", "lng" => "-190"}, "name" => "" }, "format" => "json" })
+         "pos" => %{"lat" => "30", "lng" => "-190"}, "name" => "" }, "format" => "json" })
 
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
     end
