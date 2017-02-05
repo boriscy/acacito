@@ -4,7 +4,7 @@ defmodule Publit.ClientApi.OrderController do
   alias Publit.{Order}
 
 
-  # GET /api/orders
+  # GET /client_api/orders
   def index(conn, _params) do
     user_id = conn.assigns.current_user_client.id
 
@@ -21,7 +21,7 @@ defmodule Publit.ClientApi.OrderController do
     end
   end
 
-  # POST /api/orders
+  # POST /client_api/orders
   def create(conn, %{"order" => order_params}) do
     order_params = order_params |> Map.put("user_client_id", conn.assigns.current_user_client.id)
     case Order.create(order_params) do
@@ -32,18 +32,6 @@ defmodule Publit.ClientApi.OrderController do
         conn
         |> put_status(:unprocessable_entity)
         |> render("errors.json", cs: cs)
-    end
-  end
-
-  # PUT /api/orders/:id/move_next
-  def move_next(conn, %{"id" => id}) do
-    case Repo.get(Order, id) do
-      nil -> render_not_found(conn)
-      order ->
-        case Order.next_status(order, conn.assigns.current_user.id) do
-          {:ok, order} ->
-            render(conn, "show_org.json", order: order)
-        end
     end
   end
 

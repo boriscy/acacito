@@ -29,7 +29,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
     v2 = Enum.at(p2.variations, 0)
 
     %{"organization_id" => org.id, "currency" => org.currency,
-    "pos" => %{"coordinates" => [-120, 30], "type" => "Point"},
+    "client_pos" => %{"coordinates" => [-120, 30], "type" => "Point"},
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
         "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -44,19 +44,19 @@ defmodule Publit.ClientApi.OrderControllerTest do
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
       ord = json["order"]
-      assert ord["pos"] == %{"coordinates" => [-120, 30], "type" => "Point"}
+      assert ord["client_pos"] == %{"coordinates" => [-120, 30], "type" => "Point"}
 
       assert json["order"]["organization"]["name"] == org.name
       assert json["order"]["organization"]["currency"] == "BOB"
     end
 
     test "ERROR",%{conn: conn, org: org} do
-      order_p = order_params(org) |> Map.delete("pos")
+      order_p = order_params(org) |> Map.delete("client_pos")
       conn = post(conn, "/client_api/orders", %{"order" => order_p})
 
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
       json = Poison.decode!(conn.resp_body)
-      assert json["errors"]["pos"]
+      assert json["errors"]["client_pos"]
     end
 
     test "unauthorized" do

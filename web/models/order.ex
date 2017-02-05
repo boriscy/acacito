@@ -8,12 +8,14 @@ defmodule Publit.Order do
   schema "orders" do
     field :total, :decimal
     field :status, :string, default: "new"
-    field :pos, Geo.Geometry # Location is stored
     field :null_reason, :string
     field :num, :integer
     field :currency, :string
     field :messages, {:array, :map}, default: []
     field :log, {:array, :map}, default: []
+    field :client_pos, Geo.Geometry
+    field :organization_pos, Geo.Geometry
+    field :transport_pos, Geo.Geometry # First accept transport location
 
     embeds_one :transport, OrderTransport#, on_replace: :delete
     embeds_many :details, OrderDetail#, on_replace: :delete
@@ -40,8 +42,8 @@ defmodule Publit.Order do
   """
   def create(params) do
     cs = %Order{}
-    |> cast(params, [:user_client_id, :pos, :currency, :organization_id])
-    |> validate_required([:user_client_id, :details, :pos, :currency])
+    |> cast(params, [:user_client_id, :client_pos, :currency, :organization_id])
+    |> validate_required([:user_client_id, :details, :client_pos, :currency])
     |> cast_embed(:details)
     |> set_and_validate_details()
     |> put_assoc(:organization, Repo.get(Organization, params["organization_id"]) )
@@ -145,11 +147,10 @@ defmodule Publit.Order do
 
   defp set_transport(cs) do
     if cs.changes.organization_id do
-      p = Map.merge(cs.params["transport"] || %{"calculated_price" => ""}, %{
-        "start_pos" => Geo.JSON.encode(cs.changes.organization.data.pos),
-        "end_pos" => cs.params["pos"]
-      })
+      p = Map.merge(cs.params["transport"] || %{"calculated_price" => ""}, %{})
+
       cs
+      |> put_change(:organization_pos, cs.changes.organization.data.pos)
       |> Map.put(:params, Map.merge(cs.params, %{"transport" => p}) )
       |> cast_embed(:transport)
     else
