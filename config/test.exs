@@ -19,5 +19,9 @@ config :publit, Publit.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   types: Publit.PostgresTypes
 
+
 config :arc,
   storage: Arc.Storage.Local
+
+# in test/support/messaging_api_mock.ex
+config :publit, :message_api, Publit.MessageApiMock

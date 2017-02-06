@@ -1,5 +1,3 @@
-import {Socket} from 'phoenix'
-
 export default {
   props: {
     order: {

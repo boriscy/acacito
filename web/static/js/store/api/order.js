@@ -18,5 +18,8 @@ export default {
     .then((res) => {
       cb(res.data)
     })
+  },
+  callTransport(cb, order_id) {
+    auth.post('/api/calls')
   }
 }

@@ -3,7 +3,7 @@
     <NewOrders :orders="newOrders" title="New Orders" css-class="new" v-bind:orderComp="orderComp">
     </NewOrders>
 
-    <ProcessOrders :orders="processOrders" title="Orders in Process" css-class="process"  v-bind:orderComp="processComp">
+    <ProcessOrders :orders="processOrders" title="Orders in Process" css-class="process" v-bind:orderComp="processComp">
     </ProcessOrders>
 
     <TransportOrders :orders="transportOrders" title="Transporting Orders"

@@ -1,5 +1,4 @@
 import types from './mutation-types'
-import axios from 'axios'
 
 ///////////////////////////////////////////////////
 // Orders
@@ -27,9 +26,8 @@ export const addOrder = ({commit}, data) => {
   commit(types.ADD_ORDER, data)
 }
 
-//////////////////////////////////
-import auth from './api/auth'
-
-/*
- * Utility methods to make ajax requests
- */
+export const callTransport = ({commit}, data) => {
+  orderApi.callTransport(data => {
+    commit(types.ORDER_TRANSPORTER, data)
+  }, data.id)
+}

@@ -1,5 +1,4 @@
 defmodule Publit.Api.OrderControllerTest do
-
   use Publit.ConnCase
   require Publit.Gettext
 

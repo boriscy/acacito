@@ -2,10 +2,6 @@ defmodule Publit.OrderCallTest do
   use Publit.ModelCase
   alias Publit.{UserTransport, OrderCall, Order}
 
-  test "create" do
-  end
-
-
   defp create_user_transports do
     [
       %UserTransport{mobile_number: "11223344", status: "listen", pos: %Geo.Point{coordinates: {-63.876047,-18.1787804}, srid: nil}},
@@ -17,7 +13,19 @@ defmodule Publit.OrderCallTest do
   end
 
   defp order do
-   %Order{id: Ecto.UUID.generate(), organization_pos: %Geo.Point{coordinates: [-63.8748, -18.1778], srid: nil} }
+   %Order{id: Ecto.UUID.generate(), organization_pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil} }
+  end
+
+  describe "create" do
+    test "OK" do
+      org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
+      uc = insert(:user_client)
+      {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
+
+      assert {:ok, ord_call} = OrderCall.create(ord, org)
+
+      assert ord_call.status == "new"
+    end
   end
 
   describe "get_transport_ids" do

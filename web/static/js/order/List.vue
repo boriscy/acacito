@@ -6,6 +6,7 @@
     </h3>
 
     <div v-for="order in orders">
+      <!-- orderComp it's been set on Container.vue -->
       <component :order="order" v-bind:next="next" v-bind:is="orderComp"></component>
     </div>
   </div>

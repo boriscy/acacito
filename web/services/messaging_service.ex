@@ -2,37 +2,24 @@ defmodule Publit.MessagingService do
   @moduledoc """
   Service to send notifications to the user
   """
-  use HTTPoison.Base
+  @message_api Application.get_env(:publit, :message_api)
 
   def status_code(resp) do
     {_s, msg} = resp
     {:error, msg}
   end
 
-  @messaging_url "https://fcm.googleapis.com/fcm/send"
-
-  def message(token, data) do
-    headers = [{"Authorization", "key=#{server_key()}"}, {"Content-Type", "application/json"}]
-    body = Poison.encode!(%{to: token, data: data})
-
+  def send_messages(tokens, data, cb_ok, cb_error, cb_net_error \\ fn(v) -> end) do
     Task.Supervisor.start_child(Publit.Messaging.Supervisor, fn() ->
-      start()
-      try do
-        resp = HTTPoison.post!(@messaging_url, body, headers)
+        resp = @message_api.send_messages(tokens, data)
 
-        if resp.status_code != 200 do
-          # TODO log messages
-          IO.puts "Error message"
+        case resp.status do
+          :ok -> cb_ok.(resp)
+          :error -> cb_error.(resp)
+          :network_error -> cb_net_error.(resp)
         end
-      rescue
-        HTTPoison.Error ->
-          {Publit.MessagingService, "Network error, firebase not responding"}
-      end
     end)
   end
 
-  def server_key do
-    System.get_env["FIREBASE_SERVER_KEY"]
-  end
 
 end

@@ -7,6 +7,7 @@ defmodule Publit.Repo.Migrations.CreateOrderCalls do
       add :order_id, references(:orders, type: :uuid, null: false, on_delete: :delete_all), null: false
 
       add :transport_ids, {:array, :text}, default: []
+      add :status, :text, default: "new"
 
       timestamps()
     end

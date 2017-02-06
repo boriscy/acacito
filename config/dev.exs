@@ -49,3 +49,6 @@ config :publit, Publit.Repo,
 
 config :arc,
   storage: Arc.Storage.Local
+
+config :publit, :message_api, Publit.MessageApi
+

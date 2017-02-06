@@ -79,6 +79,8 @@ defmodule Publit.Router do
       pipe_through [:organization_api_auth]
       resources "/orders", OrderController, only: [:index, :show]
       put "/orders/:id/move_next", OrderController, :move_next
+
+      resources "/transport", TransportController
     end
 
   end

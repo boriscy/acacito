@@ -33,6 +33,8 @@ config :ex_aws,
     region: "eu-central-1"
   ]
 
+config :publit, :message_api, Publit.MessageApi
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
