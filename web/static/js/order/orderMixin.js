@@ -46,6 +46,8 @@ export default {
           return 'process'
         case 'process':
           return 'transport'
+        case 'transport':
+          return 'delivered'
         default:
           return ''
       }

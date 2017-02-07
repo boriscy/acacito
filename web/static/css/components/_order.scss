@@ -8,6 +8,7 @@ body{
   margin: 0px;
 }
 
+
 .orders-container {
   display: flex;
   .orders {
@@ -16,7 +17,7 @@ body{
     background: $white;
     padding: 10px;
     box-shadow: 1px 1px 4px $grayLight;
-    width: 350px;
+    min-width: 350px;
 
     >.title {
       margin: 4px 0px 10px;
@@ -43,6 +44,15 @@ body{
       width: 60%;
       .title {
         font-size: 1.3em;
+        margin: 0px;
+      }
+      .order-time-ago {
+        color: $grayDark;
+        margin-bottom: 0.5em;
+        i {
+          vertical-align: middle;
+          font-size: 1.2em;
+        }
       }
       .details {
         color: $grayDark;
@@ -75,17 +85,39 @@ body{
       }
     }
   }
+
   .next {
     border-radius: 50%;
-    font-size: 3.5em;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
     cursor: pointer;
+    line-height: 1.15;
+    position: relative;
+    &.new {
+      background: $new;
+      color: white;
+    }
+    &.process {
+      background: $process;
+      color: white;
+    }
+    &.transport {
+      background: $transport;
+      color: white;
+    }
+    &.delivered {
+      background: $delivered;
+      color: white;
+    }
+    i {
+      position: absolute;
+      left: 0.1em;
+      top: 0.07em;
+      font-size: 2.2em;
+    }
   }
-  .process-next {
-    color: $process;
-  }
-  .transport-next {
-    color: $transport;
-  }
+
 }
 
 .badge.new {
@@ -94,9 +126,13 @@ body{
 }
 .badge.process {
   background: $process;
-  color: $dark;
+  color: $white;
 }
 .badge.transport {
   background: $transport;
+  color: white;
+}
+badge.delivered {
+  background: $delivered;
   color: white;
 }

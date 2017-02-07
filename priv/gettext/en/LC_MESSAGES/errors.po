@@ -91,3 +91,9 @@ msgstr ""
 
 msgid "must be equal to %{number}"
 msgstr ""
+
+msgid "Invalid email"
+msgstr ""
+
+msgid "Invalid password"
+msgstr ""

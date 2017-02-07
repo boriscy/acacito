@@ -28,7 +28,7 @@ defmodule Publit.OrderCallTest do
       create_user_transports()
       {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
 
-      assert {:ok, oc, pid} = OrderCall.create(ord, org)
+      assert {:ok, oc, pid} = OrderCall.create(ord)
 
       assert oc.status == "new"
       assert Enum.count(oc.transport_ids) == 4
@@ -58,7 +58,7 @@ defmodule Publit.OrderCallTest do
 
       {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
 
-      assert {:ok, oc, pid} = OrderCall.create(ord, org)
+      assert {:ok, oc, pid} = OrderCall.create(ord)
 
       ref = Process.monitor(pid)
 
@@ -78,7 +78,7 @@ defmodule Publit.OrderCallTest do
       uc = insert(:user_client)
       {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
 
-      assert {:empty, oc} = OrderCall.create(ord, org)
+      assert {:empty, oc} = OrderCall.create(ord)
       assert oc.transport_ids == []
     end
 

@@ -54,4 +54,5 @@ defmodule Publit.Factory do
       ]
     }
   end
+
 end

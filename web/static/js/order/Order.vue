@@ -5,7 +5,11 @@
       <div class="left">
         <div class="title">{{formatNum(order.num)}} - {{user_client.full_name}}</div>
 
-        <div class="time-ago">{{timeAgo(order.inserted_at)}}</div>
+        <div class="order-time-ago">
+          <i class="material-icons">watch_later</i>
+          {{timeAgo(order.inserted_at)}}
+        </div>
+
         <div class="details">
           <div v-for="det in order.details">
             <span class="det-quantity">{{det.quantity}}</span>
@@ -22,8 +26,8 @@
         <div class="currency">
           <small>{{currency()}}</small> {{ formatNumber(order.total) }}
         </div>
-        <a v-if="next" @click="moveNext()">
-          <i class="icon-right-circled next" v-bind:class="nextProcess"></i>
+        <a v-if="next" @click="moveNext()" class="next" v-bind:class="nextStatus(order.status)">
+          <i class="material-icons">forward</i>
         </a>
       </div>
     </div>

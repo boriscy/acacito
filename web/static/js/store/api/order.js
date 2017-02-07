@@ -20,6 +20,6 @@ export default {
     })
   },
   callTransport(cb, order_id) {
-    auth.post('/api/calls')
+    auth.post('/api/calls', {})
   }
 }

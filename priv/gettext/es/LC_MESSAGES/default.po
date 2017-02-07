@@ -169,7 +169,7 @@ msgstr "Ocultar"
 msgid "Unpublished"
 msgstr "Oculto"
 
-#: web/models/order.ex:127
+#: web/models/order.ex:129
 msgid "Invalid product"
 msgstr "Producto invalido"
 
@@ -256,7 +256,7 @@ msgid "New order"
 msgstr "Nuevo pedido"
 
 #: web/controllers/api/order_controller.ex:41
-#: web/controllers/client_api/order_controller.ex:50
+#: web/controllers/client_api/order_controller.ex:38
 msgid "Could not find the order"
 msgstr "No se pudo encontrar el pedido"
 
@@ -267,3 +267,7 @@ msgstr "Categoria"
 #: web/templates/layout/app.html.eex:25
 msgid "Logout"
 msgstr "Salir"
+
+#: web/views/api/transport_view.ex:9
+msgid "Order not found"
+msgstr "Pedido no encontrado"

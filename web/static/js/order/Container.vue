@@ -7,7 +7,7 @@
     </ProcessOrders>
 
     <TransportOrders :orders="transportOrders" title="Transporting Orders"
-      css-class="transport" v-bind:next="false" v-bind:orderComp="orderComp">
+      css-class="transport" v-bind:next="true" v-bind:orderComp="orderComp">
     </TransportOrders>
   </div>
 </template>
