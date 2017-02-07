@@ -16,7 +16,6 @@
         </div>
 
         <slot name="transport"></slot>
-
       </div>
 
       <div class="right">
