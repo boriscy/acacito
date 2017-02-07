@@ -14,7 +14,7 @@ defmodule Publit.OrderCallTest do
       extra_data: %{fb_token: "44556677"}},
       %UserTransport{mobile_number: "55667788", status: "listen", pos: %Geo.Point{coordinates: {-63.8732718,-18.1767489}, srid: nil},
       extra_data: %{fb_token: "55667788"}}
-    ] |> Enum.map(fn(ut) -> Repo.insert(ut) end)
+    ] |> Enum.map(&Repo.insert/1)
   end
 
   defp order do
@@ -35,8 +35,6 @@ defmodule Publit.OrderCallTest do
 
       ref = Process.monitor(pid)
 
-      #Process.sleep(200)
-      #  IO.inspect Repo.get(OrderCall, oc.id)
       receive do
         {:DOWN, ^ref, _, _, _} ->
           oc = Repo.get(OrderCall, oc.id)
@@ -46,6 +44,44 @@ defmodule Publit.OrderCallTest do
           assert oc.resp["headers"]
       end
     end
+
+    test "ERROR" do
+      org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
+      uc = insert(:user_client)
+      [
+        %UserTransport{mobile_number: "11223344", status: "listen", pos: %Geo.Point{coordinates: {-63.876047,-18.1787804}, srid: nil},
+        extra_data: %{fb_token: "11223344"}},
+        %UserTransport{mobile_number: "22334455", status: "listen", pos: %Geo.Point{coordinates: {-63.8732718,-18.1767489}, srid: nil},
+        extra_data: %{fb_token: "223344"}}
+      ]
+      |> Enum.map(&Repo.insert/1)
+
+      {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
+
+      assert {:ok, oc, pid} = OrderCall.create(ord, org)
+
+      ref = Process.monitor(pid)
+
+      receive do
+        {:DOWN, ^ref, _, _, _} ->
+          oc = Repo.get(OrderCall, oc.id)
+
+          assert oc.status == "error"
+          body = Poison.decode!(oc.resp["body"])
+          assert body["failure"] == 1
+          assert body["success"] == 0
+      end
+    end
+
+    test "empty set " do
+      org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
+      uc = insert(:user_client)
+      {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
+
+      assert {:empty, oc} = OrderCall.create(ord, org)
+      assert oc.transport_ids == []
+    end
+
   end
 
   describe "get_transport_ids" do

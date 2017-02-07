@@ -53,7 +53,7 @@ defmodule Publit.OrderCall do
 
     order_call
     |> cast(params, [:status, :resp])
-    |> validate_inclusion(:status, ["delivered", "ok"])
+    |> validate_inclusion(:status, ["delivered", "error"])
     |> Repo.update()
   end
 
