@@ -1,6 +1,6 @@
 <template>
   <Order :order="order" nextProcess="transport-next">
-    <div slot="transport" class="transport-data">
+    <div slot="transport" class="transport">
       <div v-if="order.transport.start">
         <i class="icon-cab"></i>
         {{timeAgo(order.transport.start)}}

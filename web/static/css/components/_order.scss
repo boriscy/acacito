@@ -44,7 +44,10 @@ body{
       .title {
         font-size: 1.3em;
       }
-      .transport-data {
+      .details {
+        color: $grayDark;
+      }
+      .transport {
         .call {
           font-weight: bold;
           font-size: 1.15em;
@@ -61,8 +64,14 @@ body{
       width: 40%;
       text-align: right;
       .currency {
-        font-size: 1.5em;
+        font-size: 1.3em;
         color: $money;
+        font-weight: bold;
+        small {
+          color: $grayDark;
+          font-weight: normal;
+          font-size: 70%;
+        }
       }
     }
   }
@@ -79,15 +88,15 @@ body{
   }
 }
 
-.new {
+.badge.new {
   background: $new;
   color: white;
 }
-.process {
+.badge.process {
   background: $process;
   color: $dark;
 }
-.transport {
+.badge.transport {
   background: $transport;
   color: white;
 }
