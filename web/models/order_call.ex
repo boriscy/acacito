@@ -7,27 +7,52 @@ defmodule Publit.OrderCall do
   schema "order_calls" do
     field :transport_ids, Publit.Array, default: []
     field :status, :string, default: "new"
+    field :resp, :map
 
     belongs_to :order, Order, type: :binary_id
     timestamps()
   end
-  @statuses ["new", "delivered", "error"]
+  #@statuses ["new", "delivered", "error"]
 
+  @doc """
+  Creates and %OrderCall{} and stores in the db when correct then
+  it sends messages to all near transports with  `status: calling`
+  """
   def create(order, organization, radius \\ 1000) do
     {lng, lat} = organization.pos.coordinates
-    transports = get_user_transports(%{"coordinates" => [lng, lat]})
-    tokens = Enum.map(transports, fn(t) -> t.extra_data["fb_token"] end)
-    ids = Enum.map(transports, fn(t) -> t.id end)
+    transports = get_user_transports(%{"coordinates" => [lng, lat]}, radius)
 
-    cb = fn(v) -> end
-    #Publit.MessagingService.messages(tokens, %{}, cb)
-    oc = %OrderCall{order_id: order.id, transport_ids: ids}
-    Repo.insert(oc)
+    if Enum.count(transports) > 0 do
+      ids = Enum.map(transports, fn(t) -> t.id end)
+      oc = %OrderCall{order_id: order.id, transport_ids: ids}
+
+      tokens = Enum.map(transports, fn(t) -> t.extra_data["fb_token"] end)
+
+      create_and_send_messages(oc, tokens)
+    else
+      {:empty, %OrderCall{}}
+    end
+  end
+
+  defp create_and_send_messages(oc, tokens) do
+    case Repo.insert(oc) do
+      {:ok, oc} ->
+        cb_ok = fn(resp) -> OrderCall.update(oc, %{status: "delivered", resp: Map.drop(resp.resp, [:__struct__])}) end
+        cb_error = fn(resp) -> OrderCall.update(oc, %{status: "error", resp: Map.drop(resp.resp, [:__struct__]) }) end
+
+        {:ok, pid} = Publit.MessagingService.send_messages(tokens, %{order_id: oc.order_id, status: "calling"}, cb_ok, cb_error)
+
+        {:ok, oc, pid}
+      {:error, cs} ->
+        {:error, cs}
+    end
   end
 
   def update(order_call, params) do
+    params = put_in(params, [:resp, :headers], Enum.into(params.resp[:headers], %{}, fn({a, b}) -> {a, b} end) )
+
     order_call
-    |> cast(params, [:status])
+    |> cast(params, [:status, :resp])
     |> validate_inclusion(:status, ["delivered", "ok"])
     |> Repo.update()
   end

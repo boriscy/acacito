@@ -9,6 +9,8 @@ defmodule Publit.Repo.Migrations.CreateOrderCalls do
       add :transport_ids, {:array, :text}, default: []
       add :status, :text, default: "new"
 
+      add :resp, :jsonb, default: %{}
+
       timestamps()
     end
 
