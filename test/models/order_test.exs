@@ -62,6 +62,8 @@ defmodule Publit.OrderTest do
       assert order.total == Decimal.new("71.0")
       assert order.currency == org.currency
       assert order.status == "new"
+      assert order.client_name == user_client.full_name
+      assert order.organization_name == org.name
 
       assert order.details |> Enum.count() == 2
 

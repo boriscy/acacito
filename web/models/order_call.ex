@@ -40,7 +40,8 @@ defmodule Publit.OrderCall do
         cb_ok = fn(resp) -> OrderCall.update(oc, %{status: "delivered", resp: Map.drop(resp.resp, [:__struct__])}) end
         cb_error = fn(resp) -> OrderCall.update(oc, %{status: "error", resp: Map.drop(resp.resp, [:__struct__]) }) end
 
-        {:ok, pid} = Publit.MessagingService.send_messages(tokens, %{order_id: oc.order_id, status: "calling"}, cb_ok, cb_error)
+        {:ok, pid} = Publit.MessagingService.send_messages(tokens,
+            %{order: Publit.Api.OrderView.to_api(order), status: "calling"}, cb_ok, cb_error)
 
         {:ok, oc, pid}
       {:error, cs} ->
