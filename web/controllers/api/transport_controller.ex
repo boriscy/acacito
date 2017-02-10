@@ -13,7 +13,7 @@ defmodule Publit.Api.TransportController do
       |> put_status(:not_found)
       |> render("not_found.json")
     else
-      case OrderCall.create(order) do
+      case OrderCall.create(order, 1_000) do
         {:ok, oc, _pid} ->
           render(conn, "show.json", order_call: oc)
         {:error, cs} ->

@@ -16,12 +16,14 @@ defmodule Publit.Order do
     field :client_pos, Geo.Geometry
     field :organization_pos, Geo.Geometry
     field :transport_pos, Geo.Geometry # First accept transport location
+    field :organization_name, :string
+    field :client_name, :string
 
     embeds_one :transport, OrderTransport#, on_replace: :delete
     embeds_many :details, OrderDetail#, on_replace: :delete
 
     belongs_to :user_client, UserClient, type: :binary_id
-    #belongs_to :user_transport, UserTransport, type: :binary_id
+    belongs_to :user_transport, UserTransport, type: :binary_id
     belongs_to :organization, Organization, type: :binary_id
 
     timestamps()
@@ -42,11 +44,11 @@ defmodule Publit.Order do
   """
   def create(params) do
     cs = %Order{}
-    |> cast(params, [:user_client_id, :client_pos, :currency, :organization_id])
-    |> validate_required([:user_client_id, :details, :client_pos, :currency])
+    |> cast(params, [:user_client_id, :client_pos, :client_name, :currency, :organization_id])
+    |> validate_required([:user_client_id, :details, :client_pos, :currency, :client_name])
     |> cast_embed(:details)
     |> set_and_validate_details()
-    |> put_assoc(:organization, Repo.get(Organization, params["organization_id"]) )
+    |> set_organization()
     |> set_transport()
 
     if cs.valid? do
@@ -156,6 +158,13 @@ defmodule Publit.Order do
     else
       cs
     end
+  end
+
+  defp set_organization(cs) do
+    org = Repo.get(Organization, cs.changes[:organization_id])
+    cs
+    |> put_assoc(:organization,  org)
+    |> put_change(:organization_name, org.name)
   end
 
   # Query methods

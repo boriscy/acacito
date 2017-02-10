@@ -29,7 +29,7 @@ defmodule Publit.Api.OrderView do
     end
 
     order
-    |> Map.drop([:__meta__, :__struct__, :organization])
+    |> Map.drop([:__meta__, :__struct__, :organization, :user_transport])
     |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
     |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
     |> Map.put(:user_client, Publit.UserView.to_api(order.user_client))
@@ -38,7 +38,7 @@ defmodule Publit.Api.OrderView do
   def encode_with_user(order) do
     order = order |> Repo.preload(:user_client)
 
-    Map.drop(order, [:__struct__, :__meta__, :pos])
+    Map.drop(order, [:__struct__, :__meta__, :pos, :user_transport])
     |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
     |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
   end

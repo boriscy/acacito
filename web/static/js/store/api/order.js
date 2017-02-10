@@ -20,6 +20,13 @@ export default {
     })
   },
   callTransport(cb, order_id) {
-    auth.post('/api/calls', {})
+    auth.post('/api/transport', {order_id: order_id})
+    .then((res) => {
+      console.log('res', res);
+      cb(res)
+    })
+    .catch(res => {
+      console.log('err', arguments);
+    })
   }
 }

@@ -28,13 +28,13 @@ defmodule Publit.OrderCall do
 
       tokens = Enum.map(transports, fn(t) -> t.extra_data["fb_token"] end)
 
-      create_and_send_messages(oc, tokens)
+      create_and_send_messages(oc, order, tokens)
     else
       {:empty, %OrderCall{}}
     end
   end
 
-  defp create_and_send_messages(oc, tokens) do
+  defp create_and_send_messages(oc, order, tokens) do
     case Repo.insert(oc) do
       {:ok, oc} ->
         cb_ok = fn(resp) -> OrderCall.update(oc, %{status: "delivered", resp: Map.drop(resp.resp, [:__struct__])}) end
@@ -46,6 +46,10 @@ defmodule Publit.OrderCall do
       {:error, cs} ->
         {:error, cs}
     end
+  end
+
+  defp encode_order(order) do
+    Map.take(order, [:a])
   end
 
   def update(order_call, params) do
