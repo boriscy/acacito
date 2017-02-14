@@ -51,10 +51,6 @@ defmodule Publit.OrderCall do
     end
   end
 
-  defp encode_order(order) do
-    Map.take(order, [:a])
-  end
-
   def update(order_call, params) do
     params = put_in(params, [:resp, :headers], Enum.into(params.resp[:headers], %{}, fn({a, b}) -> {a, b} end) )
 

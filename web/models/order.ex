@@ -94,21 +94,6 @@ defmodule Publit.Order do
   end
 
 
-  @doc """
-  Receives a %Order{} and %UserTransport{} to update the order
-  """
-  def update_transport(order, ut, %{final_price: fp}) do
-    params = %{transport: %{id: order.transport.id, transporter_id: ut.id, final_price: fp, transporter_name: ut.full_name} }
-
-    order
-    |> cast(params, [])
-    |> put_change(:status, "transport")
-    |> put_change(:user_transport_id, ut.id)
-    |> add_log(%{type: "update_transport", message: "New transport", user_transport_id: ut.id, user_transport: ut.full_name, mobile_number: ut.mobile_number})
-    |> cast_embed(:transport, [with: &OrderTransport.changeset_update/2 ])
-    |> Repo.update()
-  end
-
   defp set_num(cs) do
     dt = Ecto.DateTime.autogenerate()
     d = Ecto.DateTime.to_date(dt)
@@ -202,6 +187,5 @@ defmodule Publit.Order do
 
     Repo.all(q) |> Repo.preload(:organization)
   end
-
 
 end

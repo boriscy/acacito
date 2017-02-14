@@ -179,21 +179,4 @@ defmodule Publit.OrderTest do
   end
 
 
-  describe "update_transport" do
-    test "from process to transport" do
-      ord = create_order()
-      user_id = Ecto.UUID.generate()
-
-      {:ok, ord} = Order.next_status(ord, user_id)
-      ut = insert(:user_transport)
-
-      {:ok, ord} = Order.update_transport(ord, ut, %{final_price: Decimal.new("7")})
-
-      assert ord.user_transport_id == ut.id
-      assert ord.transport.transporter_id == ut.id
-      assert ord.transport.transporter_name == ut.full_name
-      assert ord.transport.final_price == Decimal.new("7")
-    end
-  end
-
 end

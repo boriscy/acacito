@@ -60,7 +60,7 @@ defmodule Publit.Product do
 
     case cs.valid? do
       true ->
-        multi = Multi.new
+        multi = Multi.new()
         |> Multi.update(:product, cs)
         |> Multi.run(:tags, fn(_) -> Organization.set_tags(cs.data.organization_id) end)
 

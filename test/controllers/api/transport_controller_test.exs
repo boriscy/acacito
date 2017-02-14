@@ -12,7 +12,8 @@ defmodule Publit.Api.TransportControllerTest do
   end
 
   defp order do
-   %Order{id: Ecto.UUID.generate(), organization_pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil} }
+   %Order{id: Ecto.UUID.generate(), organization_pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil},
+          client_pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil} }
   end
 
   defp user_transports do

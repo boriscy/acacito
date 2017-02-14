@@ -55,4 +55,8 @@ defmodule Publit.Factory do
     }
   end
 
+  def order_call_factory do
+    %Publit.OrderCall{}
+  end
+
 end

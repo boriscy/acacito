@@ -13,7 +13,8 @@ defmodule Publit.TransApi.OrderControllerTest do
 
 
   defp create_order_call(order) do
-    Repo.insert(%OrderCall{})
+    {:ok, oc} = Repo.insert(%OrderCall{order_id: order.id})
+    oc
   end
 
 

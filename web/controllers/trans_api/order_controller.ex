@@ -3,5 +3,6 @@ defmodule Publit.TransApi.OrderController do
 
   # PUT
   def accept(conn, %{"order_call_id" => order_call_id}) do
+
   end
 end

@@ -31,7 +31,7 @@ defmodule Publit.ConnCase do
 
       import Phoenix.Controller, only: [view_template: 1]
       import Publit.Support.Session
-      import Publit.Support.Org
+      import Publit.Support.Order
 
       import Publit.Gettext
       # The default endpoint for testing
