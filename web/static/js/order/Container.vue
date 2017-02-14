@@ -79,11 +79,6 @@ export default {
       //this.socket.onError( ev => console.log("ERROR", ev) )
       //this.socket.onClose( e => console.log("CLOSE", e))
 
-
-
-      window.eventHub.$on('move:next', (data) => {
-        this.channel.push('move:next', {order: data.order})
-      })
     }
   },
   created() {

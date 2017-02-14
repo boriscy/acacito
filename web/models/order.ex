@@ -28,7 +28,7 @@ defmodule Publit.Order do
 
     timestamps()
   end
-  @statuses ["new", "process", "transport", "delivered", "nulled"]
+  @statuses ["new", "process", "transport", "transporting", "delivered", "nulled"]
 
 
   @doc"""
@@ -67,13 +67,16 @@ defmodule Publit.Order do
   Changes the status of an order to the next
   """
   def next_status(%Order{status: "new"} = order, user_id) do
-    update_status(order, "process", message: "Change status to process", type: "update_next", user_id: user_id)
+    update_status(order, "process", message: "Change status from new to process", type: "update_next", user_id: user_id)
   end
   def next_status(%Order{status: "process"} = order, user_id) do
-    update_status(order, "transport", message: "Change status to transport", type: "update_next", user_id: user_id)
+    update_status(order, "transporting", message: "Change status from process to transporting", type: "update_next", user_id: user_id)
   end
   def next_status(%Order{status: "transport"} = order, user_id) do
-    update_status(order, "delivered", message: "Change status to delivered", type: "update_next", user_id: user_id)
+    update_status(order, "transporting", message: "Change status from transport to transporting", type: "update_next", user_id: user_id)
+  end
+  def next_status(%Order{status: "transporting"} = order, user_id) do
+    update_status(order, "delivered", message: "Change status from transporting to delivered", type: "update_next", user_id: user_id)
   end
 
   @doc"""
@@ -87,6 +90,22 @@ defmodule Publit.Order do
     Ecto.Changeset.change(order)
     |> put_change(:status, status)
     |> add_log(%{type: opts[:type], message: opts[:message], user_id: opts[:user_id], time: Ecto.DateTime.autogenerate() })
+    |> Repo.update()
+  end
+
+
+  @doc """
+  Receives a %Order{} and %UserTransport{} to update the order
+  """
+  def update_transport(order, ut, %{final_price: fp}) do
+    params = %{transport: %{id: order.transport.id, transporter_id: ut.id, final_price: fp, transporter_name: ut.full_name} }
+
+    order
+    |> cast(params, [])
+    |> put_change(:status, "transport")
+    |> put_change(:user_transport_id, ut.id)
+    |> add_log(%{type: "update_transport", message: "New transport", user_transport_id: ut.id, user_transport: ut.full_name, mobile_number: ut.mobile_number})
+    |> cast_embed(:transport, [with: &OrderTransport.changeset_update/2 ])
     |> Repo.update()
   end
 

@@ -20,4 +20,10 @@ defmodule Publit.OrderTransport do
     |> validate_number(:calculated_price, greater_than_or_equal_to: 0)
   end
 
+  def changeset_update(ot, params) do
+    cast(ot, params, [:transporter_id, :transporter_name, :final_price])
+    |> validate_required([:transporter_id, :transporter_name, :final_price])
+    |> validate_number(:final_price, greater_than_or_equal_to: 0)
+  end
+
 end

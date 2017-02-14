@@ -24,8 +24,6 @@ import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
 
-window.eventHub = new Vue()
-
 import moment from 'moment'
 
 import store from './store'

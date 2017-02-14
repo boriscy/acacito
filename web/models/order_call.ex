@@ -25,23 +25,25 @@ defmodule Publit.OrderCall do
     if Enum.count(transports) > 0 do
       ids = Enum.map(transports, fn(t) -> t.id end)
       oc = %OrderCall{order_id: order.id, transport_ids: ids}
+      |> change()
+      |> put_assoc(:order, order)
 
       tokens = Enum.map(transports, fn(t) -> t.extra_data["fb_token"] end)
 
-      create_and_send_messages(oc, order, tokens)
+      create_and_send_messages(oc, tokens)
     else
       {:empty, %OrderCall{}}
     end
   end
 
-  defp create_and_send_messages(oc, order, tokens) do
+  defp create_and_send_messages(oc, tokens) do
     case Repo.insert(oc) do
       {:ok, oc} ->
         cb_ok = fn(resp) -> OrderCall.update(oc, %{status: "delivered", resp: Map.drop(resp.resp, [:__struct__])}) end
         cb_error = fn(resp) -> OrderCall.update(oc, %{status: "error", resp: Map.drop(resp.resp, [:__struct__]) }) end
 
         {:ok, pid} = Publit.MessagingService.send_messages(tokens,
-            %{order: Publit.Api.OrderView.to_api(order), status: "calling"}, cb_ok, cb_error)
+          %{ order_call: encode(oc), status: "calling"}, cb_ok, cb_error)
 
         {:ok, oc, pid}
       {:error, cs} ->
@@ -70,6 +72,12 @@ defmodule Publit.OrderCall do
       and fragment("ST_DISTANCE_SPHERE(?, ST_MakePoint(?, ?)) <= ?", ut.pos, ^lng, ^lat, ^radius)
 
     Repo.all(q)
+  end
+
+  def encode(oc) do
+    oc
+    |> Map.drop([:__meta__, :__struct__])
+    |> Map.put(:order, Publit.Api.OrderView.to_api2(oc.order) )
   end
 
 end

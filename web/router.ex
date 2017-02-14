@@ -132,6 +132,8 @@ defmodule Publit.Router do
       put "/stop_tracking", PositionController, :stop_tracking
 
       put "/firebase", FirebaseController, :update
+
+      put "/accept/:order_id", OrderController, :accept
     end
   end
 

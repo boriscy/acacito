@@ -30,9 +30,6 @@ export default {
           return num
       }
     },
-    formatNumber(num) {
-      return num
-    },
     timeAgo(t) {
       return moment.utc(t).fromNow()
     },
