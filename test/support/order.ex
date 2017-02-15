@@ -22,19 +22,19 @@ defmodule Publit.Support.Order do
     order
   end
 
-  def create_only_order(user_client, org) do
+  def create_order_only(user_client, org, params \\ %{}) do
     %Geo.Point{coordinates: {lng, lat}} = org.pos
     lng = lng + 0.0001
     lat = lat + 0.0001
     {:ok, order} = Repo.insert(%Order{
-      organization_id: org.id, organization_pos: org.pos, user_client_id: user_client.id,
-      client_pos: %Geo.Point{coordinates: {lng, lat}, srid: nil},
+      organization_id: org.id, organization_pos: org.pos, organization_name: org.name,
+      user_client_id: user_client.id, client_pos: %Geo.Point{coordinates: {lng, lat}, srid: nil}, client_name: user_client.full_name,
       transport: %OrderTransport{calculated_price: Decimal.new("5")},
       details: [
         %{product_id: Ecto.UUID.generate(), name: "First product", price: Decimal.new("5"), quantity: Decimal.new("1")},
         %{product_id: Ecto.UUID.generate(), name: "Second product", price: Decimal.new("7.5"), quantity: Decimal.new("2")}
       ]
-    })
+    } |> Map.merge(params) )
 
     order
   end

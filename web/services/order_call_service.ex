@@ -22,8 +22,8 @@ defmodule Publit.OrderCallService do
           {:ok, res} ->
             {:ok, pid} = send_messages(oc, ut)
             {:ok, res.order, pid}
-          {:error, res} ->
-            {:error, res.order}
+          {:error, :order, cs, _} ->
+            {:error, :order, cs}
         end
     end
   end
