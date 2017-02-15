@@ -20,7 +20,7 @@ defmodule Publit.OrderCallService do
 
         case Repo.transaction(multi) do
           {:ok, res} ->
-            {:ok, pid} = send_messages(oc)
+            {:ok, pid} = send_messages(oc, ut)
             {:ok, res.order, pid}
           {:error, res} ->
             {:error, res.order}
@@ -46,7 +46,7 @@ defmodule Publit.OrderCallService do
     from oc in OrderCall, where: oc.order_id == ^order.id and oc.status in ^statuses
   end
 
-  defp send_messages(oc) do
+  defp send_messages(oc, ut) do
     uts = Repo.all(from ut in Publit.UserTransport, where: ut.id in ^oc.transport_ids)
     tokens = Enum.map(uts, fn(t) -> t.extra_data["fb_token"] end)
 
@@ -54,7 +54,7 @@ defmodule Publit.OrderCallService do
     cb_err = fn(resp) -> log_error(resp) end
 
     Publit.MessagingService.send_messages(tokens, %{order_id: oc.order_id,
-      order_call_id: oc.id, status: "order:answered"}, cb_ok, cb_err)
+      order_call_id: oc.id, status: "order:answered", user_transport_id: ut.id}, cb_ok, cb_err)
   end
 
   defp log_error(resp) do

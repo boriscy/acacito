@@ -29,6 +29,7 @@ defmodule Publit.OrderCallServiceTest do
 
       assert resp[:msg][:order_call_id] == oc.id
       assert resp[:msg][:order_id] == order.id
+      assert resp[:msg][:user_transport_id] == ut.id
       assert resp[:msg][:status] == "order:answered"
     end
   end
