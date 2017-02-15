@@ -22,7 +22,11 @@ defmodule Publit.MessageApiMock do
    {"Accept-Ranges", "none"}, {"Vary", "Accept-Encoding"},
    {"Transfer-Encoding", "chunked"}], status_code: 200}
 
+  Agent.start_link(fn -> %{} end, name: :api_mock)
+
   def send_messages(tokens, msg) do
+    update_agent(tokens, msg)
+
     headers = [{"Authorization", "key=server_key_firebase}"}, {"Content-Type", "application/json"}]
 
     if Enum.all?(tokens, fn(token) -> String.length(token) > 7 end) do
@@ -33,4 +37,17 @@ defmodule Publit.MessageApiMock do
       %Publit.MessageApi.Response{status: :error, resp: @resp_error, body: body}
     end
   end
+
+  defp update_agent(tokens, msg) do
+    if !Process.whereis(__MODULE__) do
+      Agent.start_link(fn -> %{} end, name: __MODULE__)
+    end
+
+    Agent.update(__MODULE__, fn(v) -> Map.merge(v, %{tokens: tokens, msg: msg}) end)
+  end
+
+  def get_data do
+    Agent.get(__MODULE__, fn(v) -> v end)
+  end
+
 end

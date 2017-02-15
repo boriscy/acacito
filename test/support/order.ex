@@ -1,5 +1,5 @@
 defmodule Publit.Support.Order do
-  alias Publit.{Repo, Product, Order, ProductVariation}
+  alias Publit.{Repo, Product, Order, OrderTransport, ProductVariation}
 
   def create_order(user_client, org) do
     prods = create_products(org)
@@ -26,9 +26,14 @@ defmodule Publit.Support.Order do
     %Geo.Point{coordinates: {lng, lat}} = org.pos
     lng = lng + 0.0001
     lat = lat + 0.0001
-    {:ok, order} = Order.create(%Order{
+    {:ok, order} = Repo.insert(%Order{
       organization_id: org.id, organization_pos: org.pos, user_client_id: user_client.id,
-      client_pos: %Geo.Point{coordinates: {lng, lat}, srid: nil}
+      client_pos: %Geo.Point{coordinates: {lng, lat}, srid: nil},
+      transport: %OrderTransport{calculated_price: Decimal.new("5")},
+      details: [
+        %{product_id: Ecto.UUID.generate(), name: "First product", price: Decimal.new("5"), quantity: Decimal.new("1")},
+        %{product_id: Ecto.UUID.generate(), name: "Second product", price: Decimal.new("7.5"), quantity: Decimal.new("2")}
+      ]
     })
 
     order

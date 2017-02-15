@@ -108,7 +108,7 @@ defmodule Publit.Order do
     |> put_change(:num, num)
   end
 
-  defp add_log(cs, msg) do
+  def add_log(cs, msg) do
     cs |> put_change(:log, List.insert_at(cs.data.log, -1, msg))
   end
 
