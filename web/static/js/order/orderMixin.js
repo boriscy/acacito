@@ -30,9 +30,6 @@ export default {
           return num
       }
     },
-    timeAgo(t) {
-      return moment.utc(t).fromNow()
-    },
     currency(order) {
       return window.currencies[this.order.currency]
     },

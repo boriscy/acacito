@@ -26,8 +26,24 @@ export const addOrder = ({commit}, data) => {
   commit(types.ADD_ORDER, data)
 }
 
+// Transport
 export const callTransport = ({commit}, data) => {
-  orderApi.callTransport(data => {
-    commit(types.ORDER_TRANSPORTER, data)
+  commit(types.ORDER_CALLING, {order_id: data.id})
+
+  orderApi.callTransport((data, order_id) => {
+    // No transports
+    if(data.status == 424) {
+      commit(types.ORDER_CALL_EMPTY, order_id)
+    }
+    // Error
+    if(data.status == 422) {
+      commit(types.ORDER_CALL_ERRORS, {data: data.data, order_id: order_id})
+    }
+    // Not found
+    if(data.status == 422) {
+      commit(types.ORDER_NOT_FOUND, order_id)
+    }
+
+    //commit(types.ORDER_TRANSPORTER, {order_id: data.id})
   }, data.id)
 }

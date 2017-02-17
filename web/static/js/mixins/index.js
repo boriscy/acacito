@@ -34,6 +34,9 @@ export const format = {
     datetimeFormat(date, format = defaults.format.datetimeFormat) {
       return moment(date).format(format)
     },
+    timeAgo(t) {
+      return moment.utc(t).fromNow()
+    },
     getUrl(pre, id) {
       return [pre, id].join('/')
     },

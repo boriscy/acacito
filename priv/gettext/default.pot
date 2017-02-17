@@ -37,7 +37,7 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:10
+#: web/templates/layout/translations.html.eex:13
 #: web/templates/product/form.html.eex:5
 msgid "Name"
 msgstr ""
@@ -70,7 +70,7 @@ msgstr ""
 msgid "Shop name"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:16
+#: web/templates/layout/translations.html.eex:19
 #: web/templates/product/form.html.eex:23
 msgid "Tags"
 msgstr ""
@@ -174,7 +174,7 @@ msgstr ""
 msgid "Invalid product"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:8
+#: web/templates/layout/translations.html.eex:10
 msgid "New Orders"
 msgstr ""
 
@@ -183,11 +183,11 @@ msgstr ""
 msgid "Orders"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:17
+#: web/templates/layout/translations.html.eex:20
 msgid "Transporting Orders"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:9
+#: web/templates/layout/translations.html.eex:12
 msgid "Orders in Process"
 msgstr ""
 
@@ -199,23 +199,23 @@ msgstr ""
 msgid "Big"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:7
+#: web/templates/layout/translations.html.eex:9
 msgid "Medium"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:12
+#: web/templates/layout/translations.html.eex:15
 msgid "Price"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:13
+#: web/templates/layout/translations.html.eex:16
 msgid "Remove"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:18
+#: web/templates/layout/translations.html.eex:21
 msgid "Variations"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:15
+#: web/templates/layout/translations.html.eex:18
 msgid "Small"
 msgstr ""
 
@@ -223,16 +223,16 @@ msgstr ""
 msgid "Call Transport"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:14
+#: web/templates/layout/translations.html.eex:17
 #: web/templates/product/form.html.eex:25
 msgid "Separate tags with commas"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:19
+#: web/templates/layout/translations.html.eex:22
 msgid "Variation name"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:6
+#: web/templates/layout/translations.html.eex:8
 msgid "Enter tags"
 msgstr ""
 
@@ -252,7 +252,7 @@ msgstr ""
 msgid "Escriba para probar"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:11
+#: web/templates/layout/translations.html.eex:14
 msgid "New order"
 msgstr ""
 
@@ -275,4 +275,16 @@ msgstr ""
 
 #: web/views/trans_api/order_view.ex:13
 msgid "No transport available"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:6
+msgid "Calling transport"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:7
+msgid "Cancel call"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:11
+msgid "No transporters available"
 msgstr ""

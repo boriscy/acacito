@@ -11,6 +11,7 @@
     </TransportOrders>
   </div>
 </template>
+
 <script>
 import {Socket} from 'phoenix'
 
@@ -89,6 +90,7 @@ export default {
     Notification.requestPermission().then(function(result) {
       console.log(result)
     });
+
   }
 }
 </script>
