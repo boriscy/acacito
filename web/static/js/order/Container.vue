@@ -62,6 +62,7 @@ export default {
 
       // Listen to channel
       this.channel.on('move:next', msg => {
+        console.log('move:next', msg.order);
         this.$store.dispatch('moveNext', {
           order: msg.order,
           orders: this.$store.state.orders.all

@@ -25,7 +25,8 @@ defmodule Publit.ChannelCase do
       import Ecto.Changeset
       import Ecto.Query
 
-
+      import Publit.Factory
+      import Publit.Support.Order
       # The default endpoint for testing
       @endpoint Publit.Endpoint
     end

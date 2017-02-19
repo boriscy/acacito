@@ -1,7 +1,8 @@
 defmodule Publit.ClientApi.OrderControllerTest do
-  use Publit.ConnCase
+  use Publit.ConnCase, async: false
   alias Publit.{ProductVariation, Endpoint}
   require Publit.Gettext
+  import Mock
 
   setup do
     user_client = insert(:user_client)
@@ -38,7 +39,8 @@ defmodule Publit.ClientApi.OrderControllerTest do
   end
 
   describe "POST /client_api/orders" do
-    test "OK", %{conn: conn, org: org} do
+    test_with_mock "OK", %{conn: conn, org: org}, Publit.OrganizationChannel, [],
+      [broadcast_order: fn(_ord) -> :ok end] do
       conn = post(conn, "/client_api/orders", %{"order" => order_params(org)})
 
       assert conn.status == 200
@@ -48,6 +50,8 @@ defmodule Publit.ClientApi.OrderControllerTest do
 
       assert json["order"]["organization"]["name"] == org.name
       assert json["order"]["organization"]["currency"] == "BOB"
+
+      assert called Publit.OrganizationChannel.broadcast_order(:_)
     end
 
     test "ERROR",%{conn: conn, org: org} do

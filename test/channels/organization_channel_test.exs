@@ -5,14 +5,19 @@ defmodule Publit.OrderChannelTest do
   @endpoind Publit.Endpoint
 
   setup do
+    org = insert(:organization)
     {:ok, _, socket} = socket("user:id", %{data: 1})
-    |> subscribe_and_join(OrganizationChannel, "organizations:123", %{"id" => 3})
+    |> subscribe_and_join(OrganizationChannel, "organizations:#{org.id}", %{"id" => 3})
 
-    {:ok, socket: socket}
+    {:ok, socket: socket, org: org}
   end
 
-  test "join", %{socket: socket} do
-
-    IO.inspect socket
+  test "move_next", %{socket: socket, org: org} do
+    uc = insert(:user_client)
+    order = create_order_only(uc, org)
+    Publit.OrganizationChannel.broadcast_order(order)
+    ord = Publit.Api.OrderView.to_api(order)
+    #assert_reply ref, :ok, %{}
+    assert_broadcast "new:order", ord
   end
 end

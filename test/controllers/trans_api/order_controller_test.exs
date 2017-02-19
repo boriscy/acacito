@@ -1,7 +1,8 @@
 defmodule Publit.TransApi.OrderControllerTest do
-  use Publit.ConnCase
+  use Publit.ConnCase, async: false
+  import Mock
 
-  alias Publit.{OrderCall, UserTransport, OrderTransport}
+  alias Publit.{OrderCall, OrderTransport}
 
   setup do
     ut = insert(:user_transport)
@@ -20,7 +21,8 @@ defmodule Publit.TransApi.OrderControllerTest do
 
 
   describe "PUT /trans_api/accept/:order_id" do
-    test "OK", %{conn: conn, ut: ut} do
+    test_with_mock "OK", %{conn: conn, ut: ut}, Publit.OrganizationChannel, [],
+      [broadcast_order: fn(_a, _b) -> :ok end] do
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org)
@@ -33,6 +35,8 @@ defmodule Publit.TransApi.OrderControllerTest do
       ord = json["order"]
       assert ord["status"] == "transport"
       assert ord["transport"]["final_price"] == to_string(order.transport.calculated_price)
+
+      assert called Publit.OrganizationChannel.broadcast_order(:_, "order:updated")
     end
 
     test "Error", %{conn: conn} do
