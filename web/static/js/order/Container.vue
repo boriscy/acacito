@@ -48,8 +48,9 @@ export default {
       ${this.formatNumber(order.total)}`
     },
     setChannel() {
-      this.socket = new Socket("/socket", {})
+      this.socket = new Socket("/socket", {params: {token: localStorage.getItem('authToken') }})
       this.socket.connect()
+      console.log('connect socket', new Date());
 
       const chName = window.organization.id
       this.channel = this.socket.channel(`organizations:${chName}`)
@@ -73,9 +74,9 @@ export default {
         new Notification(this.createMessage(order))
       })
 
-      let user = `user-${Math.floor(Math.random() * 100000)}`
-      this.socket = new Socket("/socket", {})
-      this.socket.connect()
+      //let user = `user-${Math.floor(Math.random() * 100000)}`
+      //this.socket = new Socket("/socket", {})
+      //this.socket.connect()
       //this.socket.onOpen( ev => console.log("OPEN", ev) )
       //this.socket.onError( ev => console.log("ERROR", ev) )
       //this.socket.onClose( e => console.log("CLOSE", e))

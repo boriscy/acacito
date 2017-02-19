@@ -18,6 +18,8 @@ defmodule Publit.TransApi.OrderController do
           {:error, :order, cs} ->
             conn |> put_status(:unprocessable_entity) |> render("errors.json", cs: cs)
           {:ok, order, _pid} ->
+            # TODO call organization channel to update the view
+            #Publit.OrganizationChannel.broadcast_order(order)
             render(conn, "show.json", order: order)
         end
     end

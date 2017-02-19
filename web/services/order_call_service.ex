@@ -11,7 +11,8 @@ defmodule Publit.OrderCallService do
   """
 
   def accept(order, ut, params) do
-    case Repo.one(order_call_query(order)) do
+    q = from order_call_query(order), limit: 1
+    case Repo.one(q) do
       nil -> :empty
       oc ->
         multi = Multi.new()
