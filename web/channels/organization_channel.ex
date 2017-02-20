@@ -21,7 +21,7 @@ defmodule Publit.OrganizationChannel do
     {:noreply, socket}
   end
 
-  def broadcast_order(order, status \\ "new:order") do
+  def broadcast_order(order, status \\ "order:created") do
     ord = Publit.Api.OrderView.to_api(order)
     Publit.Endpoint.broadcast("organizations:" <> order.organization_id, status, ord)
   end

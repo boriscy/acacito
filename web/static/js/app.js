@@ -15,7 +15,8 @@
 
 // Set all window defaults and global methods
 window.currencies = {
-  "BOB": "Bs"
+  "BOB": "Bs",
+  "USD": "$",
 }
 
 
@@ -45,7 +46,7 @@ switch(true) {
       mixins: [prodForm]
     })
   break;
-  case !!path.match(/work_area/):
+  case !!path.match(/orders/):
     new Vue({
       store,
       router

@@ -58,7 +58,7 @@ defmodule Publit.Router do
     get "/organizations/:id", OrganizationController, :show
     put "/organizations/current", OrganizationController, :update
 
-    get "/work_area", WorkAreaController, :index
+    get "/orders", OrderController, :index
   end
 
   # Unauthorized API

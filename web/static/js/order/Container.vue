@@ -69,7 +69,7 @@ export default {
         })
       })
 
-      this.channel.on('new:order', order => {
+      this.channel.on('order:created', order => {
         this.$store.commit(types.ADD_ORDER, {order: order})
         this.sound.play()
         new Notification(this.createMessage(order))
