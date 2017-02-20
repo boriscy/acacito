@@ -54,6 +54,13 @@ export default {
     },
     transportStatus() {
       return this.order.transport_status
+    },
+    order_call() {
+      if(this.order && this.order.order_calls && this.order.order_calls.length > 0) {
+        return this.order.order_calls[0]
+      } else {
+        return {}
+      }
     }
   },
   watch: {
@@ -73,10 +80,18 @@ export default {
       this.$store.dispatch('callTransport', {id: this.order.id})
       this.$refs.timer.start()
     },
+    setTimer() {
+      const count = (new Date().getTime() - Date.parse(this.order_call.inserted_at)) / 1000
+      this.$refs.timer.count = Math.floor(count)
+      this.$refs.timer.start()
+    }
   },
   mounted() {
     this.countStarted = true
     that = this
+    if(this.order_call.inserted_at) {
+      this.setTimer()
+    }
   }
 }
 </script>

@@ -1,6 +1,6 @@
 defmodule Publit.Order do
   use Publit.Web, :model
-  alias Publit.{Order, OrderTransport, UserClient, OrderDetail, Product, Organization, Repo}
+  alias Publit.{Order, OrderCall, OrderTransport, UserClient, OrderDetail, Product, Organization, Repo}
   import Ecto.Query
   import Publit.Gettext
 
@@ -25,6 +25,8 @@ defmodule Publit.Order do
     belongs_to :user_client, UserClient, type: :binary_id
     belongs_to :user_transport, UserTransport, type: :binary_id
     belongs_to :organization, Organization, type: :binary_id
+
+    has_many :order_calls, OrderCall
 
     timestamps()
   end

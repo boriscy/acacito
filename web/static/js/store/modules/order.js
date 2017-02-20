@@ -10,7 +10,8 @@ const state = {
 const mutations = {
   [types.FETCH_ORDERS] (state, {orders}) {
     orders.forEach((ord) => {
-      Object.assign(ord, {transport_status:  null, transport_called_at: null})
+      const status = (ord.order_calls.length > 0) ? 'calling' : null
+      Object.assign(ord, {transport_status:  status, transport_called_at: null})
     })
     state.orders = orders
   },

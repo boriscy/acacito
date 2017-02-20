@@ -5,8 +5,9 @@ defmodule Publit.Api.OrderController do
   # GET /api/org_orders
   def index(conn, _params) do
     org_id = conn.assigns.current_organization.id
+    orders = Order.active(org_id) |> Repo.preload(:order_calls)
 
-    render(conn, "index.json", orders: Order.active(org_id))
+    render(conn, "index.json", orders: orders)
   end
 
   # GET /api/org_order/:id
