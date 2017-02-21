@@ -19,23 +19,28 @@ defmodule Publit.UserTransport do
     field :plate, :string
     field :pos, Geo.Geometry
     field :status, :string, default: "off"
+    field :vehicle, :string
 
     field :password, :string, virtual: true
 
     timestamps()
   end
   @statuses ["off", "listen", "order"]
+  @vehicles ["walk", "bike", "motorcycle", "car", "truck"]
+  @vehicles_plate ["motorcycle", "car", "truck"]
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
   def create_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:mobile_number, :email, :full_name, :password, :plate])
-    |> validate_required([:email, :password, :full_name, :mobile_number, :plate])
+    |> cast(params, [:mobile_number, :email, :full_name, :password, :plate, :vehicle])
+    |> validate_required([:email, :password, :full_name, :mobile_number, :vehicle])
     |> validate_format(:email, @email_reg)
     |> validate_format(:mobile_number, @number_reg)
     |> validate_length(:password, min: 8)
+    |> validate_inclusion(:vehicle, @vehicles)
+    |> valid_transport()
     |> unique_constraint(:email)
   end
 
@@ -86,6 +91,16 @@ defmodule Publit.UserTransport do
     else
       _ ->
         add_error(cs, :pos, "Invalid position")
+    end
+  end
+
+  defp valid_transport(cs) do
+    case Enum.any?(@vehicles_plate, fn(v) -> v == cs.changes[:vehicle] end) do
+      true ->
+        cs
+        |> validate_required([:plate])
+        |> validate_length(:plate, min: 3)
+      _ -> cs
     end
   end
 

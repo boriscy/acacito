@@ -15,7 +15,8 @@ export default {
   data() {
     return {
       socket: null,
-      channel: null
+      channel: null,
+      now: 0
     }
   },
   methods: {
@@ -49,5 +50,8 @@ export default {
     moveNext() {
       this.$store.dispatch('moveNext', this.order)
     }
+  },
+  created() {
+    setInterval(() => { this.now = new Date()}, 1000 * 60)
   }
 }

@@ -5,6 +5,7 @@
         <i class="icon-cab"></i>
         {{timeAgo(order.transport.start)}}
       </div>
+
       <div v-if="!order.transport_status">
         <a class="call" @click="callTransport()">{{gettext("Call Transport")}}</a>
       </div>
@@ -17,9 +18,14 @@
         <button class="btn btn-danger btn-sm" v-if="timerCount > 59" @click="cancelCall()">{{gettext('Cancel call')}}</button>
       </div>
 
+      <div v-show="order.transport_status=='responded'">
+        {{order.transport.transporter_name}} :: {{order.transport.responded_at}}
+      </div>
+
       <div v-if="order.transport_status=='call_empty'" class="alert alert-warning">
         {{gettext('No transport available')}}
       </div>
+
     </div>
   </Order>
 </template>

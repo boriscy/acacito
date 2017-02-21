@@ -31,6 +31,8 @@
         </a>
       </div>
     </div>
+    <!--It will update the view-->
+    <span style="display:none">{{now}}</span>
   </div>
 
 </template>

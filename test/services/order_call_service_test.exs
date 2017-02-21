@@ -22,6 +22,7 @@ defmodule Publit.OrderCallServiceTest do
       assert order.transport.transporter_id == ut.id
       assert order.transport.transporter_name == ut.full_name
       assert order.transport.final_price == Decimal.new("7")
+      assert order.transport.responded_at
 
       log = order.log |> List.last()
 
