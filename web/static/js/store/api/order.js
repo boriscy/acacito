@@ -27,5 +27,14 @@ export default {
     .catch(error => {
       cb(error.response, order_id)
     })
+  },
+  cancelCall(cb, order_id) {
+    auth.delete(`/api/transport/${order_id}`)
+    .then((res) => {
+      return cb(res)
+    })
+    .catch(error => {
+      cb(error.response, order_id)
+    })
   }
 }

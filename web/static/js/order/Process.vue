@@ -14,7 +14,7 @@
           <Timer ref="timer"/>
           <span class="text-muted">{{gettext('Calling transport')}}</span>
         </div>
-        <button class="btn btn-danger btn-sm" v-if="timerCount > 59">{{gettext('Cancel call')}}</button>
+        <button class="btn btn-danger btn-sm" v-if="timerCount > 59" @click="cancelCall()">{{gettext('Cancel call')}}</button>
       </div>
 
       <div v-if="order.transport_status=='call_empty'" class="alert alert-warning">
@@ -84,6 +84,9 @@ export default {
       const count = (new Date().getTime() - Date.parse(this.order_call.inserted_at)) / 1000
       this.$refs.timer.count = Math.floor(count)
       this.$refs.timer.start()
+    },
+    cancelCall() {
+      this.$store.dispatch('cancelCall', this.order.id)
     }
   },
   mounted() {

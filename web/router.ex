@@ -80,7 +80,7 @@ defmodule Publit.Router do
       resources "/orders", OrderController, only: [:index, :show]
       put "/orders/:id/move_next", OrderController, :move_next
 
-      resources "/transport", TransportController
+      resources "/transport", TransportController, only: [:create, :delete]
     end
 
   end

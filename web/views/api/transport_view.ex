@@ -13,6 +13,10 @@ defmodule Publit.Api.TransportView do
     %{errors: get_errors(cs)}
   end
 
+  def render("order.json", %{order: order}) do
+    %{order: Publit.Api.OrderView.to_api(order)}
+  end
+
   def to_api(oc) do
     Map.drop(oc, [:__struct__, :__meta__, :order])
   end

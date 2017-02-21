@@ -1,6 +1,6 @@
 defmodule Publit.Api.TransportControllerTest do
   use Publit.ConnCase
-  alias Publit.{Order, Repo, UserTransport}
+  alias Publit.{Order, Repo, UserTransport, OrderCall}
 
   setup do
     {user, org} = create_user_org()
@@ -56,4 +56,22 @@ defmodule Publit.Api.TransportControllerTest do
       assert conn.status == Plug.Conn.Status.code(:failed_dependency)
     end
   end
+
+  describe "DELETE /api/transport/:id" do
+    test "OK", %{conn: conn, org: org} do
+      uc = insert(:user_client)
+      order = create_order_only(uc, org)
+      assert {:ok, _} = Repo.insert(%OrderCall{order_id: order.id, status: "new"})
+
+      assert Repo.all(OrderCall) |> Enum.count() == 1
+      conn = delete(conn, "/api/transport/#{order.id}")
+
+      assert conn.status == 200
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["order"]["id"] == order.id
+      assert Repo.all(OrderCall) |> Enum.count() == 0
+    end
+  end
+
 end

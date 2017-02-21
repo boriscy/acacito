@@ -60,6 +60,13 @@ const mutations = {
     if(idx > -1) {
       state.orders[idx].transport_status = null
     }
+  },
+  [types.REMOVE_ORDER_CALLS] (state, order_id) {
+    const idx = state.orders.findIndex((ord) => { return ord.id == order_id})
+
+    if(idx > -1) {
+      Object.assign(state.orders[idx], {order_calls: [], transport_status: null})
+    }
   }
 }
 

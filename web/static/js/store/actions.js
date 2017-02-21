@@ -47,3 +47,16 @@ export const callTransport = ({commit}, data) => {
     //commit(types.ORDER_TRANSPORTER, {order_id: data.id})
   }, data.id)
 }
+
+export const cancelCall = ({commit}, order_id) => {
+  orderApi.cancelCall((data) => {
+    if(data.status == 404) {
+      // TODO nor found
+      commit(types.ORDER_CALL_EMPTY, order_id)
+    }
+
+    if(data.status == 200) {
+      commit(types.REMOVE_ORDER_CALLS, order_id)
+    }
+  }, order_id)
+}

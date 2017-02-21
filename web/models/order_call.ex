@@ -76,4 +76,8 @@ defmodule Publit.OrderCall do
     |> Map.put(:order, Publit.Api.OrderView.to_api2(oc.order) )
   end
 
+  def delete(order_id) do
+    Repo.delete_all(from oc in OrderCall, where: oc.order_id == ^order_id and oc.status in ^["new", "delivered"])
+  end
+
 end

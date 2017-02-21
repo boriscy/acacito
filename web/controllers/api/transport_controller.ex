@@ -28,4 +28,20 @@ defmodule Publit.Api.TransportController do
     end
   end
 
+  # DELETE /api/transport/:id
+  def delete(conn, %{"id" => order_id}) do
+    case Order.get_order(order_id, conn.assigns.current_organization.id) do
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> render("not_found.json", %{msg: "order not found"})
+      order ->
+        OrderCall.delete(order.id)
+        render(conn, "order.json", order: order)
+    end
+
+  end
+
+
+
 end
