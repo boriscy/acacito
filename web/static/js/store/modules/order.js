@@ -29,7 +29,7 @@ const mutations = {
   [types.ADD_ORDER] (state, {order}) {
     state.orders.unshift(order)
   },
-  [types.UPDATE_ORDER] (state, {order}) {
+  [types.ORDER_UPDATED] (state, {order}) {
     const idx = state.orders.findIndex((ord) => { return ord.id == order.id})
 
     if(idx > -1) {

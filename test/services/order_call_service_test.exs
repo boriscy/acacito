@@ -23,6 +23,8 @@ defmodule Publit.OrderCallServiceTest do
       assert order.transport.transporter_name == ut.full_name
       assert order.transport.final_price == Decimal.new("7")
       assert order.transport.responded_at
+      assert order.transport.vehicle == "motorcycle"
+      assert order.transport.plate == ut.plate
 
       log = order.log |> List.last()
 

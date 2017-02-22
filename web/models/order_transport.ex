@@ -1,12 +1,11 @@
 defmodule Publit.OrderTransport do
   use Publit.Web, :model
 
-  alias Publit.{OrderTransport}
-
   embedded_schema do
     field :transporter_id, :binary
     field :transporter_name, :string
-    field :type, :string
+    field :vehicle, :string
+    field :plate, :string
     field :calculated_price, :decimal
     field :final_price, :decimal
     field :log, {:array, :map}, default: []
@@ -25,8 +24,8 @@ defmodule Publit.OrderTransport do
   end
 
   def changeset_update(ot, params) do
-    cast(ot, params, [:transporter_id, :transporter_name, :final_price])
-    |> validate_required([:transporter_id, :transporter_name, :final_price])
+    cast(ot, params, [:transporter_id, :transporter_name, :final_price, :plate, :vehicle])
+    |> validate_required([:transporter_id, :transporter_name, :final_price, :vehicle])
     |> validate_number(:final_price, greater_than_or_equal_to: 0)
     |> put_change(:responded_at, DateTime.utc_now())
   end

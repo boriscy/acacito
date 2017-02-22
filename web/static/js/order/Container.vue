@@ -1,13 +1,15 @@
 <template>
   <div class="orders-container">
-    <NewOrders :orders="newOrders" title="New Orders" css-class="new" v-bind:orderComp="orderComp">
+    <NewOrders :orders="newOrders" title="New Orders" css-class="new"
+    v-bind:orderComp="orderComp">
     </NewOrders>
 
-    <ProcessOrders :orders="processOrders" title="Orders in Process" css-class="process" v-bind:orderComp="processComp">
+    <ProcessOrders :orders="processOrders" title="Orders in Process"
+    css-class="process" v-bind:orderComp="processComp">
     </ProcessOrders>
 
     <TransportOrders :orders="transportOrders" title="Transporting Orders"
-      css-class="transport" v-bind:next="true" v-bind:orderComp="orderComp">
+      css-class="transport" v-bind:next="true" v-bind:orderComp="processComp">
     </TransportOrders>
   </div>
 </template>
@@ -73,6 +75,11 @@ export default {
         this.$store.commit(types.ADD_ORDER, {order: order})
         this.sound.play()
         new Notification(this.createMessage(order))
+      })
+
+      this.channel.on('order:updated', order => {
+        this.sound.play()
+        this.$store.commit(types.ORDER_UPDATED, {order: order})
       })
 
       //let user = `user-${Math.floor(Math.random() * 100000)}`

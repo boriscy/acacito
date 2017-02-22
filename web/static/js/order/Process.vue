@@ -18,8 +18,12 @@
         <button class="btn btn-danger btn-sm" v-if="timerCount > 59" @click="cancelCall()">{{gettext('Cancel call')}}</button>
       </div>
 
-      <div v-show="order.transport_status=='responded'">
-        {{order.transport.transporter_name}} :: {{order.transport.responded_at}}
+      <div v-if="order.transport_status=='responded'" class="transport text-muted">
+        <div>
+          <i class="material-icons" :title="gettext(vehicle)">{{getVehicleIcon(vehicle)}}</i>
+          {{order.transport.transporter_name}}
+        </div>
+        <div>{{timeAgo(order.transport.responded_at)}}</div>
       </div>
 
       <div v-if="order.transport_status=='call_empty'" class="alert alert-warning">
@@ -67,7 +71,8 @@ export default {
       } else {
         return {}
       }
-    }
+    },
+    vehicle() { return this.order.transport.vehicle }
   },
   watch: {
     transportStatus: (a, b) => {
@@ -93,6 +98,31 @@ export default {
     },
     cancelCall() {
       this.$store.dispatch('cancelCall', this.order.id)
+      .then(r => {
+        this.$refs.timer.count = 0
+      })
+    },
+    getVehicleIcon(vehicle) {
+      let v = null
+      switch(vehicle) {
+        case 'walk':
+          v = 'directions_walk'
+          break
+        case 'car':
+          v = 'directions_car'
+          break
+        case 'bike':
+          v = 'directions_bike'
+          break
+        case 'truck':
+          v = 'local_shipping'
+          break
+        case 'motorcycle':
+          v = 'motorcycle_black'
+          break
+      }
+
+      return v
     }
   },
   mounted() {

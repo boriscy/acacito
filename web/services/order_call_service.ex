@@ -33,7 +33,8 @@ defmodule Publit.OrderCallService do
   #Receives a %Order{} and %UserTransport{} to update the order
   #"""
   defp update_order(order, ut, %{final_price: fp}) do
-    params = %{transport: %{id: order.transport.id, transporter_id: ut.id, final_price: fp, transporter_name: ut.full_name} }
+    params = %{transport: %{id: order.transport.id, transporter_id: ut.id, final_price: fp, transporter_name: ut.full_name,
+               vehicle: ut.vehicle, plate: ut.plate} }
 
     order
     |> cast(params, [])

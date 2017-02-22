@@ -2,14 +2,17 @@
 window.translations = {
   "Add line": "<%= gettext("Add line") %>",
   "Big": "<%= gettext("Big") %>",
+  "bike": "<%= gettext("bike") %>",
   "Call Transport": "<%= gettext("Call Transport") %>",
   "Calling transport": "<%= gettext("Calling transport") %>",
+  "car": "<%= gettext("car") %>",
   "Cancel call": "<%= gettext("Cancel call") %>",
   "Enter tags": "<%= gettext("Enter tags") %>",
   "Medium": "<%= gettext("Medium") %>",
   "New Orders": "<%= gettext("New Orders") %>",
   "No transport available": "<%= gettext("No transport available") %>",
   "Orders in Process": "<%= gettext("Orders in Process") %>",
+  "motorcycle": "<%= gettext("motorcycle") %>",
   "Name": "<%= gettext("Name") %>",
   "New order": "<%= gettext("New order") %>",
   "Price": "<%= gettext("Price") %>",
@@ -18,7 +21,9 @@ window.translations = {
   "Small": "<%= gettext("Small") %>",
   "Tags": "<%= gettext("Tags") %>",
   "Transporting Orders": "<%= gettext("Transporting Orders") %>",
+  "truck": "<%= gettext("truck") %>",
   "Variations": "<%= gettext("Variations") %>",
-  "Variation name": "<%= gettext("Variation name") %>"
+  "Variation name": "<%= gettext("Variation name") %>",
+  "walk": "<%= gettext("walk") %>",
 }
 </script>

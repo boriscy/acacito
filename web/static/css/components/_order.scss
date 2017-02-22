@@ -36,6 +36,9 @@ body{
 
 .order {
   border-bottom: 1px solid $grayLighter;
+  .material-icons {
+    max-width: 18px;
+  }
 
   .header{
     display: flex;
@@ -67,6 +70,12 @@ body{
         }
         [class*=icon] {
           font-size: 1.3em;
+        }
+        .transport {
+          border-radius: 4px;
+          padding: 4px;
+          border: 1px solid $grayLighter;
+          background: lighten($grayLighter, 15%);
         }
       }
     }
