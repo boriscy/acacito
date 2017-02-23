@@ -13,7 +13,7 @@ defmodule Publit.MessageApi do
 
   def send_messages(tokens, msg) do
     headers = [{"Authorization", "key=#{server_key()}"}, {"Content-Type", "application/json"}]
-    body = Poison.encode!(%{data: msg, registration_ids: tokens})
+    body = Poison.encode!(%{data: msg, registration_ids: tokens, priority: "high"})
 
     try do
       HTTPoison.start()
@@ -29,6 +29,14 @@ defmodule Publit.MessageApi do
       HTTPoison.Error ->
         %Publit.MessageApi.Response{status: :network_error, message: "Network error", body: "{}"}
     end
+  end
+
+  def send_message(token, msg) do
+    headers = [{"Authorization", "key=#{server_key()}"}, {"Content-Type", "application/json"}]
+    body = Poison.encode!(%{data: msg, to: token, priority: "high"})
+
+    HTTPoison.start()
+    HTTPoison.post!(@messaging_url, body, headers)
   end
 
 end

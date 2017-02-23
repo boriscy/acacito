@@ -23,4 +23,8 @@ defmodule Publit.MessagingService do
   def send_direct_messages(tokens, data) do
     @message_api.send_messages(tokens, data)
   end
+
+  def send_direct_message(token, data) do
+    @message_api.send_message(token, data)
+  end
 end

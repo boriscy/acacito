@@ -6,19 +6,24 @@ const state = {
   order: {}
 }
 
+const getTransportStatus = (order) => {
+  let obj = {}
+
+  if(order.transport && order.transport.transporter_id) {
+    obj = {transport_status: 'responded', responded_at: order.transport.responded_at}
+  } else if(order.order_calls.length > 0) {
+    obj = {transport_status: 'calling', responded_at: null}
+  } else {
+    obj = {transport_status: null, responded_at: null}
+  }
+
+  return obj
+}
 
 const mutations = {
   [types.FETCH_ORDERS] (state, {orders}) {
-    orders.forEach((ord) => {
-      let obj = {}
-      if(ord.transport && ord.transport.transporter_id) {
-        obj = {transport_status: 'responded', responded_at: ord.transport.responded_at}
-      } else if(ord.order_calls.length > 0) {
-        obj = {transport_status: 'calling', responded_at: null}
-      } else {
-        obj = {transport_status: null, responded_at: null}
-      }
-      Object.assign(ord, obj)
+    orders.forEach((order) => {
+      Object.assign(order, getTransportStatus(order))
     })
 
     state.orders = orders
@@ -33,7 +38,9 @@ const mutations = {
     const idx = state.orders.findIndex((ord) => { return ord.id == order.id})
 
     if(idx > -1) {
-      Object.assign(state.orders[idx], order)
+      const o = Object.assign(order, getTransportStatus(order))
+      console.log('Order:', order)
+      Object.assign(state.orders[idx], o)
     }
   },
   [types.ORDER_CALLING] (state, {order_id}) {

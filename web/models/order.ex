@@ -64,7 +64,6 @@ defmodule Publit.Order do
     end
   end
 
-
   @doc"""
   Changes the status of an order to the next
   """

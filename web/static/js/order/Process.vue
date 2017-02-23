@@ -15,7 +15,7 @@
           <Timer ref="timer"/>
           <span class="text-muted">{{gettext('Calling transport')}}</span>
         </div>
-        <button class="btn btn-danger btn-sm" v-if="timerCount > 59" @click="cancelCall()">{{gettext('Cancel call')}}</button>
+        <button class="btn btn-danger btn-sm" v-if="timerCount > cancelTimerCount" @click="cancelCall()">{{gettext('Cancel call')}}</button>
       </div>
 
       <div v-if="order.transport_status=='responded'" class="transport text-muted">
@@ -27,7 +27,7 @@
       </div>
 
       <div v-if="order.transport_status=='call_empty'" class="alert alert-warning">
-        {{gettext('No transport available')}}
+        <strong>{{gettext('No transport available')}}</strong>
       </div>
 
     </div>
@@ -84,7 +84,7 @@ export default {
     }
   },
   data() {
-    return {call_seconds: 0, countStarted: false }
+    return {call_seconds: 0, countStarted: false, cancelTimerCount: 9 }
   },
   methods: {
     callTransport() {
@@ -99,7 +99,7 @@ export default {
     cancelCall() {
       this.$store.dispatch('cancelCall', this.order.id)
       .then(r => {
-        this.$refs.timer.count = 0
+        this.$refs.timer.reset()
       })
     },
     getVehicleIcon(vehicle) {
