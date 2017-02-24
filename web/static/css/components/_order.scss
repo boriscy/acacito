@@ -76,9 +76,11 @@ body{
         }
         .transport {
           border-radius: 4px;
-          padding: 4px;
-          border: 1px solid $grayLighter;
+          padding: 1px 4px;
+          line-height: 1.1;
+          //border: 1px solid $grayLighter;
           background: lighten($grayLighter, 15%);
+          border: 1px solid darken($transport, 10%);
         }
       }
     }
@@ -110,11 +112,12 @@ body{
       background: $new;
       color: white;
     }
-    &.process {
+    &.process,
+    &.transport {
       background: $process;
       color: white;
     }
-    &.transport {
+    &.transporting {
       background: $transport;
       color: white;
     }

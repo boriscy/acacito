@@ -40,8 +40,9 @@ export default {
         case 'new':
           return 'process'
         case 'process':
-          return 'transport'
         case 'transport':
+          return 'transporting'
+        case 'transporting':
           return 'delivered'
         default:
           return ''
