@@ -57,6 +57,12 @@ defmodule Publit.Factory do
     }
   end
 
+  def order_factory do
+    %Publit.Order{
+      status: "new"
+    }
+  end
+
   def order_call_factory do
     %Publit.OrderCall{}
   end

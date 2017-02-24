@@ -2,6 +2,14 @@ defmodule Publit.TransApi.OrderController do
   use Publit.Web, :controller
   alias Publit.{Order, OrderCallService}
 
+  # GET
+  def index(conn, %{"status" => status}) do
+    ut_id = conn.assigns.current_user_transport.id
+    orders = Order.transport_orders(ut_id, get_status(status))
+
+    render(conn, "index.json", orders: orders)
+  end
+
   # PUT
   def accept(conn, %{"order_id" => order_id}) do
     ut = conn.assigns.current_user_transport
@@ -28,4 +36,16 @@ defmodule Publit.TransApi.OrderController do
   defp get_accept_params(order) do
     %{final_price: order.transport.calculated_price}
   end
+
+  defp get_status(status) do
+    cond do
+      is_list(status) ->
+        status
+      is_map(status) ->
+        Enum.into(status, [], fn({key, val}) -> val end)
+      true ->
+        []
+    end
+  end
+
 end

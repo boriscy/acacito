@@ -194,4 +194,10 @@ defmodule Publit.Order do
     Repo.all(q) |> Repo.preload(:organization)
   end
 
+  def transport_orders(ut_id, statuses \\ ["transport", "transporting"]) do
+    q = from o in Order, where: o.user_transport_id == ^ut_id and o.status in ^statuses, order_by: [desc: o.inserted_at]
+
+    Repo.all(q)
+  end
+
 end

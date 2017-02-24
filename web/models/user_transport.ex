@@ -20,6 +20,7 @@ defmodule Publit.UserTransport do
     field :pos, Geo.Geometry
     field :status, :string, default: "off"
     field :vehicle, :string
+    field :orders, Publit.Array, default: []
 
     field :password, :string, virtual: true
 

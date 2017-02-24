@@ -1,6 +1,12 @@
 defmodule Publit.TransApi.OrderView do
   use Publit.Web,:view
 
+  def render("index.json", %{orders: orders}) do
+    orders = Enum.map(orders, &to_api/1)
+
+    %{orders: orders}
+  end
+
   def render("not_found.json", %{}) do
     %{message: gettext("Order not found")}
   end
@@ -18,4 +24,10 @@ defmodule Publit.TransApi.OrderView do
     %{errors: errors}
   end
 
+  def to_api(order) do
+    order
+    |> Map.drop([:__meta__, :__struct__, :user_client, :user_transport, :order_calls, :organization])
+    |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
+    |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
+  end
 end

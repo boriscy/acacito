@@ -1,7 +1,7 @@
 defmodule Publit.OrderCallServiceTest do
   use Publit.ModelCase
 
-  alias Publit.{Order, OrderCall, OrderCallService, UserTransport}
+  alias Publit.{Order, OrderCall, OrderCallService, UserTransport, Repo}
 
   @user_id Ecto.UUID.generate()
 
@@ -19,12 +19,21 @@ defmodule Publit.OrderCallServiceTest do
 
       assert order.status == "transport"
       assert order.user_transport_id == ut.id
+
       assert order.transport.transporter_id == ut.id
       assert order.transport.transporter_name == ut.full_name
       assert order.transport.final_price == Decimal.new("7")
       assert order.transport.responded_at
       assert order.transport.vehicle == "motorcycle"
       assert order.transport.plate == ut.plate
+
+      user_t = Repo.get(UserTransport, ut.id)
+      assert Enum.count(user_t.orders) == 1
+      ut_order = user_t.orders |> List.first()
+
+      assert ut_order["order_id"] == order.id
+      assert ut_order["client_pos"] == Geo.JSON.encode(order.client_pos)
+      assert ut_order["organization_pos"] == Geo.JSON.encode(order.organization_pos)
 
       log = order.log |> List.last()
 

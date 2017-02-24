@@ -19,6 +19,30 @@ defmodule Publit.TransApi.OrderControllerTest do
     oc
   end
 
+  @pos %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil}
+
+  describe "GET /trans_api/orders" do
+    test "OK", %{conn: conn, ut: ut} do
+      org = insert(:organization)
+      uc = insert(:user_client)
+
+      insert(:order, %{user_client_id: uc.id, client_pos: @pos, organization_pos: @pos,
+        organization_id: org.id, user_transport_id: ut.id, status: "transport"})
+      insert(:order, %{user_client_id: uc.id, client_pos: @pos, organization_pos: @pos,
+        organization_id: org.id, status: "transport"})
+
+      conn = get(conn, "/trans_api/orders?status[0]=transport&status[1]=transporting")
+      assert conn.status == 200
+      json = Poison.decode!(conn.resp_body)
+
+      assert Enum.count(json["orders"]) == 1
+
+      ord = List.first(json["orders"])
+
+      assert ord["status"] == "transport"
+      assert ord["user_transport_id"] == ut.id
+    end
+  end
 
   describe "PUT /trans_api/accept/:order_id" do
     test_with_mock "OK", %{conn: conn}, Publit.OrganizationChannel, [],

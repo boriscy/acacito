@@ -17,6 +17,7 @@ defmodule Publit.OrderCallService do
       oc ->
         multi = Multi.new()
         |> Multi.update(:order, update_order(order, ut, params))
+        |> Multi.update(:user_transport, update_transport_orders(order, ut))
         |> Multi.delete_all(:order_call, order_call_query(order, ["new", "delivered"]))
 
         case Repo.transaction(multi) do
@@ -57,6 +58,16 @@ defmodule Publit.OrderCallService do
 
     Publit.MessagingService.send_messages(tokens, %{order_id: oc.order_id,
       order_call_id: oc.id, status: "order:answered", user_transport_id: ut.id}, cb_ok, cb_err)
+  end
+
+  defp update_transport_orders(order, ut) do
+    o = %{order_id: order.id,
+      client_pos: Geo.JSON.encode(order.client_pos),
+      organization_pos: Geo.JSON.encode(order.organization_pos)}
+
+    ut
+    |> change()
+    |> put_change(:orders, ut.orders ++ [o])
   end
 
   defp log_error(resp) do
