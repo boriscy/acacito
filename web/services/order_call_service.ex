@@ -53,7 +53,7 @@ defmodule Publit.OrderCallService do
     uts = Repo.all(from ut in Publit.UserTransport, where: ut.id in ^oc.transport_ids)
     tokens = Enum.map(uts, fn(t) -> t.extra_data["fb_token"] end)
 
-    cb_ok = fn(_) -> end
+    cb_ok = fn(_) -> "" end
     cb_err = fn(resp) -> log_error(resp) end
 
     Publit.MessagingService.send_messages(tokens, %{order_id: oc.order_id,
@@ -61,7 +61,7 @@ defmodule Publit.OrderCallService do
   end
 
   defp update_transport_orders(order, ut) do
-    o = %{order_id: order.id,
+    o = %{order_id: order.id, status: "transport",
       client_pos: Geo.JSON.encode(order.client_pos),
       organization_pos: Geo.JSON.encode(order.organization_pos)}
 

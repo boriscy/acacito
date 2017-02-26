@@ -3,13 +3,15 @@ defmodule Publit.Mixfile do
 
   def project do
     [app: :publit,
-     version: "0.0.1",
+     version: "0.9.0",
      elixir: "~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      aliases: aliases(),
+     description: "Main API and app to control the orders and tracking the transport",
+     #docs: [main: "README"],
      deps: deps()]
   end
 
@@ -34,7 +36,7 @@ defmodule Publit.Mixfile do
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.2.1"},
      {:ecto, "2.1.1", override: true},
-     #{:postgrex, "~> 1.0.0-rc.1", override: true},
+     {:ex_doc, "~> 0.14", only: :dev, runtime: false},
      {:postgrex, "~> 0.13", override: true},
      {:phoenix_html, "~> 2.9"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},

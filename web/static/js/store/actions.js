@@ -18,7 +18,7 @@ export const getOrder = ({commit}, ord_id) => {
 
 export const moveNext = ({commit}, order) => {
   orderApi.moveNext(data => {
-    commit(types.UPDATE_ORDER, data)
+    commit(types.ORDER_UPDATED, data)
   }, order)
 }
 

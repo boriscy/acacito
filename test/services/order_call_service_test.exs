@@ -13,6 +13,7 @@ defmodule Publit.OrderCallServiceTest do
       {:ok, order} = Order.next_status(order, @user_id)
       ut = insert(:user_transport, status: "listen")
       ut2 = insert(:user_transport, status: "listen", mobile_number: "99887766", extra_data: %{"fb_token" => "fb3456789"})
+      assert order.status == "process"
 
       oc = insert(:order_call, transport_ids: [ut.id, ut2.id], order_id: order.id, status: "delivered")
       {:ok, order, _pid} = OrderCallService.accept(order, ut, %{final_price: Decimal.new("7")})
@@ -34,6 +35,7 @@ defmodule Publit.OrderCallServiceTest do
       assert ut_order["order_id"] == order.id
       assert ut_order["client_pos"] == Geo.JSON.encode(order.client_pos)
       assert ut_order["organization_pos"] == Geo.JSON.encode(order.organization_pos)
+      assert ut_order["status"] == "transport"
 
       log = order.log |> List.last()
 

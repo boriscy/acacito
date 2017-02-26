@@ -3,7 +3,8 @@ defmodule Publit.UserClientTest do
 
   alias Publit.UserClient
 
-  @valid_attrs %{full_name: "Amaru Barroso", email: "amaru@mail.com", password: "demo1234", mobile_number: "73732655", type: "jejeje"}
+  @valid_attrs %{full_name: "Amaru Barroso", email: "amaru@mail.com",
+      password: "demo1234", mobile_number: "73732655", extra_data: %{"fb_token" => "fbclitoken123"}}
   @invalid_attrs %{email: "to", mobile_number: "22"}
 
   describe "create" do

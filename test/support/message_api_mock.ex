@@ -38,6 +38,15 @@ defmodule Publit.MessageApiMock do
     end
   end
 
+  def send_message(token, msg) do
+    update_agent([token], msg)
+
+    headers = [{"Authorization", "key=server_key_firebase}"}, {"Content-Type", "application/json"}]
+    body = Poison.decode!(@resp.body)
+
+    %Publit.MessageApi.Response{status: :ok, resp: @resp, body: body}
+  end
+
   defp update_agent(tokens, msg) do
     if !Process.whereis(__MODULE__) do
       Agent.start_link(fn -> %{} end, name: __MODULE__)

@@ -39,7 +39,6 @@ const mutations = {
 
     if(idx > -1) {
       const o = Object.assign(order, getTransportStatus(order))
-      console.log('Order:', order)
       Object.assign(state.orders[idx], o)
     }
   },
