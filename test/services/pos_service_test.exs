@@ -1,5 +1,6 @@
 defmodule PublitPosServiceTest do
   use Publit.ModelCase
+  import Mock
   alias Publit.PosService
 
   describe "update_position" do
@@ -44,7 +45,11 @@ defmodule PublitPosServiceTest do
   end
 
   describe "update position and send message if it has orders" do
-    test "OK" do
+    test_with_mock "OK near_org", Publit.OrganizationChannel, [],
+      [broadcast_order: fn(_a, _b) -> :ok end] do
+
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org)
@@ -57,14 +62,45 @@ defmodule PublitPosServiceTest do
 
       pos = %{"coordinates" => [lng + 0.001, lat + 0.001], "type" => "Point"}
 
-      #assert PosService.is_near(pos, %{"coordinates" => [lng, lat]}) == true
-
       assert {:ok, ut} = PosService.update_pos(ut, %{"pos" => pos})
       assert ut.pos == %Geo.Point{coordinates: {-18.179, -63.869}, srid: nil}
 
       token = uc.extra_data["fb_token"]
       assert token
       assert Publit.MessageApiMock.get_data() == %{msg: %{status: "order:near_org"}, tokens: [token]}
+
+      assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_org")
+    end
+
+
+    test_with_mock "OK near_client", Publit.OrganizationChannel, [],
+      [broadcast_order: fn(_a, _b) -> :ok end] do
+
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
+      org = insert(:organization)
+      uc = insert(:user_client)
+      order = create_order_only(uc, org)
+
+      {lng, lat} = order.client_pos.coordinates
+
+      ut = insert(:user_transport, %{status: "order", pos: %Geo.Point{coordinates: {lng + 0.05, lat + 0.05}, srid: nil},
+                orders: [%{"order_id" => order.id, "status" => "transporting",
+                "client_pos" => Geo.JSON.encode(order.client_pos), "organization_pos" => Geo.JSON.encode(order.organization_pos) }] })
+
+
+      lat = lat + 0.001
+      lng = lng + 0.001
+      pos = %{"coordinates" => [lng, lat], "type" => "Point"}
+
+      assert {:ok, ut} = PosService.update_pos(ut, %{"pos" => pos})
+      assert ut.pos == %Geo.Point{coordinates: {lng, lat}, srid: nil}
+
+      token = uc.extra_data["fb_token"]
+      assert token
+      assert Publit.MessageApiMock.get_data() == %{msg: %{status: "order:near_client"}, tokens: [token]}
+
+      assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
     end
   end
 

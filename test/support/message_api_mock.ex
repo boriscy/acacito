@@ -22,8 +22,6 @@ defmodule Publit.MessageApiMock do
    {"Accept-Ranges", "none"}, {"Vary", "Accept-Encoding"},
    {"Transfer-Encoding", "chunked"}], status_code: 200}
 
-  Agent.start_link(fn -> %{} end, name: :api_mock)
-
   def send_messages(tokens, msg) do
     update_agent(tokens, msg)
 
@@ -48,15 +46,15 @@ defmodule Publit.MessageApiMock do
   end
 
   defp update_agent(tokens, msg) do
-    if !Process.whereis(__MODULE__) do
-      Agent.start_link(fn -> %{} end, name: __MODULE__)
+    if !Process.whereis(:api_mock) do
+      raise "Error, the agent :api_mock has not been started, start in your tests with: Agent.start_link(fn -> %{} end, name: :api_mock)"
     end
 
-    Agent.update(__MODULE__, fn(v) -> Map.merge(v, %{tokens: tokens, msg: msg}) end)
+    Agent.update(:api_mock, fn(v) -> Map.merge(v, %{tokens: tokens, msg: msg}) end)
   end
 
   def get_data do
-    Agent.get(__MODULE__, fn(v) -> v end)
+    Agent.get(:api_mock, fn(v) -> v end)
   end
 
 end

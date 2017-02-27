@@ -27,6 +27,8 @@ defmodule Publit.Api.TransportControllerTest do
 
   describe "POST /api/transport" do
     test "OK", %{conn: conn, org: org} do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
       uc = insert(:user_client)
       {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
       user_transports() |> Enum.map(&Repo.insert/1)

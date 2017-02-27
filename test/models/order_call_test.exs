@@ -25,6 +25,8 @@ defmodule Publit.OrderCallTest do
 
   describe "create" do
     test "OK" do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
       org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)
       create_user_transports()
@@ -48,6 +50,8 @@ defmodule Publit.OrderCallTest do
     end
 
     test "ERROR" do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
       org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)
       [

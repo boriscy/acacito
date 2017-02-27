@@ -44,8 +44,10 @@ defmodule Publit.PosService do
     case ord["status"] do
       "transport" ->
         Publit.MessagingService.send_messages(tokens, %{status: "order:near_org"}, ok_cb, err_cb)
+        Publit.OrganizationChannel.broadcast_order(order, "order:near_org")
       "transporting" ->
-        Publit.MessagingService.send_messages(tokens, %{status: "order:near_client"})
+        Publit.MessagingService.send_messages(tokens, %{status: "order:near_client"}, ok_cb, err_cb)
+        Publit.OrganizationChannel.broadcast_order(order, "order:near_client")
     end
   end
 
@@ -53,17 +55,10 @@ defmodule Publit.PosService do
     cond do
       ord["status"] == "transport" ->
         is_near(ord["organization_pos"], params)
-      ord["status"] == "transporting"
+      ord["status"] == "transporting" ->
         is_near(ord["client_pos"], params)
       true ->
         false
-    end
-  end
-
-  defp get_near_point(ord) do
-    case ord["status"] do
-      "transport" -> ord["organization_pos"]
-      "transporting" -> ord["client_pos"]
     end
   end
 

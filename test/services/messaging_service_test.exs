@@ -5,6 +5,8 @@ defmodule Publit.MessagingServiceTest do
 
   describe "messages" do
     test "OK" do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
       {:ok, agent} = Agent.start_link fn -> %{resp: nil} end
       cb_ok = fn(resp) ->
         Agent.update(agent, fn(v) -> %{v | resp: resp} end)
@@ -24,8 +26,11 @@ defmodule Publit.MessagingServiceTest do
     end
 
     test "ERROR" do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
       {:ok, agent} = Agent.start_link fn -> %{resp: nil} end
+
       cb_ok = fn(_v) -> "" end
+      cb_error = fn(_v) -> "" end
       cb_error = fn(resp) ->
         Agent.update(agent, fn(v) -> %{v | resp: resp} end)
       end

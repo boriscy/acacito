@@ -47,6 +47,7 @@ defmodule Publit.TransApi.OrderControllerTest do
   describe "PUT /trans_api/accept/:order_id" do
     test_with_mock "OK", %{conn: conn}, Publit.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org)

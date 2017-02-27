@@ -7,6 +7,8 @@ defmodule Publit.OrderCallServiceTest do
 
   describe "update_transport" do
     test "OK" do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
       {uc, org} = {insert(:user_client), insert(:organization)}
       order = create_order_only(uc, org)
 
