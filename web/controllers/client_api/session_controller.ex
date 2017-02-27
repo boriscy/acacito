@@ -2,6 +2,7 @@ defmodule Publit.ClientApi.SessionController do
   use Publit.Web, :controller
   plug :scrub_params, "login" when action in [:create]
   alias Publit.{UserAuthentication}
+  @max_age Application.get_env(:publit, :session_max_age)
 
   # POST /client_api/login
   def create(conn, %{"login" => login_params}) do
@@ -18,9 +19,8 @@ defmodule Publit.ClientApi.SessionController do
 
   # GET /client_api/valid_token/:token
   def valid_token(conn, %{"token" => token}) do
-    case Phoenix.Token.verify(Publit.Endpoint, "user_id", token) do
+    case Phoenix.Token.verify(Publit.Endpoint, "user_id", token, max_age: @max_age) do
       {:ok, _user_id} ->
-        #user = Repo.get(User, user_id)
         render(conn, "valid_token.json", valid: true)
       {:error, :invalid} ->
         conn

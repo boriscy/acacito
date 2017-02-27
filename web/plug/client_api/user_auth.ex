@@ -3,6 +3,8 @@ defmodule Publit.Plug.ClientApi.UserAuth do
   import Phoenix.Controller, only: [put_flash: 3, redirect: 2, render: 3]
   alias Publit.{Repo, Endpoint, UserClient}
 
+  @max_age Application.get_env(:publit, :session_max_age)
+
   def init(default), do: default
 
   def call(conn, _default) do
@@ -24,7 +26,7 @@ defmodule Publit.Plug.ClientApi.UserAuth do
 
   defp get_user_client(conn) do
     with [user_token] <- get_req_header(conn, "authorization"),
-      {:ok, user_id} <- Phoenix.Token.verify(Endpoint, "user_id", user_token),
+      {:ok, user_id} <- Phoenix.Token.verify(Endpoint, "user_id", user_token, max_age: @max_age),
       {:ok, user_id} <- Ecto.UUID.cast(user_id),
       user <- Repo.get(UserClient, user_id),
       false <- is_nil(user) do

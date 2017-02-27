@@ -9,14 +9,14 @@ defmodule Publit.UserSocket do
   transport :websocket, Phoenix.Transports.WebSocket
   # transport :longpoll, Phoenix.Transports.LongPoll
 
-  @max_age 2 * 7 * 24 * 60 * 60
+  @max_age Application.get_env(:publit, :session_max_age)
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   def connect(%{"token" => token}, socket) do
     case Phoenix.Token.verify(socket, "user_id", token, max_age: @max_age) do
       {:ok, user_id} ->
         {:ok, assign(socket, :user_id, user_id)}
-      {:error, _reason} ->
+      {:error, reason} ->
         :error
     end
   end
