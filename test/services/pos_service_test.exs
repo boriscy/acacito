@@ -1,7 +1,7 @@
 defmodule PublitPosServiceTest do
   use Publit.ModelCase
   import Mock
-  alias Publit.PosService
+  alias Publit.{PosService, Order, Repo, UserTransport}
   require Publit.Gettext
   import Publit.Gettext
 
@@ -49,9 +49,6 @@ defmodule PublitPosServiceTest do
   describe "update position and send message if it has orders" do
     test_with_mock "OK near_org", Publit.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
-
-      #Agent.start_link(fn -> %{} end, name: :api_mock)
-
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org)
@@ -69,11 +66,16 @@ defmodule PublitPosServiceTest do
 
       token = uc.extra_data["fb_token"]
       assert token
-      #IO.inspect Agent.get(:api_mock, fn(v)-> v end)
-      #Publit.MessageApiMock.get_data()
-      #== %{message: %{status: "order:near_org"}, tokens: [token]}
 
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_org")
+
+      ord = Repo.get(Order, order.id)
+      assert ord.transport.picked_arrived_at
+
+      ut = Repo.get(UserTransport, ut.id)
+      ordt = List.first(ut.orders)
+
+      assert ordt["picked_arrived_at"]
     end
 
 
@@ -92,6 +94,45 @@ defmodule PublitPosServiceTest do
                 orders: [%{"order_id" => order.id, "status" => "transporting",
                 "client_pos" => Geo.JSON.encode(order.client_pos), "organization_pos" => Geo.JSON.encode(order.organization_pos) }] })
 
+      lat = lat + 0.001
+      lng = lng + 0.001
+      pos = %{"coordinates" => [lng, lat], "type" => "Point"}
+
+      assert {:ok, ut} = PosService.update_pos(ut, %{"pos" => pos})
+      assert ut.pos == %Geo.Point{coordinates: {lng, lat}, srid: nil}
+
+      token = uc.extra_data["fb_token"]
+      assert token
+
+      assert Publit.MessageApiMock.get_data() == %{msg: %{
+        title: gettext("Transport near"), message: gettext("Your order is arriving"),
+        status: "order:near_client"}, tokens: [token]}
+
+      assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
+
+      ord = Repo.get(Order, order.id)
+      assert ord.transport.delivered_arrived_at
+
+      ut = Repo.get(UserTransport, ut.id)
+      ordt = List.first(ut.orders)
+
+      assert ordt["delivered_arrived_at"]
+    end
+
+    test_with_mock "ERROR send message near_client", Publit.OrganizationChannel, [],
+      [broadcast_order: fn(_a, _b) -> :ok end] do
+
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
+      org = insert(:organization)
+      uc = insert(:user_client, %{extra_data: %{"fb_token" => "nn"}})
+      order = create_order_only(uc, org)
+
+      {lng, lat} = order.client_pos.coordinates
+
+      ut = insert(:user_transport, %{status: "order", pos: %Geo.Point{coordinates: {lng + 0.05, lat + 0.05}, srid: nil},
+                orders: [%{"order_id" => order.id, "status" => "transporting",
+                "client_pos" => Geo.JSON.encode(order.client_pos), "organization_pos" => Geo.JSON.encode(order.organization_pos) }] })
 
       lat = lat + 0.001
       lng = lng + 0.001
@@ -108,6 +149,9 @@ defmodule PublitPosServiceTest do
         status: "order:near_client"}, tokens: [token]}
 
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
+
+      ord = Repo.get(Order, order.id)
+      refute ord.transport.delivered_arrived_at
     end
   end
 

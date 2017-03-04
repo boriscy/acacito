@@ -42,7 +42,7 @@ defmodule Publit.OrderCallService do
     |> put_change(:status, "transport")
     |> put_change(:user_transport_id, ut.id)
     |> Order.add_log(%{type: "update_transport", message: "New transport", user_transport_id: ut.id, user_transport: ut.full_name, mobile_number: ut.mobile_number})
-    |> cast_embed(:transport, [with: &OrderTransport.changeset_update/2 ])
+    |> cast_embed(:transport, [with: &OrderTransport.changeset_update/2])
   end
 
   defp order_call_query(order, statuses \\ ["delivered"]) do
