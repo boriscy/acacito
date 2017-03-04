@@ -168,7 +168,7 @@ msgstr ""
 msgid "Unpublished"
 msgstr ""
 
-#: web/models/order.ex:137
+#: web/models/order.ex:136
 msgid "Invalid product"
 msgstr ""
 
@@ -267,12 +267,12 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: web/views/api/transport_view.ex:9 web/views/trans_api/order_view.ex:5
+#: web/views/api/transport_view.ex:9 web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:13
-#: web/views/trans_api/order_view.ex:13
+#: web/views/trans_api/order_view.ex:19
 msgid "No transport available"
 msgstr ""
 
@@ -303,3 +303,11 @@ msgstr ""
 #: web/templates/layout/translations.html.eex:27
 msgid "walk"
 msgstr ""
+
+#: web/models/order_call.ex:47
+msgid "New order call"
+msgstr "Nuevo pedido"
+
+#: web/models/order_call.ex:48
+msgid "New order from %{org}"
+msgstr "Nuevo pedido de %{org}"

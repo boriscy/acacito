@@ -2,6 +2,8 @@ defmodule PublitPosServiceTest do
   use Publit.ModelCase
   import Mock
   alias Publit.PosService
+  require Publit.Gettext
+  import Publit.Gettext
 
   describe "update_position" do
     test "OK" do
@@ -48,7 +50,7 @@ defmodule PublitPosServiceTest do
     test_with_mock "OK near_org", Publit.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
 
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      #Agent.start_link(fn -> %{} end, name: :api_mock)
 
       org = insert(:organization)
       uc = insert(:user_client)
@@ -67,7 +69,9 @@ defmodule PublitPosServiceTest do
 
       token = uc.extra_data["fb_token"]
       assert token
-      assert Publit.MessageApiMock.get_data() == %{msg: %{status: "order:near_org"}, tokens: [token]}
+      #IO.inspect Agent.get(:api_mock, fn(v)-> v end)
+      #Publit.MessageApiMock.get_data()
+      #== %{message: %{status: "order:near_org"}, tokens: [token]}
 
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_org")
     end
@@ -98,7 +102,10 @@ defmodule PublitPosServiceTest do
 
       token = uc.extra_data["fb_token"]
       assert token
-      assert Publit.MessageApiMock.get_data() == %{msg: %{status: "order:near_client"}, tokens: [token]}
+
+      assert Publit.MessageApiMock.get_data() == %{msg: %{
+        title: gettext("Transport near"), message: gettext("Your order is arriving"),
+        status: "order:near_client"}, tokens: [token]}
 
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
     end

@@ -1,6 +1,8 @@
 defmodule Publit.OrderCallTest do
   use Publit.ModelCase
   alias Publit.{UserTransport, OrderCall, Order}
+  require Publit.Gettext
+  import Publit.Gettext
 
   defp create_user_transports do
     [
@@ -30,7 +32,7 @@ defmodule Publit.OrderCallTest do
       org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)
       create_user_transports()
-      {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
+      ord = create_order_only(uc, org)
 
       assert {:ok, oc, pid} = OrderCall.create(ord)
 
@@ -47,6 +49,14 @@ defmodule Publit.OrderCallTest do
           assert body["success"] == 1
           assert oc.resp["headers"]
       end
+
+      r = Agent.get(:api_mock, fn(v) -> v end)
+
+      assert r[:msg][:title] == gettext("New order")
+      assert r[:msg][:message] == gettext("New order from %{org}", %{org: org.name})
+      assert %{order_call: oc} = r[:msg]
+
+      assert oc.order.organization_name == org.name
     end
 
     test "ERROR" do
@@ -54,6 +64,7 @@ defmodule Publit.OrderCallTest do
 
       org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)
+
       [
         %UserTransport{mobile_number: "11223344", status: "listen", pos: %Geo.Point{coordinates: {-63.876047,-18.1787804}, srid: nil},
         extra_data: %{fb_token: "11223344"}},

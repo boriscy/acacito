@@ -2,6 +2,7 @@ defmodule Publit.OrderCall do
   use Publit.Web, :model
   import Ecto.Adapters.SQL
   alias Publit.{Order, OrderCall, UserTransport, Repo}
+  import Publit.Gettext
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "order_calls" do
@@ -43,7 +44,11 @@ defmodule Publit.OrderCall do
         cb_error = fn(resp) -> OrderCall.update(oc, %{status: "error", resp: Map.drop(resp.resp, [:__struct__]) }) end
 
         {:ok, pid} = Publit.MessagingService.send_messages(tokens,
-          %{ order_call: encode(oc), status: "calling"}, cb_ok, cb_error)
+          %{ title: gettext("New order"),
+             message: gettext("New order from %{org}", %{org: oc.order.organization_name}),
+             order_call: encode(oc),
+             status: "calling" },
+          cb_ok, cb_error)
 
         {:ok, oc, pid}
       {:error, cs} ->

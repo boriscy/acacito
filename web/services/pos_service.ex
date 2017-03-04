@@ -6,6 +6,7 @@ defmodule Publit.PosService do
 
   use Publit.Web, :model
   alias Publit.{Repo, Order}
+  import Publit.Gettext
   @earth_radius_km 6371
   @max_dist_mt 200
 
@@ -43,10 +44,11 @@ defmodule Publit.PosService do
 
     case ord["status"] do
       "transport" ->
-        Publit.MessagingService.send_messages(tokens, %{status: "order:near_org"}, ok_cb, err_cb)
+        #Publit.MessagingService.send_messages(tokens, %{status: "order:near_org"}, ok_cb, err_cb)
         Publit.OrganizationChannel.broadcast_order(order, "order:near_org")
       "transporting" ->
-        Publit.MessagingService.send_messages(tokens, %{status: "order:near_client"}, ok_cb, err_cb)
+        {title, msg} = {gettext("Transport near"), gettext("Your order is arriving")}
+        Publit.MessagingService.send_messages(tokens, %{title: title, message: msg, status: "order:near_client"}, ok_cb, err_cb)
         Publit.OrganizationChannel.broadcast_order(order, "order:near_client")
     end
   end

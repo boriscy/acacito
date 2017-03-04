@@ -23,7 +23,7 @@ defmodule Publit.TransApi.SessionController do
   # GET /trans_api/valid_token_user/:token
   def valid_token(conn, %{"token" => token}) do
     case Phoenix.Token.verify(Publit.Endpoint, "user_id", token) do
-      {:ok, user_id} ->
+      {:ok, _user_id} ->
         render(conn, "valid_token.json", valid: true)
       {:error, :invalid} ->
         conn
