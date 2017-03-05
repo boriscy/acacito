@@ -82,6 +82,12 @@ export default {
         this.$store.commit(types.ORDER_UPDATED, {order: order})
       })
 
+      this.channel.on('order:near_org', order => {
+        this.sound.play()
+        console.log('order near org', order)
+        this.$store.commit(types.ORDER_UPDATED, {order: order})
+      })
+
       //let user = `user-${Math.floor(Math.random() * 100000)}`
       //this.socket = new Socket("/socket", {})
       //this.socket.connect()

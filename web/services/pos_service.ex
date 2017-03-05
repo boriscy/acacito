@@ -40,9 +40,14 @@ defmodule Publit.PosService do
   end
 
   defp send_message(user_t, ord) do
-    order = Repo.get(Order, ord["order_id"]) |> Repo.preload([:organization, :user_client])
-    tokens = [order.user_client.extra_data["fb_token"]]
+    case Repo.get(Order, ord["order_id"]) |> Repo.preload([:organization, :user_client]) do
+      nil -> :error
+      order -> send_message(user_t, ord, order)
+    end
+  end
 
+  defp send_message(user_t, ord, order) do
+    tokens = [order.user_client.extra_data["fb_token"]]
     case ord["status"] do
       "transport" ->
         case update_order_transport(order, user_t, "picked_arrived_at") do

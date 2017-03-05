@@ -110,6 +110,7 @@ defmodule PublitPosServiceTest do
 
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
 
+      Process.sleep(100)
       ord = Repo.get(Order, order.id)
       assert ord.transport.delivered_arrived_at
 
