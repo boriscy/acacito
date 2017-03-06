@@ -21,6 +21,7 @@ window.translations = {
   "Small": "<%= gettext("Small") %>",
   "Tags": "<%= gettext("Tags") %>",
   "Transporting Orders": "<%= gettext("Transporting Orders") %>",
+  "Transport has arrived": "<%= gettext("Transport has arrived") %>",
   "truck": "<%= gettext("truck") %>",
   "Variations": "<%= gettext("Variations") %>",
   "Variation name": "<%= gettext("Variation name") %>",

@@ -8,7 +8,7 @@
       <div class="right">
         <button v-for="variation in product.variations" class="text-center btn btn-success btn-full" @click="addProduct(product, variation)">
           <small>{{variation.name}}</small>
-          <span class="price">{{getCurrency()}} {{formatNumber(variation.price)}}<span>
+          <span class="price">{{getCurrency()}} {{formatNumber(variation.price)}}</span>
         </button>
       </div>
     </div>

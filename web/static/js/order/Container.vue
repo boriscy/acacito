@@ -52,7 +52,6 @@ export default {
     setChannel() {
       this.socket = new Socket("/socket", {params: {token: localStorage.getItem('authToken') }})
       this.socket.connect()
-      console.log('connect socket', new Date());
 
       const chName = window.organization.id
       this.channel = this.socket.channel(`organizations:${chName}`)
@@ -81,13 +80,16 @@ export default {
         this.sound.play()
         this.$store.commit(types.ORDER_UPDATED, {order: order})
       })
-
+      // Near org
       this.channel.on('order:near_org', order => {
         this.sound.play()
-        console.log('order near org', order)
         this.$store.commit(types.ORDER_UPDATED, {order: order})
       })
-
+      // Near client
+      this.channel.on('order:near_client', order => {
+        this.sound.play()
+        this.$store.commit(types.ORDER_UPDATED, {order: order})
+      })
       //let user = `user-${Math.floor(Math.random() * 100000)}`
       //this.socket = new Socket("/socket", {})
       //this.socket.connect()

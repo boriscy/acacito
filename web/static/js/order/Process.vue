@@ -24,10 +24,14 @@
           {{order.transport.transporter_name}}
         </div>
         <div>{{timeAgo(order.transport.responded_at)}}</div>
+
+        <div v-if="!trans.picked_at && trans.picked_arrived_at">
+          <strong class="text-red">{{gettext("Transport has arrived")}}</strong>
+        </div>
       </div>
 
       <div v-if="order.transport_status=='call_empty'" class="alert alert-warning">
-        <strong>{{gettext('No transport available')}}</strong>
+        <strong>{{gettext("No transport available")}}</strong>
       </div>
 
     </div>
@@ -68,6 +72,13 @@ export default {
     order_call() {
       if(this.order && this.order.order_calls && this.order.order_calls.length > 0) {
         return this.order.order_calls[0]
+      } else {
+        return {}
+      }
+    },
+    trans() {
+      if(this.order && this.order.transport) {
+        return this.order.transport
       } else {
         return {}
       }

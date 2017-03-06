@@ -209,7 +209,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:25
+#: web/templates/layout/translations.html.eex:26
 msgid "Variations"
 msgstr ""
 
@@ -226,7 +226,7 @@ msgstr ""
 msgid "Separate tags with commas"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:26
+#: web/templates/layout/translations.html.eex:27
 msgid "Variation name"
 msgstr ""
 
@@ -250,7 +250,7 @@ msgstr ""
 msgid "Escriba para probar"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:17
+#: web/models/order_call.ex:47 web/templates/layout/translations.html.eex:17
 msgid "New order"
 msgstr ""
 
@@ -296,18 +296,26 @@ msgstr ""
 msgid "motorcycle"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:24
+#: web/templates/layout/translations.html.eex:25
 msgid "truck"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:27
+#: web/templates/layout/translations.html.eex:28
 msgid "walk"
 msgstr ""
-
-#: web/models/order_call.ex:47
-msgid "New order call"
-msgstr "Nuevo pedido"
 
 #: web/models/order_call.ex:48
 msgid "New order from %{org}"
 msgstr "Nuevo pedido de %{org}"
+
+#: web/templates/layout/translations.html.eex:24
+msgid "Transport has arrived"
+msgstr ""
+
+#: web/services/pos_service.ex:63
+msgid "Transport near"
+msgstr ""
+
+#: web/services/pos_service.ex:63
+msgid "Your order is arriving"
+msgstr ""

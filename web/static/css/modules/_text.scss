@@ -16,3 +16,10 @@ a.text-red:focus
 {
   color: darken($red,10%);
 }
+
+.text-green {
+  color: $green;
+}
+.text-green2 {
+  color: $green2;
+}

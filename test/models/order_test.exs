@@ -3,7 +3,7 @@ defmodule Publit.OrderTest do
   import Publit.Support.Session, only: [create_user_org: 1]
   #import Mock
 
-  alias Publit.{Order, ProductVariation}
+  alias Publit.{Order, ProductVariation, UserTransport}
 
   #@valid_attrs %{details: %{}, pos: "some content", total: "120.5", user_id: "7488a646-e31f-11e4-aace-600308960662"}
   #@invalid_attrs %{}
@@ -157,6 +157,38 @@ defmodule Publit.OrderTest do
       assert Enum.count(ord.log) == 4
 
       assert ord.status == "delivered"
+    end
+
+    test "transport to transporting" do
+      {uc, org} = {insert(:user_client), insert(:organization)}
+      ord = create_order_only(uc, org, %{status: "transport"})
+
+      ut = insert(:user_transport, %{orders: [%{
+        "client_pos" => Geo.JSON.encode(ord.client_pos), "organization_pos" => Geo.JSON.encode(ord.organization_pos),
+        "order_id" => ord.id, "status" => "transport"
+      }]})
+
+      ordt = ut.orders |> List.first()
+      assert %{"status" => "transport"} = ordt
+
+      sql = "update orders set user_transport_id=$1"
+      {:ok, uid} = Ecto.UUID.dump(ut.id)
+      assert {:ok, _res} = Ecto.Adapters.SQL.query(Publit.Repo, sql, [uid])
+
+      ord = Repo.get(Order, ord.id)
+
+      {:ok, ord} = Order.next_status(ord, Ecto.UUID.generate() )
+
+      assert ord.transport.picked_at
+      assert ord.status == "transporting"
+
+      ut = Repo.get(UserTransport, ut.id)
+
+      ordt = ut.orders |> List.first()
+
+      assert ordt["order_id"] == ord.id
+      assert ordt["status"] == "transporting"
+      assert ordt["picked_at"]
     end
 
     test "previous" do
