@@ -118,5 +118,19 @@ defmodule Publit.OrderTest do
 
   end
 
+  test "active, all" do
+    {uc, org} = {insert(:user_client), insert(:organization)}
+    ut = insert(:user_transport)
+
+    create_order_only(uc, org, %{status: "new"})
+    create_order_only(uc, org, %{status: "process"})
+    create_order_only(uc, org, %{status: "transport", user_transport_id: ut.id})
+    create_order_only(uc, org, %{status: "transporting", user_transport_id: ut.id})
+    create_order_only(uc, org, %{status: "delivered"})
+
+    assert Enum.count(Order.active(org.id)) == 4
+
+    assert Enum.count(Order.transport_orders(ut.id)) == 2
+  end
 
 end

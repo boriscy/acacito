@@ -147,7 +147,7 @@ defmodule Publit.Order do
   """
   def active(organization_id) do
     q = from o in Order,
-    where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport"]
+    where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport", "transporting"]
 
     Repo.all(q) |> Repo.preload(:user_client)
   end
