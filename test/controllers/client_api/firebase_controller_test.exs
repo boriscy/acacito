@@ -1,6 +1,5 @@
 defmodule Publit.ClientApi.FirebaseControllerTest do
   use Publit.ConnCase
-  alias Publit.{UserClient}
 
   setup do
     uc = insert(:user_client)

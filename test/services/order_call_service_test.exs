@@ -3,16 +3,13 @@ defmodule Publit.OrderCallServiceTest do
 
   alias Publit.{Order, OrderCall, OrderCallService, UserTransport, Repo}
 
-  @user_id Ecto.UUID.generate()
-
   describe "update_transport" do
     test "OK" do
       Agent.start_link(fn -> %{} end, name: :api_mock)
 
       {uc, org} = {insert(:user_client), insert(:organization)}
-      order = create_order_only(uc, org)
+      order = create_order_only(uc, org, %{status: "process"})
 
-      {:ok, order} = Order.next_status(order, @user_id)
       ut = insert(:user_transport, status: "listen")
       ut2 = insert(:user_transport, status: "listen", mobile_number: "99887766", extra_data: %{"fb_token" => "fb3456789"})
       assert order.status == "process"
@@ -64,9 +61,8 @@ defmodule Publit.OrderCallServiceTest do
 
     test "empty2" do
       {uc, org} = {insert(:user_client), insert(:organization)}
-      order = create_order_only(uc, org)
+      order = create_order_only(uc, org, %{status: "process"})
 
-      {:ok, order} = Order.next_status(order, @user_id)
       ut = insert(:user_transport, status: "listen")
 
       assert :empty = OrderCallService.accept(order, ut, %{final_price: Decimal.new("7")})
@@ -74,9 +70,8 @@ defmodule Publit.OrderCallServiceTest do
 
     test "error" do
       {uc, org} = {insert(:user_client), insert(:organization)}
-      order = create_order_only(uc, org)
+      order = create_order_only(uc, org, %{status: "process"})
 
-      {:ok, order} = Order.next_status(order, @user_id)
       ut = insert(:user_transport, status: "listen")
 
       insert(:order_call, transport_ids: [ut.id], order_id: order.id, status: "delivered")

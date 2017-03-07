@@ -1,7 +1,6 @@
 defmodule Publit.Order do
   use Publit.Web, :model
-  alias Publit.{Order, OrderCall, OrderTransport, UserClient, OrderDetail, Product, Organization, Repo, UserTransport}
-  alias Ecto.Multi
+  alias Publit.{Order, OrderCall, OrderTransport, UserClient, OrderDetail, Product, Organization, Repo}
   import Ecto.Query
   import Publit.Gettext
 
@@ -63,78 +62,6 @@ defmodule Publit.Order do
     else
       {:error, cs}
     end
-  end
-
-  @doc"""
-  Changes the status of an order to the next
-  """
-  def next_status(%Order{status: "new"} = order, user_id) do
-    update_status(order, "process", message: "Change status from new to process", type: "update_next", user_id: user_id)
-  end
-  def next_status(%Order{status: "process"} = order, user_id) do
-    update_status(order, "transporting", message: "Change status from process to transporting", type: "update_next", user_id: user_id)
-  end
-  def next_status(%Order{status: "transport"} = order, user_id) do
-    multi = Multi.new()
-    |> Multi.update(:order, set_order_status_and_extra(order, "transporting", trans_field: :picked_at, message: "Change status from transport to transporting", type: "update_next", user_id: user_id))
-    |> Multi.update(:user_transport, set_user_transport(order))
-
-    case Repo.transaction(multi) do
-      {:ok, res} -> {:ok, res.order}
-      {:error, res} -> {:error, res}
-    end
-  end
-  def next_status(%Order{status: "transporting"} = order, user_id) do
-    update_status(order, "delivered", message: "Change status from transporting to delivered", type: "update_next", user_id: user_id)
-  end
-
-  @doc"""
-  Move to previous status
-  """
-  def previous_status(%Order{status: "process"} = order, user_id) do
-    update_status(order, "new", message: "Back to status new", user_id: user_id, type: "update_back")
-  end
-
-  defp update_status(order, status, opts) do
-    set_order_status(order, status, opts)
-    |> Repo.update()
-  end
-
-  def set_order_status_and_extra(order, status, opts) do
-    dt = DateTime.to_string(DateTime.utc_now())
-    tcs = change(order.transport) |> put_change(opts[:trans_field], dt)
-
-    set_order_status(order, status, opts)
-    |> put_embed(:transport, tcs)
-  end
-
-  def set_order_status(order, status, opts) do
-    Ecto.Changeset.change(order)
-    |> put_change(:status, status)
-    |> add_log(%{type: opts[:type], message: opts[:message], user_id: opts[:user_id], time: Ecto.DateTime.autogenerate() })
-  end
-
-  defp set_user_transport(order) do
-    with ut <- Repo.get(UserTransport, order.user_transport_id),
-      {:ut, %UserTransport{}, idx}  <- {:ut, ut, Enum.find_index(ut.orders, fn(o) -> o["order_id"] == order.id end)},
-      {:ord, true, orders} <- {:ord, is_number(idx), update_transport_orders(ut, idx) } do
-      change(ut)
-      |> put_change(:orders, orders)
-    else
-      {:ut, ut, _} ->
-        change(ut)
-        |> add_error(:email, gettext("User transport not found"))
-      {:ord, _, _} ->
-        change(%UserTransport{})
-        |> add_error(:orders, gettext("Order not found"))
-    end
-  end
-
-  defp update_transport_orders(ut, idx) do
-    List.update_at(ut.orders, idx, fn(o) ->
-      ot = %{"status" => "transporting", "picked_at" => DateTime.to_string(DateTime.utc_now())}
-      Map.merge(o, ot)
-    end)
   end
 
   defp set_num(cs) do
