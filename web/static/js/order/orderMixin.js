@@ -1,12 +1,17 @@
 export default {
+  computed: {
+    next() {
+      if(this.order.status == 'transporting' && this.order.user_transport_id) {
+        return false
+      } else {
+        return true
+      }
+    }
+  },
   props: {
     order: {
       type:Object,
       required: true
-    },
-    next: {
-      type: Boolean,
-      default: true
     },
     nextProcess: {
       default: 'process-next'
@@ -48,8 +53,13 @@ export default {
           return ''
       }
     },
+    //
     moveNext() {
       this.$store.dispatch('moveNext', this.order)
+    },
+    //
+    presentNext(order) {
+      console.log(order.status, order.user_transport_id)
     }
   },
   created() {
