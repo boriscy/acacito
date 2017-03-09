@@ -124,8 +124,12 @@ defmodule Publit.TransApi.OrderControllerTest do
              "pos" => %{"coordinates" => [-63.86842910000001, -18.189872799999996], "type" => "Point"},
              "speed" => 30}}
 
-    test "OK" do
+    test "OK", %{conn: conn, token: token, ut: ut} do
+      id = Ecto.UUID.generate()
 
+      conn = conn
+      |> put_req_header("authorization", token)
+      |> put("/trans_api/deliver/#{id}", %{"poisition" => @pos})
     end
   end
 

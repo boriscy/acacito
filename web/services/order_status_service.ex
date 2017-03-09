@@ -13,6 +13,10 @@ defmodule Publit.OrderStatusService do
   def next_status(%Order{status: "process"} = order, user) do
     update_status(order, "transport", %{msg: "Change status from process to transporting", type: "update:order.status", user_id: user.id})
   end
+  @doc """
+  change Order from status `process` to `transport`
+  it recognizes which kind of user makes the changes and passes the field :user or :user_client
+  """
   def next_status(%Order{status: "transport"} = order, %User{} = user), do: next_status(order, user, :user)
   def next_status(%Order{status: "transport"} = order, %UserTransport{} = user), do: next_status(order, user, :user_client)
   defp next_status(%Order{status: "transport"} = order, user, user_type) do
@@ -28,6 +32,7 @@ defmodule Publit.OrderStatusService do
       {:error, res} -> {:error, res}
     end
   end
+
   def next_status(%Order{status: "transporting"} = order, %User{} = user), do: next_status(order, user, :user)
   def next_status(%Order{status: "transporting"} = order, %UserTransport{} = user), do: next_status(order, user, :user_client)
   defp next_status(%Order{status: "transporting"} = order, user, user_type) do
@@ -73,43 +78,40 @@ defmodule Publit.OrderStatusService do
   end
 
   defp set_user_transport(order, "transporting") do
-    with ut <- Repo.get(UserTransport, order.user_transport_id),
-      {:ut, %UserTransport{}, idx}  <- {:ut, ut, Enum.find_index(ut.orders, fn(o) -> o["order_id"] == order.id end)},
-      {:ord, true, orders} <- {:ord, is_number(idx), update_transport_orders(ut, idx) } do
-      change(ut)
-      |> put_change(:orders, orders)
-    else
-      {:ut, ut, _} ->
+    case get_user_transport_order_index(order) do
+      {:ok, ut, idx} ->
+        orders = List.update_at(ut.orders, idx, fn(o) -> Map.put(o, "status", "transporting") end)
+
         change(ut)
-        |> add_error(:email, gettext("User transport not found"))
-      {:ord, _, _} ->
+        |> put_change(:orders, orders)
+      :error ->
         change(%UserTransport{})
-        |> add_error(:orders, gettext("Order not found"))
+        |> add_error(:orders, gettext("User transport not found"))
     end
   end
 
   defp set_user_transport(order, "delivered") do
-    with ut <- Repo.get(UserTransport, order.user_transport_id),
-      {:ut, %UserTransport{}, idx}  <- {:ut, ut, Enum.find_index(ut.orders, fn(o) -> o["order_id"] == order.id end)},
-      {:ord, true} <- {:ord, is_number(idx)} do
+    case get_user_transport_order_index(order) do
+      {:ok, ut, idx} ->
         orders = List.delete_at(ut.orders, idx)
 
         change(ut)
         |> put_change(:orders, orders)
-    else
-      {:ut, ut, _} ->
-        change(ut)
-        |> add_error(:email, gettext("User transport not found"))
-      {:ord, _, _} ->
+      :error ->
         change(%UserTransport{})
-        |> add_error(:orders, gettext("Order not found"))
+        |> add_error(:orders, gettext("User transport not found"))
     end
   end
 
-  defp update_transport_orders(ut, idx) do
-    List.update_at(ut.orders, idx, fn(o) ->
-      ot = %{"status" => "transporting", "picked_at" => DateTime.to_string(DateTime.utc_now())}
-      Map.merge(o, ot)
-    end)
+  defp get_user_transport_order_index(order) do
+    with ut <- Repo.get(UserTransport, order.user_transport_id),
+      {:ut, %UserTransport{}}  <- {:ut, ut},
+      idx <- Enum.find_index(ut.orders, fn(o) -> o["id"] == order.id end),
+      {:idx, true} <- {:idx, is_number(idx)} do
+        {:ok, ut, idx}
+    else
+      _ -> :error
+    end
   end
+
 end

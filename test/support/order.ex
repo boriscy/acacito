@@ -49,11 +49,11 @@ defmodule Publit.Support.Order do
   end
 
   def update_order_and_create_user_transport(ord) do
-    ut = Publit.Factory.insert(:user_transport, orders: [%{"order_id" => ord.id, "status" => ord.status,
-      "client_pos" => Geo.JSON.encode(ord.client_pos), "organization_pos" => Geo.JSON.encode(ord.organization_pos),
-    }])
+    ut = Publit.Factory.insert(:user_transport, orders: [%{"id" => ord.id, "status" => ord.status}])
 
-    {:ok, ord} = Ecto.Changeset.change(ord) |> Ecto.Changeset.put_change(:user_transport_id, ut.id) |> Publit.Repo.update()
+    {:ok, ord} = Ecto.Changeset.change(ord)
+    |> Ecto.Changeset.put_change(:user_transport_id, ut.id)
+    |> Publit.Repo.update()
 
     {ord, ut}
   end

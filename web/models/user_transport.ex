@@ -6,6 +6,10 @@ defmodule Publit.UserTransport do
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
   @number_reg ~r|^\d{8}$|
 
+  defmodule Order do
+    defstruct [:id, :status]
+  end
+
   @derive {Poison.Encoder, only: [:id, :full_name, :email, :mobile_number, :status]}
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "user_transports" do

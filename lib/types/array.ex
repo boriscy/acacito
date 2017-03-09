@@ -8,15 +8,14 @@ defmodule Publit.Array do
     {:ok, array}
   end
 
-  # We should still accept integers
+  # Cast when it's a list
   def cast(array) when is_list(array), do: {:ok, array}
 
   # Everything else is a failure though
   def cast(_), do: :error
 
   # When loading data from the database, we are guaranteed to
-  # receive an integer (as databases are strict) and we will
-  # just return it to be stored in the schema struct.
+  # return a list
   def load(array) when is_list(array), do: {:ok, array}
 
   # When dumping data to the database, we *expect* an integer

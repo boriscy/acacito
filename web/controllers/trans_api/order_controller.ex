@@ -3,9 +3,9 @@ defmodule Publit.TransApi.OrderController do
   alias Publit.{Order, OrderCallService}
 
   # GET /trans_api/orders
-  def index(conn, %{"status" => status}) do
+  def index(conn, _params) do
     ut_id = conn.assigns.current_user_transport.id
-    orders = Order.transport_orders(ut_id, get_status(status))
+    orders = Order.transport_orders(ut_id, ["transport", "transporting"])
 
     render(conn, "index.json", orders: orders)
   end
@@ -34,6 +34,17 @@ defmodule Publit.TransApi.OrderController do
 
   # PUT /trans_api/deliver/:order_id
   def deliver(conn, %{"order_id" => order_id}) do
+    case Repo.get_by(Order, id: order_id, status: "transporting") do
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> render("not_found.json", msg: "Order not found")
+      order ->
+        case OrderStatusService.move_next(order, conn.assigns.current_user_transport) do
+          {:ok, ut} ->
+            render(conn, "show.json", ut: ut)
+        end
+    end
   end
 
   defp get_accept_params(order) do

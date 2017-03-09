@@ -49,9 +49,8 @@ defmodule Publit.OrderStatusServiceTest do
 
       ordt = ut.orders |> List.first()
 
-      assert ordt["order_id"] == ord.id
+      assert ordt["id"] == ord.id
       assert ordt["status"] == "transporting"
-      assert ordt["picked_at"]
     end
 
     test "transporting to delivered", %{uc: uc, org: org} do
