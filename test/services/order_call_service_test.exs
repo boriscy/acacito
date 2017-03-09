@@ -38,7 +38,7 @@ defmodule Publit.OrderCallServiceTest do
 
       log = order.log |> List.last()
 
-      assert log[:type] == "update_transport"
+      assert log[:type] == "update:order.transport"
       assert log[:user_transport]
       assert log[:user_transport_id]
 

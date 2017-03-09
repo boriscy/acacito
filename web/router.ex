@@ -136,6 +136,7 @@ defmodule Publit.Router do
       put "/firebase", FirebaseController, :update
 
       put "/accept/:order_id", OrderController, :accept
+      put "/deliver/:order_id", OrderController, :deliver
       resources "/orders", OrderController, only: [:index]
     end
   end

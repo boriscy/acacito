@@ -2,7 +2,7 @@ defmodule Publit.TransApi.OrderController do
   use Publit.Web, :controller
   alias Publit.{Order, OrderCallService}
 
-  # GET
+  # GET /trans_api/orders
   def index(conn, %{"status" => status}) do
     ut_id = conn.assigns.current_user_transport.id
     orders = Order.transport_orders(ut_id, get_status(status))
@@ -10,7 +10,7 @@ defmodule Publit.TransApi.OrderController do
     render(conn, "index.json", orders: orders)
   end
 
-  # PUT
+  # PUT /trans_api/accept/:order_id
   def accept(conn, %{"order_id" => order_id}) do
     ut = conn.assigns.current_user_transport
 
@@ -30,7 +30,10 @@ defmodule Publit.TransApi.OrderController do
             render(conn, "show.json", order: order)
         end
     end
+  end
 
+  # PUT /trans_api/deliver/:order_id
+  def deliver(conn, %{"order_id" => order_id}) do
   end
 
   defp get_accept_params(order) do

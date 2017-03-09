@@ -82,6 +82,12 @@ defmodule Publit.OrderTest do
 
       assert order.num == 2
       assert order.organization.name == "Publit"
+      assert order.inserted_at
+
+      log = order.log |> List.first()
+
+      assert log[:time]
+      assert log[:user_client_id] == user_client.id
     end
 
     test "ERROR" do

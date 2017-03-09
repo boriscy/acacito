@@ -15,12 +15,12 @@ defmodule Publit.Order do
     field :log, {:array, :map}, default: []
     field :client_pos, Geo.Geometry
     field :organization_pos, Geo.Geometry
-    field :transport_pos, Geo.Geometry # First accept transport location
+    field :transport_pos, Geo.Geometry
     field :organization_name, :string
     field :client_name, :string
 
-    embeds_one :transport, OrderTransport#, on_replace: :delete
-    embeds_many :details, OrderDetail#, on_replace: :delete
+    embeds_one :transport, OrderTransport
+    embeds_many :details, OrderDetail
 
     belongs_to :user_client, UserClient, type: :binary_id
     belongs_to :user_transport, UserTransport, type: :binary_id
@@ -57,7 +57,7 @@ defmodule Publit.Order do
       cs
       |> set_total()
       |> set_num()
-      |> add_log(%{time: Ecto.DateTime.autogenerate(), message: "Creation", type: "create", user_id: params["user_id"]})
+      |> add_log(%{msg: "Creation", type: "create", user_client_id: params["user_client_id"]})
       |> Repo.insert()
     else
       {:error, cs}
@@ -65,8 +65,8 @@ defmodule Publit.Order do
   end
 
   defp set_num(cs) do
-    dt = Ecto.DateTime.autogenerate()
-    d = Ecto.DateTime.to_date(dt)
+    d = Ecto.Date.utc()
+
     {:ok, org_id} = Ecto.UUID.cast(cs.params["organization_id"])
     q = from(o in Order, where: o.organization_id == ^org_id
      and fragment("date(?)", o.inserted_at) == ^d, select: count(o.id))
@@ -74,12 +74,13 @@ defmodule Publit.Order do
     num = Repo.one(q) + 1
 
     cs
-    |> put_change(:inserted_at, dt)
     |> put_change(:num, num)
   end
 
   def add_log(cs, msg) do
-    cs |> put_change(:log, List.insert_at(cs.data.log, -1, msg))
+    msg = Map.put(msg, :time, DateTime.utc_now())
+
+    cs |> put_change(:log, List.insert_at(cs.data.log, -1, msg) )
   end
 
   defp set_and_validate_details(cs) do

@@ -35,7 +35,11 @@ defmodule Publit.OrderTransport do
 
   def changeset_delivery(ot, params) do
     ot
-    |> cast(params, [:picked_arrived_at, :delivered_arrived_at])
+    |> cast(params, [:picked_arrived_at, :delivered_arrived_at, :log])
+  end
+
+  def add_log(o_trans, pos) do
+    o_trans.log ++ [%{pos: pos, time: DateTime.utc_now()}]
   end
 
 end

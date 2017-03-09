@@ -5,22 +5,23 @@ defmodule Publit.PosService do
   """
 
   use Publit.Web, :model
+  import Ecto.Query
   import Publit.Gettext
 
   alias Publit.{Repo, Order, OrderTransport}
   alias Ecto.Multi
 
   @earth_radius_km 6371
-  @max_dist_mt 200
+  @max_dist_mt 100
 
   def update_pos(user_t, params) do
     case Enum.count(user_t.orders) > 0 do
-      true -> update_pos_and_message(user_t, params)
-      false -> update_pos_only(user_t, params)
+      true -> update_orders_and_user_transport(user_t, params)
+      false -> update_user_transport_pos(user_t, params)
     end
   end
 
-  defp update_pos_only(user_t, params) do
+  defp update_user_transport_pos(user_t, params) do
     user_t
     |> cast(params, [:pos])
     |> put_change(:status, "listen")
@@ -29,55 +30,93 @@ defmodule Publit.PosService do
     |> Repo.update()
   end
 
-  defp update_pos_and_message(user_t, params) do
-    Enum.each(user_t.orders, fn(ord) ->
-      if requires_messaging(ord, params["pos"]) do
-        send_message(user_t, ord)
+  defp update_orders_and_user_transport(user_t, params) do
+    orders = get_orders(user_t.orders |> Enum.map(fn(ord) -> ord["id"] end) )
+
+    multi = Enum.reduce(orders, Multi.new(), fn(order, m) ->
+      if requires_messaging?(order, params["pos"]) do
+        send_message(order, user_t)
+
+        Multi.update(m, order.id, set_order_changeset(order, true, params["pos"]))
+      else
+
+        Multi.update(m, order.id, set_order_changeset(order, false, params["pos"]))
+      end
+    end)
+    |> Multi.update(:transport, set_transport_orders_and_pos(user_t, orders, params["pos"]))
+
+    case Repo.transaction(multi) do
+      {:ok, res} ->
+        {:ok, res.transport}
+      {:error, res} -> {:error, res}
+    end
+  end
+
+  defp get_orders(order_ids) do
+    order_ids = Enum.reduce(order_ids, [], fn(id, l) ->
+      case Ecto.UUID.cast(id) do
+        {:ok, _id} -> l ++ [id]
+        _ -> l
       end
     end)
 
-    update_pos_only(user_t, params)
+    Repo.all(from o in Order, where: o.id in ^order_ids) |> Repo.preload(:user_client)
   end
 
-  defp send_message(user_t, ord) do
-    case Repo.get(Order, ord["order_id"]) |> Repo.preload([:organization, :user_client]) do
-      nil -> :error
-      order -> send_message(user_t, ord, order)
+  defp set_order_changeset(order, messaging, pos) do
+    t_data = case {order.status, messaging} do
+      {"transport", true} ->
+        %{picked_arrived_at: to_string(DateTime.utc_now())}
+      {"transporting", true} ->
+        %{delivered_arrived_at: to_string(DateTime.utc_now())}
+      _ ->
+        %{}
     end
+    |> Map.put(:id, order.transport.id)
+    |> Map.put(:log, OrderTransport.add_log(order.transport, pos))
+
+    cs = order
+    |> cast(%{transport: t_data}, [])
+    |> set_order_log(messaging)
+    |> cast_embed(:transport, with: &OrderTransport.changeset_delivery/2)
+
+    cs
   end
 
-  defp send_message(user_t, ord, order) do
+  defp set_order_log(cs, false), do: cs
+  defp set_order_log(cs, true) do
+    cs |> Order.add_log(%{user_transport_id: 1})
+  end
+
+  # sends the actual message
+  defp send_message(order, _user_t) do
     tokens = [order.user_client.extra_data["fb_token"]]
-    case ord["status"] do
+
+    case order.status do
       "transport" ->
-        case update_order_transport(order, user_t, "picked_arrived_at") do
-          {:ok, res} ->
-            Publit.OrganizationChannel.broadcast_order(res.order, "order:near_org")
-        end
+         Publit.OrganizationChannel.broadcast_order(order, "order:near_org")
       "transporting" ->
-        ok_cb = fn(_) ->
-          update_order_transport(order, user_t, "delivered_arrived_at")
-        end
+        ok_cb = fn(_) -> "" end
         err_cb = fn(_) -> "" end
 
         {title, msg} = {gettext("Transport near"), gettext("Your order is arriving")}
-        Publit.MessagingService.send_messages(tokens, %{title: title, message: msg, status: "order:near_client"}, ok_cb, err_cb)
         Publit.OrganizationChannel.broadcast_order(order, "order:near_client")
+        Publit.MessagingService.send_messages(tokens, %{title: title, message: msg, status: "order:near_client"}, ok_cb, err_cb)
     end
   end
 
-  defp requires_messaging(ord, params) do
+  defp requires_messaging?(order, pos) do
     cond do
-      ord["status"] == "transport" && !ord["picked_arrived_at"] ->
-        is_near(ord["organization_pos"], params)
-      ord["status"] == "transporting" && !ord["delivered_arrived_at"] ->
-        is_near(ord["client_pos"], params)
+      order.status == "transport" && !order.transport.picked_arrived_at ->
+        near?(Geo.JSON.encode(order.organization_pos), pos)
+      order.status == "transporting" && !order.transport.delivered_arrived_at ->
+        near?(Geo.JSON.encode(order.client_pos), pos)
       true ->
         false
     end
   end
 
-  def is_near(p1, p2) do
+  def near?(p1, p2) do
     calculate_distance_in_mt(p1, p2) <= @max_dist_mt
   end
 
@@ -118,35 +157,15 @@ defmodule Publit.PosService do
     deg * :math.pi / 180
   end
 
-  defp update_order_transport(order, user_t, param) do
-    dt = DateTime.to_string(DateTime.utc_now())
-
-    multi = Multi.new()
-    |> Multi.update(:order, update_order(order, param, dt))
-    |> Multi.update(:user_transport, update_transport(user_t, order.id, param, dt))
-
-    Repo.transaction(multi)
+  defp set_transport_orders_and_pos(user_t, orders, pos) do
+    change(user_t)
+    |> cast(%{pos: pos}, [:pos])
+    |> put_change(:orders, Enum.map(orders, &set_order_transport/1))
   end
 
-  defp update_transport(user_t, order_id, param, dt) do
-    case Enum.find_index(user_t.orders, fn(o) -> o["order_id"] == order_id end) do
-      nil -> :error
-      idx ->
-        orders = List.update_at(user_t.orders, idx, fn(o) ->
-          Map.put(o, param, dt)
-        end)
-
-        change(user_t)
-        |> put_change(:orders, orders)
-    end
-  end
-
-  defp update_order(order, param, dt) do
-    params = Map.put(%{"id" => order.transport.id}, param, dt)
-
-    order
-    |> cast(%{transport: params}, [])
-    |> cast_embed(:transport, [with: fn(ot, p) -> OrderTransport.changeset_delivery(ot, p) end])
+  defp set_order_transport(order) do
+    Map.take(order, [:id, :status])
+    |> Enum.into(%{}, fn({k, v}) -> {to_string(k), v} end)
   end
 
 end

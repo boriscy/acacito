@@ -24,9 +24,9 @@ defmodule Publit.Api.OrderController do
   def move_next(conn, %{"id" => id}) do
     with ord <- get_order(conn, id),
       false <- is_nil(ord) do
-        user_id = conn.assigns.current_user.id
+        user = conn.assigns.current_user
 
-        case OrderStatusService.next_status(ord, user_id) do
+        case OrderStatusService.next_status(ord, user) do
           {:ok, order} ->
             UserChannel.broadcast_order(order)
             render(conn, "show.json", order: order)

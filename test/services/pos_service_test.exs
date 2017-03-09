@@ -51,18 +51,18 @@ defmodule PublitPosServiceTest do
       [broadcast_order: fn(_a, _b) -> :ok end] do
       org = insert(:organization)
       uc = insert(:user_client)
-      order = create_order_only(uc, org)
+      order = create_order_only(uc, org, %{status: "transport"})
 
       {lng, lat} = order.organization_pos.coordinates
 
       ut = insert(:user_transport, %{status: "order", pos: %Geo.Point{coordinates: {lng + 0.05, lat + 0.05}, srid: nil},
-                orders: [%{"order_id" => order.id, "status" => "transport",
-                "client_pos" => Geo.JSON.encode(order.client_pos), "organization_pos" => Geo.JSON.encode(order.organization_pos) }] })
+                orders: [%{"id" => order.id, "status" => "transport"}] })
 
-      pos = %{"coordinates" => [lng + 0.001, lat + 0.001], "type" => "Point"}
+      pos = %{"coordinates" => [lng + 0.0001, lat - 0.0001], "type" => "Point"}
 
+      #################################
       assert {:ok, ut} = PosService.update_pos(ut, %{"pos" => pos})
-      assert ut.pos == %Geo.Point{coordinates: {-18.179, -63.869}, srid: nil}
+      assert ut.pos == %Geo.Point{coordinates: {-18.1799, -63.8701}, srid: nil}
 
       token = uc.extra_data["fb_token"]
       assert token
@@ -75,7 +75,8 @@ defmodule PublitPosServiceTest do
       ut = Repo.get(UserTransport, ut.id)
       ordt = List.first(ut.orders)
 
-      assert ordt["picked_arrived_at"]
+      assert ordt["id"] == order.id
+      assert ordt["status"] == order.status
     end
 
 
@@ -86,20 +87,31 @@ defmodule PublitPosServiceTest do
 
       org = insert(:organization)
       uc = insert(:user_client)
-      order = create_order_only(uc, org)
+      order = create_order_only(uc, org, %{status: "transporting"})
+
+      assert order.transport.log == []
 
       {lng, lat} = order.client_pos.coordinates
 
-      ut = insert(:user_transport, %{status: "order", pos: %Geo.Point{coordinates: {lng + 0.05, lat + 0.05}, srid: nil},
-                orders: [%{"order_id" => order.id, "status" => "transporting",
-                "client_pos" => Geo.JSON.encode(order.client_pos), "organization_pos" => Geo.JSON.encode(order.organization_pos) }] })
+      ut = insert(:user_transport, %{status: "order", pos: %Geo.Point{coordinates: {lng + 0.07, lat + 0.07}, srid: nil},
+                orders: [%{"id" => order.id, "status" => "transporting"}] })
 
-      lat = lat + 0.001
-      lng = lng + 0.001
-      pos = %{"coordinates" => [lng, lat], "type" => "Point"}
+      #################################
+      {:ok, ut} = PosService.update_pos(ut, %{"pos" => %{"coordinates" => [lng + 0.05, lat + 0.05], "type" => "Point"} })
 
+      assert ut.pos == %Geo.Point{coordinates: {lng + 0.05, lat + 0.05}, srid: nil}
+      refute called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
+
+      # order
+      #order = Repo.get(Order, order.id)
+      #IO.inspect order.transport.log
+      ut = Repo.get(UserTransport, ut.id)
+
+      pos = %{"coordinates" => [lng + 0.0001, lat - 0.0001], "type" => "Point"}
+
+      #################################
       assert {:ok, ut} = PosService.update_pos(ut, %{"pos" => pos})
-      assert ut.pos == %Geo.Point{coordinates: {lng, lat}, srid: nil}
+      assert ut.pos == %Geo.Point{coordinates: {lng + 0.0001, lat - 0.0001}, srid: nil}
 
       token = uc.extra_data["fb_token"]
       assert token
@@ -112,12 +124,13 @@ defmodule PublitPosServiceTest do
 
       Process.sleep(100)
       ord = Repo.get(Order, order.id)
+
       assert ord.transport.delivered_arrived_at
 
-      ut = Repo.get(UserTransport, ut.id)
       ordt = List.first(ut.orders)
 
-      assert ordt["delivered_arrived_at"]
+      assert ordt["id"] == order.id
+      assert ordt["status"] == order.status
     end
 
     test_with_mock "ERROR send message near_client", Publit.OrganizationChannel, [],
@@ -127,32 +140,30 @@ defmodule PublitPosServiceTest do
 
       org = insert(:organization)
       uc = insert(:user_client, %{extra_data: %{"fb_token" => "nn"}})
-      order = create_order_only(uc, org)
+      order = create_order_only(uc, org, %{status: "transporting"})
 
       {lng, lat} = order.client_pos.coordinates
 
       ut = insert(:user_transport, %{status: "order", pos: %Geo.Point{coordinates: {lng + 0.05, lat + 0.05}, srid: nil},
-                orders: [%{"order_id" => order.id, "status" => "transporting",
-                "client_pos" => Geo.JSON.encode(order.client_pos), "organization_pos" => Geo.JSON.encode(order.organization_pos) }] })
+                orders: [%{"id" => order.id, "status" => "transporting"}] })
 
-      lat = lat + 0.001
-      lng = lng + 0.001
+      lat = lat + 0.0001
+      lng = lng - 0.0001
       pos = %{"coordinates" => [lng, lat], "type" => "Point"}
 
+      ####################################
       assert {:ok, ut} = PosService.update_pos(ut, %{"pos" => pos})
       assert ut.pos == %Geo.Point{coordinates: {lng, lat}, srid: nil}
 
       token = uc.extra_data["fb_token"]
       assert token
 
-      assert Publit.MessageApiMock.get_data() == %{msg: %{
-        title: gettext("Transport near"), message: gettext("Your order is arriving"),
-        status: "order:near_client"}, tokens: [token]}
+      #assert Publit.MessageApiMock.get_data() == %{}
 
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
 
       ord = Repo.get(Order, order.id)
-      refute ord.transport.delivered_arrived_at
+      assert ord.transport.delivered_arrived_at
     end
   end
 
