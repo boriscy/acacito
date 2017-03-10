@@ -2,7 +2,7 @@ defmodule Publit.TransApi.OrderControllerTest do
   use Publit.ConnCase, async: false
   import Mock
 
-  alias Publit.{OrderCall, OrderTransport}
+  alias Publit.{OrderCall, OrderTransport, UserTransport, Repo}
 
   setup do
     ut = insert(:user_transport)
@@ -124,12 +124,32 @@ defmodule Publit.TransApi.OrderControllerTest do
              "pos" => %{"coordinates" => [-63.86842910000001, -18.189872799999996], "type" => "Point"},
              "speed" => 30}}
 
-    test "OK", %{conn: conn, token: token, ut: ut} do
-      id = Ecto.UUID.generate()
+    test "OK", %{conn: conn, ut: ut} do
+      uc = insert(:user_client)
+      org = insert(:organization)
+      order = create_order_only(uc, org, %{status: "transporting"})
+
+      {:ok, order} = Ecto.Changeset.change(order)
+      |> Ecto.Changeset.put_change(:user_transport_id, ut.id)
+      |> Publit.Repo.update()
+
+      {:ok, ut} = Ecto.Changeset.change(ut)
+      |> Ecto.Changeset.put_change(:orders, [%{"id" => order.id, "status" => order.status}])
+      |> Publit.Repo.update()
 
       conn = conn
-      |> put_req_header("authorization", token)
-      |> put("/trans_api/deliver/#{id}", %{"poisition" => @pos})
+      |> assign(:current_user_transport, ut)
+      |> put("/trans_api/deliver/#{order.id}", %{"poisition" => @pos})
+
+      assert conn.status == 200
+
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["order"]["status"] == "delivered"
+
+      ut = Repo.get(UserTransport, ut.id)
+
+      assert ut.orders == []
     end
   end
 

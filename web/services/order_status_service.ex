@@ -25,7 +25,7 @@ defmodule Publit.OrderStatusService do
 
     multi = Multi.new()
     |> Multi.update(:order, set_order_transport_status(order, "transporting", :picked_at, log))
-    |> Multi.update(:user_transport, set_user_transport(order, "transporting"))
+    |> Multi.update(:user_transport, set_user_transport(order, user, "transporting"))
 
     case Repo.transaction(multi) do
       {:ok, res} -> {:ok, res.order}
@@ -33,19 +33,26 @@ defmodule Publit.OrderStatusService do
     end
   end
 
-  def next_status(%Order{status: "transporting"} = order, %User{} = user), do: next_status(order, user, :user)
-  def next_status(%Order{status: "transporting"} = order, %UserTransport{} = user), do: next_status(order, user, :user_client)
-  defp next_status(%Order{status: "transporting"} = order, user, user_type) do
+  def next_status(%Order{status: "transporting"} = order, %User{} = user) do
     log = %{msg: "Change status from transporting to delivered", type: "update:order.status"}
-    |> Map.put(user_type, user.id)
+    |> Map.put(:user_id, user.id)
+
+    change(order)
+    |> put_change(:status, "delivered")
+    |> Order.add_log(log)
+    |> Repo.update()
+  end
+  def next_status(%Order{status: "transporting"} = order, %UserTransport{} = user) do
+    log = %{msg: "Change status from transporting to delivered", type: "update:order.status"}
+    |> Map.put(:user_transport_id, user.id)
 
     multi = Multi.new()
     |> Multi.update(:order, set_order_transport_status(order, "delivered", :delivered_at, log))
-    |> Multi.update(:user_transport, set_user_transport(order, "delivered"))
+    |> Multi.update(:user_transport, set_user_transport(order, user, "delivered"))
 
     case Repo.transaction(multi) do
       {:ok, res} -> {:ok, res.order}
-      {:error, res} -> {:error, res}
+      {:error, cs} -> {:error, cs}
     end
   end
 
@@ -77,9 +84,9 @@ defmodule Publit.OrderStatusService do
     |> put_embed(:transport, tcs)
   end
 
-  defp set_user_transport(order, "transporting") do
-    case get_user_transport_order_index(order) do
-      {:ok, ut, idx} ->
+  defp set_user_transport(order, ut, "transporting") do
+    case get_user_transport_order_index(order, ut) do
+      {:ok, idx} ->
         orders = List.update_at(ut.orders, idx, fn(o) -> Map.put(o, "status", "transporting") end)
 
         change(ut)
@@ -90,25 +97,23 @@ defmodule Publit.OrderStatusService do
     end
   end
 
-  defp set_user_transport(order, "delivered") do
-    case get_user_transport_order_index(order) do
-      {:ok, ut, idx} ->
+  defp set_user_transport(order, ut, "delivered") do
+    case get_user_transport_order_index(order, ut) do
+      {:ok, idx} ->
         orders = List.delete_at(ut.orders, idx)
 
         change(ut)
         |> put_change(:orders, orders)
       :error ->
-        change(%UserTransport{})
-        |> add_error(:orders, gettext("User transport not found"))
+        change(ut)
+        |> add_error(:orders, gettext("Order not found"))
     end
   end
 
-  defp get_user_transport_order_index(order) do
-    with ut <- Repo.get(UserTransport, order.user_transport_id),
-      {:ut, %UserTransport{}}  <- {:ut, ut},
-      idx <- Enum.find_index(ut.orders, fn(o) -> o["id"] == order.id end),
+  defp get_user_transport_order_index(order, ut) do
+    with idx <- Enum.find_index(ut.orders, fn(o) -> o["id"] == order.id end),
       {:idx, true} <- {:idx, is_number(idx)} do
-        {:ok, ut, idx}
+        {:ok, idx}
     else
       _ -> :error
     end

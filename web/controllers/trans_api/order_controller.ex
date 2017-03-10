@@ -1,6 +1,6 @@
 defmodule Publit.TransApi.OrderController do
   use Publit.Web, :controller
-  alias Publit.{Order, OrderCallService}
+  alias Publit.{Order, OrderCallService, OrderStatusService}
 
   # GET /trans_api/orders
   def index(conn, _params) do
@@ -40,9 +40,11 @@ defmodule Publit.TransApi.OrderController do
         |> put_status(:not_found)
         |> render("not_found.json", msg: "Order not found")
       order ->
-        case OrderStatusService.move_next(order, conn.assigns.current_user_transport) do
-          {:ok, ut} ->
-            render(conn, "show.json", ut: ut)
+        case OrderStatusService.next_status(order, conn.assigns.current_user_transport) do
+          {:ok, order} ->
+            render(conn, "show.json", order: order)
+          _ ->
+            IO.puts "Error"
         end
     end
   end
