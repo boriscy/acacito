@@ -22,7 +22,7 @@ defmodule Publit.OrderStatusServiceTest do
       assert Enum.count(ord.log) == 3
       assert ord.status == "transport"
 
-      {:ok, ord} = OrderStatusService.next_status(ord, ut)
+      {:ok, ord} = OrderStatusService.next_status(ord, u)
       assert Enum.count(ord.log) == 4
 
       assert ord.status == "transporting"
@@ -36,11 +36,12 @@ defmodule Publit.OrderStatusServiceTest do
     test "transport to transporting", %{uc: uc, org: org} do
       ord = create_order_only(uc, org, %{status: "transport"})
       {ord, ut} = update_order_and_create_user_transport(ord)
+      user = build(:user, id: Ecto.UUID.generate())
 
       ordt = ut.orders |> List.first()
       assert ordt["status"] == "transport"
 
-      {:ok, ord} = OrderStatusService.next_status(ord, ut)
+      {:ok, ord} = OrderStatusService.next_status(ord, user)
 
       assert ord.transport.picked_at
       assert ord.status == "transporting"

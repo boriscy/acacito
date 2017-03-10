@@ -31,10 +31,8 @@ defmodule Publit.OrderCallServiceTest do
       assert Enum.count(user_t.orders) == 1
       ut_order = user_t.orders |> List.first()
 
-      assert ut_order["order_id"] == order.id
-      assert ut_order["client_pos"] == Geo.JSON.encode(order.client_pos)
-      assert ut_order["organization_pos"] == Geo.JSON.encode(order.organization_pos)
-      assert ut_order["status"] == "transport"
+      assert ut_order["id"] == order.id
+      assert ut_order["status"] == "transporting"
 
       log = order.log |> List.last()
 

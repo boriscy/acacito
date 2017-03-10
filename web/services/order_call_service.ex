@@ -16,8 +16,8 @@ defmodule Publit.OrderCallService do
       nil -> :empty
       oc ->
         multi = Multi.new()
-        |> Multi.update(:order, update_order(order, ut, params))
-        |> Multi.update(:user_transport, update_transport_orders(order, ut))
+        |> Multi.update(:order, set_order_cs(order, ut, params))
+        |> Multi.update(:user_transport, set_user_transport_cs(order, ut))
         |> Multi.delete_all(:order_call, order_call_query(order, ["new", "delivered"]))
 
         case Repo.transaction(multi) do
@@ -33,7 +33,7 @@ defmodule Publit.OrderCallService do
   #@doc """
   #Receives a %Order{} and %UserTransport{} to update the order
   #"""
-  defp update_order(order, ut, %{final_price: fp}) do
+  defp set_order_cs(order, ut, %{final_price: fp}) do
     params = %{transport: %{id: order.transport.id, transporter_id: ut.id, final_price: fp, transporter_name: ut.full_name,
                vehicle: ut.vehicle, plate: ut.plate} }
 
@@ -60,14 +60,10 @@ defmodule Publit.OrderCallService do
       order_call_id: oc.id, status: "order:answered", user_transport_id: ut.id}, cb_ok, cb_err)
   end
 
-  defp update_transport_orders(order, ut) do
-    o = %{order_id: order.id, status: "transport",
-      client_pos: Geo.JSON.encode(order.client_pos),
-      organization_pos: Geo.JSON.encode(order.organization_pos)}
-
+  defp set_user_transport_cs(order, ut) do
     ut
     |> change()
-    |> put_change(:orders, ut.orders ++ [o])
+    |> put_change(:orders, ut.orders ++ [%{"id" => order.id, "status" => "transporting" }])
   end
 
   defp log_error(resp) do

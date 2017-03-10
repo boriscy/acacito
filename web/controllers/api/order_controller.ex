@@ -23,7 +23,7 @@ defmodule Publit.Api.OrderController do
   # PUT /api/org_orders/:id/move_next
   def move_next(conn, %{"id" => id}) do
     with ord <- get_order(conn, id),
-      false <- is_nil(ord) do
+      %Order{} <- ord do
         user = conn.assigns.current_user
 
         case OrderStatusService.next_status(ord, user) do

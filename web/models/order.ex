@@ -1,6 +1,6 @@
 defmodule Publit.Order do
   use Publit.Web, :model
-  alias Publit.{Order, OrderCall, OrderTransport, UserClient, OrderDetail, Product, Organization, Repo}
+  alias Publit.{Order, OrderCall, OrderTransport, UserClient, UserTransport, OrderDetail, Product, Organization, Repo}
   import Ecto.Query
   import Publit.Gettext
 
@@ -168,6 +168,12 @@ defmodule Publit.Order do
     q = from o in Order, where: o.user_transport_id == ^ut_id and o.status in ^statuses, order_by: [desc: o.inserted_at]
 
     Repo.all(q)
+  end
+
+  defp query_trans_map(o) do
+    %Order{}
+    |> Map.drop([:__meta__, :__struct__, :log, :messages, :null_reason, :order_calls, :organization, :user_client, :user_transport])
+    |> Enum.into(%{}, fn({k, _}) -> {k, field(o, k)} end)
   end
 
 end

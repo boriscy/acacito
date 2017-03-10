@@ -19,7 +19,7 @@ defmodule Publit.OrderCall do
   Creates and %OrderCall{} and stores in the db when correct then
   it sends messages to all near transports with  `status: calling`
   """
-  def create(order, radius \\ 1000) do
+  def create(order, radius \\ 1_000) do
     {lng, lat} = order.organization_pos.coordinates
     transports = get_user_transports(%{"coordinates" => [lng, lat]}, radius)
 

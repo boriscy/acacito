@@ -18,15 +18,17 @@ defmodule Publit.OrderStatusService do
   it recognizes which kind of user makes the changes and passes the field :user or :user_client
   """
   def next_status(%Order{status: "transport"} = order, %User{} = user), do: next_status(order, user, :user)
-  def next_status(%Order{status: "transport"} = order, %UserTransport{} = user), do: next_status(order, user, :user_client)
+  #def next_status(%Order{status: "transport"} = order, %UserTransport{} = user), do: next_status(order, user, :user_client)
   defp next_status(%Order{status: "transport"} = order, user, user_type) do
     log = %{msg: "Change status from transport to transporting", type: "update:order.status"}
     |> Map.put(user_type, user.id)
 
+    order = order |> Repo.preload(:user_transport)
+
     multi = Multi.new()
     |> Multi.update(:order, set_order_transport_status(order, "transporting", :picked_at, log))
-    |> Multi.update(:user_transport, set_user_transport(order, user, "transporting"))
-
+    |> Multi.update(:user_transport, set_user_transport(order, order.user_transport, "transporting"))
+IO.inspect order.user_transport
     case Repo.transaction(multi) do
       {:ok, res} -> {:ok, res.order}
       {:error, res} -> {:error, res}
@@ -51,7 +53,9 @@ defmodule Publit.OrderStatusService do
     |> Multi.update(:user_transport, set_user_transport(order, user, "delivered"))
 
     case Repo.transaction(multi) do
-      {:ok, res} -> {:ok, res.order}
+      {:ok, res} ->
+        Publit.OrganizationChannel.broadcast_order(res.order, "order:updated")
+        {:ok, res.order}
       {:error, cs} -> {:error, cs}
     end
   end
