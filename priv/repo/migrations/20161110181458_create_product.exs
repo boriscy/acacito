@@ -6,7 +6,6 @@ defmodule Publit.Repo.Migrations.CreateProduct do
       add :id, :uuid, primary_key: true
       add :name, :text, null: false
       add :description, :text
-      add :price, :decimal, precision: 12, scale: 2, default: 0.0
       add :publish, :boolean, default: false, null: false
       add :currency, :text
       add :tags, {:array, :text}, default: []
@@ -23,6 +22,8 @@ defmodule Publit.Repo.Migrations.CreateProduct do
 
       timestamps()
     end
+
+    create index(:products, [:organization_id])
 
   end
 end

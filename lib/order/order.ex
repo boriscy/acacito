@@ -1,6 +1,7 @@
 defmodule Publit.Order do
   use Publit.Web, :model
-  alias Publit.{Order, OrderCall, OrderTransport, UserClient, UserTransport, OrderDetail, Product, Organization, Repo}
+  alias Publit.{Order, Order.Call, Order.Transport, UserClient, UserTransport, Order.Detail, Product, Organization, Repo}
+  alias Ecto.Multi
   import Ecto.Query
   import Publit.Gettext
 
@@ -11,22 +12,21 @@ defmodule Publit.Order do
     field :null_reason, :string
     field :num, :integer
     field :currency, :string
-    field :messages, {:array, :map}, default: []
-    field :log, {:array, :map}, default: []
     field :client_pos, Geo.Geometry
     field :organization_pos, Geo.Geometry
-    field :transport_pos, Geo.Geometry
     field :organization_name, :string
     field :client_name, :string
 
-    embeds_one :transport, OrderTransport
-    embeds_many :details, OrderDetail
+    embeds_one :transport, Order.Transport
+    embeds_many :details, Order.Detail
 
     belongs_to :user_client, UserClient, type: :binary_id
     belongs_to :user_transport, UserTransport, type: :binary_id
     belongs_to :organization, Organization, type: :binary_id
 
-    has_many :order_calls, OrderCall
+    has_many :order_calls, Order.Call
+    has_one :log, Order.Log
+    has_one :chat, Order.Chat
 
     timestamps()
   end
@@ -50,18 +50,26 @@ defmodule Publit.Order do
     |> validate_required([:user_client_id, :details, :client_pos, :currency, :client_name])
     |> cast_embed(:details)
     |> set_and_validate_details()
-    |> set_organization()
-    |> set_transport()
 
-    if cs.valid? do
+    with true <- cs.valid? do
       cs
+      |> set_organization()
+      |> set_transport()
       |> set_total()
       |> set_num()
-      |> add_log(%{msg: "Creation", type: "create", user_client_id: params["user_client_id"]})
+      |> put_assoc(:log, %Order.Log{})
+      |> put_assoc(:chat, %Order.Chat{})
       |> Repo.insert()
     else
-      {:error, cs}
+      _ ->
+        {:error, cs}
     end
+  end
+
+  def set_order_create(cs) do
+    cs
+    |> set_total()
+    |> set_num()
   end
 
   defp set_num(cs) do
@@ -140,40 +148,6 @@ defmodule Publit.Order do
     cs
     |> put_assoc(:organization,  org)
     |> put_change(:organization_name, org.name)
-  end
-
-  # Query methods
-  @doc """
-  Returns the active orders ["new", "process", "transport"] for the current organization
-  """
-  def active(organization_id) do
-    q = from o in Order,
-    where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport", "transporting"]
-
-    Repo.all(q) |> Repo.preload(:user_client)
-  end
-
-  # Returns the organization order
-  def get_order(order_id, org_id) do
-    Repo.one(from o in Order, where: o.id == ^order_id and o.organization_id == ^org_id)
-  end
-
-  def user_orders(user_client_id) do
-    q = from o in Order, where: o.user_client_id == ^user_client_id, order_by: [desc: o.inserted_at]
-
-    Repo.all(q) |> Repo.preload(:organization)
-  end
-
-  def transport_orders(ut_id, statuses \\ ["transport", "transporting"]) do
-    q = from o in Order, where: o.user_transport_id == ^ut_id and o.status in ^statuses, order_by: [desc: o.inserted_at]
-
-    Repo.all(q)
-  end
-
-  defp query_trans_map(o) do
-    %Order{}
-    |> Map.drop([:__meta__, :__struct__, :log, :messages, :null_reason, :order_calls, :organization, :user_client, :user_transport])
-    |> Enum.into(%{}, fn({k, _}) -> {k, field(o, k)} end)
   end
 
 end

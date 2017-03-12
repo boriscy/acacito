@@ -1,4 +1,4 @@
-defmodule Publit.OrderStatusService do
+defmodule Publit.Order.StatusService do
   use Publit.Web, :model
   alias Publit.{Order, UserTransport, Repo, User, UserTransport}
   alias Ecto.Multi
@@ -8,27 +8,27 @@ defmodule Publit.OrderStatusService do
   Changes the status of an order to the next
   """
   def next_status(%Order{status: "new"} = order, user) do
-    update_status(order, "process", %{msg: "Change status from new to process", type: "update:order.status", user_id: user.id})
+    update_status(order, "process", %{"msg" => "Change status from new to process", "user_id" => user.id})
   end
   def next_status(%Order{status: "process"} = order, user) do
-    update_status(order, "transport", %{msg: "Change status from process to transporting", type: "update:order.status", user_id: user.id})
+    update_status(order, "transport", %{"msg" => "Change status from process to transport", "user_id" => user.id})
   end
   @doc """
   change Order from status `process` to `transport`
   it recognizes which kind of user makes the changes and passes the field :user or :user_client
   """
-  def next_status(%Order{status: "transport"} = order, %User{} = user), do: next_status(order, user, :user)
-  #def next_status(%Order{status: "transport"} = order, %UserTransport{} = user), do: next_status(order, user, :user_client)
-  defp next_status(%Order{status: "transport"} = order, user, user_type) do
-    log = %{msg: "Change status from transport to transporting", type: "update:order.status"}
-    |> Map.put(user_type, user.id)
-
-    order = order |> Repo.preload(:user_transport)
+  def next_status(%Order{status: "transport"} = order, user) do
+    log = %{"msg" => "Change status from transport to transporting", "user_id" => user.id}
 
     multi = Multi.new()
     |> Multi.update(:order, set_order_transport_status(order, "transporting", :picked_at, log))
-    |> Multi.update(:user_transport, set_user_transport(order, order.user_transport, "transporting"))
-IO.inspect order.user_transport
+    |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
+
+    if order.user_transport_id do
+      order = order |> Repo.preload([:user_transport])
+      multi = Multi.update(multi, :user_transport, set_user_transport(order, order.user_transport, "transporting"))
+    end
+
     case Repo.transaction(multi) do
       {:ok, res} -> {:ok, res.order}
       {:error, res} -> {:error, res}
@@ -36,20 +36,25 @@ IO.inspect order.user_transport
   end
 
   def next_status(%Order{status: "transporting"} = order, %User{} = user) do
-    log = %{msg: "Change status from transporting to delivered", type: "update:order.status"}
-    |> Map.put(:user_id, user.id)
-
-    change(order)
-    |> put_change(:status, "delivered")
-    |> Order.add_log(log)
-    |> Repo.update()
-  end
-  def next_status(%Order{status: "transporting"} = order, %UserTransport{} = user) do
-    log = %{msg: "Change status from transporting to delivered", type: "update:order.status"}
-    |> Map.put(:user_transport_id, user.id)
+    log = %{"msg" => "Change status from transporting to delivered", "user_id" => user.id}
 
     multi = Multi.new()
     |> Multi.update(:order, set_order_transport_status(order, "delivered", :delivered_at, log))
+    |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
+
+    case Repo.transaction(multi) do
+      {:ok, res} ->
+        Publit.OrganizationChannel.broadcast_order(res.order, "order:updated")
+        {:ok, res.order}
+      {:error, cs} -> {:error, cs}
+    end
+  end
+  def next_status(%Order{status: "transporting"} = order, %UserTransport{} = user) do
+    log = %{"msg" => "Change status from transporting to delivered", "user_id" => user.id}
+
+    multi = Multi.new()
+    |> Multi.update(:order, set_order_transport_status(order, "delivered", :delivered_at, log))
+    |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
     |> Multi.update(:user_transport, set_user_transport(order, user, "delivered"))
 
     case Repo.transaction(multi) do
@@ -63,19 +68,24 @@ IO.inspect order.user_transport
   @doc"""
   Move to previous status
   """
-  def previous_status(%Order{status: "process"} = order, user_id) do
-    update_status(order, "new", %{msg: "Change status from process to new", user_id: user_id, type: "update:order.status"})
+  def previous_status(%Order{status: "process"} = order, user) do
+    update_status(order, "new", %{"msg" => "Change status from process to new", "user_id" => user.id })
   end
 
   defp update_status(order, status, log) do
-    set_order_status(order, status, log)
-    |> Repo.update()
+    multi = Multi.new()
+    |> Multi.update(:order, set_order_status(order, status))
+    |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
+
+    case Repo.transaction(multi) do
+      {:ok, res} -> {:ok, res.order}
+      {:erro, res} -> {:error, res.order}
+    end
   end
 
-  defp set_order_status(order, status, log) do
+  defp set_order_status(order, status) do
     change(order)
     |> put_change(:status, status)
-    |> Order.add_log(log)
   end
 
   defp set_order_transport_status(order, status, field, opts) do
@@ -84,7 +94,6 @@ IO.inspect order.user_transport
 
     change(order)
     |> put_change(:status, status)
-    |> Order.add_log(%{type: opts[:type], message: opts[:message], user_id: opts[:user_id], time: Ecto.DateTime.autogenerate() })
     |> put_embed(:transport, tcs)
   end
 

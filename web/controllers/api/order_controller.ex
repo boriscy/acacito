@@ -1,11 +1,11 @@
 defmodule Publit.Api.OrderController do
   use Publit.Web, :controller
-  alias Publit.{Order, Repo, UserChannel, OrderStatusService}
+  alias Publit.{Order, Repo, UserChannel, Order.StatusService}
 
   # GET /api/org_orders
   def index(conn, _params) do
     org_id = conn.assigns.current_organization.id
-    orders = Order.active(org_id) |> Repo.preload(:order_calls)
+    orders = Order.Query.active(org_id) |> Repo.preload(:order_calls)
 
     render(conn, "index.json", orders: orders)
   end
@@ -26,7 +26,7 @@ defmodule Publit.Api.OrderController do
       %Order{} <- ord do
         user = conn.assigns.current_user
 
-        case OrderStatusService.next_status(ord, user) do
+        case Order.StatusService.next_status(ord, user) do
           {:ok, order} ->
             UserChannel.broadcast_order(order)
             render(conn, "show.json", order: order)

@@ -1,6 +1,6 @@
 defmodule Publit.Api.TransportController do
   use Publit.Web, :controller
-  alias Publit.{OrderCall, Order}
+  alias Publit.{Order.Call, Order}
 
   # POST /api/transport
   # Creates a call to transports
@@ -13,7 +13,7 @@ defmodule Publit.Api.TransportController do
       |> put_status(:not_found)
       |> render("not_found.json")
     else
-      case OrderCall.create(order, 10_000) do
+      case Order.Call.create(order, 10_000) do
         {:ok, oc, _pid} ->
           render(conn, "show.json", order_call: oc)
         {:error, cs} ->
@@ -30,13 +30,13 @@ defmodule Publit.Api.TransportController do
 
   # DELETE /api/transport/:id
   def delete(conn, %{"id" => order_id}) do
-    case Order.get_order(order_id, conn.assigns.current_organization.id) do
+    case Order.Query.get_order(order_id, conn.assigns.current_organization.id) do
       nil ->
         conn
         |> put_status(:not_found)
         |> render("not_found.json", %{msg: "order not found"})
       order ->
-        OrderCall.delete(order.id)
+        Order.Call.delete(order.id)
         render(conn, "order.json", order: order)
     end
 

@@ -1,12 +1,12 @@
-defmodule Publit.OrderCallService do
+defmodule Publit.Order.CallService do
   use Publit.Web, :model
   import Ecto.Query
   alias Ecto.Multi
 
-  alias Publit.{Order, OrderCall, OrderTransport, Repo}
+  alias Publit.{Order, Order.Call, Order.Transport, Repo}
 
   @moduledoc """
-  This module handles the call and updates both Order and OrderCall as well as it sends
+  This module handles the call and updates both Order and Order.Call as well as it sends
   notifications to all UserTransport that have received
   """
 
@@ -17,6 +17,7 @@ defmodule Publit.OrderCallService do
       oc ->
         multi = Multi.new()
         |> Multi.update(:order, set_order_cs(order, ut, params))
+        |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, %{"msg" => "Order call accepted", "user_id" => ut.id}) end)
         |> Multi.update(:user_transport, set_user_transport_cs(order, ut))
         |> Multi.delete_all(:order_call, order_call_query(order, ["new", "delivered"]))
 
@@ -41,12 +42,11 @@ defmodule Publit.OrderCallService do
     |> cast(params, [])
     |> put_change(:status, "transport")
     |> put_change(:user_transport_id, ut.id)
-    |> Order.add_log(%{type: "update:order.transport", msg: "New transport", user_transport_id: ut.id, user_transport: ut.full_name, mobile_number: ut.mobile_number})
-    |> cast_embed(:transport, [with: &OrderTransport.changeset_update/2])
+    |> cast_embed(:transport, [with: &Order.Transport.changeset_update/2])
   end
 
   defp order_call_query(order, statuses \\ ["delivered"]) do
-    from oc in OrderCall, where: oc.order_id == ^order.id and oc.status in ^statuses
+    from oc in Order.Call, where: oc.order_id == ^order.id and oc.status in ^statuses
   end
 
   defp send_messages(oc, ut) do

@@ -60,6 +60,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
 
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
       json = Poison.decode!(conn.resp_body)
+
       assert json["errors"]["client_pos"]
     end
 

@@ -1,4 +1,4 @@
-defmodule Publit.OrderDetail do
+defmodule Publit.Order.Detail do
   use Publit.Web, :model
 
   embedded_schema do

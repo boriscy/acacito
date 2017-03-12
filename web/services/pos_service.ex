@@ -8,7 +8,7 @@ defmodule Publit.PosService do
   import Ecto.Query
   import Publit.Gettext
 
-  alias Publit.{Repo, Order, OrderTransport}
+  alias Publit.{Repo, Order, Order.Transport}
   alias Ecto.Multi
 
   @earth_radius_km 6371
@@ -32,16 +32,18 @@ defmodule Publit.PosService do
 
   defp update_orders_and_user_transport(user_t, params) do
     orders = get_orders(user_t.orders |> Enum.map(fn(ord) -> ord["id"] end) )
+    msg = %{"type" => "trans", "pos" => params["pos"]}
 
     multi = Enum.reduce(orders, Multi.new(), fn(order, m) ->
       if requires_messaging?(order, params["pos"]) do
         send_message(order, user_t)
 
+        msg = Map.merge(msg, %{"send_msg" => true, "status" => order.status})
         Multi.update(m, order.id, set_order_changeset(order, true, params["pos"]))
       else
-
         Multi.update(m, order.id, set_order_changeset(order, false, params["pos"]))
       end
+      |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, msg) end)
     end)
     |> Multi.update(:transport, set_transport_orders_and_pos(user_t, orders, params["pos"]))
 
@@ -73,19 +75,12 @@ defmodule Publit.PosService do
         %{}
     end
     |> Map.put(:id, order.transport.id)
-    |> Map.put(:log, OrderTransport.add_log(order.transport, pos))
 
     cs = order
     |> cast(%{transport: t_data}, [])
-    |> set_order_log(messaging)
-    |> cast_embed(:transport, with: &OrderTransport.changeset_delivery/2)
+    |> cast_embed(:transport, with: &Order.Transport.changeset_delivery/2)
 
     cs
-  end
-
-  defp set_order_log(cs, false), do: cs
-  defp set_order_log(cs, true) do
-    cs |> Order.add_log(%{user_transport_id: 1})
   end
 
   # sends the actual message

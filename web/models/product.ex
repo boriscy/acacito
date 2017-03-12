@@ -9,7 +9,6 @@ defmodule Publit.Product do
   schema "products" do
     field :name, :string
     field :description, :string
-    field :price, :decimal
     field :publish, :boolean, default: false
     field :currency, :string, default: "BOB"
     field :tags, Publit.Array, default: []

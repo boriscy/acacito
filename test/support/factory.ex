@@ -65,7 +65,11 @@ defmodule Publit.Factory do
   end
 
   def order_call_factory do
-    %Publit.OrderCall{}
+    %Publit.Order.Call{}
+  end
+
+  def order_log_factory do
+    %Publit.Order.Log{}
   end
 
 end

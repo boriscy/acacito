@@ -32,7 +32,7 @@ defmodule Publit.OrderTest do
         }, "transport" => %{"calculated_price" => "5"}
       }
 
-      {:ok, order} = Order.create(params)
+      assert {:ok, order} = Order.create(params)
 
       assert order.client_pos == %Geo.Point{coordinates: {-100, 30}, srid: nil}
       assert order.organization_pos == org.pos
@@ -58,6 +58,10 @@ defmodule Publit.OrderTest do
       assert d2.variation_id == v2.id
       assert d2.name == p2.name
       assert d2.variation == v2.name
+
+      assert %Order.Log{} = order.log
+
+      assert %Order.Chat{} = order.chat
     end
 
     test "OK num" do
@@ -83,11 +87,6 @@ defmodule Publit.OrderTest do
       assert order.num == 2
       assert order.organization.name == "Publit"
       assert order.inserted_at
-
-      log = order.log |> List.first()
-
-      assert log[:time]
-      assert log[:user_client_id] == user_client.id
     end
 
     test "ERROR" do
@@ -122,21 +121,6 @@ defmodule Publit.OrderTest do
       assert det.errors[:product_id]
     end
 
-  end
-
-  test "active, all" do
-    {uc, org} = {insert(:user_client), insert(:organization)}
-    ut = insert(:user_transport)
-
-    create_order_only(uc, org, %{status: "new"})
-    create_order_only(uc, org, %{status: "process"})
-    create_order_only(uc, org, %{status: "transport", user_transport_id: ut.id})
-    create_order_only(uc, org, %{status: "transporting", user_transport_id: ut.id})
-    create_order_only(uc, org, %{status: "delivered"})
-
-    assert Enum.count(Order.active(org.id)) == 4
-
-    assert Enum.count(Order.transport_orders(ut.id)) == 2
   end
 
 end

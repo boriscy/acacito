@@ -14,6 +14,7 @@ defmodule Publit.Repo.Migrations.CreateOrderCalls do
       timestamps()
     end
 
+    create index(:order_calls, [:order_id])
     execute("CREATE INDEX transport_ids_on_order_calls on order_calls USING GIN (transport_ids)")
   end
 

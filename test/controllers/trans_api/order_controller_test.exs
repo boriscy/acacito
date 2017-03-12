@@ -2,7 +2,7 @@ defmodule Publit.TransApi.OrderControllerTest do
   use Publit.ConnCase, async: false
   import Mock
 
-  alias Publit.{OrderCall, OrderTransport, UserTransport, Repo}
+  alias Publit.{Order, UserTransport, Repo}
 
   setup do
     ut = insert(:user_transport)
@@ -17,7 +17,7 @@ defmodule Publit.TransApi.OrderControllerTest do
 
   defp create_order_call(order, params \\ %{status: "delivered"}) do
     params = Map.merge(params, %{order_id: order.id})
-    {:ok, oc} = Repo.insert(Map.merge(%OrderCall{}, params))
+    {:ok, oc} = Repo.insert(Map.merge(%Order.Call{}, params))
     oc
   end
 
@@ -74,7 +74,7 @@ defmodule Publit.TransApi.OrderControllerTest do
     test "Error", %{conn: conn, token: token} do
       org = insert(:organization)
       uc = insert(:user_client)
-      order = create_order_only(uc, org, %{transport: %OrderTransport{calculated_price: Decimal.new("-5")} })
+      order = create_order_only(uc, org, %{transport: %Order.Transport{calculated_price: Decimal.new("-5")} })
 
       oc = create_order_call(order)
 
@@ -91,7 +91,7 @@ defmodule Publit.TransApi.OrderControllerTest do
     test "Empty", %{conn: conn, token: token} do
       org = insert(:organization)
       uc = insert(:user_client)
-      order = create_order_only(uc, org, %{transport: %OrderTransport{calculated_price: Decimal.new("-5")} })
+      order = create_order_only(uc, org, %{transport: %Order.Transport{calculated_price: Decimal.new("-5")} })
 
       conn = conn
       |> put_req_header("authorization", token)

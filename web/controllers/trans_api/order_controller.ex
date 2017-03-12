@@ -1,11 +1,11 @@
 defmodule Publit.TransApi.OrderController do
   use Publit.Web, :controller
-  alias Publit.{Order, OrderCallService, OrderStatusService}
+  alias Publit.{Order, Order.CallService, Order.StatusService}
 
   # GET /trans_api/orders
   def index(conn, _params) do
     ut_id = conn.assigns.current_user_transport.id
-    orders = Order.transport_orders(ut_id, ["transport", "transporting"])
+    orders = Order.Query.transport_orders(ut_id, ["transport", "transporting"])
 
     render(conn, "index.json", orders: orders)
   end
@@ -20,7 +20,7 @@ defmodule Publit.TransApi.OrderController do
         |> put_status(:not_found)
         |> render("not_found.json")
       order ->
-        case OrderCallService.accept(order, ut, get_accept_params(order)) do
+        case Order.CallService.accept(order, ut, get_accept_params(order)) do
           :empty ->
             conn |> put_status(:precondition_failed) |> render("empty.json")
           {:error, :order, cs} ->
@@ -40,7 +40,7 @@ defmodule Publit.TransApi.OrderController do
         |> put_status(:not_found)
         |> render("not_found.json", msg: "Order not found")
       order ->
-        case OrderStatusService.next_status(order, conn.assigns.current_user_transport) do
+        case Order.StatusService.next_status(order, conn.assigns.current_user_transport) do
           {:ok, order} ->
             render(conn, "show.json", order: order)
           _ ->

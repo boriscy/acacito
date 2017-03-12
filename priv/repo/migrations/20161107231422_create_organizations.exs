@@ -17,6 +17,8 @@ defmodule Publit.Repo.Migrations.CreateOrganizations do
 
       timestamps()
     end
+
+    execute "CREATE INDEX organizations_on_pos ON organizations USING GIST (pos)"
   end
 
   def down do

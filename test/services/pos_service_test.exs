@@ -88,8 +88,7 @@ defmodule PublitPosServiceTest do
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org, %{status: "transporting"})
-
-      assert order.transport.log == []
+      ol = insert(:order_log, %{order_id: order.id})
 
       {lng, lat} = order.client_pos.coordinates
 
@@ -102,9 +101,6 @@ defmodule PublitPosServiceTest do
       assert ut.pos == %Geo.Point{coordinates: {lng + 0.05, lat + 0.05}, srid: nil}
       refute called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
 
-      # order
-      #order = Repo.get(Order, order.id)
-      #IO.inspect order.transport.log
       ut = Repo.get(UserTransport, ut.id)
 
       pos = %{"coordinates" => [lng + 0.0001, lat - 0.0001], "type" => "Point"}
@@ -131,6 +127,13 @@ defmodule PublitPosServiceTest do
 
       assert ordt["id"] == order.id
       assert ordt["status"] == order.status
+
+      log = Repo.get_by(Order.Log, order_id: order.id, log_type: "Order")
+
+      assert Enum.at(log.log, 0)["pos"] == %{"coordinates" => [-18.1299, -63.8199], "type" => "Point"}
+      assert Enum.at(log.log, 0)["type"] == "trans"
+      assert Enum.at(log.log, 1)["pos"] == %{"coordinates" => [-18.1798, -63.87], "type" => "Point"}
+      assert Enum.at(log.log, 1)["type"] == "trans"
     end
 
     test_with_mock "ERROR send message near_client", Publit.OrganizationChannel, [],

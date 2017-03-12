@@ -1,7 +1,7 @@
-defmodule Publit.OrderCall do
+defmodule Publit.Order.Call do
   use Publit.Web, :model
   import Ecto.Adapters.SQL
-  alias Publit.{Order, OrderCall, UserTransport, Repo}
+  alias Publit.{Order, Order.Call, UserTransport, Repo}
   import Publit.Gettext
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -16,7 +16,7 @@ defmodule Publit.OrderCall do
   #@statuses ["new", "delivered", "error"]
 
   @doc """
-  Creates and %OrderCall{} and stores in the db when correct then
+  Creates and %Order.Call{} and stores in the db when correct then
   it sends messages to all near transports with  `status: calling`
   """
   def create(order, radius \\ 1_000) do
@@ -25,7 +25,7 @@ defmodule Publit.OrderCall do
 
     if Enum.count(transports) > 0 do
       ids = Enum.map(transports, fn(t) -> t.id end)
-      oc = %OrderCall{order_id: order.id, transport_ids: ids}
+      oc = %Order.Call{order_id: order.id, transport_ids: ids}
       |> change()
       |> put_assoc(:order, order)
 
@@ -33,15 +33,15 @@ defmodule Publit.OrderCall do
 
       create_and_send_messages(oc, tokens)
     else
-      {:empty, %OrderCall{}}
+      {:empty, %Order.Call{}}
     end
   end
 
   defp create_and_send_messages(oc, tokens) do
     case Repo.insert(oc) do
       {:ok, oc} ->
-        cb_ok = fn(resp) -> OrderCall.update(oc, %{status: "delivered", resp: Map.drop(resp.resp, [:__struct__])}) end
-        cb_error = fn(resp) -> OrderCall.update(oc, %{status: "error", resp: Map.drop(resp.resp, [:__struct__]) }) end
+        cb_ok = fn(resp) -> Order.Call.update(oc, %{status: "delivered", resp: Map.drop(resp.resp, [:__struct__])}) end
+        cb_error = fn(resp) -> Order.Call.update(oc, %{status: "error", resp: Map.drop(resp.resp, [:__struct__]) }) end
 
         {:ok, pid} = Publit.MessagingService.send_messages(tokens,
           %{ title: gettext("New order"),
@@ -82,7 +82,7 @@ defmodule Publit.OrderCall do
   end
 
   def delete(order_id) do
-    Repo.delete_all(from oc in OrderCall, where: oc.order_id == ^order_id and oc.status in ^["new", "delivered"])
+    Repo.delete_all(from oc in Order.Call, where: oc.order_id == ^order_id and oc.status in ^["new", "delivered"])
   end
 
 end

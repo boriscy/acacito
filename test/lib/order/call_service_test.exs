@@ -1,7 +1,7 @@
-defmodule Publit.OrderCallServiceTest do
+defmodule Publit.Order.CallServiceTest do
   use Publit.ModelCase
 
-  alias Publit.{Order, OrderCall, OrderCallService, UserTransport, Repo}
+  alias Publit.{Order, UserTransport, Repo}
 
   describe "update_transport" do
     test "OK" do
@@ -9,13 +9,14 @@ defmodule Publit.OrderCallServiceTest do
 
       {uc, org} = {insert(:user_client), insert(:organization)}
       order = create_order_only(uc, org, %{status: "process"})
+      insert(:order_log, order_id: order.id)
 
       ut = insert(:user_transport, status: "listen")
       ut2 = insert(:user_transport, status: "listen", mobile_number: "99887766", extra_data: %{"fb_token" => "fb3456789"})
       assert order.status == "process"
 
       oc = insert(:order_call, transport_ids: [ut.id, ut2.id], order_id: order.id, status: "delivered")
-      {:ok, order, _pid} = OrderCallService.accept(order, ut, %{final_price: Decimal.new("7")})
+      {:ok, order, _pid} = Order.CallService.accept(order, ut, %{final_price: Decimal.new("7")})
 
       assert order.status == "transport"
       assert order.user_transport_id == ut.id
@@ -34,13 +35,12 @@ defmodule Publit.OrderCallServiceTest do
       assert ut_order["id"] == order.id
       assert ut_order["status"] == "transporting"
 
-      log = order.log |> List.last()
+      log = Repo.get_by(Order.Log, order_id: order.id, log_type: "Order")
+      lg = log.log |> List.last()
 
-      assert log[:type] == "update:order.transport"
-      assert log[:user_transport]
-      assert log[:user_transport_id]
+      assert lg["user_id"] == ut.id
 
-      assert Repo.one(from oc in OrderCall, select: count(oc.id)) == 0
+      assert Repo.one(from oc in Order.Call, select: count(oc.id)) == 0
 
       resp = Publit.MessageApiMock.get_data()
 
@@ -54,7 +54,7 @@ defmodule Publit.OrderCallServiceTest do
     test "empty" do
       order = %Order{id: Ecto.UUID.generate()}
 
-      assert OrderCallService.accept(order, %UserTransport{}, %{}) == :empty
+      assert Order.CallService.accept(order, %UserTransport{}, %{}) == :empty
     end
 
     test "empty2" do
@@ -63,7 +63,7 @@ defmodule Publit.OrderCallServiceTest do
 
       ut = insert(:user_transport, status: "listen")
 
-      assert :empty = OrderCallService.accept(order, ut, %{final_price: Decimal.new("7")})
+      assert :empty = Order.CallService.accept(order, ut, %{final_price: Decimal.new("7")})
     end
 
     test "error" do
@@ -74,7 +74,7 @@ defmodule Publit.OrderCallServiceTest do
 
       insert(:order_call, transport_ids: [ut.id], order_id: order.id, status: "delivered")
 
-      assert {:error, :order, cs} = OrderCallService.accept(order, ut, %{final_price: Decimal.new("-7")})
+      assert {:error, :order, cs} = Order.CallService.accept(order, ut, %{final_price: Decimal.new("-7")})
       assert cs.changes.transport.errors[:final_price]
     end
 

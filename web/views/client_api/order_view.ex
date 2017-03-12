@@ -13,8 +13,8 @@ defmodule Publit.ClientApi.OrderView do
   end
 
   def render("errors.json", %{cs: cs}) do
-    err = Map.put(get_errors(cs), :transport_errors, get_errors(cs.changes.transport))
-    %{errors: err}
+    #err = Map.put(get_errors(cs), :transport_errors, get_errors(cs.changes.transport))
+    %{errors: get_errors(cs)}
   end
 
   def render("not_found.json", %{msg: msg}) do
@@ -28,7 +28,7 @@ defmodule Publit.ClientApi.OrderView do
     end
 
     order
-    |> Map.drop([:__meta__, :__struct__, :user_client, :user_transport, :order_calls])
+    |> Map.drop([:__meta__, :__struct__, :user_client, :user_transport, :chat, :log,:order_calls])
     |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
     |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
     |> Map.put(:organization, Publit.OrganizationView.to_api(order.organization))

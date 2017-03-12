@@ -1,4 +1,4 @@
-defmodule Publit.OrderTransport do
+defmodule Publit.Order.Transport do
   use Publit.Web, :model
 
   embedded_schema do
@@ -8,7 +8,6 @@ defmodule Publit.OrderTransport do
     field :plate, :string
     field :calculated_price, :decimal
     field :final_price, :decimal
-    field :log, {:array, :map}, default: []
     field :responded_at, :string
     field :picked_arrived_at, :string
     field :picked_at, :string
@@ -35,7 +34,7 @@ defmodule Publit.OrderTransport do
 
   def changeset_delivery(ot, params) do
     ot
-    |> cast(params, [:picked_arrived_at, :delivered_arrived_at, :log])
+    |> cast(params, [:picked_arrived_at, :delivered_arrived_at])
   end
 
   def add_log(o_trans, pos) do
