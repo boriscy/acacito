@@ -38,10 +38,3 @@ defmodule Publit.Order.Log do
   end
 
 end
-#
-#defmodule Publit.Je do
-#  use Publit.Web, :model
-#  schema "je" do
-#    field :list, {:array, :map}
-#  end
-#end

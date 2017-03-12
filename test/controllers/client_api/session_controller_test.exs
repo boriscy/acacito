@@ -28,8 +28,8 @@ defmodule Publit.ClientApi.SessionControllerTest do
 
   describe "GET /client_api/valid_token" do
     test "VALID", %{conn: conn} do
-      id = Ecto.UUID.generate()
-      token = UserAuthentication.encrypt_user_id(id)
+      uc = insert(:user_client)
+      token = UserAuthentication.encrypt_user_id(uc.id)
 
       conn = get(conn, "/client_api/valid_token/#{token}")
 

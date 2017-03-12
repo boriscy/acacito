@@ -23,13 +23,10 @@ defmodule Publit.Api.OrderView do
   end
 
   def to_api(order) do
-    order = case order.user_client do
-      %Ecto.Association.NotLoaded{} -> order |> Repo.preload(:user_client)
-      %UserClient{} -> order
-    end
+    order = Repo.preload(order, [:user_client, :order_calls])
 
     order
-    |> Map.drop([:__meta__, :__struct__, :organization, :user_transport, :order_calls, :chat, :log])
+    |> Map.drop([:__meta__, :__struct__, :organization, :user_transport, :chat, :log])
     |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
     |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
     |> Map.put(:user_client, Publit.UserView.to_api(order.user_client))

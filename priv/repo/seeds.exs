@@ -9,7 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-alias Publit.{Repo, User, UserClient, Organization, UserOrganization, Product, ProductVariation}
+alias Publit.{Repo, User, UserClient, UserTransport, Organization, UserOrganization, Product, ProductVariation}
 
 #org = Repo.insert(%Organization{
 #  name: "Amalunchi",
@@ -18,7 +18,8 @@ alias Publit.{Repo, User, UserClient, Organization, UserOrganization, Product, P
 #})
 pass = Comeonin.Bcrypt.hashpwsalt("demo1234")
 
-
+##################################
+# Tierra Libre
 {:ok, org} = Repo.insert(%Organization{
   name: "Tierra Libre",
   address: "Plaza principal samaipata",
@@ -76,8 +77,9 @@ pass = Comeonin.Bcrypt.hashpwsalt("demo1234")
 
 Organization.set_tags(org.id)
 
-######################################################################################
 
+##################################
+# La Chakana
 {:ok, org} = Repo.insert(%Organization{
   name: "La Chakana",
   address: "Plaza principal samaipata",
@@ -145,3 +147,5 @@ Repo.insert(%UserTransport{
 })
 
 Ecto.Adapters.SQL.query(Repo, "UPDATE products SET publish=true")
+
+

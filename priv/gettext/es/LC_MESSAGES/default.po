@@ -168,7 +168,7 @@ msgstr "Ocultar"
 msgid "Unpublished"
 msgstr "Oculto"
 
-#: web/models/order.ex:136
+#: lib/order/order.ex:114
 msgid "Invalid product"
 msgstr "Producto inválido"
 
@@ -250,7 +250,7 @@ msgstr "Ejemplo de descripción"
 msgid "Escriba para probar"
 msgstr ""
 
-#: web/models/order_call.ex:47 web/templates/layout/translations.html.eex:17
+#: lib/order/call.ex:47 web/templates/layout/translations.html.eex:17
 msgid "New order"
 msgstr "Nuevo pedido"
 
@@ -267,7 +267,8 @@ msgstr "Categoría"
 msgid "Logout"
 msgstr "Salir"
 
-#: web/views/api/transport_view.ex:9 web/views/trans_api/order_view.ex:11
+#: lib/order/status_service.ex:124 web/views/api/transport_view.ex:9
+#: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr "Pedido no encontrado"
 
@@ -304,7 +305,7 @@ msgstr "camión"
 msgid "walk"
 msgstr "caminata"
 
-#: web/models/order_call.ex:48
+#: lib/order/call.ex:48
 msgid "New order from %{org}"
 msgstr ""
 
@@ -312,10 +313,22 @@ msgstr ""
 msgid "Transport has arrived"
 msgstr "Su transporte ya llego"
 
-#: web/services/pos_service.ex:63
+#: web/services/pos_service.ex:97
 msgid "Transport near"
 msgstr "Su transporte esta cerca"
 
-#: web/services/pos_service.ex:63
+#: web/services/pos_service.ex:97
 msgid "Your order is arriving"
 msgstr "Su transporte ya llego"
+
+#: lib/order/status_service.ex:145
+msgid "Order transporting"
+msgstr "Pedido en transporte"
+
+#: lib/order/status_service.ex:111
+msgid "User transport not found"
+msgstr "No se encontro transporte al pedido"
+
+#: lib/order/status_service.ex:145
+msgid "Your order is on the way"
+msgstr "Su pedido esta en camino"

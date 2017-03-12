@@ -33,7 +33,7 @@ defmodule Publit.Factory do
       mobile_number: "66778899",
       vehicle: "motorcycle",
       plate: "HUT321",
-      extra_data: %{"fb_token" => "fb12345678"},
+      extra_data: %{"fb_token" => "fbtranstoken12345678"},
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
     }
   end

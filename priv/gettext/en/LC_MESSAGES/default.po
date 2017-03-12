@@ -168,7 +168,7 @@ msgstr ""
 msgid "Unpublished"
 msgstr ""
 
-#: web/models/order.ex:136
+#: lib/order/order.ex:114
 msgid "Invalid product"
 msgstr ""
 
@@ -250,7 +250,7 @@ msgstr ""
 msgid "Escriba para probar"
 msgstr ""
 
-#: web/models/order_call.ex:47 web/templates/layout/translations.html.eex:17
+#: lib/order/call.ex:47 web/templates/layout/translations.html.eex:17
 msgid "New order"
 msgstr ""
 
@@ -267,7 +267,8 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: web/views/api/transport_view.ex:9 web/views/trans_api/order_view.ex:11
+#: lib/order/status_service.ex:124 web/views/api/transport_view.ex:9
+#: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr ""
 
@@ -304,7 +305,7 @@ msgstr ""
 msgid "walk"
 msgstr ""
 
-#: web/models/order_call.ex:48
+#: lib/order/call.ex:48
 msgid "New order from %{org}"
 msgstr "Nuevo pedido de %{org}"
 
@@ -312,10 +313,22 @@ msgstr "Nuevo pedido de %{org}"
 msgid "Transport has arrived"
 msgstr ""
 
-#: web/services/pos_service.ex:63
+#: web/services/pos_service.ex:97
 msgid "Transport near"
 msgstr ""
 
-#: web/services/pos_service.ex:63
+#: web/services/pos_service.ex:97
 msgid "Your order is arriving"
+msgstr ""
+
+#: lib/order/status_service.ex:145
+msgid "Order transporting"
+msgstr ""
+
+#: lib/order/status_service.ex:111
+msgid "User transport not found"
+msgstr ""
+
+#: lib/order/status_service.ex:145
+msgid "Your order is on the way"
 msgstr ""

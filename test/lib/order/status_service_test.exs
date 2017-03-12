@@ -1,6 +1,7 @@
 defmodule Publit.Order.StatusServiceTest do
   use Publit.ModelCase
   alias Publit.{Order, Repo, UserTransport}
+  import Publit.Gettext
 
   setup do
     %{uc: insert(:user_client), org: insert(:organization)}
@@ -8,6 +9,8 @@ defmodule Publit.Order.StatusServiceTest do
 
   describe "Change status" do
     test "change all statuses", %{uc: uc, org: org} do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
       ord = create_order(uc, org)
       u = build(:user, id: Ecto.UUID.generate())
 
@@ -41,9 +44,14 @@ defmodule Publit.Order.StatusServiceTest do
       assert Enum.at(log.log, 3)["user_id"] == u.id
       assert Enum.at(log.log, 3)["msg"] == "Change status from transporting to delivered"
 
+      data = Publit.MessageApiMock.get_data()
+
+      assert data[:tokens] == [uc.extra_data["fb_token"]]
     end
 
     test "transport to transporting", %{uc: uc, org: org} do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
       ord = create_order_only(uc, org, %{status: "transport"})
       {ord, ut} = update_order_and_create_user_transport(ord)
       user = build(:user, id: Ecto.UUID.generate())
@@ -62,6 +70,13 @@ defmodule Publit.Order.StatusServiceTest do
 
       assert ordt["id"] == ord.id
       assert ordt["status"] == "transporting"
+
+      data = Publit.MessageApiMock.get_data()
+
+      assert data[:msg][:message] == gettext("Your order is on the way")
+      assert data[:msg][:order][:id] == ord.id
+
+      assert data[:tokens] == [uc.extra_data["fb_token"], ut.extra_data["fb_token"]]
     end
 
     test "transporting to delivered", %{uc: uc, org: org} do

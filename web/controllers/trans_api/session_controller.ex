@@ -22,21 +22,10 @@ defmodule Publit.TransApi.SessionController do
   """
   # GET /trans_api/valid_token_user/:token
   def valid_token(conn, %{"token" => token}) do
-    case Phoenix.Token.verify(Publit.Endpoint, "user_id", token) do
-      {:ok, _user_id} ->
-        render(conn, "valid_token.json", valid: true)
-      {:error, :invalid} ->
-        conn
-        |> put_status(:unauthorized)
-        |> render("valid_token.json", valid: false)
-    end
-  end
-
-  def valid_token_user(conn, %{"token" => token}) do
-    with {:ok, user_id} <- Phoenix.Token.verify(Publit.Endpoint, "user_id", token),
-      user <- Repo.get(UserTransport, user_id),
-      {:user, %UserTransport{}} <- {:user, user} do
-        render(conn, "valid_token_user.json", valid: true, user: user)
+    with {:ok, user_id} <- Phoenix.Token.verify(Publit.Endpoint, "user_id", token, max_age: @max_age),
+      ut <- Repo.get_by(UserTransport, id: user_id),
+      %UserTransport{} <- ut do
+        render(conn, "show.json", user: ut, token: token)
     else
       _ ->
         conn

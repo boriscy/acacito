@@ -34,15 +34,16 @@ defmodule Publit.TransApi.SessionControllerTest do
 
   describe "GET /trans_api/valid_token" do
     test "VALID", %{conn: conn} do
-      id = Ecto.UUID.generate()
-      token = UserAuthentication.encrypt_user_id(id)
+      ut = insert(:user_transport)
+      token = UserAuthentication.encrypt_user_id(ut.id)
 
       conn = get(conn, "/trans_api/valid_token/#{token}")
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
 
-      assert json["valid"] == true
+      assert json["user"]["id"] == ut.id
+      assert json["token"]
     end
 
     test "INVALID", %{conn: conn} do
@@ -50,33 +51,6 @@ defmodule Publit.TransApi.SessionControllerTest do
       token = UserAuthentication.encrypt_user_id(id) <> "aa"
 
       conn = get(conn, "/trans_api/valid_token/#{token}")
-
-      assert conn.status == Plug.Conn.Status.code(:unauthorized)
-      json = Poison.decode!(conn.resp_body)
-
-      assert json["valid"] == false
-    end
-
-  end
-
-  describe "GET /trans_api/valid_token_user" do
-    test "VALID", %{conn: conn} do
-      user = insert(:user_transport)
-      token = UserAuthentication.encrypt_user_id(user.id)
-
-      conn = get(conn, "/trans_api/valid_token_user/#{token}")
-
-      assert conn.status == 200
-      json = Poison.decode!(conn.resp_body)
-
-      assert json["valid"] == true
-      assert json["user"]["id"] == user.id
-    end
-
-    test "INVALID", %{conn: conn} do
-      token = UserAuthentication.encrypt_user_id(Ecto.UUID.generate())
-
-      conn = get(conn, "/trans_api/valid_token_user/#{token}")
 
       assert conn.status == Plug.Conn.Status.code(:unauthorized)
       json = Poison.decode!(conn.resp_body)
