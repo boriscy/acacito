@@ -26,7 +26,6 @@ defmodule Publit.ClientApi.OrderView do
     |> Map.drop([:__meta__, :__struct__, :user_client, :user_transport, :organization, :chat, :log, :order_calls])
     |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
     |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
-    |> Map.put(:organization, Publit.OrganizationView.to_api(order.organization))
   end
 
 end

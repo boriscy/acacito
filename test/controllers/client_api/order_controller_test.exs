@@ -48,8 +48,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
       ord = json["order"]
       assert ord["client_pos"] == %{"coordinates" => [-120, 30], "type" => "Point"}
 
-      assert json["order"]["organization"]["name"] == org.name
-      assert json["order"]["organization"]["currency"] == "BOB"
+      assert json["order"]["organization_name"] == org.name
 
       assert called Publit.OrganizationChannel.broadcast_order(:_)
     end
@@ -86,8 +85,8 @@ defmodule Publit.ClientApi.OrderControllerTest do
       assert json["order"]["id"] == ord.id
       assert json["order"]["details"] |> Enum.count() == 2
 
-      assert json["order"]["organization"]["id"] == org.id
-      assert json["order"]["organization"]["name"] == org.name
+      assert json["order"]["organization_id"] == org.id
+      assert json["order"]["organization_name"] == org.name
     end
 
     test "not found", %{conn: conn} do
@@ -103,7 +102,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
 
   describe "GET /client_api/orders" do
     test "OK", %{conn: conn, user_client: user_client, org: org} do
-      create_order(user_client, org)
+      create_order_only(user_client, org)
 
       conn = get(conn, "/client_api/orders")
 
@@ -113,8 +112,8 @@ defmodule Publit.ClientApi.OrderControllerTest do
 
       assert ord["details"] |> Enum.count() == 2
 
-      assert ord["organization"]["id"] == org.id
-      assert ord["organization"]["name"] == org.name
+      assert ord["organization_id"] == org.id
+      assert ord["organization_name"] == org.name
     end
   end
 

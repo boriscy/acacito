@@ -31,7 +31,7 @@ defmodule Publit.Order.StatusService do
 
     case Repo.transaction(multi) do
       {:ok, res} ->
-        send_messages(order)
+        send_messages(res.order)
         {:ok, res.order}
       {:error, res} -> {:error, res}
     end
@@ -135,7 +135,7 @@ defmodule Publit.Order.StatusService do
   end
 
   defp send_messages(order) do
-    order = Repo.preload(order, :user_client)
+    order = Repo.preload(order, [:user_transport, :user_client])
 
     tokens = [order.user_client.extra_data["fb_token"]]
 

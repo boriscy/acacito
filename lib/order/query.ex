@@ -21,7 +21,14 @@ defmodule Publit.Order.Query do
   def user_orders(user_client_id) do
     q = from o in Order, where: o.user_client_id == ^user_client_id, order_by: [desc: o.inserted_at]
 
-    Repo.all(q) |> Repo.preload(:organization)
+    Repo.all(q)
+  end
+
+  def user_active_orders(user_client_id) do
+    q = from o in Order, where: o.user_client_id == ^user_client_id,
+      where: o.status in ^["new", "process", "transport", "transporting"], order_by: [desc: o.inserted_at]
+
+    Repo.all(q)
   end
 
   def transport_orders(ut_id, statuses \\ ["transport", "transporting"]) do
