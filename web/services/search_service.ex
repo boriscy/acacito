@@ -19,7 +19,7 @@ defmodule Publit.SearchService do
   defp map_results(rows) do
     Enum.map(rows, fn(row) ->
       [id, name, pos, tags, address, open, rating, rating_count, desc, curr] = row
-      %{id: id, name: name, coords: Geo.JSON.encode(pos),
+      %{id: id, name: name, pos: Geo.JSON.encode(pos),
         tags: tags, address: address, open: open, rating: rating, rating_count: rating_count,
         description: desc, currency: curr}
     end)

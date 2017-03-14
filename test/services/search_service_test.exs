@@ -80,7 +80,7 @@ defmodule Publit.SearchServiceTest do
       assert org.rating == %Decimal{coef: 50, exp: -1, sign: 1}
       assert org.rating_count == 2
       assert org.id
-      assert org.coords
+      assert org.pos
     end
 
     test "rating integer" do
@@ -101,7 +101,7 @@ defmodule Publit.SearchServiceTest do
       assert org.rating == %Decimal{coef: 50, exp: -1, sign: 1}
       assert org.rating_count == 2
       assert org.id
-      assert org.coords
+      assert org.pos
     end
 
     test "only rating" do
@@ -116,7 +116,7 @@ defmodule Publit.SearchServiceTest do
       org = List.first(rows)
 
       assert org.name == "org 1"
-      assert org.coords == %{"coordinates" => [-63.876047, -18.1787804], "type" => "Point"}
+      assert org.pos == %{"coordinates" => [-63.876047, -18.1787804], "type" => "Point"}
       assert org.id
       assert org.open == true
       assert org.rating == Decimal.new("4.0")

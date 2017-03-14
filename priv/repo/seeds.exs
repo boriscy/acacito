@@ -25,7 +25,7 @@ pass = Comeonin.Bcrypt.hashpwsalt("demo1234")
   address: "Plaza principal samaipata",
   description: "Tierra Libre tiene la **mejor comida** en un lugar calido y hermoso donde encuetra la mejor comida y gran variedad.",
   rating: 4.5,  rating_count: 5,
-  pos: %Geo.Point{coordinates: {-63.8684321, -18.1898758}, srid: nil},
+  pos: %Geo.Point{coordinates: {-63.8765, -18.1802}, srid: nil},
   tags: [], open: true
 })
 
@@ -85,7 +85,7 @@ Organization.set_tags(org.id)
   address: "Plaza principal samaipata",
   description: "Un lugar cerca del centro de samaipata con comida internacional de la mejor calidad",
   open: true, rating: 4.2,  rating_count: 3,
-  pos: %Geo.Point{coordinates: {-63.8784321, -18.1798758}, srid: nil},
+  pos: %Geo.Point{coordinates: {-63.8762, -18.1799}, srid: nil},
   tags: [%{text: "carne", count: 10}, %{text: "vegetariano", count: 2}]
 })
 
