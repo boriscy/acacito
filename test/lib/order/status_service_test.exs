@@ -80,6 +80,7 @@ defmodule Publit.Order.StatusServiceTest do
     end
 
     test "transporting to delivered", %{uc: uc, org: org} do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
       ord = create_order_only(uc, org, %{status: "transporting"})
       {ord, ut} = update_order_and_create_user_transport(ord)
 
@@ -93,6 +94,13 @@ defmodule Publit.Order.StatusServiceTest do
       ut = Repo.get(UserTransport, ut.id)
 
       assert ut.orders |> Enum.count() == 0
+
+      data = Publit.MessageApiMock.get_data()
+
+      assert data[:tokens] == [uc.extra_data["fb_token"]]
+
+      assert data[:msg][:title] == gettext("Order delivered")
+      assert data[:msg][:message] == gettext("Your order has been delivered")
     end
 
     test "previous", %{uc: uc, org: org} do

@@ -268,7 +268,7 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: lib/order/status_service.ex:124 web/views/api/transport_view.ex:9
+#: lib/order/status_service.ex:125 web/views/api/transport_view.ex:9
 #: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr ""
@@ -322,14 +322,22 @@ msgstr ""
 msgid "Your order is arriving"
 msgstr ""
 
-#: lib/order/status_service.ex:145
+#: lib/order/status_service.ex:146
 msgid "Order transporting"
 msgstr ""
 
-#: lib/order/status_service.ex:111
+#: lib/order/status_service.ex:112
 msgid "User transport not found"
 msgstr ""
 
-#: lib/order/status_service.ex:145
+#: lib/order/status_service.ex:146
 msgid "Your order is on the way"
+msgstr ""
+
+#: lib/order/status_service.ex:165
+msgid "Order delivered"
+msgstr ""
+
+#: lib/order/status_service.ex:165
+msgid "Your order has been delivered"
 msgstr ""

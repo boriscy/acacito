@@ -1,13 +1,13 @@
 {
-  "name": "brote",
+  "name": "acacito",
   "version": "1.0.0",
-  "description": "Finance info",
-  "main": "webpack.config.js",
+  "description": "Compra y vende facilito",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error\" && exit 1"
+    "deploy": "brunch build --production",
+    "watch": "brunch watch --stdin"
   },
   "author": "Boris Barroso",
   "license": "ISC",

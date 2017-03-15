@@ -9,25 +9,6 @@ defmodule Publit.ProductImage do
   def transform(:big, _), do: {:convert, "-strip -thumbnail 500x500"}
   def transform(:thumb, _), do: {:convert, "-strip -thumbnail 200x200"}
 
-
-  #def __versions, do: @versions
-  #def public_dir, do: "uploads"
-  #def storage_dir(_, _), do: "priv/static/#{public_dir()}"
-  #def __storage, do: Arc.Storage.Local
-
-  #def filename(:big, {_file, prod}) do
-  #  "#{partial_name(prod)}-big"
-  #end
-  #def filename(:thumb, {file, prod}) do
-  #  "#{partial_name(prod)}-thumb"
-  #end
-
-  #def img_url(:big, product), do: img_urlp(:big, product)
-  #def img_url(:thumb, product), do: img_urlp(:thumb, product)
-  #defp img_urlp(ver, product) do
-  #  "/#{public_dir()}/#{filename(ver, {product.image, product})}#{Path.extname(product.image.file_name)}"
-  #end
-
   def filename(version, _) do
     version
   end
@@ -59,16 +40,6 @@ defmodule Publit.ProductImage do
   #  else
   #    ""
   #  end
-  #end
-
-  #def delete_all(product) do
-  #  Enum.each(@versions, fn(ver)->
-  #    delete(ver, product)
-  #  end)
-  #end
-
-  #defp partial_name(prod) do
-  #  String.slice(prod.organization_id, 0, 8) <> "-" <> slugify(prod.name)
   #end
 
   defp slugify(name) do

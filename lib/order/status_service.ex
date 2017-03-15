@@ -62,6 +62,7 @@ defmodule Publit.Order.StatusService do
     case Repo.transaction(multi) do
       {:ok, res} ->
         Publit.OrganizationChannel.broadcast_order(res.order, "order:updated")
+        send_messages_deliver(res.order)
         {:ok, res.order}
       {:error, cs} -> {:error, cs}
     end
@@ -143,6 +144,22 @@ defmodule Publit.Order.StatusService do
       tokens = tokens ++ [order.user_transport.extra_data["fb_token"]]
     end
     {title, msg} = {gettext("Order transporting"), gettext("Your order is on the way")}
+
+    ord = Publit.TransApi.OrderView.to_api(order)
+    cb_ok = fn(_) -> "" end
+    cb_err = fn(_) -> "" end
+
+    Publit.MessagingService.send_messages(tokens,
+      %{title: title, message: msg, status: "order:updated", order: ord},
+      cb_ok, cb_err)
+  end
+
+  def send_messages_deliver(order) do
+    order = Repo.preload(order, [:user_client])
+
+    tokens = [order.user_client.extra_data["fb_token"]]
+
+    {title, msg} = {gettext("Order delivered"), gettext("Your order has been delivered")}
 
     ord = Publit.TransApi.OrderView.to_api(order)
     cb_ok = fn(_) -> "" end

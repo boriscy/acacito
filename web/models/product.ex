@@ -41,6 +41,7 @@ defmodule Publit.Product do
   def create(params) do
     %Product{}
     |> cast(params, [:name, :description, :organization_id, :tags, :category])
+    |> put_change(:id, Ecto.UUID.generate())
     |> cast_attachments(params, [:image])
     |> validate_required([:name, :organization_id])
     |> cast_embed(:variations)
@@ -74,7 +75,8 @@ defmodule Publit.Product do
   def delete(product) do
     if product.image do
       try do
-        Publit.ProductImage.delete_all(product)
+        path = product.image.file_name
+        Task.async(fn -> Publit.ProductImage.delete({path, product}) end)
       rescue
         _ -> nil
       end

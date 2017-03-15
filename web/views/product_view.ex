@@ -2,7 +2,7 @@ defmodule Publit.ProductView do
   use Publit.Web, :view
 
   def img_url(product, version \\ :thumb) do
-    if product.image do
+    if product.image && product.image.file_name do
       Publit.ProductImage.path(product, version)
     else
       "/images/blank.jpg"
