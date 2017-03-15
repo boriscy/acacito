@@ -29,7 +29,7 @@
         </div>
 
       </div>
-      <img src="<%= img_url(:big, product) %>" class="img" />
+      <img src="<%= img_url(product, :big) %>" class="img" />
 
       <div class="clearfix">
         <%= for pv <- product.variations do %>

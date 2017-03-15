@@ -20,17 +20,17 @@ config :publit, Publit.Endpoint,
 config :logger, level: :info
 
 config :arc,
-  #storage: Arc.Storage.Local
-  bucket: "acasito"
+  storage: Arc.Storage.S3,
+  bucket: "acacito"
 
 config :ex_aws,
   access_key_id: System.get_env["AMAZON_KEY_ID"],
   secret_access_key: System.get_env["AMAZON_SECRET_KEY"],
-  region: "eu-central-1",
+  region: "sa-east-1",
   s3: [
     scheme: "https://",
-    host: "s3.eu-central-1.amazonaws.com",
-    region: "eu-central-1"
+    host: "s3-sa-east-1.amazonaws.com",
+    region: "sa-east-1"
   ]
 
 config :publit, :message_api, Publit.MessageApi

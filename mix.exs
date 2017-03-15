@@ -45,10 +45,14 @@ defmodule Publit.Mixfile do
      {:comeonin, "~> 3.0"},
      {:geo, "~> 1.4"},
      {:poison, "~> 3.1", override: true},
-     {:arc_ecto, "0.5.0"},
+     {:ex_aws, "~> 1.1", override: true},
+     {:arc, "~> 0.7.0"},
+     {:arc_ecto, "0.6.0"},
      {:cors_plug, "~> 1.2"},
      {:earmark, "~> 1.0"},
      {:httpoison, "0.11.0"},
+     {:hackney, "1.6.5"},
+     {:sweet_xml, "~> 0.6"},
      {:ex_machina, "~> 2.0", only: [:dev, :test]},
      {:mock, "~> 0.2.0", only: :test}]
   end

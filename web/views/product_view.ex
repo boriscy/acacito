@@ -1,9 +1,9 @@
 defmodule Publit.ProductView do
   use Publit.Web, :view
 
-  def img_url(version, product) do
+  def img_url(product, version \\ :thumb) do
     if product.image do
-      Publit.ProductImage.img_url(version, product)
+      Publit.ProductImage.path(product, version)
     else
       "/images/blank.jpg"
     end
@@ -48,7 +48,7 @@ defmodule Publit.ProductView do
   def encode_product(cs) do
     m = Map.merge(cs.data, cs.changes)
     |> Map.drop([:__struct__, :__meta__, :organization])
-    |> Map.put(:image, Publit.ClientApi.ProductView.get_image(cs.data))
+    |> Map.put(:image, img_url(cs.data, :big))
     if cs.valid? do
       m |> Poison.encode!()
     else

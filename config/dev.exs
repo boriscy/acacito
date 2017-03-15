@@ -48,7 +48,19 @@ config :publit, Publit.Repo,
   types: Publit.PostgresTypes
 
 config :arc,
-  storage: Arc.Storage.Local
+  storage: Arc.Storage.S3,
+  #virtual_host: true,
+  bucket: "acacitodev"
+
+config :ex_aws,
+  access_key_id: System.get_env["AMAZON_KEY_ID"],
+  secret_access_key: System.get_env["AMAZON_SECRET_KEY"],
+  region: "sa-east-1",
+  s3: [
+    scheme: "https://",
+    host: "s3-sa-east-1.amazonaws.com",
+    region: "sa-east-1"
+  ]
 
 config :publit, :message_api, Publit.MessageApi
 

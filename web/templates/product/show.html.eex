@@ -20,7 +20,7 @@
 </h4>
 
 
-<img src="<%= img_url(:big, @product) %>" />
+<img src="<%= Publit.ProductImage.path(@product, :big) %>" />
 
 <div>
   <%= for pv <- @product.variations do %>
