@@ -1,10 +1,14 @@
 @import "colors";
 
+html {
+  height: 100%;
+}
+
 /* Space out content a bit */
 body {
   background: $white;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 0px;
+  height: 100%;
 }
 
 /* Phoenix flash messages */
@@ -21,6 +25,57 @@ form.link, form.button {
 //}
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
+.main-cont {
+  display: flex;
+  min-height: 100%;
+  height: auto;
+
+  header {
+    background: $dark;
+    min-height: 100%;
+    height: auto;
+    margin: 0px;
+
+    .menu-links {
+      margin: 0px;
+      padding: 0px;
+      list-style: none;
+
+      a {
+        color: $grayLighter;
+        text-align: center;
+        display: block;
+        padding: 0.7rem 0.2em;
+        border-bottom: 1px solid darken($grayLighter, 50%);
+        width: 4em;
+
+        &.logo {
+          img {
+            width: 70%;
+          }
+        }
+        &:hover {
+          background: lighten($dark, 10%);
+          text-decoration: none;
+        }
+        &.active {
+          color: #000;
+          background: lighten($dark, 40%);
+        }
+
+        i {
+          font-size: 2.2em;
+        }
+        .text {
+          font-size: 0.7em;
+          margin-top: -0.7em;
+        }
+      }
+    }
+  }
+}
+
+
 .header,
 .marketing {
   padding-right: 15px;
@@ -40,9 +95,8 @@ form.link, form.button {
 /* Full widht container */
 .product-container {
   margin: 0 auto;
-  max-width: 1200px;
+  //max-width: 1200px;
 }
-
 
 /* Main marketing message */
 .jumbotron {

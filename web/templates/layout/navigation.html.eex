@@ -1,0 +1,30 @@
+<header >
+  <nav role="navigation">
+    <ul class="menu-links">
+      <li>
+        <a href="/dashboard" class="logo <%= active_link(@conn, "/dashboard") %>">
+          <img src="/images/acacito.svg" title="Acacito"/>
+          <div>Acacito</div>
+        </a>
+      </li>
+      <li>
+        <a href="/products" class="<%= active_link(@conn, "/products") %>">
+          <i class="material-icons">list</i>
+          <div class="text"><%= gettext("Products") %></div>
+        </a>
+      </li>
+      <li>
+        <a href="/orders" class="<%= active_link(@conn, "/orders") %>">
+          <i class="material-icons">shopping_cart</i>
+          <div class="text"><%= gettext("Orders") %></div>
+        </a>
+      </li>
+      <li>
+        <%= link(to: "/logout", method: :delete) do %>
+          <i class="material-icons">sync_disabled</i>
+          <div class="text"><%= gettext("Logout") %></div>
+        <% end %>
+      </li>
+    </ul>
+  </nav>
+</header>

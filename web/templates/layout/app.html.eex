@@ -8,34 +8,24 @@
     <meta name="author" content="">
     <meta name="csrf" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
 
-    <title>Hello Publit!</title>
+    <title>Acacito</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
 
   </head>
 
   <body>
-    <div class="container">
-      <header class="header">
-        <nav role="navigation">
-          <span class="">Publit</span>
-          <ul class="nav nav-pills pull-right menu-links">
-            <li><a href="/products"><%= gettext("Products") %></a></li>
-            <li><a href="/orders"><%= gettext("Orders") %></a></li>
-            <li>
-              <%= link(gettext("Logout"), to: "/logout", method: :delete) %>
-            </li>
-          </ul>
-        </nav>
-      </header>
+    <div class="main-cont">
+      <%= render("navigation.html", conn: @conn) %>
 
-      <p class="alert alert-success" role="alert"><%= get_flash(@conn, :success) %></p>
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <div class="cont-right">
+        <p class="alert alert-success" role="alert"><%= get_flash(@conn, :success) %></p>
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
 
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
-
+        <main role="main">
+          <%= render @view_module, @view_template, assigns %>
+        </main>
+      </div>
     </div> <!-- /container -->
     <%= render Publit.LayoutView, "translations.html" %>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

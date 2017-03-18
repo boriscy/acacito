@@ -8,16 +8,19 @@
     <meta name="author" content="">
     <meta name="csrf" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
 
-    <title>Hello Publit!</title>
+    <title>Acacito</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
 
   </head>
 
-  <body class="no-margin">
-    <main role="main" id="main" class="orders">
-      <%= link(gettext("Products"), to: "/products", class: "work-area-back-link") %>
-      <%= render @view_module, @view_template, assigns %>
-    </main>
+  <body>
+    <div class="main-cont">
+      <%= render("navigation.html", conn: @conn) %>
+
+      <div id="main" class="orders cont-right">
+        <%= render @view_module, @view_template, assigns %>
+      </div>
+    </div>
 
     <%= render Publit.LayoutView, "translations.html" %>
     <script>
