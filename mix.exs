@@ -21,7 +21,8 @@ defmodule Publit.Mixfile do
   def application do
     [mod: {Publit, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :comeonin, :arc_ecto, :httpoison]]
+                    :phoenix_ecto, :postgrex, :comeonin, :arc, :arc_ecto, :httpoison,
+                    :ex_aws, :hackney, :poison]]
   end
 
   # Specifies which paths to compile per environment.
