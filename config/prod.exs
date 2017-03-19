@@ -13,16 +13,33 @@ use Mix.Config
 # which you typically run after static files are built.
 config :publit, Publit.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "example.com", port: 80],
+  url: [host: "acacito.com", port: 80],
   cache_static_manifest: "priv/static/manifest.json"
+  # Distillery release config
+  root: ".",
+  server: true,
+  version: Mix.Project.config[:version]
 
 # Do not print debug messages in production
 config :logger, level: :info
 
+
+# Configure your database
+config :publit, Publit.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  username: System.get_env("DB_USERNAME"),
+  password: System.get_env("DB_PASSWORD"),
+  database: System.get_env("DB_DATABASE"),
+  hostname: System.get_env("DB_HOSTNAME"),
+  pool_size: 10,
+  types: Publit.PostgresTypes
+
+# arc
 config :arc,
   storage: Arc.Storage.S3,
   bucket: "acacito"
 
+# aws
 config :ex_aws,
   access_key_id: System.get_env["AMAZON_KEY_ID"],
   secret_access_key: System.get_env["AMAZON_SECRET_KEY"],
@@ -64,7 +81,7 @@ config :publit, :message_api, Publit.MessageApi
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start the server for all endpoints:
 #
-#     config :phoenix, :serve_endpoints, true
+config :phoenix, :serve_endpoints, true
 #
 # Alternatively, you can configure exactly which server to
 # start per endpoint:
@@ -74,4 +91,6 @@ config :publit, :message_api, Publit.MessageApi
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+
+
+#import_config "prod.secret.exs"

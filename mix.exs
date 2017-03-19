@@ -54,7 +54,8 @@ defmodule Publit.Mixfile do
      {:hackney, "1.6.5"},
      {:sweet_xml, "~> 0.6"},
      {:ex_machina, "~> 2.0", only: [:dev, :test]},
-     {:mock, "~> 0.2.0", only: :test}]
+     {:mock, "~> 0.2.0", only: :test},
+     {:distillery, "~> 1.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
