@@ -25,6 +25,7 @@ defmodule Publit.Mixfile do
       :phoenix_pubsub,
       :phoenix_html,
       :cowboy,
+      :cors_plug,
       :logger,
       :gettext,
       :phoenix_ecto,
