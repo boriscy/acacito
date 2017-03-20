@@ -12,7 +12,7 @@ config :publit,
 # Configures the endpoint
 config :publit, Publit.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "tzEK8ZUKh6uBgSXAugYjlWQDdNH7fk0Fz7cEwbGibVp+xeu1dxixJu/EObXqPgwP",
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   render_errors: [view: Publit.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Publit.PubSub,
            adapter: Phoenix.PubSub.PG2]

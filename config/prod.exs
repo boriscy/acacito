@@ -13,12 +13,16 @@ use Mix.Config
 # which you typically run after static files are built.
 config :publit, Publit.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "acacito.com", port: 80],
+  url: [scheme: "http", host: "acacito.com", port: 80],
   cache_static_manifest: "priv/static/manifest.json"
   # Distillery release config
   root: ".",
   server: true,
   version: Mix.Project.config[:version]
+
+
+config :publit, Publit.Endpoint,
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -31,8 +35,12 @@ config :publit, Publit.Repo,
   password: System.get_env("DB_PASSWORD"),
   database: System.get_env("DB_DATABASE"),
   hostname: System.get_env("DB_HOSTNAME"),
-  pool_size: 10,
+  pool_size: 20,
   types: Publit.PostgresTypes
+
+
+config :phoenix, :serve_endpoints, true
+
 
 # arc
 config :arc,
@@ -81,7 +89,6 @@ config :publit, :message_api, Publit.MessageApi
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start the server for all endpoints:
 #
-config :phoenix, :serve_endpoints, true
 #
 # Alternatively, you can configure exactly which server to
 # start per endpoint:
@@ -91,6 +98,3 @@ config :phoenix, :serve_endpoints, true
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-
-
-#import_config "prod.secret.exs"
