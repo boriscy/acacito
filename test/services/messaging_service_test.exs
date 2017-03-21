@@ -30,7 +30,6 @@ defmodule Publit.MessagingServiceTest do
       {:ok, agent} = Agent.start_link fn -> %{resp: nil} end
 
       cb_ok = fn(_v) -> "" end
-      cb_error = fn(_v) -> "" end
       cb_error = fn(resp) ->
         Agent.update(agent, fn(v) -> %{v | resp: resp} end)
       end

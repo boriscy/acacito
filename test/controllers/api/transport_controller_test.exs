@@ -1,6 +1,6 @@
 defmodule Publit.Api.TransportControllerTest do
   use Publit.ConnCase
-  alias Publit.{Order, Repo, UserTransport, Order.Call}
+  alias Publit.{Order, Repo, UserTransport}
 
   setup do
     {user, org} = create_user_org()

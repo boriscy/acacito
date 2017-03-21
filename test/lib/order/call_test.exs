@@ -121,7 +121,7 @@ defmodule Publit.Order.CallTest do
       oc = Map.put(oc, :order, ord)
 
 
-      ocapi = Order.Call.encode(oc)
+      _ocapi = Order.Call.encode(oc)
       assert {:ok, json} = Order.Call.encode(oc) |> Poison.encode()
 
       json = Poison.decode!(json)

@@ -1,8 +1,7 @@
 defmodule Publit.Order.QueryTest do
   use Publit.ModelCase
-  import Publit.Support.Session, only: [create_user_org: 1]
 
-  alias Publit.{Order, ProductVariation}
+  alias Publit.{Order}
 
   test "active, all" do
     {uc, org} = {insert(:user_client), insert(:organization)}

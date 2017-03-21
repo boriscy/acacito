@@ -88,7 +88,7 @@ defmodule PublitPosServiceTest do
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org, %{status: "transporting"})
-      ol = insert(:order_log, %{order_id: order.id})
+      _ol = insert(:order_log, %{order_id: order.id})
 
       {lng, lat} = order.client_pos.coordinates
 
