@@ -1,7 +1,7 @@
 use Mix.Config
 
 config :publit, Publit.Endpoint,
-  http: [port: System.get_env("PORT")],
+  http: [port: 42357],#System.get_env("PORT")],
   url: [scheme: "http", host: "acacito.com", port: 80],
   cache_static_manifest: "priv/static/manifest.json",
   # Distillery release config
