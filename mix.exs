@@ -3,7 +3,7 @@ defmodule Publit.Mixfile do
 
   def project do
     [app: :publit,
-     version: "0.9.1",
+     version: "0.9.1.#{committed_at()}",
      elixir: "~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -83,5 +83,10 @@ defmodule Publit.Mixfile do
     ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
      "ecto.reset": ["ecto.drop", "ecto.setup"],
      "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
+  end
+
+  @doc "Unix timestamp of the last commit."
+  def committed_at do
+    System.cmd("git", ~w[log -1 --date=short --pretty=format:%ct]) |> elem(0)
   end
 end
