@@ -25,6 +25,7 @@ config :publit, Publit.Endpoint,
       ~r{priv/static/js/.*js$},
       ~r{priv/static/css/.*css$},
       ~r{priv/static/css/images/.*(png|jpeg|jpg|gif|svg)$},
+      ~r{priv/static/images/.*(png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
       ~r{web/views/.*(ex)$},
       ~r{web/templates/.*(eex)$}

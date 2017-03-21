@@ -16,11 +16,6 @@ use Mix.Releases.Config,
 # and environments, visit https://hexdocs.pm/distillery/configuration.html
 
 
-# You may define one or more environments in this file,
-# an environment's settings will override those of a release
-# when building in that environment, this combination of release
-# and environment configuration is called a profile
-
 environment :dev do
   set dev_mode: true
   set include_erts: false
