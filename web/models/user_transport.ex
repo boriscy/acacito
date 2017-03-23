@@ -40,7 +40,7 @@ defmodule Publit.UserTransport do
   def create_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:mobile_number, :email, :full_name, :password, :plate, :vehicle])
-    |> validate_required([:email, :password, :full_name, :mobile_number, :vehicle])
+    |> validate_required([:password, :full_name, :mobile_number, :vehicle])
     |> validate_format(:email, @email_reg)
     |> validate_format(:mobile_number, @number_reg)
     |> validate_length(:password, min: 8)
