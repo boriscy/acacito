@@ -38,12 +38,19 @@ const router = new VueRouter({
 const path = window.location.pathname
 
 import prodForm from './product/productForm'
+import Pos from './components/Pos.vue'
 
 switch(true) {
   case window.vueLoad == 'ProductForm':
     new Vue({
       el: '.product-form',
       mixins: [prodForm]
+    })
+  break;
+  case window.vueLoad == 'PosComponent':
+    new Vue({
+      el: '.pos-component',
+      components: {Pos}
     })
   break;
   case !!path.match(/orders/):
