@@ -37,6 +37,7 @@ defmodule Publit.Mixfile do
       :ex_aws,
       :hackney,
       :poison,
+      :sweet_xml,
       :edeliver]]
   end
 
@@ -90,6 +91,6 @@ defmodule Publit.Mixfile do
 
   @doc "Unix timestamp of the last commit."
   def committed_at do
-    System.cmd("git", ~w[log -1 --date=short --pretty=format:%ct]) |> elem(0)
+    System.cmd("git", ~w[git rev-parse HEAD]) |> elem(0) |> String.slice(0..7)
   end
 end

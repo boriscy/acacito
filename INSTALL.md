@@ -170,37 +170,6 @@ export DB_HOSTNAME=localhost
 MIX_ENV=prod
 ```
 
-### Install gatling
-
-```
-
-mix archive.install https://github.com/hashrocket/gatling_archives/raw/master/gatling.ez
-mix local.hex
-mix local.rebar
-```
-
-Now with the current command it will create the repo
-```
-mix gatling.load publit
-```
-
-
-In you local machine add the git remote
-
-```
-git remote add production deploy@acacito.com:publit
-```
-
-Add to your project the file `domains`
-
-```
-acacito.com
-www.acacito.com
-```
-
-
-To deploy gatling from server run first inside app `sudo mix release`
-and outside the project dir `sudo mix gatling.deploy`
 
 ## Letsencrypt
 
