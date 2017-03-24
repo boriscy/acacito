@@ -3,7 +3,7 @@ defmodule Publit.Mixfile do
 
   def project do
     [app: :publit,
-     version: "0.9.3-#{committed_at()}",
+     version: "0.9.3",
      elixir: "~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
