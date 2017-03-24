@@ -52,6 +52,13 @@ sudo -u postgres createdb acacito
 ```
 
 
+# Image magick
+
+```
+sudo apt-get install imagemagick
+```
+
+
 ## Deploy
 
 ### Distillery

@@ -64,6 +64,7 @@ defmodule Publit.Mixfile do
      {:ex_aws, "~> 1.1", override: true},
      {:arc, "~> 0.7.0"},
      {:arc_ecto, "0.6.0"},
+     {:sweet_xml, "~> 0.6"},
      {:cors_plug, "~> 1.2"},
      {:earmark, "~> 1.0"},
      {:httpoison, "0.11.0"},
