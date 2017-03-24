@@ -3,7 +3,7 @@ defmodule Publit.Mixfile do
 
   def project do
     [app: :publit,
-     version: "0.9.2",
+     version: "0.9.3",
      elixir: "~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -36,7 +36,8 @@ defmodule Publit.Mixfile do
       :httpoison,
       :ex_aws,
       :hackney,
-      :poison]]
+      :poison,
+      :ssl]]
   end
 
   # Specifies which paths to compile per environment.
