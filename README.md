@@ -43,4 +43,3 @@ end
 ```sql
 select o.id, d.name, d.price, d.quantity from orders o, jsonb_to_recordset(o.details) as d(price numeric, name text, quantity int)
 ```
-new
