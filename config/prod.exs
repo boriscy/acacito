@@ -1,15 +1,9 @@
 use Mix.Config
 
 config :publit, Publit.Endpoint,
-  http: [port: 42357],#System.get_env("PORT")],
+  http: [port: {:system, "PORT"}],#System.get_env("PORT")],
   url: [host: "www.acacito.com", port: 80],
   cache_static_manifest: "priv/static/manifest.json",
-  https: [port: 42357,
-    otp_app: :publit,
-    keyfile: System.get_env("ACACITO_SSL_KEY_PATH"),
-    certfile: System.get_env("ACACITO_SSL_CERT_PATH")
-    #cacertfile: System.get_env("INTERMEDIATE_CERTFILE_PATH") # OPTIONAL Key for intermediate certificates
-  ],
   # Distillery release config
   root: ".",
   server: true,

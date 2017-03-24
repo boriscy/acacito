@@ -43,3 +43,30 @@ end
 ```sql
 select o.id, d.name, d.price, d.quantity from orders o, jsonb_to_recordset(o.details) as d(price numeric, name text, quantity int)
 ```
+
+```
+# Init file
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          publit
+# Required-Start:    $local_fs $network $named $time $syslog
+# Required-Stop:     $local_fs $network $named $time $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Description:       Plug Application: publit
+### END INIT INFO
+
+export MIX_ENV=prod
+export PORT=42357
+export HOME=/home/deploy/deployments/publit
+
+[ -f $HOME/.env ] && export $(cat $HOME/.env)
+
+/home/deploy/deployments/publit/bin/publit "$1" "$2
+```
+
+
+mix edeliver build release
+mix edeliver deploy release to production
+mix edeliver start production

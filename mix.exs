@@ -3,7 +3,7 @@ defmodule Publit.Mixfile do
 
   def project do
     [app: :publit,
-     version: "0.9.3",
+     version: "0.9.3-#{committed_at()}",
      elixir: "~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -37,7 +37,7 @@ defmodule Publit.Mixfile do
       :ex_aws,
       :hackney,
       :poison,
-      :ssl]]
+      :edeliver]]
   end
 
   # Specifies which paths to compile per environment.
@@ -71,7 +71,8 @@ defmodule Publit.Mixfile do
      {:sweet_xml, "~> 0.6"},
      {:ex_machina, "~> 2.0", only: [:dev, :test]},
      {:mock, "~> 0.2.0", only: :test},
-     {:distillery, "~> 1.0"}]
+     {:edeliver, "~> 1.4.2"},
+     {:distillery, "~> 1.0", warn_missing: false}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
