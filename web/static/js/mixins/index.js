@@ -19,8 +19,17 @@ const defaults = {
   }
 }
 
+const md = new Markdown('commonmark', {html: false})
+
 export const format = {
   methods: {
+    md(txt) {
+      if(txt) {
+        return md.render(txt)
+      } else {
+        return ''
+      }
+    },
     getUser(id, field = 'full_name') {
       if(!field) {
         return users[id]

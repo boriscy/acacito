@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 
-export const auth = axios.create({
+export default axios.create({
   timeout: 1000,
   headers: {
     'Authorization': localStorage.getItem('authToken'),
@@ -10,7 +10,5 @@ export const auth = axios.create({
 });
 
 export const xhr = axios.create({
-  headers: {
-    'x-csrf-token': document.querySelector('[name=csrf]').content
-  }
+  
 })

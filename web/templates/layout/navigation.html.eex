@@ -20,6 +20,12 @@
         </a>
       </li>
       <li>
+        <%= link(to: "/organizations/current") do %>
+          <i class="material-icons">settings</i>
+          <div class="text"><%= gettext("Settings") %></div>
+        <% end %>
+      </li>
+      <li>
         <%= link(to: "/logout", method: :delete) do %>
           <i class="material-icons">sync_disabled</i>
           <div class="text"><%= gettext("Logout") %></div>

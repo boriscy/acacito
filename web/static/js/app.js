@@ -38,7 +38,7 @@ const router = new VueRouter({
 const path = window.location.pathname
 
 import prodForm from './product/productForm'
-import Pos from './components/Pos.vue'
+import OrgData from './org/Show.vue'
 
 switch(true) {
   case window.vueLoad == 'ProductForm':
@@ -47,10 +47,10 @@ switch(true) {
       mixins: [prodForm]
     })
   break;
-  case window.vueLoad == 'PosComponent':
+  case window.vueLoad == 'OrgData':
     new Vue({
-      el: '.pos-component',
-      components: {Pos}
+      el: window.vueEl,
+      components: {OrgData}
     })
   break;
   case !!path.match(/orders/):
@@ -63,10 +63,3 @@ switch(true) {
 
 // set moment locale
 moment.locale(window.locale)
-
-// Import local files
-//
-// Local files can be imported directly using relative
-// paths "./socket" or full ones "web/static/js/socket".
-
-// import socket from "./socket"

@@ -1,37 +1,61 @@
-<h2><%= @organization.name %></h2>
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<!-- Load Esri Leaflet from CDN -->
+<script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&key=AIzaSyDQwB6IOvELaaXQX1keoMuH-gaN3QbPRqM"></script>
 
 <div id="map" style="width:500px;height:500px">
 </div>
 
-<!--
-<div id="coords">
-  <span><%= gettext("Latitude") %>:</span> {{ coords.lat }}
-  <span><%= gettext("Longitude") %>:</span> {{ coords.lng }}
-  <button class="btn btn-primary" @click="setPosition()"><%= gettext("Update Position") %></button>
-  <div v-show="showSaved" class="alert alert-success">
-    <h4><%= gettext("Your position has been updated.") %></h4>
-  </div>
-</div>
--->
-
-<div class="pos-component">
-  <Pos>
+<div id="org-data">
+  <org-data />
 </div>
 
 <script>
-  window.vueLoad = 'PosComponent';
-  window.pos = <%= raw Poison.encode!(Publit.Organization.coords(@organization)) %>;
-  var geoOptions = {
-    enableHighAccuracy: true,
-    maximumAge: Infinity,
-    timeout: Infinity
-  };
+  var map = window.map = L.map('map').setView([-18.174332636, -63.871996512], 16);
+  //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> '
+  }).addTo(map);
 
-  window.addEventListener("load", function load(event){
-    window.removeEventListener("load", load, false); //remove listener, no longer needed
+  var GoogleSearch = L.Control.extend({
+    onAdd: function() {
+      var el = document.createElement("input");
+      el.id = "searchBox";
+      el.classList.add('form-control');
+      el.classList.add('input-sm');
+      el.style.width = "17  em";
+      el.placeholder = "<%= gettext("Search place") %>";
+
+      return el;
+    }
+  });
+
+  (new GoogleSearch).addTo(map);
+
+  var input = document.getElementById("searchBox");
+  var searchBox = new google.maps.places.SearchBox(input);
+  searchBox.addListener('places_changed', function() {
+    var places = searchBox.getPlaces();
+
+    var place = places[0];
+    var coords = place.geometry.location;
+    map.setView([coords.lat(), coords.lng()], 16)
+  });
 
 
+  window.vueLoad = 'OrgData';
+  window.vueEl = '#org-data';
 
-  },false);
+  window.orgData = <%= raw Poison.encode!(to_api(@organization)) %>
+
 </script>
+
+<style>
+#map {
+  min-height: 300px;
+}
+.pac-container:after {
+  background-image: none;
+  display: none;
+}
+</style>

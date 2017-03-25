@@ -1,66 +1,97 @@
 <template>
-  <div>
-    latitude:
-    <input v-model="pos.lat" type="number"/>
-    longitude:
-    <input v-model="pos.lng" type="number"/>
-    <button class="btn btn-primary" @click.prevent="updatePosition()">Update position</button>
+  <div class="form-inline">
+    <div>
+      <button class="btn btn-default" :class="getActiveCSS('selpos')" @click="selectPos()">
+        <i class="material-icons">location_on</i>
+        {{gettext("Click then map to select your position")}}
+      </button>
+      <button class="btn btn-default" :class="getActiveCSS('getpos')" @click="getPos()">
+        <i class="material-icons">navigation</i>
+        {{gettext("Obtain position using GPS")}}
+      </button>
+    </div>
 
-    <div id="map"></div>
+    <div>
+      {{gettext("Latitude")}}:
+      <input v-model="lat" type="number" class="form-control pos lat input-sm"/>
+      {{gettext("Longitude")}}:
+      <input v-model="lng" type="number" class="form-control pos lng input-sm"/>
+    </div>
   </div>
 </template>
 
 <script>
-import auth from '../store/api/auth'
+import {translate, format} from '../mixins'
 
+let that
 export default {
+  name: 'Pos',
+  props: {
+    pos: null
+  },
+  watch: {
+    pos:(a, b) => {
+      if(a && a.coordinates) {
+        that.lng = a.coordinates[0]
+        that.lat = a.coordinates[1]
+
+        that.updatePos()
+      }
+    }
+  },
+  mixins: [format, translate],
   data() {
     return {
-      pos: {lat: 1, lng: 2},
-      count: 1,
-      showSaved: false
+      lat: null,
+      lng: null,
+      marker: null,
+      posStatus: ''
     }
   },
   methods: {
-    updateCoords() {
-      navigator.geolocation.getCurrentPosition(this.setPosition, this.error, geoOptions);
-    },
-    getPositionData(position) {
-    },
-    //
-    updatePosition(position) {
-      const that = this
-
-    },
-    //
-    posSuccess: function(position) {
-      if(this.count > 10) {
-      } else {
-        this.coords = {lat: position.coords.latitude, lng: position.coords.longitude};
-        var p = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        this.marker.setPosition(p);
-        this.marker.setMap(window.map);
-        window.map.setCenter(p);
-        this.count ++;
+    getActiveCSS(who) {
+      if(who == this.posStatus) {
+        return 'active'
       }
-      //this.setPosition()
     },
-    posError: function() {},
     //
-    setMap: function() {
-    }
+    updatePos() {
+      if(!this.marker) {
+        this.marker = L.marker([this.lat, this.lng]).addTo(window.map)
+      } else {
+        this.marker.setLatLng({lat: this.lat, lng: this.lng})
+      }
+      window.map.setView([that.lat, that.lng], 18)
+    },
+    //
+    selectPos() {
+      this.posStatus = 'selpos'
+      window.map.once('click', (e) => {
+        this.lat = e.latlng.lat
+        this.lng = e.latlng.lng
+        this.updatePos()
+        this.posStatus = ''
+        window.map.off('click')
+      })
+    },
+    //
+    getPos() {
+      const geoOptions = {
+        enableHighAccuracy: true
+      }
+      navigator.geolocation.getCurrentPosition(this.posSuccess, this.posError, geoOptions)
+    },
+    //
+    posSuccess(position) {
+      this.lat = position.coords.latitude
+      this.lng = position.coords.longitude
+      this.updatePos()
+    },
+    //
+    posError() {},
   },
   mounted() {
-    let lng = window.pos.coordinates[0]
-    let lat = window.pos.coordinates[1]
-    if(window.pos.coordinates[0]) {
-      try {
-        this.pos.lng = window.pos.coordinates[0]
-        this.pos.lat = window.pos.coordinates[1]
-      }
-      catch(e) {}
-    }
-    this.setMap()
+    that = this
   }
 }
 </script>

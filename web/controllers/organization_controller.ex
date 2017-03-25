@@ -18,7 +18,7 @@ defmodule Publit.OrganizationController do
                               user_org: conn.assigns.current_user_org)
   end
 
-  # PUT /organizations/xyz
+  # PUT /organizations/current
   # render json
   def update(conn, %{"organization" => org_params, "format" => "json"}) do
     case Organization.update(conn.assigns.current_organization, org_params) do
@@ -32,7 +32,7 @@ defmodule Publit.OrganizationController do
     end
   end
 
-  # PUT /organizations/xyz
+  # PUT /organizations/current
   def update(conn, %{"organization" => organization_params}) do
     case Organization.update(conn.assigns.current_organization, organization_params) do
       {:ok, org} ->

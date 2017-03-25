@@ -71,4 +71,4 @@ mix edeliver build release
 mix edeliver deploy release to production
 mix edeliver start production
 
-mix edeliver build upgrade --auto-version=git-revision
+mix edeliver build upgrade --from=03b88d8 --run-migrations
