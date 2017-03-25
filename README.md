@@ -66,6 +66,7 @@ export HOME=/home/deploy/deployments/publit
 /home/deploy/deployments/publit/bin/publit "$1" "$2
 ```
 
+mix edeliver update production --branch=master --start-deploy
 
 mix edeliver build release
 mix edeliver deploy release to production

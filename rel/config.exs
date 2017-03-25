@@ -16,16 +16,21 @@ use Mix.Releases.Config,
 # and environments, visit https://hexdocs.pm/distillery/configuration.html
 
 
+# You may define one or more environments in this file,
+# an environment's settings will override those of a release
+# when building in that environment, this combination of release
+# and environment configuration is called a profile
+
 environment :dev do
   set dev_mode: true
   set include_erts: false
-  set cookie: :"D&.&1:fI~J4IwDGLC;4TodAg?o~1rRdfrwGE,G|>pq.*9/<o(,7k;*Vz^JY$ns@["
+  set cookie: :"Ih^K<621iVNZpS`uh>ONgwqa({mQx.r3_z>A0OWJks.^a^l[8Yy3j7%6[XX^U!i]"
 end
 
 environment :prod do
   set include_erts: true
   set include_src: false
-  set cookie: :"RGc(HhrO*@iPi,!E8N1Jqw:~.EntwZk47h=|(&nc~mgZh<UG[NV%gXawuY3IM<G="
+  set cookie: :"Dc5lW6Pzo8IGZ4XD~/5tg6H3cw$9c<Blijsul|i4wES@(FPF7Z>qPBHPEMoY98Zs"
 end
 
 # You may define one or more releases in this file.

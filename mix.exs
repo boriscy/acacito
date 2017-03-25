@@ -35,6 +35,7 @@ defmodule Publit.Mixfile do
       :arc_ecto,
       :httpoison,
       :ex_aws,
+      :geo,
       :hackney,
       :poison,
       :sweet_xml,
