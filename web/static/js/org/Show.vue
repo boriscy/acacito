@@ -44,9 +44,9 @@
 <script>
 import Pos from '../components/Pos.vue'
 import {translate, format} from '../mixins'
-//import {xhr} from '../store/api/xhr'
 import axios from 'axios'
-export const xhr = axios.create({
+
+const xhr = axios.create({
   headers: {
     'x-csrf-token': document.querySelector('[name=csrf]').content
   }

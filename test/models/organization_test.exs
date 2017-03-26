@@ -34,6 +34,27 @@ defmodule Publit.OrganizationTest do
       assert org.open == false
     end
 
+    test "open_close" do
+      {:ok, org} = Organization.create(%{"name" => "A new name"})
+
+      assert org.name == "A new name"
+      assert org.currency == "BOB"
+      assert org.open == false
+
+      uid = Ecto.UUID.generate()
+
+      {:ok, org} = Organization.open_close(org, uid)
+
+      assert org.open == true
+      assert org.info["last_opened_by"] == uid
+
+      {:ok, org} = Organization.open_close(org, uid)
+
+      assert org.open == false
+      assert org.info["last_closed_by"] == uid
+      assert org.info["last_opened_by"] == uid
+    end
+
   end
 
   describe "update" do

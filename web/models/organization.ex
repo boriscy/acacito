@@ -23,7 +23,6 @@ defmodule Publit.Organization do
     field :rating, :decimal
     field :rating_count, :integer
     field :description, :string
-    #field :images, :map
 
     has_many :products, Product
 
@@ -34,7 +33,6 @@ defmodule Publit.Organization do
   @categories ["restaurant", "store"]
 
   def changeset(mod, params) do
-    IO.puts "Changeset org"
     mod
   end
 
@@ -58,6 +56,22 @@ defmodule Publit.Organization do
     |> cast(params, [:name, :address, :pos, :description])
     |> validate_required([:name, :currency, :pos])
     |> Repo.update()
+  end
+
+  @doc """
+  Opens or closes an organization
+  """
+  def open_close(org, user_id) do
+    cs = change(org)
+    |> put_change(:open, !org.open)
+
+    cs = if org.open do
+      cs |> put_change(:info, Map.merge(org.info, %{"last_closed_by" => user_id}))
+    else
+      cs |> put_change(:info, Map.merge(org.info, %{"last_opened_by" => user_id}))
+    end
+
+    Repo.update(cs)
   end
 
   @doc """

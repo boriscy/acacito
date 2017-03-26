@@ -29,6 +29,7 @@ defmodule Publit.Router do
     plug Publit.Plug.Api.OrganizationAuth
   end
 
+  ######################################################
   scope "/", Publit do
     pipe_through [:browser] # Use the default browser stack
 
@@ -57,10 +58,12 @@ defmodule Publit.Router do
 
     get "/organizations/:id", OrganizationController, :show
     put "/organizations/current", OrganizationController, :update
+    put "/organizations/open_close", OrganizationController, :open_close
 
     get "/orders", OrderController, :index
   end
 
+  ######################################################
   # Unauthorized API
   scope "/api", Publit do
     pipe_through [:api]

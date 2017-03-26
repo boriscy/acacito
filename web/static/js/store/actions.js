@@ -60,3 +60,14 @@ export const cancelCall = ({commit}, order_id) => {
     }
   }, order_id)
 }
+
+//////////////////////////////////
+// Organization
+import organizationApi from './api/organization'
+
+export const openCloseOrganization = ({commit}) => {
+  organizationApi.openCloseOrganization((data) => {
+    console.log(data)
+    commit(types.UPDATE_ORGANIZATION, {org: data.organization})
+  })
+}

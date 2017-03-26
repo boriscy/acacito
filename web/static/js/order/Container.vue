@@ -1,16 +1,28 @@
 <template>
-  <div class="orders-container">
-    <NewOrders :orders="newOrders" title="New Orders" css-class="new"
-    v-bind:orderComp="orderComp">
-    </NewOrders>
+  <div class="orders-main-cont">
+    <div v-if="!org.open" class="text-center">
+      <br/>
+      <button class="btn btn-success btn-lg" @click="openCloseOrg()" :disabled="saving">{{gettext("Open for sale")}}</button>
+    </div>
 
-    <ProcessOrders :orders="processOrders" title="Orders in Process"
-    css-class="process" v-bind:orderComp="processComp">
-    </ProcessOrders>
+    <button class="close-org" v-if="org.open" @click="openCloseOrg()" :disabled="saving">
+      <i class="material-icons">close</i>
+      <span class="text">{{gettext("Close sale")}}</span>
+    </button>
 
-    <TransportOrders :orders="transportOrders" title="Transporting Orders"
-      css-class="transport" v-bind:orderComp="processComp">
-    </TransportOrders>
+    <div class="orders-container" v-if="org.open">
+      <NewOrders :orders="newOrders" title="New Orders" css-class="new"
+      v-bind:orderComp="orderComp">
+      </NewOrders>
+
+      <ProcessOrders :orders="processOrders" title="Orders in Process"
+      css-class="process" v-bind:orderComp="processComp">
+      </ProcessOrders>
+
+      <TransportOrders :orders="transportOrders" title="Transporting Orders"
+        css-class="transport" v-bind:orderComp="processComp">
+      </TransportOrders>
+    </div>
   </div>
 </template>
 
@@ -31,7 +43,8 @@ export default {
     return {
       orderComp: Order,
       processComp: OrderProcess,
-      channel: null
+      channel: null,
+      saving: false
     }
   },
   components: {
@@ -39,12 +52,30 @@ export default {
     ProcessOrders: OrderList,
     TransportOrders: OrderList
   },
-  computed: mapGetters({
-    newOrders: 'newOrders',
-    processOrders: 'processOrders',
-    transportOrders: 'transportOrders'
-  }),
+  computed: {
+    state() { return this.$store.state },
+    newOrders() {
+      return this.state.order.orders.filter(ord => { return ord.status == 'new' })
+    },
+    processOrders() {
+      return this.state.order.orders.filter(ord => { return ord.status == 'process'  || ord.status == 'transport' })
+    },
+    transportOrders() {
+      return this.state.order.orders.filter(ord => { return ord.status == 'transporting' })
+    },
+    org() {
+      return this.state.organization.org
+    }
+  },
   methods: {
+    openCloseOrg() {
+      this.saving = true
+      this.$store.dispatch('openCloseOrganization')
+      .then((res) => {
+        console.log('org up', res)
+        this.saving = false
+      })
+    },
     createMessage(order) {
       return `${this.gettext('New order')}, ${order.user_client.full_name}: ${this.currency(order.currency)}
       ${this.formatNumber(order.total)}`
@@ -99,15 +130,18 @@ export default {
 
     }
   },
-  created() {
+  ////////////////////////
+  mounted() {
     this.$store.dispatch('getOrders')
     this.setChannel()
 
+
     this.sound = new Audio('/sounds/alert1.mp3')
     Notification.requestPermission().then(function(result) {
-      console.log(result)
-    });
+      console.log('Permission for notification', result)
+    })
 
+    this.$store.commit('UPDATE_ORGANIZATION', {org: window.organization})
   }
 }
 </script>

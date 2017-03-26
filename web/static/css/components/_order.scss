@@ -8,7 +8,39 @@ body{
   margin: 0px;
 }
 
+.orders-main-cont {
+  position: relative;
+  .close-org {
+    position: absolute;
+    width: 2em;
+    padding: 0.3rem;
+    height: 1.5em;
+    text-align: center;
+    background: $red;
+    border: 1px solid darken($red, 15%);
+    border-radius: 4px;
+    color: white;
+    i {
+      font-size: 1.2em;
+    }
+    .text {
+      color: rgba(255, 255, 255, 0);
+      vertical-align: top;
+      line-height: 1.2;
+    }
 
+    &:hover {
+      font-size: 1.5em;
+      width: 8em;
+      height: 1.8em;
+      transition: all 0.3s;
+      .text {
+        color: white;
+      }
+    }
+  }
+
+}
 .orders-container {
   display: flex;
   .orders {

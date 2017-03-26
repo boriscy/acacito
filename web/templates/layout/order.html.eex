@@ -26,7 +26,7 @@
     <script>
     window.vueLoad = 'orders';
     window.locale = '<%= @conn.assigns.current_user.locale %>';
-    window.organization = <%= raw Poison.encode!(@conn.assigns.current_organization) %>;
+    window.organization = <%= raw Poison.encode!(Publit.OrganizationView.to_api(@conn.assigns.current_organization)) %>;
 
     localStorage.setItem('authToken', "<%= @token %>");
     localStorage.setItem('orgToken', "<%= @orgtoken %>");

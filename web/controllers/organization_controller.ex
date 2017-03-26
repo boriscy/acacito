@@ -24,11 +24,11 @@ defmodule Publit.OrganizationController do
     case Organization.update(conn.assigns.current_organization, org_params) do
       {:ok, org} ->
         conn
-        |> render("show.json", organization: Organization.to_api(org))
-      {:error, _cs} ->
+        |> render("show.json", organization: org)
+      {:error, cs} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render("error.json", errors: [])
+        |> render("error.json", cs: cs)
     end
   end
 
@@ -42,6 +42,20 @@ defmodule Publit.OrganizationController do
         conn
         |> put_status(:unprocessable_entity)
         |> render("edit.html", changeset: cs)
+    end
+  end
+
+  # PUT /organizations/open_close
+  def open_close(conn, _params) do
+    user_id = conn.assigns.current_user.id
+
+    case Organization.open_close(conn.assigns.current_organization, user_id) do
+      {:ok, org} ->
+        render(conn, "show.json", organization: org)
+      {:error, cs} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render("error.json", cs: cs)
     end
   end
 

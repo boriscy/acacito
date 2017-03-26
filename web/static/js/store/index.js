@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import * as actions from './actions'
 import * as getters from './getters'
 import order from './modules/order'
+import organization from './modules/organization'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,8 @@ const vx = new Vuex.Store({
   actions,
   getters,
   modules: {
-    order
+    order,
+    organization
   }
 })
 

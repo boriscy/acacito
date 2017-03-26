@@ -36,7 +36,7 @@ msgstr "Imagen"
 msgid "Login"
 msgstr "Ingresar"
 
-#: web/templates/layout/translations.html.eex:21
+#: web/templates/layout/translations.html.eex:23
 #: web/templates/product/form.html.eex:5
 msgid "Name"
 msgstr "Nombre"
@@ -68,7 +68,7 @@ msgstr "Registre su venta"
 msgid "Shop name"
 msgstr "Nombre de la venta"
 
-#: web/templates/layout/translations.html.eex:27
+#: web/templates/layout/translations.html.eex:29
 #: web/templates/product/form.html.eex:23
 msgid "Tags"
 msgstr "Etiquetas"
@@ -127,11 +127,11 @@ msgstr "Organizaciones"
 msgid "You don't have permission to access this page"
 msgstr "No tiene privilegios para ver esta pagina"
 
-#: web/templates/layout/translations.html.eex:13
+#: web/templates/layout/translations.html.eex:14
 msgid "Latitude"
 msgstr "Latitud"
 
-#: web/templates/layout/translations.html.eex:14
+#: web/templates/layout/translations.html.eex:15
 msgid "Longitude"
 msgstr "Longitud"
 
@@ -164,7 +164,7 @@ msgstr "Oculto"
 msgid "Invalid product"
 msgstr "Producto inválido"
 
-#: web/templates/layout/translations.html.eex:16
+#: web/templates/layout/translations.html.eex:17
 msgid "New Orders"
 msgstr "Nuevos Pedidos"
 
@@ -173,11 +173,11 @@ msgstr "Nuevos Pedidos"
 msgid "Orders"
 msgstr "Pedidos"
 
-#: web/templates/layout/translations.html.eex:28
+#: web/templates/layout/translations.html.eex:30
 msgid "Transporting Orders"
 msgstr "Pedidos en Transporte"
 
-#: web/templates/layout/translations.html.eex:19
+#: web/templates/layout/translations.html.eex:21
 msgid "Orders in Process"
 msgstr "Pedidos en Proceso"
 
@@ -189,23 +189,23 @@ msgstr "Adicionar línea"
 msgid "Big"
 msgstr "Grande"
 
-#: web/templates/layout/translations.html.eex:15
+#: web/templates/layout/translations.html.eex:16
 msgid "Medium"
 msgstr "Medio"
 
-#: web/templates/layout/translations.html.eex:23
+#: web/templates/layout/translations.html.eex:25
 msgid "Price"
 msgstr "Precio"
 
-#: web/templates/layout/translations.html.eex:24
+#: web/templates/layout/translations.html.eex:26
 msgid "Remove"
 msgstr "Eliminar"
 
-#: web/templates/layout/translations.html.eex:33
+#: web/templates/layout/translations.html.eex:35
 msgid "Variations"
 msgstr "Variaciones"
 
-#: web/templates/layout/translations.html.eex:26
+#: web/templates/layout/translations.html.eex:28
 msgid "Small"
 msgstr "Pequeño"
 
@@ -213,16 +213,16 @@ msgstr "Pequeño"
 msgid "Call Transport"
 msgstr "Llamar Transporte"
 
-#: web/templates/layout/translations.html.eex:25
+#: web/templates/layout/translations.html.eex:27
 #: web/templates/product/form.html.eex:25
 msgid "Separate tags with commas"
 msgstr "Separe las etiquetas con comas"
 
-#: web/templates/layout/translations.html.eex:34
+#: web/templates/layout/translations.html.eex:36
 msgid "Variation name"
 msgstr "Nombre de variación"
 
-#: web/templates/layout/translations.html.eex:12
+#: web/templates/layout/translations.html.eex:13
 msgid "Enter tags"
 msgstr "Ingrese etiquetas"
 
@@ -242,7 +242,7 @@ msgstr "Ejemplo de descripción"
 msgid "Escriba para probar"
 msgstr ""
 
-#: lib/order/call.ex:47 web/templates/layout/translations.html.eex:22
+#: lib/order/call.ex:47 web/templates/layout/translations.html.eex:24
 msgid "New order"
 msgstr "Nuevo pedido"
 
@@ -264,7 +264,7 @@ msgstr "Salir"
 msgid "Order not found"
 msgstr "Pedido no encontrado"
 
-#: web/templates/layout/translations.html.eex:17
+#: web/templates/layout/translations.html.eex:18
 #: web/views/trans_api/order_view.ex:19
 msgid "No transport available"
 msgstr "No hay transporte disponible"
@@ -285,15 +285,15 @@ msgstr "bicicleta"
 msgid "car"
 msgstr "auto"
 
-#: web/templates/layout/translations.html.eex:20
+#: web/templates/layout/translations.html.eex:22
 msgid "motorcycle"
 msgstr "motocicleta"
 
-#: web/templates/layout/translations.html.eex:30
+#: web/templates/layout/translations.html.eex:32
 msgid "truck"
 msgstr "camión"
 
-#: web/templates/layout/translations.html.eex:35
+#: web/templates/layout/translations.html.eex:37
 msgid "walk"
 msgstr "caminata"
 
@@ -301,7 +301,7 @@ msgstr "caminata"
 msgid "New order from %{org}"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:29
+#: web/templates/layout/translations.html.eex:31
 msgid "Transport has arrived"
 msgstr "Su transporte ya llego"
 
@@ -337,7 +337,7 @@ msgstr "Su pedido fue entregado"
 msgid "Click to edit"
 msgstr "Haga click para editar"
 
-#: web/templates/layout/translations.html.eex:31
+#: web/templates/layout/translations.html.eex:33
 msgid "Update position"
 msgstr "Actualizar posición"
 
@@ -345,7 +345,7 @@ msgstr "Actualizar posición"
 msgid "Search place"
 msgstr "Buscar lugar"
 
-#: web/templates/layout/translations.html.eex:18
+#: web/templates/layout/translations.html.eex:19
 msgid "Obtain position using GPS"
 msgstr "Obtener posición usando el GPS"
 
@@ -353,10 +353,18 @@ msgstr "Obtener posición usando el GPS"
 msgid "Click then map to select your position"
 msgstr "Hacer click en el mapa para seleccionar su posición"
 
-#: web/templates/layout/translations.html.eex:32
+#: web/templates/layout/translations.html.eex:34
 msgid "Update data and position"
 msgstr "Actualizar datos y posición"
 
 #: web/templates/layout/navigation.html.eex:25
 msgid "Settings"
 msgstr "Configuración"
+
+#: web/templates/layout/translations.html.eex:20
+msgid "Open for sale"
+msgstr "Abrir para la venta"
+
+#: web/templates/layout/translations.html.eex:12
+msgid "Close sale"
+msgstr "Cerrar venta"

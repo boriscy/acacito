@@ -3941,9 +3941,16 @@ vue-style-loader@^2.0.0:
     hash-sum "^1.0.2"
     loader-utils "^0.2.7"
 
-vue-template-compiler@^2.0.0-alpha.8, vue-template-compiler@^2.2.1:
+vue-template-compiler@^2.0.0-alpha.8:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.2.1.tgz#ca5e43db50dc6e761e3c1296313de33091783511"
+  dependencies:
+    de-indent "^1.0.2"
+    he "^1.1.0"
+
+vue-template-compiler@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.2.5.tgz#71b1366c3f716e8137a87f82591de9f816609b57"
   dependencies:
     de-indent "^1.0.2"
     he "^1.1.0"
@@ -3952,9 +3959,9 @@ vue-template-es2015-compiler@^1.2.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.4.2.tgz#0bc595cda68fc27779568926fcead13553a335df"
 
-vue@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.2.1.tgz#ddbfd2f0caf38f374f5a36eea2e1edf25225b68e"
+vue@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.2.5.tgz#528eba68447d7eff99f86767b31176aa656c6963"
 
 vueify-insert-css@^1.0.0:
   version "1.0.0"

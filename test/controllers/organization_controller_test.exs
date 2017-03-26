@@ -53,4 +53,28 @@ defmodule Publit.OrganizationControllerTest do
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
     end
   end
+
+  describe "PUT /organization/open_close" do
+    test "open", %{conn: conn} do
+      conn = put(conn, "/organizations/open_close")
+
+      json = Poison.decode!(conn.resp_body)
+
+      assert conn.status == 200
+      assert json["organization"]["open"] == true
+    end
+
+    test "close", %{conn: conn} do
+      {:ok, org} = Publit.Organization.open_close(conn.assigns.current_organization, conn.assigns.current_user.id)
+      assert org.open == true
+      conn = assign(conn, :current_organization, org)
+
+      conn = put(conn, "/organizations/open_close")
+
+      json = Poison.decode!(conn.resp_body)
+
+      assert conn.status == 200
+      assert json["organization"]["open"] == false
+    end
+  end
 end

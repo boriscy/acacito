@@ -2,12 +2,11 @@ defmodule Publit.OrganizationView do
   use Publit.Web, :view
 
   def render("show.json", %{organization: organization}) do
-    %{organization: organization}
+    %{organization: to_api(organization)}
   end
 
-
-  def render("error.json", %{errors: errors}) do
-    %{errors: errors}
+  def render("error.json", %{cs: cs}) do
+    %{errors: get_errors(cs)}
   end
 
   def show_point(point) do
