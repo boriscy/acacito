@@ -6,7 +6,8 @@ defmodule Publit.UserSocket do
   channel "organizations:*", Publit.OrganizationChannel
 
   ## Transports
-  transport :websocket, Phoenix.Transports.WebSocket
+  transport :websocket, Phoenix.Transports.WebSocket,
+    check_origin: ["boriscy.github.io"]
   # transport :longpoll, Phoenix.Transports.LongPoll
 
   @max_age Application.get_env(:publit, :session_max_age)

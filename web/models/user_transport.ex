@@ -45,6 +45,7 @@ defmodule Publit.UserTransport do
     |> validate_format(:mobile_number, @number_reg)
     |> validate_length(:password, min: 8)
     |> validate_inclusion(:vehicle, @vehicles)
+    |> unique_constraint(:mobile_number)
     |> valid_transport()
     |> unique_constraint(:email)
   end
