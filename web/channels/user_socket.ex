@@ -7,7 +7,7 @@ defmodule Publit.UserSocket do
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket,
-    check_origin: ["boriscy.github.io"]
+    check_origin: ["app.acacito.com", "boriscy.github.io"]
   # transport :longpoll, Phoenix.Transports.LongPoll
 
   @max_age Application.get_env(:publit, :session_max_age)

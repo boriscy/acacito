@@ -1,9 +1,9 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-<!-- Load Esri Leaflet from CDN -->
+
 <script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&key=AIzaSyDQwB6IOvELaaXQX1keoMuH-gaN3QbPRqM"></script>
 
-<div id="map" style="width:500px;height:500px">
+<div id="map" style="height:100%">
 </div>
 
 <div id="org-data">
@@ -11,6 +11,18 @@
 </div>
 
 <script>
+  var width = window.innerWidth
+  || document.documentElement.clientWidth
+  || document.body.clientWidth;
+
+  var height = window.innerHeight
+  || document.documentElement.clientHeight
+  || document.body.clientHeight;
+
+  var map = document.getElementById('map')
+  map.style.height = (height - 120) + 'px';
+  map.style.width = (width - 65) + 'px';
+
   var map = window.map = L.map('map').setView([-18.174332636, -63.871996512], 16);
   //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
