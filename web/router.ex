@@ -33,7 +33,7 @@ defmodule Publit.Router do
   scope "/", Publit do
     pipe_through [:browser] # Use the default browser stack
 
-    get "/", HomeController, :index
+    get "/", SessionController, :index
     get "/login", SessionController, :index
     post "/login", SessionController, :create
     delete "/logout", SessionController, :delete

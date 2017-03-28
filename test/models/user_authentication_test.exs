@@ -20,7 +20,10 @@ defmodule Publit.UserAuthenticationTest do
     insert(:user, email: "lucas@mail.com")
 
     {:error, cs} = UserAuthentication.valid_user(%{"email" => "lucas@mail.com", "password" => "demo123"})
+
+    assert cs.valid? == false
     assert cs.changes.email == "lucas@mail.com"
+    assert cs.errors[:password]
   end
 
   test "valid_user false invalid user" do

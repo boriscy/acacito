@@ -55,7 +55,9 @@ defmodule Publit.SessionControllerTest do
       |> post("/login", %{"user_authentication" => %{"email" => "amaru@mail.com", "password" => "demo12"} })
 
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
-      assert conn.private.phoenix_flash["error"]
+      cs = conn.assigns.changeset
+
+      assert cs.errors[:email]
     end
   end
 

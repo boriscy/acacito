@@ -341,7 +341,7 @@ msgstr "Haga click para editar"
 msgid "Update position"
 msgstr "Actualizar posición"
 
-#: web/templates/organization/show.html.eex:27
+#: web/templates/organization/show.html.eex:39
 msgid "Search place"
 msgstr "Buscar lugar"
 
@@ -368,3 +368,11 @@ msgstr "Abrir para la venta"
 #: web/templates/layout/translations.html.eex:12
 msgid "Close sale"
 msgstr "Cerrar venta"
+
+#: web/models/user_authentication.ex:72
+msgid "Invalid email"
+msgstr "Email inválido"
+
+#: web/models/user_authentication.ex:74
+msgid "Invalid password"
+msgstr "Contraseña inválida"

@@ -21,7 +21,6 @@ defmodule Publit.SessionController do
         |> redirect(to: route)
       {:error, cs} ->
         conn
-        |> put_flash(:error, "Invalid email or password")
         |> put_status(:unprocessable_entity)
         |> render("index.html", changeset: cs, valid: false)
     end

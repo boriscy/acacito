@@ -5,8 +5,9 @@ defmodule Publit.UserAuthentication do
   """
   use Ecto.Schema
   import Ecto.Changeset
+  import Publit.Gettext
 
-  alias Publit.{UserAuthentication, User, UserClient, UserTransport, Repo}
+  alias Publit.{UserAuthentication, User, UserClient, UserTransport, Repo, Gettext}
 
   embedded_schema do
     field :email
@@ -39,8 +40,12 @@ defmodule Publit.UserAuthentication do
       {:pass, true} <- {:pass, valid_password?(user, params["password"])} do
         {:ok, user}
     else
-      {:user, _} -> {:error, changeset(params) |> add_error(:email, "Invalid email")}
-      {:pass, _} -> {:error, changeset(params) |> add_error(:password, "Invalid password") }
+      {:user, _} ->
+        cs = changeset(params) |> add_error(:email, "Invalid email")
+        {:error, cs}
+      {:pass, _} ->
+        cs = changeset(params) |> add_error(:password, "Invalid password")
+        {:error, cs }
     end
   end
 
@@ -61,11 +66,16 @@ defmodule Publit.UserAuthentication do
     email = String.trim(params["email"] || "")
 
     with user <- Repo.get_by(schema, email: email),
-      false <- is_nil(user),
-      true <- valid_password?(user, params["password"]) do
+      {:email, false} <- {:email, is_nil(user)},
+      {:pass, true} <- {:pass, valid_password?(user, params["password"])} do
         {:ok, user}
     else
-      _ -> {:error, changeset(params)}
+      {:email, _} ->
+        cs = changeset(params) |> add_error(:email, gettext("Invalid email"))
+        {:error, cs}
+      {:pass, _} ->
+        cs = changeset(params) |> add_error(:password, gettext("Invalid password"))
+        {:error, cs}
     end
   end
 

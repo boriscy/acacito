@@ -40,3 +40,10 @@ defmodule Publit.MessageApi do
   end
 
 end
+
+#{
+#	"app_id": "f78f735f-a596-4fd8-9524-404f2c843a96",
+#	"include_player_ids": ["9ce97a55-b483-4872-9257-997ce7a88dbf"],
+#	"heading": "Holaaaaa",
+#	"contents": {"en": "Esto es una prueba!"}
+#}

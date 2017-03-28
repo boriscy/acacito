@@ -341,7 +341,7 @@ msgstr ""
 msgid "Update position"
 msgstr ""
 
-#: web/templates/organization/show.html.eex:27
+#: web/templates/organization/show.html.eex:39
 msgid "Search place"
 msgstr ""
 
@@ -367,4 +367,12 @@ msgstr ""
 
 #: web/templates/layout/translations.html.eex:12
 msgid "Close sale"
+msgstr ""
+
+#: web/models/user_authentication.ex:72
+msgid "Invalid email"
+msgstr ""
+
+#: web/models/user_authentication.ex:74
+msgid "Invalid password"
 msgstr ""
