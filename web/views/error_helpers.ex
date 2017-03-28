@@ -1,6 +1,6 @@
 defmodule Publit.ErrorHelpers do
   @moduledoc """
-  Conveniences for translating and building error messages.
+  Conveniences for translating and building error message.
   """
 
   use Phoenix.HTML
@@ -25,7 +25,7 @@ defmodule Publit.ErrorHelpers do
   Translates an error message using gettext.
   """
   def translate_error({msg, opts}) do
-    # Because error messages were defined within Ecto, we must
+    # Because error message were defined within Ecto, we must
     # call the Gettext module passing our Gettext backend. We
     # also use the "errors" domain as translations are placed
     # in the errors.po file.

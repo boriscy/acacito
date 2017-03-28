@@ -1,4 +1,4 @@
-defmodule Publit.ClientApi.OpenSignalControllerTest do
+defmodule Publit.ClientApi.OneSignalControllerTest do
   use Publit.ConnCase
 
   setup do

@@ -1,7 +1,7 @@
 defmodule Publit.PosService do
   @moduledoc """
   Updates the position for transportation, depending if it's carrying orders
-  will send messages to the client or organization
+  will send message to the client or organization
   """
 
   use Publit.Web, :model
@@ -85,7 +85,7 @@ defmodule Publit.PosService do
 
   # sends the actual message
   defp send_message(order, _user_t) do
-    tokens = [order.user_client.extra_data["fb_token"]]
+    tokens = [order.user_client.extra_data["os_player_id"]]
 
     case order.status do
       "transport" ->
@@ -96,7 +96,7 @@ defmodule Publit.PosService do
 
         {title, msg} = {gettext("Transport near"), gettext("Your order is arriving")}
         Publit.OrganizationChannel.broadcast_order(order, "order:near_client")
-        Publit.MessagingService.send_messages(tokens, %{title: title, message: msg, status: "order:near_client"}, ok_cb, err_cb)
+        Publit.MessagingService.send_message(tokens, %{title: title, message: msg, status: "order:near_client"}, ok_cb, err_cb)
     end
   end
 

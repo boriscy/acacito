@@ -26,7 +26,7 @@ defmodule Publit.MessageApi do
   end
 
   @doc """
-  Receives a list of player_ids in OpenSignal and sends the message in the msg map
+  Receives a list of player_ids in OneSignal and sends the message in the msg map
   """
   #@type send_message(list, map) ::
   def send_message(player_ids, msg) do

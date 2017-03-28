@@ -1,4 +1,4 @@
-defmodule Publit.OpenSignal do
+defmodule Publit.OneSignal do
   @moduledoc false
   alias Publit.Repo
 

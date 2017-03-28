@@ -64,7 +64,7 @@ defmodule PublitPosServiceTest do
       assert {:ok, ut} = PosService.update_pos(ut, %{"pos" => pos})
       assert ut.pos == %Geo.Point{coordinates: {-18.1799, -63.8701}, srid: nil}
 
-      token = uc.extra_data["fb_token"]
+      token = uc.extra_data["os_player_id"]
       assert token
 
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_org")
@@ -109,7 +109,7 @@ defmodule PublitPosServiceTest do
       assert {:ok, ut} = PosService.update_pos(ut, %{"pos" => pos})
       assert ut.pos == %Geo.Point{coordinates: {lng + 0.0001, lat - 0.0001}, srid: nil}
 
-      token = uc.extra_data["fb_token"]
+      token = uc.extra_data["os_player_id"]
       assert token
 
       assert Publit.MessageApiMock.get_data() == %{msg: %{
@@ -142,7 +142,7 @@ defmodule PublitPosServiceTest do
       Agent.start_link(fn -> %{} end, name: :api_mock)
 
       org = insert(:organization)
-      uc = insert(:user_client, %{extra_data: %{"fb_token" => "nn"}})
+      uc = insert(:user_client, %{extra_data: %{"os_player_id" => "nn"}})
       order = create_order_only(uc, org, %{status: "transporting"})
 
       {lng, lat} = order.client_pos.coordinates
@@ -158,7 +158,7 @@ defmodule PublitPosServiceTest do
       assert {:ok, ut} = PosService.update_pos(ut, %{"pos" => pos})
       assert ut.pos == %Geo.Point{coordinates: {lng, lat}, srid: nil}
 
-      token = uc.extra_data["fb_token"]
+      token = uc.extra_data["os_player_id"]
       assert token
 
       #assert Publit.MessageApiMock.get_data() == %{}

@@ -1,4 +1,4 @@
-defmodule Publit.TransApi.OpenSignalControllerTest do
+defmodule Publit.TransApi.OneSignalControllerTest do
   use Publit.ConnCase
   alias Publit.{UserTransport}
 

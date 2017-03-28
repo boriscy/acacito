@@ -47,7 +47,7 @@ defmodule Publit.UserTransportTest do
 
   @player_id "e95fb4a9-50d3-41ae-a8d3-1465f00611e6"
 
-  describe "OpenSignal" do
+  describe "OneSignal" do
     test "update_player_id" do
       {:ok, user} = UserTransport.create(@valid_attrs)
 

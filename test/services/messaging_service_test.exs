@@ -3,7 +3,7 @@ defmodule Publit.MessagingServiceTest do
 
   alias Publit.{MessagingService}
 
-  describe "messages" do
+  describe "message" do
     test "OK" do
       Agent.start_link(fn -> %{} end, name: :api_mock)
 
@@ -14,14 +14,15 @@ defmodule Publit.MessagingServiceTest do
       cb_error = fn(_v) -> "" end
       data = %{title: "Test", body: "A test body"}
 
-      {:ok, pid} = MessagingService.send_messages(["demo1234"], data, cb_ok, cb_error)
+      {:ok, pid} = MessagingService.send_message(["demo1234"], data, cb_ok, cb_error)
       ref = Process.monitor(pid)
 
       receive do
         {:DOWN, ^ref, _, _, _} ->
         r = Agent.get(agent, fn(v) -> v end)[:resp]
-        assert r.body["success"] == 1
-        assert r.body["multicast_id"]
+
+        assert r.body["recipients"] == 1
+        assert r.body["id"]
       end
     end
 
@@ -35,15 +36,13 @@ defmodule Publit.MessagingServiceTest do
       end
       data = %{title: "Test", body: "A test body"}
 
-      {:ok, pid} = MessagingService.send_messages(["demo123"], data, cb_ok, cb_error)
+      {:ok, pid} = MessagingService.send_message(["demo123"], data, cb_ok, cb_error)
       ref = Process.monitor(pid)
 
       receive do
         {:DOWN, ^ref, _, _, _} ->
         r = Agent.get(agent, fn(v) -> v end)[:resp]
-        assert r.body["success"] == 0
-        assert r.body["failure"] == 1
-        assert r.body["multicast_id"]
+IO.inspect r
       end
     end
 

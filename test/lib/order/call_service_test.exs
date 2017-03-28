@@ -12,7 +12,7 @@ defmodule Publit.Order.CallServiceTest do
       insert(:order_log, order_id: order.id)
 
       ut = insert(:user_transport, status: "listen")
-      ut2 = insert(:user_transport, status: "listen", mobile_number: "99887766", extra_data: %{"fb_token" => "fb3456789"})
+      ut2 = insert(:user_transport, status: "listen", mobile_number: "99887766", extra_data: %{"os_player_id" => "fb3456789"})
       assert order.status == "process"
 
       oc = insert(:order_call, transport_ids: [ut.id, ut2.id], order_id: order.id, status: "delivered")

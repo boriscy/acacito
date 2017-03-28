@@ -4,6 +4,8 @@ defmodule Publit.Order.StatusService do
   alias Ecto.Multi
   import Publit.Gettext
 
+  @token_id "os_player_id"
+
   @doc"""
   Changes the status of an order to the next
   """
@@ -31,7 +33,7 @@ defmodule Publit.Order.StatusService do
 
     case Repo.transaction(multi) do
       {:ok, res} ->
-        send_messages(res.order)
+        send_message(res.order)
         {:ok, res.order}
       {:error, res} -> {:error, res}
     end
@@ -62,7 +64,7 @@ defmodule Publit.Order.StatusService do
     case Repo.transaction(multi) do
       {:ok, res} ->
         Publit.OrganizationChannel.broadcast_order(res.order, "order:updated")
-        send_messages_deliver(res.order)
+        send_message_deliver(res.order)
         {:ok, res.order}
       {:error, cs} -> {:error, cs}
     end
@@ -135,13 +137,13 @@ defmodule Publit.Order.StatusService do
     end
   end
 
-  defp send_messages(order) do
+  defp send_message(order) do
     order = Repo.preload(order, [:user_transport, :user_client])
 
-    tokens = [order.user_client.extra_data["fb_token"]]
+    tokens = [order.user_client.extra_data[@token_id]]
 
     if order.user_transport_id do
-      tokens = tokens ++ [order.user_transport.extra_data["fb_token"]]
+      tokens = tokens ++ [order.user_transport.extra_data[@token_id]]
     end
     {title, msg} = {gettext("Order transporting"), gettext("Your order is on the way")}
 
@@ -149,15 +151,15 @@ defmodule Publit.Order.StatusService do
     cb_ok = fn(_) -> "" end
     cb_err = fn(_) -> "" end
 
-    Publit.MessagingService.send_messages(tokens,
+    Publit.MessagingService.send_message(tokens,
       %{title: title, message: msg, status: "order:updated", order: ord},
       cb_ok, cb_err)
   end
 
-  def send_messages_deliver(order) do
+  def send_message_deliver(order) do
     order = Repo.preload(order, [:user_client])
 
-    tokens = [order.user_client.extra_data["fb_token"]]
+    tokens = [order.user_client.extra_data[@token_id]]
 
     {title, msg} = {gettext("Order delivered"), gettext("Your order has been delivered")}
 
@@ -165,7 +167,7 @@ defmodule Publit.Order.StatusService do
     cb_ok = fn(_) -> "" end
     cb_err = fn(_) -> "" end
 
-    Publit.MessagingService.send_messages(tokens,
+    Publit.MessagingService.send_message(tokens,
       %{title: title, message: msg, status: "order:updated", order: ord},
       cb_ok, cb_err)
   end

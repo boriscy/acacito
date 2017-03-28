@@ -19,9 +19,9 @@ defmodule Publit.Api.TransportControllerTest do
   defp user_transports do
     [
       %UserTransport{mobile_number: "11223344", status: "listen", pos: %Geo.Point{coordinates: {-63.876047,-18.1787804}, srid: nil},
-      extra_data: %{fb_token: "11223344"}},
+      extra_data: %{os_player_id: "11223344"}},
       %UserTransport{mobile_number: "22334455", status: "listen", pos: %Geo.Point{coordinates: {-63.8732718,-18.1767489}, srid: nil},
-      extra_data: %{fb_token: "22334455"}}
+      extra_data: %{os_player_id: "22334455"}}
     ]
   end
 

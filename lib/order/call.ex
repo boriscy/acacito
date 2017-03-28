@@ -15,6 +15,8 @@ defmodule Publit.Order.Call do
   end
   #@statuses ["new", "delivered", "error"]
 
+  @token_id "os_player_id"
+
   @doc """
   Creates and %Order.Call{} and stores in the db when correct then
   it sends messages to all near transports with  `status: calling`
@@ -29,21 +31,21 @@ defmodule Publit.Order.Call do
       |> change()
       |> put_assoc(:order, order)
 
-      tokens = Enum.map(transports, fn(t) -> t.extra_data["fb_token"] end)
+      tokens = Enum.map(transports, fn(t) -> t.extra_data[@token_id] end)
 
-      create_and_send_messages(oc, tokens)
+      create_and_send_message(oc, tokens)
     else
       {:empty, %Order.Call{}}
     end
   end
 
-  defp create_and_send_messages(oc, tokens) do
+  defp create_and_send_message(oc, tokens) do
     case Repo.insert(oc) do
       {:ok, oc} ->
         cb_ok = fn(resp) -> Order.Call.update(oc, %{status: "delivered", resp: Map.drop(resp.resp, [:__struct__])}) end
         cb_error = fn(resp) -> Order.Call.update(oc, %{status: "error", resp: Map.drop(resp.resp, [:__struct__]) }) end
 
-        {:ok, pid} = Publit.MessagingService.send_messages(tokens,
+        {:ok, pid} = Publit.MessagingService.send_message(tokens,
           %{ title: gettext("New order"),
              message: gettext("New order from %{org}", %{org: oc.order.organization_name}),
              order_call: encode(oc),

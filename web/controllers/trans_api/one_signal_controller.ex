@@ -1,4 +1,4 @@
-defmodule Publit.TransApi.OpenSignalController do
+defmodule Publit.TransApi.OneSignalController do
   use Publit.Web, :controller
   plug :scrub_params, "login" when action in [:create]
   alias Publit.{UserTransport}
