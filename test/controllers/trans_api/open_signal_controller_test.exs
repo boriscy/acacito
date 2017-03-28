@@ -1,4 +1,4 @@
-defmodule Publit.TransApi.FirebaseControllerTest do
+defmodule Publit.TransApi.OpenSignalControllerTest do
   use Publit.ConnCase
   alias Publit.{UserTransport}
 
@@ -15,9 +15,11 @@ defmodule Publit.TransApi.FirebaseControllerTest do
     u
   end
 
-  describe "PUT /trans_api/firebase" do
+  @player_id "e95fb4a9-50d3-41ae-a8d3-1465f00611e6"
+
+  describe "PUT /trans_api/open_signal" do
     test "OK", %{conn: conn} do
-      conn = put(conn, "/trans_api/firebase", %{"token" => "demo4321"})
+      conn = put(conn, "/trans_api/open_signal", %{"player_id" => @player_id})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -27,7 +29,7 @@ defmodule Publit.TransApi.FirebaseControllerTest do
 
     test "ERROR" do
       conn = build_conn()
-      conn = put(conn, "/trans_api/firebase", %{"token" => "demo4321"})
+      conn = put(conn, "/trans_api/open_signal", %{"player_id" => @player_id})
 
       assert conn.status == Plug.Conn.Status.code(:unauthorized)
       json = Poison.decode!(conn.resp_body)

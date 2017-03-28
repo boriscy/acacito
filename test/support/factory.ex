@@ -20,7 +20,7 @@ defmodule Publit.Factory do
       full_name: "Amaru Barroso",
       password: "demo1234",
       mobile_number: "73731234",
-      extra_data: %{"fb_token" => "fbclienttoken1234"},
+      extra_data: %{"os_player_id" => Ecto.UUID.generate()},
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
     }
   end
@@ -33,7 +33,7 @@ defmodule Publit.Factory do
       mobile_number: "66778899",
       vehicle: "motorcycle",
       plate: "HUT321",
-      extra_data: %{"fb_token" => "fbtranstoken12345678"},
+      extra_data: %{"os_player_id" => Ecto.UUID.generate()},
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
     }
   end

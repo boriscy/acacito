@@ -1,14 +1,14 @@
-defmodule Publit.TransApi.FirebaseController do
+defmodule Publit.TransApi.OpenSignalController do
   use Publit.Web, :controller
   plug :scrub_params, "login" when action in [:create]
   alias Publit.{UserTransport}
 
 
-  # PUT /trans_api/firebase/:user_id
-  def update(conn, %{"token" => token}) do
+  # PUT /trans_api/open_signal/:user_id
+  def update(conn, %{"player_id" => player_id}) do
     user = conn.assigns.current_user_transport
 
-    case UserTransport.update_fb_token(user, token) do
+    case UserTransport.update_os_player_id(user, player_id) do
       {:ok, user} ->
         render(conn, "show.json", user: user)
       {:error, cs} ->

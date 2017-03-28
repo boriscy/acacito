@@ -1,4 +1,4 @@
-defmodule Publit.ClientApi.FirebaseView do
+defmodule Publit.ClientApi.OpenSignalView do
   use Publit.Web, :view
 
   def render("show.json", %{user: user}) do

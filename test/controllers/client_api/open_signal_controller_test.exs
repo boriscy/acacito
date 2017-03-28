@@ -1,4 +1,4 @@
-defmodule Publit.ClientApi.FirebaseControllerTest do
+defmodule Publit.ClientApi.OpenSignalControllerTest do
   use Publit.ConnCase
 
   setup do
@@ -9,9 +9,9 @@ defmodule Publit.ClientApi.FirebaseControllerTest do
     %{conn: conn}
   end
 
-  describe "PUT /cli_api/firebase" do
+  describe "PUT /cli_api/open_signal" do
     test "OK", %{conn: conn} do
-      conn = put(conn, "/client_api/firebase", %{"token" => "demo4321"})
+      conn = put(conn, "/client_api/open_signal", %{"token" => "demo4321"})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -21,7 +21,7 @@ defmodule Publit.ClientApi.FirebaseControllerTest do
 
     test "ERROR" do
       conn = build_conn()
-      conn = put(conn, "/client_api/firebase", %{"token" => "demo4321"})
+      conn = put(conn, "/client_api/open_signal", %{"token" => "demo4321"})
 
       assert conn.status == Plug.Conn.Status.code(:unauthorized)
       json = Poison.decode!(conn.resp_body)

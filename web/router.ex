@@ -105,7 +105,7 @@ defmodule Publit.Router do
     scope "/" do
       pipe_through [:user_client_auth]
 
-      put "/firebase", FirebaseController, :update
+      put "/open_signal", OpenSignalController, :update
 
       get "/:organization_id/products", ProductController, :products
       post "/search", SearchController, :search
@@ -136,7 +136,7 @@ defmodule Publit.Router do
       put "/order_position", PositionController, :order_position
       put "/stop_tracking", PositionController, :stop_tracking
 
-      put "/firebase", FirebaseController, :update
+      put "/open_signal", OpenSignalController, :update
 
       put "/accept/:order_id", OrderController, :accept
       put "/deliver/:order_id", OrderController, :deliver

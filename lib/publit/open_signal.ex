@@ -1,17 +1,17 @@
-defmodule Publit.Firebase do
+defmodule Publit.OpenSignal do
   @moduledoc false
   alias Publit.Repo
 
   defmacro __using__(_opts) do
     quote do
-      def update_fb_token(user, fb_token) do
-        if user.extra_data["fb_token"] == fb_token do
+      def update_os_player_id(user, player_id) do
+        if user.extra_data["os_player_id"] == player_id do
           {:ok, user}
         else
           user
           |> Ecto.Changeset.change()
           |> Ecto.Changeset.put_change(:extra_data, Map.merge(user.extra_data, %{
-             "fb_token" => fb_token, "fb_token_updated_at" => to_string(DateTime.utc_now)}) )
+             "os_player_id" => player_id, "os_updated_at" => to_string(DateTime.utc_now)}) )
           |> Repo.update()
         end
       end
@@ -25,3 +25,4 @@ defmodule Publit.Firebase do
   end
 
 end
+

@@ -1,26 +1,35 @@
 defmodule Publit.MessageApiMock do
 
-  @resp %HTTPoison.Response{body: "{\"multicast_id\":7506846924425657137,\"success\":1,\"failure\":0,\"canonical_ids\":0,\"results\":[{\"message_id\":\"0:1486409102610914%2fd9afcdf9fd7ecd\"}]}",
-    headers: [{"Content-Type", "application/json; charset=UTF-8"},
-    {"Date", "Mon, 06 Feb 2017 19:25:02 GMT"},
-    {"Expires", "Mon, 06 Feb 2017 19:25:02 GMT"},
-    {"Cache-Control", "private, max-age=0"},
-    {"X-Content-Type-Options", "nosniff"}, {"X-Frame-Options", "SAMEORIGIN"},
-    {"X-XSS-Protection", "1; mode=block"}, {"Server", "GSE"},
-    {"Alt-Svc", "quic=\":443\"; ma=2592000; v=\"35,34\""},
-    {"Accept-Ranges", "none"}, {"Vary", "Accept-Encoding"},
-    {"Transfer-Encoding", "chunked"}], status_code: 200}
+  @resp %HTTPoison.Response{body: "{\"id\":\"e8af7ee9-4873-4450-abaa-6152932e0202\",\"recipients\":1}",
+  headers: [{"Date", "Tue, 28 Mar 2017 12:34:51 GMT"},
+  {"Content-Type", "application/json; charset=utf-8"},
+  {"Transfer-Encoding", "chunked"}, {"Connection", "keep-alive"},
+  {"Set-Cookie",
+   "__cfduid=d9867bec9340add126956f1b04fecb2e11490704491; expires=Wed, 28-Mar-18 12:34:51 GMT; path=/; domain=.onesignal.com; HttpOnly"},
+  {"Status", "200 OK"},
+  {"Cache-Control", "max-age=0, private, must-revalidate"},
+  {"Access-Control-Allow-Origin", "*"}, {"X-XSS-Protection", "1; mode=block"},
+  {"X-Request-Id", "e9711083-1507-44d2-b086-ba33a515afba"},
+  {"Access-Control-Allow-Headers", "SDK-Version"},
+  {"ETag", "W/\"6ac0ef8f1c2ff6ca77779598a77aba58\""},
+  {"X-Frame-Options", "SAMEORIGIN"}, {"X-Runtime", "0.034245"},
+  {"X-Content-Type-Options", "nosniff"},
+  {"X-Powered-By", "Phusion Passenger 5.0.30"}, {"Server", "cloudflare-nginx"},
+  {"CF-RAY", "346aa03cfcf407b5-MIA"}], status_code: 200}
 
-  @resp_error %HTTPoison.Response{body: "{\"multicast_id\":4738451672835022850,\"success\":0,\"failure\":1,\"canonical_ids\":0,\"results\":[{\"error\":\"InvalidRegistration\"}]}",
-  headers: [{"Content-Type", "application/json; charset=UTF-8"},
-   {"Date", "Mon, 06 Feb 2017 22:16:24 GMT"},
-   {"Expires", "Mon, 06 Feb 2017 22:16:24 GMT"},
-   {"Cache-Control", "private, max-age=0"},
-   {"X-Content-Type-Options", "nosniff"}, {"X-Frame-Options", "SAMEORIGIN"},
-   {"X-XSS-Protection", "1; mode=block"}, {"Server", "GSE"},
-   {"Alt-Svc", "quic=\":443\"; ma=2592000; v=\"35,34\""},
-   {"Accept-Ranges", "none"}, {"Vary", "Accept-Encoding"},
-   {"Transfer-Encoding", "chunked"}], status_code: 200}
+  @resp_error %HTTPoison.Response{body: "{\"errors\":[\"You must include which players, segments, or tags you wish to send this notification to.\"]}",
+  headers: [{"Date", "Tue, 28 Mar 2017 12:34:38 GMT"},
+  {"Content-Type", "application/json; charset=utf-8"},
+  {"Transfer-Encoding", "chunked"}, {"Connection", "keep-alive"},
+  {"Set-Cookie",
+   "__cfduid=d1a8a4f3a4bac9bd2ea59e862cc3f2afe1490704478; expires=Wed, 28-Mar-18 12:34:38 GMT; path=/; domain=.onesignal.com; HttpOnly"},
+  {"Status", "400 Bad Request"}, {"Cache-Control", "no-cache"},
+  {"Access-Control-Allow-Origin", "*"}, {"X-XSS-Protection", "1; mode=block"},
+  {"X-Request-Id", "b177f879-3972-40fb-bed8-7838dd7ec395"},
+  {"Access-Control-Allow-Headers", "SDK-Version"}, {"X-Runtime", "0.007269"},
+  {"X-Frame-Options", "SAMEORIGIN"}, {"X-Content-Type-Options", "nosniff"},
+  {"X-Powered-By", "Phusion Passenger 5.0.30"}, {"Server", "cloudflare-nginx"},
+  {"CF-RAY", "346a9fef294907b5-MIA"}], status_code: 400}
 
   def send_messages(tokens, msg) do
     update_agent(tokens, msg)
@@ -58,3 +67,7 @@ defmodule Publit.MessageApiMock do
   end
 
 end
+
+
+
+

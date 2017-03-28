@@ -29,20 +29,20 @@ defmodule Publit.UserClientTest do
 
   end
 
-  @fb_token "diFIABJ373k:APA91bGy81r8Gk9YYFTO5Sr-POcfsXkwP3dGD6xe8zT-7tgsk80pusIEp3KdPm4vxsNCb1Cb_KRElTY6p3ycDXNx1WXOgc7q7BgJp2PG4ctjjs79QxHHSzICEivpBiy5Xyfa1oe2Wy7Z"
+  @player_id "e95fb4a9-50d3-41ae-a8d3-1465f00611e6"
 
-  describe "update_fb_token" do
+  describe "update_player_id" do
     test "OK" do
       {:ok, user} = UserClient.create(@valid_attrs)
 
-      {:ok, user} = UserClient.update_fb_token(user, @fb_token)
+      {:ok, user} = UserClient.update_os_player_id(user, @player_id)
 
-      t = to_string(user.extra_data["fb_token_updated_at"])
+      t = to_string(user.extra_data["os_updated_at"])
 
       user = Repo.get(UserClient, user.id)
 
-      assert user.extra_data["fb_token"] == @fb_token
-      assert user.extra_data["fb_token_updated_at"] == t
+      assert user.extra_data["os_player_id"] == @player_id
+      assert user.extra_data["os_updated_at"] == t
     end
 
     test "does not override" do
@@ -53,7 +53,7 @@ defmodule Publit.UserClientTest do
       })
 
       user = Repo.get(UserClient, user.id)
-      {:ok, user} = UserClient.update_fb_token(user, @fb_token)
+      {:ok, user} = UserClient.update_os_player_id(user, @player_id)
 
       user = Repo.get(UserClient, user.id)
 
@@ -63,8 +63,8 @@ defmodule Publit.UserClientTest do
       assert user.extra_data["bool"] == true
 
 
-      assert user.extra_data["fb_token"] == @fb_token
-      assert user.extra_data["fb_token_updated_at"]
+      assert user.extra_data["os_player_id"] == @player_id
+      assert user.extra_data["os_updated_at"]
     end
   end
 end

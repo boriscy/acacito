@@ -45,23 +45,23 @@ defmodule Publit.UserTransportTest do
     end
   end
 
-  @fb_token "diFIABJ373k:APA91bGy81r8Gk9YYFTO5Sr-POcfsXkwP3dGD6xe8zT-7tgsk80pusIEp3KdPm4vxsNCb1Cb_KRElTY6p3ycDXNx1WXOgc7q7BgJp2PG4ctjjs79QxHHSzICEivpBiy5Xyfa1oe2Wy7Z"
+  @player_id "e95fb4a9-50d3-41ae-a8d3-1465f00611e6"
 
-  describe "firebase" do
-    test "update_fb_token" do
+  describe "OpenSignal" do
+    test "update_player_id" do
       {:ok, user} = UserTransport.create(@valid_attrs)
 
-      {:ok, user} = UserTransport.update_fb_token(user, @fb_token)
+      {:ok, user} = UserTransport.update_os_player_id(user, @player_id)
 
-      t = to_string(user.extra_data["fb_token_updated_at"])
+      t = to_string(user.extra_data["os_updated_at"])
 
       user = Repo.get(UserTransport, user.id)
 
-      assert user.extra_data["fb_token"] == @fb_token
-      assert user.extra_data["fb_token_updated_at"] == t
+      assert user.extra_data["os_player_id"] == @player_id
+      assert user.extra_data["os_updated_at"] == t
     end
 
-    test "update_fb_token does not override " do
+    test "update_os_player_id does not override " do
       {:ok, user} = Repo.insert(%UserTransport{
         full_name: "Juan Perez", mobile_number: "12345678", email: "juan@mail.com",
         encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234"),
@@ -69,7 +69,7 @@ defmodule Publit.UserTransportTest do
       })
 
       user = Repo.get(UserTransport, user.id)
-      {:ok, user} = UserTransport.update_fb_token(user, @fb_token)
+      {:ok, user} = UserTransport.update_os_player_id(user, @player_id)
 
       user = Repo.get(UserTransport, user.id)
 
@@ -79,31 +79,10 @@ defmodule Publit.UserTransportTest do
       assert user.extra_data["bool"] == true
 
 
-      assert user.extra_data["fb_token"] == @fb_token
-      assert user.extra_data["fb_token_updated_at"]
+      assert user.extra_data["os_player_id"] == @player_id
+      assert user.extra_data["os_updated_at"]
     end
 
-    test "update_fb_token updates time" do
-      {:ok, user} = UserTransport.create(@valid_attrs)
-
-      {:ok, user} = UserTransport.update_fb_token(user, @fb_token)
-
-      Process.sleep(10)
-      {:ok, user2} = UserTransport.update_fb_token(user, @fb_token <> "A")
-
-      refute user.updated_at == user2.updated_at
-    end
-
-    test "update_fb_token doesn't update time" do
-      {:ok, user} = UserTransport.create(@valid_attrs)
-
-      {:ok, user} = UserTransport.update_fb_token(user, @fb_token)
-
-      Process.sleep(10)
-      {:ok, user2} = UserTransport.update_fb_token(user, @fb_token)
-
-      assert user.updated_at == user2.updated_at
-    end
   end
 
   describe "get_by_email_or_mobile" do
