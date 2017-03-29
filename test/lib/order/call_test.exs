@@ -46,8 +46,9 @@ defmodule Publit.Order.CallTest do
           oc = Repo.get(Order.Call, oc.id)
           assert oc.status == "delivered"
           body = Poison.decode!(oc.resp["body"])
-          assert body["success"] == 1
-          assert oc.resp["headers"]
+
+          assert body["id"]
+          assert body["recipients"]
       end
 
       r = Agent.get(:api_mock, fn(v) -> v end)
@@ -85,8 +86,8 @@ defmodule Publit.Order.CallTest do
 
           assert oc.status == "error"
           body = Poison.decode!(oc.resp["body"])
-          assert body["failure"] == 1
-          assert body["success"] == 0
+
+          assert body["errors"]
       end
     end
 

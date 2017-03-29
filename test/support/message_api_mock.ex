@@ -31,7 +31,7 @@ defmodule Publit.MessageApiMock do
   {"X-Powered-By", "Phusion Passenger 5.0.30"}, {"Server", "cloudflare-nginx"},
   {"CF-RAY", "346a9fef294907b5-MIA"}], status_code: 400}
 
-  def send_messages(tokens, msg) do
+  def send_message(tokens, msg) do
     update_agent(tokens, msg)
 
     headers = [{"Authorization", "key=server_key_firebase}"}, {"Content-Type", "application/json"}]
@@ -43,15 +43,6 @@ defmodule Publit.MessageApiMock do
       body = Poison.decode!(@resp_error.body)
       %Publit.MessageApi.Response{status: :error, resp: @resp_error, body: body}
     end
-  end
-
-  def send_message(token, msg) do
-    update_agent([token], msg)
-
-    headers = [{"Authorization", "key=server_key_firebase}"}, {"Content-Type", "application/json"}]
-    body = Poison.decode!(@resp.body)
-
-    %Publit.MessageApi.Response{status: :ok, resp: @resp, body: body}
   end
 
   defp update_agent(tokens, msg) do

@@ -19,7 +19,7 @@ defmodule Publit.TransApi.OneSignalControllerTest do
 
   describe "PUT /trans_api/open_signal" do
     test "OK", %{conn: conn} do
-      conn = put(conn, "/trans_api/open_signal", %{"player_id" => @player_id})
+      conn = put(conn, "/trans_api/one_signal", %{"player_id" => @player_id})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -29,7 +29,7 @@ defmodule Publit.TransApi.OneSignalControllerTest do
 
     test "ERROR" do
       conn = build_conn()
-      conn = put(conn, "/trans_api/open_signal", %{"player_id" => @player_id})
+      conn = put(conn, "/trans_api/one_signal", %{"player_id" => @player_id})
 
       assert conn.status == Plug.Conn.Status.code(:unauthorized)
       json = Poison.decode!(conn.resp_body)

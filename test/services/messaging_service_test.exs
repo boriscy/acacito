@@ -42,7 +42,7 @@ defmodule Publit.MessagingServiceTest do
       receive do
         {:DOWN, ^ref, _, _, _} ->
         r = Agent.get(agent, fn(v) -> v end)[:resp]
-IO.inspect r
+
       end
     end
 
