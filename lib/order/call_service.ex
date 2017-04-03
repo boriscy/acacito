@@ -1,11 +1,12 @@
 defmodule Publit.Order.CallService do
   use Publit.Web, :model
   import Ecto.Query
+  import Publit.Gettext
   alias Ecto.Multi
 
   alias Publit.{Order, Order.Call, Order.Transport, Repo}
 
-  @token_id "os_player_id"
+  @token_id "device_token"
 
   @moduledoc """
   This module handles the call and updates both Order and Order.Call as well as it sends
@@ -25,7 +26,7 @@ defmodule Publit.Order.CallService do
 
         case Repo.transaction(multi) do
           {:ok, res} ->
-            {:ok, pid} = send_message(oc, ut)
+            {:ok, pid} = send_message(oc, ut, order)
             {:ok, res.order, pid}
           {:error, :order, cs, _} ->
             {:error, :order, cs}
@@ -51,15 +52,19 @@ defmodule Publit.Order.CallService do
     from oc in Order.Call, where: oc.order_id == ^order.id and oc.status in ^statuses
   end
 
-  defp send_message(oc, ut) do
+  defp send_message(oc, ut, order) do
     uts = Repo.all(from ut in Publit.UserTransport, where: ut.id in ^oc.transport_ids)
     tokens = Enum.map(uts, fn(t) -> t.extra_data[@token_id] end)
 
     cb_ok = fn(_) -> "" end
     cb_err = fn(resp) -> log_error(resp) end
 
-    Publit.MessagingService.send_message(tokens, %{order_id: oc.order_id,
-      order_call_id: oc.id, status: "order:answered", user_transport_id: ut.id}, cb_ok, cb_err)
+    msg = %{
+      message: gettext("New order from %{org}", org: order.organization_name),
+      data: Publit.TransApi.OrderView.to_api(order)
+    }
+
+    Publit.MessagingService.send_message(tokens, msg, cb_ok, cb_err)
   end
 
   defp set_user_transport_cs(order, ut) do

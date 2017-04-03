@@ -1,17 +1,17 @@
-defmodule Publit.OneSignal do
+defmodule Publit.Pushy do
   @moduledoc false
   alias Publit.Repo
 
   defmacro __using__(_opts) do
     quote do
-      def update_os_player_id(user, player_id) do
-        if user.extra_data["os_player_id"] == player_id do
+      def update_device_token(user, device_token) do
+        if user.extra_data["evice_token"] == device_token do
           {:ok, user}
         else
           user
           |> Ecto.Changeset.change()
           |> Ecto.Changeset.put_change(:extra_data, Map.merge(user.extra_data, %{
-             "os_player_id" => player_id, "os_updated_at" => to_string(DateTime.utc_now)}) )
+             "device_token" => device_token, "device_token_updated_at" => to_string(DateTime.utc_now)}) )
           |> Repo.update()
         end
       end

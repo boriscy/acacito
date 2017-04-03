@@ -1,4 +1,4 @@
-defmodule Publit.TransApi.OneSignalControllerTest do
+defmodule Publit.TransApi.PushyControllerTest do
   use Publit.ConnCase
   alias Publit.{UserTransport}
 
@@ -15,11 +15,11 @@ defmodule Publit.TransApi.OneSignalControllerTest do
     u
   end
 
-  @player_id "e95fb4a9-50d3-41ae-a8d3-1465f00611e6"
+  @device_token "14d14fa953ac53aaff8416"
 
-  describe "PUT /trans_api/open_signal" do
+  describe "PUT /trans_api/puhsy" do
     test "OK", %{conn: conn} do
-      conn = put(conn, "/trans_api/one_signal", %{"player_id" => @player_id})
+      conn = put(conn, "/trans_api/pushy", %{"device_token" => @device_token})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -29,7 +29,7 @@ defmodule Publit.TransApi.OneSignalControllerTest do
 
     test "ERROR" do
       conn = build_conn()
-      conn = put(conn, "/trans_api/one_signal", %{"player_id" => @player_id})
+      conn = put(conn, "/trans_api/pushy", %{"device_token" => @device_token})
 
       assert conn.status == Plug.Conn.Status.code(:unauthorized)
       json = Poison.decode!(conn.resp_body)

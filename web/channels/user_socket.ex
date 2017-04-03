@@ -6,9 +6,17 @@ defmodule Publit.UserSocket do
   channel "organizations:*", Publit.OrganizationChannel
 
   ## Transports
-  transport :websocket, Phoenix.Transports.WebSocket,
-    check_origin: ["app.acacito.com", "boriscy.github.io"]
-  # transport :longpoll, Phoenix.Transports.LongPoll
+  #transport :websocket, Phoenix.Transports.WebSocket,
+  #  check_origin: [
+  #    "//localhost", "https://boriscy.github.io"
+  #  ]
+
+  transport :longpoll, Phoenix.Transports.LongPoll#,
+  #  window_ms: 10_000,
+  #  pubsub_timeout_ms: 2_000,
+  #  transport_log: false,
+  #  crypto: [max_age: 1209600],
+  #  check_origin: false
 
   @max_age Application.get_env(:publit, :session_max_age)
   # See `Phoenix.Token` documentation for examples in

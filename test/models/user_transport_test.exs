@@ -45,23 +45,23 @@ defmodule Publit.UserTransportTest do
     end
   end
 
-  @player_id "e95fb4a9-50d3-41ae-a8d3-1465f00611e6"
+  @device_token "14d14fa953ac53aaff8416"
 
-  describe "OneSignal" do
-    test "update_player_id" do
+  describe "Pushy" do
+    test "update_device_token" do
       {:ok, user} = UserTransport.create(@valid_attrs)
 
-      {:ok, user} = UserTransport.update_os_player_id(user, @player_id)
+      {:ok, user} = UserTransport.update_device_token(user, @device_token)
 
-      t = to_string(user.extra_data["os_updated_at"])
+      t = to_string(user.extra_data["device_token_updated_at"])
 
       user = Repo.get(UserTransport, user.id)
 
-      assert user.extra_data["os_player_id"] == @player_id
-      assert user.extra_data["os_updated_at"] == t
+      assert user.extra_data["device_token"] == @device_token
+      assert user.extra_data["device_token_updated_at"] == t
     end
 
-    test "update_os_player_id does not override " do
+    test "update_os_device_token does not override " do
       {:ok, user} = Repo.insert(%UserTransport{
         full_name: "Juan Perez", mobile_number: "12345678", email: "juan@mail.com",
         encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234"),
@@ -69,7 +69,7 @@ defmodule Publit.UserTransportTest do
       })
 
       user = Repo.get(UserTransport, user.id)
-      {:ok, user} = UserTransport.update_os_player_id(user, @player_id)
+      {:ok, user} = UserTransport.update_device_token(user, @device_token)
 
       user = Repo.get(UserTransport, user.id)
 
@@ -79,8 +79,8 @@ defmodule Publit.UserTransportTest do
       assert user.extra_data["bool"] == true
 
 
-      assert user.extra_data["os_player_id"] == @player_id
-      assert user.extra_data["os_updated_at"]
+      assert user.extra_data["device_token"] == @device_token
+      assert user.extra_data["device_token_updated_at"]
     end
 
   end

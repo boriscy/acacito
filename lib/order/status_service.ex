@@ -4,7 +4,7 @@ defmodule Publit.Order.StatusService do
   alias Ecto.Multi
   import Publit.Gettext
 
-  @token_id "os_player_id"
+  @token_id "device_token"
 
   @doc"""
   Changes the status of an order to the next

@@ -85,7 +85,7 @@ defmodule Publit.PosService do
 
   # sends the actual message
   defp send_message(order, _user_t) do
-    tokens = [order.user_client.extra_data["os_player_id"]]
+    tokens = [order.user_client.extra_data["device_token"]]
 
     case order.status do
       "transport" ->

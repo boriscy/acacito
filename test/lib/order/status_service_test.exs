@@ -46,7 +46,7 @@ defmodule Publit.Order.StatusServiceTest do
 
       data = Publit.MessageApiMock.get_data()
 
-      assert data[:tokens] == [uc.extra_data["os_player_id"]]
+      assert data[:tokens] == [uc.extra_data["device_token"]]
     end
 
     test "transport to transporting", %{uc: uc, org: org} do
@@ -76,7 +76,7 @@ defmodule Publit.Order.StatusServiceTest do
       assert data[:msg][:message] == gettext("Your order is on the way")
       assert data[:msg][:order][:id] == ord.id
 
-      assert data[:tokens] == [uc.extra_data["os_player_id"], ut.extra_data["os_player_id"]]
+      assert data[:tokens] == [uc.extra_data["device_token"], ut.extra_data["device_token"]]
     end
 
     test "transporting to delivered", %{uc: uc, org: org} do
@@ -97,7 +97,7 @@ defmodule Publit.Order.StatusServiceTest do
 
       data = Publit.MessageApiMock.get_data()
 
-      assert data[:tokens] == [uc.extra_data["os_player_id"]]
+      assert data[:tokens] == [uc.extra_data["device_token"]]
 
       assert data[:msg][:title] == gettext("Order delivered")
       assert data[:msg][:message] == gettext("Your order has been delivered")

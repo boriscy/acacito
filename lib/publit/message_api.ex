@@ -2,10 +2,10 @@ defmodule Publit.MessageApi do
   @moduledoc """
   Should send a message similar to
   {
-    "app_id": "f78f735f-a596-4fd8-9524-404f2c843a96",
-    "include_player_ids": ["9ce97a55-b483-4872-9257-997ce7a88dbf"],
-    "heading": "Holaaaaa",
-    "contents": {"en": "Esto es una prueba!"}
+      "to": "a6345d0278adc55d3474f5",
+      "data": {
+          "message": "Hello World!",
+      }
   }
   """
 
@@ -15,29 +15,23 @@ defmodule Publit.MessageApi do
   end
 
 
-  @messaging_url "https://onesignal.com/api/v1/notifications"
+  # POST https://api.pushy.me/push?api_key=PUSHY_SECRET_API_KEY
+  @messaging_url "https://api.pushy.me/push?api_key=#{System.get_env["PUSHY_SECRET_API_KEY"]}"
 
   def server_key do
-    System.get_env["OPEN_SIGNAL_REST_API_KEY"]
-  end
-
-  def app_id do
-    System.get_env("OPEN_SIGNAL_APP_ID")
+    System.get_env["PUSHY_SECRET_API_KEY"]
   end
 
   @doc """
-  Receives a list of player_ids in OneSignal and sends the message in the msg map
+  Receives a list of device_tokens in Pushy and sends the message in the msg map
   """
+  #headers = [{"Authorization", "Basic #{server_key()}"}, {"Content-Type", "application/json"}]
   #@type send_message(list, map) ::
-  def send_message(player_ids, msg) do
-    headers = [{"Authorization", "Basic #{server_key()}"}, {"Content-Type", "application/json"}]
+  def send_message(tokens, msg) do
+    headers = [{"Content-Type", "application/json"}]
     body = Poison.encode!(%{
-      include_player_ids: player_ids,
       data: msg,
-      app_id: app_id,
-      player_ids: player_ids,
-      heading: msg.heading,
-      contents: %{ en: msg.body},
+      tokens: tokens,
       priority: 10
     })
 

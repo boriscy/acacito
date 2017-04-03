@@ -4,7 +4,7 @@ defmodule Publit.UserClientTest do
   alias Publit.UserClient
 
   @valid_attrs %{full_name: "Amaru Barroso", email: "amaru@mail.com",
-      password: "demo1234", mobile_number: "73732655", extra_data: %{"os_player_id" => "fbclitoken123"}}
+      password: "demo1234", mobile_number: "73732655", extra_data: %{"device_token" => "devtoken123"}}
   @invalid_attrs %{email: "to", mobile_number: "22"}
 
   describe "create" do
@@ -29,20 +29,20 @@ defmodule Publit.UserClientTest do
 
   end
 
-  @player_id "e95fb4a9-50d3-41ae-a8d3-1465f00611e6"
+  @device_token "14d14fa953ac53aaff8416"
 
-  describe "update_player_id" do
+  describe "update_device_token" do
     test "OK" do
       {:ok, user} = UserClient.create(@valid_attrs)
 
-      {:ok, user} = UserClient.update_os_player_id(user, @player_id)
+      {:ok, user} = UserClient.update_device_token(user, @device_token)
 
-      t = to_string(user.extra_data["os_updated_at"])
+      t = to_string(user.extra_data["device_token_updated_at"])
 
       user = Repo.get(UserClient, user.id)
 
-      assert user.extra_data["os_player_id"] == @player_id
-      assert user.extra_data["os_updated_at"] == t
+      assert user.extra_data["device_token"] == @device_token
+      assert user.extra_data["device_token_updated_at"] == t
     end
 
     test "does not override" do
@@ -53,7 +53,7 @@ defmodule Publit.UserClientTest do
       })
 
       user = Repo.get(UserClient, user.id)
-      {:ok, user} = UserClient.update_os_player_id(user, @player_id)
+      {:ok, user} = UserClient.update_device_token(user, @device_token)
 
       user = Repo.get(UserClient, user.id)
 
@@ -63,8 +63,8 @@ defmodule Publit.UserClientTest do
       assert user.extra_data["bool"] == true
 
 
-      assert user.extra_data["os_player_id"] == @player_id
-      assert user.extra_data["os_updated_at"]
+      assert user.extra_data["device_token"] == @device_token
+      assert user.extra_data["device_token_updated_at"]
     end
   end
 end

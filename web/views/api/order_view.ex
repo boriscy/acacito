@@ -23,14 +23,7 @@ defmodule Publit.Api.OrderView do
   end
 
   def to_api(order) do
-    order = Repo.preload(order, [:user_client, :order_calls])
-
-    order
-    |> Map.drop([:__meta__, :__struct__, :organization, :user_transport, :chat, :log])
-    |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
-    |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
-    |> Map.put(:user_client, Publit.UserView.to_api(order.user_client))
-    #|> Map.put(:order_calls, encode_order_calls(order) )
+    Publit.OrderView.to_api(order)
   end
 
   def encode_with_user(order) do
@@ -41,13 +34,6 @@ defmodule Publit.Api.OrderView do
     |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
   end
 
-  def to_api2(order) do
-    order
-    |> Map.drop([:__meta__, :__struct__, :organization, :user_transport, :log, :user_client, :user_transport, :chat, :order_calls])
-    |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
-    |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
-    |> Map.put(:user_client, Publit.UserView.to_api(order.user_client))
-  end
 
   defp encode_order_calls(order) do
     case is_list(order.order_calls) do

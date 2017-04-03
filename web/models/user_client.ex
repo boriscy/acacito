@@ -1,6 +1,6 @@
 defmodule Publit.UserClient do
   use Publit.Web, :model
-  use Publit.OneSignal
+  use Publit.Pushy
   alias Publit.{UserClient, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|

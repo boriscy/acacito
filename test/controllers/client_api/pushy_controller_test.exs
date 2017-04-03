@@ -1,4 +1,4 @@
-defmodule Publit.ClientApi.OneSignalControllerTest do
+defmodule Publit.ClientApi.PushyControllerTest do
   use Publit.ConnCase
 
   setup do
@@ -9,9 +9,11 @@ defmodule Publit.ClientApi.OneSignalControllerTest do
     %{conn: conn}
   end
 
-  describe "PUT /cli_api/open_signal" do
+  @device_token "14d14fa953ac53aaff8416"
+
+  describe "PUT /cli_api/pushy" do
     test "OK", %{conn: conn} do
-      conn = put(conn, "/client_api/one_signal", %{"player_id" => "demo4321"})
+      conn = put(conn, "/client_api/pushy", %{"device_token" => @device_token})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -21,7 +23,7 @@ defmodule Publit.ClientApi.OneSignalControllerTest do
 
     test "ERROR" do
       conn = build_conn()
-      conn = put(conn, "/client_api/one_signal", %{"player_id" => "demo4321"})
+      conn = put(conn, "/client_api/pushy", %{"device_token" => @device_token})
 
       assert conn.status == Plug.Conn.Status.code(:unauthorized)
       json = Poison.decode!(conn.resp_body)

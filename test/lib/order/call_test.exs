@@ -7,15 +7,15 @@ defmodule Publit.Order.CallTest do
   defp create_user_transports do
     [
       %UserTransport{mobile_number: "11223344", status: "listen", pos: %Geo.Point{coordinates: {-63.876047,-18.1787804}, srid: nil},
-      extra_data: %{os_player_id: "11223344"}},
+      extra_data: %{device_token: "11223344"}},
       %UserTransport{mobile_number: "22334455", status: "listen", pos: %Geo.Point{coordinates: {-63.8732718,-18.1767489}, srid: nil},
-      extra_data: %{os_player_id: "22334455"}},
+      extra_data: %{device_token: "22334455"}},
       %UserTransport{mobile_number: "33445566", status: "listen", pos: %Geo.Point{coordinates: {-63.8210238,-18.1650556}, srid: nil},
-      extra_data: %{os_player_id: "33445566"}},
+      extra_data: %{device_token: "33445566"}},
       %UserTransport{mobile_number: "44556677", status: "listen", pos: %Geo.Point{coordinates: {-63.8660898,-18.1781923}, srid: nil},
-      extra_data: %{os_player_id: "44556677"}},
+      extra_data: %{device_token: "44556677"}},
       %UserTransport{mobile_number: "55667788", status: "listen", pos: %Geo.Point{coordinates: {-63.8732718,-18.1767489}, srid: nil},
-      extra_data: %{os_player_id: "55667788"}}
+      extra_data: %{device_token: "55667788"}}
     ] |> Enum.map(&Repo.insert/1)
   end
 
@@ -48,16 +48,17 @@ defmodule Publit.Order.CallTest do
           body = Poison.decode!(oc.resp["body"])
 
           assert body["id"]
-          assert body["recipients"]
+          assert body["success"]
       end
 
       r = Agent.get(:api_mock, fn(v) -> v end)
 
-      assert r[:msg][:title] == gettext("New order")
       assert r[:msg][:message] == gettext("New order from %{org}", %{org: org.name})
-      assert %{order_call: oc} = r[:msg]
+      assert r[:msg][:data][:order_call][:id] == oc.id
 
-      assert oc.order.organization_name == org.name
+      order = r[:msg][:data][:order_call][:order]
+      assert order[:client_name] == ord.client_name
+      assert order[:organization_name] == "Publit"
     end
 
     test "ERROR" do
@@ -68,9 +69,9 @@ defmodule Publit.Order.CallTest do
 
       [
         %UserTransport{mobile_number: "11223344", status: "listen", pos: %Geo.Point{coordinates: {-63.876047,-18.1787804}, srid: nil},
-        extra_data: %{os_player_id: "11223344"}},
+        extra_data: %{device_token: "11223344"}},
         %UserTransport{mobile_number: "22334455", status: "listen", pos: %Geo.Point{coordinates: {-63.8732718,-18.1767489}, srid: nil},
-        extra_data: %{os_player_id: "223344"}}
+        extra_data: %{device_token: "223344"}}
       ]
       |> Enum.map(&Repo.insert/1)
 
@@ -87,7 +88,7 @@ defmodule Publit.Order.CallTest do
           assert oc.status == "error"
           body = Poison.decode!(oc.resp["body"])
 
-          assert body["errors"]
+          assert body["error"]
       end
     end
 

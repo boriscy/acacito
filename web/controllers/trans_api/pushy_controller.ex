@@ -1,14 +1,14 @@
-defmodule Publit.TransApi.OneSignalController do
+defmodule Publit.TransApi.PushyController do
   use Publit.Web, :controller
   plug :scrub_params, "login" when action in [:create]
   alias Publit.{UserTransport}
 
 
   # PUT /trans_api/open_signal/:user_id
-  def update(conn, %{"player_id" => player_id}) do
+  def update(conn, %{"device_token" => device_token}) do
     user = conn.assigns.current_user_transport
 
-    case UserTransport.update_os_player_id(user, player_id) do
+    case UserTransport.update_device_token(user, device_token) do
       {:ok, user} ->
         render(conn, "show.json", user: user)
       {:error, cs} ->

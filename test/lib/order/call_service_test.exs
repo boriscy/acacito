@@ -1,5 +1,6 @@
 defmodule Publit.Order.CallServiceTest do
   use Publit.ModelCase
+  import Publit.Gettext
 
   alias Publit.{Order, UserTransport, Repo}
 
@@ -12,7 +13,7 @@ defmodule Publit.Order.CallServiceTest do
       insert(:order_log, order_id: order.id)
 
       ut = insert(:user_transport, status: "listen")
-      ut2 = insert(:user_transport, status: "listen", mobile_number: "99887766", extra_data: %{"os_player_id" => "fb3456789"})
+      ut2 = insert(:user_transport, status: "listen", mobile_number: "99887766", extra_data: %{"device_token" => "devtoken3456789"})
       assert order.status == "process"
 
       oc = insert(:order_call, transport_ids: [ut.id, ut2.id], order_id: order.id, status: "delivered")
@@ -44,6 +45,7 @@ defmodule Publit.Order.CallServiceTest do
 
       resp = Publit.MessageApiMock.get_data()
 
+      assert resp[:msg][:message] == gettext("New order from %{org}", org: org.name)
       assert resp[:msg][:order_call_id] == oc.id
       assert resp[:msg][:order_id] == order.id
       assert resp[:msg][:user_transport_id] == ut.id

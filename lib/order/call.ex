@@ -15,7 +15,7 @@ defmodule Publit.Order.Call do
   end
   #@statuses ["new", "delivered", "error"]
 
-  @token_id "os_player_id"
+  @token_id "device_token"
 
   @doc """
   Creates and %Order.Call{} and stores in the db when correct then
@@ -27,30 +27,33 @@ defmodule Publit.Order.Call do
 
     if Enum.count(transports) > 0 do
       ids = Enum.map(transports, fn(t) -> t.id end)
-      oc = %Order.Call{order_id: order.id, transport_ids: ids}
+      occs = %Order.Call{order_id: order.id, transport_ids: ids}
       |> change()
       |> put_assoc(:order, order)
 
       tokens = Enum.map(transports, fn(t) -> t.extra_data[@token_id] end)
 
-      create_and_send_message(oc, tokens)
+      create_and_send_message(occs, tokens)
     else
       {:empty, %Order.Call{}}
     end
   end
 
-  defp create_and_send_message(oc, tokens) do
-    case Repo.insert(oc) do
+  defp create_and_send_message(occs, tokens) do
+    case Repo.insert(occs) do
       {:ok, oc} ->
         cb_ok = fn(resp) -> Order.Call.update(oc, %{status: "delivered", resp: Map.drop(resp.resp, [:__struct__])}) end
         cb_error = fn(resp) -> Order.Call.update(oc, %{status: "error", resp: Map.drop(resp.resp, [:__struct__]) }) end
 
-        {:ok, pid} = Publit.MessagingService.send_message(tokens,
-          %{ title: gettext("New order"),
-             message: gettext("New order from %{org}", %{org: oc.order.organization_name}),
-             order_call: encode(oc),
-             status: "calling" },
-          cb_ok, cb_error)
+        msg = %{
+          message: gettext("New order from %{org}", %{org: oc.order.organization_name}),
+          data: %{
+            status: "calling",
+            order_call: encode(oc)
+          }
+        }
+
+        {:ok, pid} = Publit.MessagingService.send_message(tokens, msg, cb_ok, cb_error)
 
         {:ok, oc, pid}
       {:error, cs} ->
@@ -80,7 +83,7 @@ defmodule Publit.Order.Call do
   def encode(oc) do
     oc
     |> Map.drop([:__meta__, :__struct__])
-    |> Map.put(:order, Publit.Api.OrderView.to_api2(oc.order) )
+    |> Map.put(:order, Publit.OrderView.to_api(oc.order) )
   end
 
   def delete(order_id) do
