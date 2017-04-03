@@ -61,7 +61,10 @@ defmodule Publit.Order.CallService do
 
     msg = %{
       message: gettext("New order from %{org}", org: order.organization_name),
-      data: Publit.TransApi.OrderView.to_api(order)
+      data: %{
+        order_call_id: oc.id,
+        order: Publit.TransApi.OrderView.to_api(order)
+      }
     }
 
     Publit.MessagingService.send_message(tokens, msg, cb_ok, cb_err)

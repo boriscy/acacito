@@ -45,12 +45,11 @@ defmodule Publit.Order.CallServiceTest do
 
       resp = Publit.MessageApiMock.get_data()
 
-      assert resp[:msg][:message] == gettext("New order from %{org}", org: org.name)
-      assert resp[:msg][:order_call_id] == oc.id
-      assert resp[:msg][:order_id] == order.id
-      assert resp[:msg][:user_transport_id] == ut.id
-      assert resp[:msg][:status] == "order:answered"
-
+      #assert resp[:msg][:message] == gettext("New order from %{org}", org: org.name)
+      assert resp[:msg][:data][:order_call_id] == oc.id
+      ord = resp[:msg][:data][:order]
+      assert ord[:id] == order.id
+      IO.inspect ord
     end
 
     test "empty" do

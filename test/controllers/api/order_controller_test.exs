@@ -22,8 +22,8 @@ defmodule Publit.Api.OrderControllerTest do
       assert json["orders"] |> Enum.count() == 1
 
       order = json["orders"] |> List.first()
-      assert order["user_client"]["id"] == user_client.id
-      assert order["user_client"]["full_name"] == user_client.full_name
+      assert order["user_client_id"] == user_client.id
+      assert order["client_name"] == user_client.full_name
     end
 
     test "not found", %{conn: conn} do
@@ -47,8 +47,8 @@ defmodule Publit.Api.OrderControllerTest do
       assert json["order"]["id"] == ord.id
       assert json["order"]["details"] |> Enum.count() == 2
 
-      assert json["order"]["user_client"]["id"] == user_client.id
-      assert json["order"]["user_client"]["full_name"] == user_client.full_name
+      assert json["order"]["user_client_id"] == user_client.id
+      assert json["order"]["client_name"] == user_client.full_name
     end
 
     test "not found", %{conn: conn} do
@@ -73,7 +73,7 @@ defmodule Publit.Api.OrderControllerTest do
 
       assert json["order"]["status"] == "process"
 
-      assert json["order"]["organization"] == nil
+      assert json["order"]["organization"] == %{}
     end
   end
 end

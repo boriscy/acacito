@@ -12,7 +12,7 @@ defmodule Publit.TransApi.OrderView do
   end
 
   def render("show.json", %{order: order}) do
-    %{order: Publit.Api.OrderView.to_api2(order)}
+    %{order: Publit.Api.OrderView.to_api(order)}
   end
 
   def render("empty.json", %{}) do
@@ -25,9 +25,6 @@ defmodule Publit.TransApi.OrderView do
   end
 
   def to_api(order) do
-    order
-    |> Map.drop([:__meta__, :__struct__, :user_client, :user_transport, :order_calls, :organization, :log, :chat])
-    |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
-    |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
+    Publit.OrderView.to_api(order)
   end
 end

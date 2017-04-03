@@ -29,39 +29,7 @@ defmodule Publit.Router do
     plug Publit.Plug.Api.OrganizationAuth
   end
 
-  ######################################################
-  scope "/", Publit do
-    pipe_through [:browser] # Use the default browser stack
 
-    get "/", SessionController, :index
-    get "/login", SessionController, :index
-    post "/login", SessionController, :create
-    delete "/logout", SessionController, :delete
-
-    resources "/users", UserController
-    resources "/registration", RegistrationController, only: [:index, :create]
-  end
-
-  # UserAuth
-  scope "/", Publit do
-    pipe_through [:browser, :user_auth]
-    get "/organizations", OrganizationController, :index
-  end
-
-  # OrganizationAuth
-  scope "/", Publit do
-    pipe_through [:browser, :user_auth, :organization_auth]
-
-    get "/dashboard", DashboardController, :index
-
-    resources "/products", ProductController
-
-    get "/organizations/:id", OrganizationController, :show
-    put "/organizations/current", OrganizationController, :update
-    put "/organizations/open_close", OrganizationController, :open_close
-
-    get "/orders", OrderController, :index
-  end
 
   ######################################################
   # Unauthorized API
@@ -144,4 +112,39 @@ defmodule Publit.Router do
     end
   end
 
+
+  ######################################################
+  scope "/", Publit do
+    pipe_through [:browser] # Use the default browser stack
+
+    get "/", SessionController, :index
+    get "/login", SessionController, :index
+    post "/login", SessionController, :create
+    delete "/logout", SessionController, :delete
+
+    resources "/users", UserController
+    resources "/registration", RegistrationController, only: [:index, :create]
+  end
+
+
+  # UserAuth
+  scope "/", Publit do
+    pipe_through [:browser, :user_auth]
+    get "/organizations", OrganizationController, :index
+  end
+
+  # OrganizationAuth
+  scope "/", Publit do
+    pipe_through [:browser, :user_auth, :organization_auth]
+
+    get "/dashboard", DashboardController, :index
+
+    resources "/products", ProductController
+
+    get "/organizations/:id", OrganizationController, :show
+    put "/organizations/current", OrganizationController, :update
+    put "/organizations/open_close", OrganizationController, :open_close
+
+    get "/orders", OrderController, :index
+  end
 end

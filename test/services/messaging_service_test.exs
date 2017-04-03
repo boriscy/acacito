@@ -21,8 +21,8 @@ defmodule Publit.MessagingServiceTest do
         {:DOWN, ^ref, _, _, _} ->
         r = Agent.get(agent, fn(v) -> v end)[:resp]
 
-        assert r.body["recipients"] == 1
         assert r.body["id"]
+        assert r.body["success"]
       end
     end
 

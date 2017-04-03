@@ -53,6 +53,7 @@ defmodule Publit.Order.CallTest do
 
       r = Agent.get(:api_mock, fn(v) -> v end)
 
+      r[:tokens] == ["11223344", "22334455", "44556677", "55667788"]
       assert r[:msg][:message] == gettext("New order from %{org}", %{org: org.name})
       assert r[:msg][:data][:order_call][:id] == oc.id
 
