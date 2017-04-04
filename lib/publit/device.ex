@@ -1,11 +1,11 @@
-defmodule Publit.Pushy do
+defmodule Publit.Device do
   @moduledoc false
   alias Publit.Repo
 
   defmacro __using__(_opts) do
     quote do
       def update_device_token(user, device_token) do
-        if user.extra_data["evice_token"] == device_token do
+        if user.extra_data["device_token"] == device_token do
           {:ok, user}
         else
           user

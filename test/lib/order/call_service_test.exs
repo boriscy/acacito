@@ -49,7 +49,6 @@ defmodule Publit.Order.CallServiceTest do
       assert resp[:msg][:data][:order_call_id] == oc.id
       ord = resp[:msg][:data][:order]
       assert ord[:id] == order.id
-      IO.inspect ord
     end
 
     test "empty" do

@@ -1,9 +1,9 @@
-defmodule Publit.ClientApi.PushyController do
+defmodule Publit.ClientApi.DeviceController do
   use Publit.Web, :controller
   alias Publit.{UserClient}
 
 
-  # PUT /client_api/pushy
+  # PUT /client_api/device
   def update(conn, %{"device_token" => device_token}) do
     user = conn.assigns.current_user_client
 

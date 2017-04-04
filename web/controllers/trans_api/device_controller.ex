@@ -1,10 +1,10 @@
-defmodule Publit.TransApi.PushyController do
+defmodule Publit.TransApi.DeviceController do
   use Publit.Web, :controller
   plug :scrub_params, "login" when action in [:create]
   alias Publit.{UserTransport}
 
 
-  # PUT /trans_api/open_signal/:user_id
+  # PUT /trans_api/device/:user_id
   def update(conn, %{"device_token" => device_token}) do
     user = conn.assigns.current_user_transport
 

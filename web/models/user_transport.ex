@@ -1,6 +1,6 @@
 defmodule Publit.UserTransport do
   use Publit.Web, :model
-  use Publit.Pushy
+  use Publit.Device
   alias Publit.{UserTransport, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|

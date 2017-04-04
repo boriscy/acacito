@@ -1,4 +1,4 @@
-defmodule Publit.ClientApi.PushyControllerTest do
+defmodule Publit.ClientApi.DeviceControllerTest do
   use Publit.ConnCase
 
   setup do
@@ -11,9 +11,9 @@ defmodule Publit.ClientApi.PushyControllerTest do
 
   @device_token "14d14fa953ac53aaff8416"
 
-  describe "PUT /cli_api/pushy" do
+  describe "PUT /cli_api/device" do
     test "OK", %{conn: conn} do
-      conn = put(conn, "/client_api/pushy", %{"device_token" => @device_token})
+      conn = put(conn, "/client_api/device", %{"device_token" => @device_token})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -23,7 +23,7 @@ defmodule Publit.ClientApi.PushyControllerTest do
 
     test "ERROR" do
       conn = build_conn()
-      conn = put(conn, "/client_api/pushy", %{"device_token" => @device_token})
+      conn = put(conn, "/client_api/device", %{"device_token" => @device_token})
 
       assert conn.status == Plug.Conn.Status.code(:unauthorized)
       json = Poison.decode!(conn.resp_body)

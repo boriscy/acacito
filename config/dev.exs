@@ -64,5 +64,5 @@ config :ex_aws,
     region: "sa-east-1"
   ]
 
-config :publit, :message_api, Publit.MessageApi
+config :publit, :message_api, Publit.MessageApiDev
 

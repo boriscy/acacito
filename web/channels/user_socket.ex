@@ -6,12 +6,12 @@ defmodule Publit.UserSocket do
   channel "organizations:*", Publit.OrganizationChannel
 
   ## Transports
-  #transport :websocket, Phoenix.Transports.WebSocket,
-  #  check_origin: [
-  #    "//localhost", "https://boriscy.github.io"
-  #  ]
+  transport :websocket, Phoenix.Transports.WebSocket,
+    check_origin: [
+      "//localhost", "https://boriscy.github.io"
+    ]
 
-  transport :longpoll, Phoenix.Transports.LongPoll#,
+  #transport :longpoll, Phoenix.Transports.LongPoll#,
   #  window_ms: 10_000,
   #  pubsub_timeout_ms: 2_000,
   #  transport_log: false,

@@ -73,7 +73,7 @@ defmodule Publit.Router do
     scope "/" do
       pipe_through [:user_client_auth]
 
-      put "/pushy", PushyController, :update
+      put "/device", DeviceController, :update
 
       get "/:organization_id/products", ProductController, :products
       post "/search", SearchController, :search
@@ -104,7 +104,7 @@ defmodule Publit.Router do
       put "/order_position", PositionController, :order_position
       put "/stop_tracking", PositionController, :stop_tracking
 
-      put "/pushy", PushyController, :update
+      put "/device", DeviceController, :update
 
       put "/accept/:order_id", OrderController, :accept
       put "/deliver/:order_id", OrderController, :deliver
