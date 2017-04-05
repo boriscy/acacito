@@ -3,7 +3,7 @@
 
     <div class="header">
       <div class="left">
-        <div class="title">{{formatNum(order.num)}} - {{user_client.full_name}}</div>
+        <div class="title">{{formatNum(order.num)}} - {{order.client_name}}</div>
 
         <div class="order-time-ago">
           <i class="material-icons">watch_later</i>

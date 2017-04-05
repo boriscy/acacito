@@ -145,15 +145,19 @@ defmodule Publit.Order.StatusService do
     if order.user_transport_id do
       tokens = tokens ++ [order.user_transport.extra_data[@token_id]]
     end
-    {title, msg} = {gettext("Order transporting"), gettext("Your order is on the way")}
+    tokens = Enum.filter(tokens, fn(t) -> to_string(t) != "" end)
+
 
     ord = Publit.TransApi.OrderView.to_api(order)
     cb_ok = fn(_) -> "" end
     cb_err = fn(_) -> "" end
 
-    Publit.MessagingService.send_message(tokens,
-      %{title: title, message: msg, status: "order:updated", order: ord},
-      cb_ok, cb_err)
+    msg = %{
+      message: gettext("Your order is on the way"),
+      data: %{order: ord, status: "order:updated"}
+    }
+
+    Publit.MessagingService.send_message(tokens, msg, cb_ok, cb_err)
   end
 
   def send_message_deliver(order) do
