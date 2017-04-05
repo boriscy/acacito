@@ -16,7 +16,7 @@ defmodule Publit.Order.CallServiceTest do
       ut2 = insert(:user_transport, status: "listen", mobile_number: "99887766", extra_data: %{"device_token" => "devtoken3456789"})
       assert order.status == "process"
 
-      oc = insert(:order_call, transport_ids: [ut.id, ut2.id], order_id: order.id, status: "delivered")
+      oc = insert(:order_call, transport_ids: [ut.id, ut2.id], order_id: order.id, status: "new")
       {:ok, order, _pid} = Order.CallService.accept(order, ut, %{final_price: Decimal.new("7")})
 
       assert order.status == "transport"
@@ -72,7 +72,7 @@ defmodule Publit.Order.CallServiceTest do
 
       ut = insert(:user_transport, status: "listen")
 
-      insert(:order_call, transport_ids: [ut.id], order_id: order.id, status: "delivered")
+      insert(:order_call, transport_ids: [ut.id], order_id: order.id, status: "new")
 
       assert {:error, :order, cs} = Order.CallService.accept(order, ut, %{final_price: Decimal.new("-7")})
       assert cs.changes.transport.errors[:final_price]

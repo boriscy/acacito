@@ -242,7 +242,7 @@ msgstr ""
 msgid "Escriba para probar"
 msgstr ""
 
-#: lib/order/call.ex:47 web/templates/layout/translations.html.eex:24
+#: web/templates/layout/translations.html.eex:24
 msgid "New order"
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: lib/order/status_service.ex:125 web/views/api/transport_view.ex:9
+#: lib/order/status_service.ex:127 web/views/api/transport_view.ex:9
 #: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr ""
@@ -297,7 +297,7 @@ msgstr ""
 msgid "walk"
 msgstr ""
 
-#: lib/order/call.ex:48
+#: lib/order/call.ex:49 lib/order/call_service.ex:63
 msgid "New order from %{org}"
 msgstr "Nuevo pedido de %{org}"
 
@@ -313,23 +313,23 @@ msgstr ""
 msgid "Your order is arriving"
 msgstr ""
 
-#: lib/order/status_service.ex:146
+#: lib/order/status_service.ex:148
 msgid "Order transporting"
 msgstr ""
 
-#: lib/order/status_service.ex:112
+#: lib/order/status_service.ex:114
 msgid "User transport not found"
 msgstr ""
 
-#: lib/order/status_service.ex:146
+#: lib/order/status_service.ex:148
 msgid "Your order is on the way"
 msgstr ""
 
-#: lib/order/status_service.ex:162
+#: lib/order/status_service.ex:164
 msgid "Order delivered"
 msgstr ""
 
-#: lib/order/status_service.ex:162
+#: lib/order/status_service.ex:164
 msgid "Your order has been delivered"
 msgstr ""
 
@@ -369,10 +369,10 @@ msgstr ""
 msgid "Close sale"
 msgstr ""
 
-#: web/models/user_authentication.ex:72
+#: web/models/user_authentication.ex:74
 msgid "Invalid email"
 msgstr ""
 
-#: web/models/user_authentication.ex:74
+#: web/models/user_authentication.ex:77
 msgid "Invalid password"
 msgstr ""

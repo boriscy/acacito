@@ -15,7 +15,7 @@ defmodule Publit.TransApi.OrderControllerTest do
   end
 
 
-  defp create_order_call(order, params \\ %{status: "delivered"}) do
+  defp create_order_call(order, params \\ %{status: "new"}) do
     params = Map.merge(params, %{order_id: order.id})
     {:ok, oc} = Repo.insert(Map.merge(%Order.Call{}, params))
     oc

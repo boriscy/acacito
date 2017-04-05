@@ -59,7 +59,7 @@
     <div slot="body">
       <div class="flex">
         <div style="width: 49%">
-          <label><%= gettext("Escriba para probar") %></label>
+          <label><%= gettext("Write to test") %></label>
           <textarea rows="10" cols="50" v-model="demoMd" style="width: 100%">
           </textarea>
         </div>

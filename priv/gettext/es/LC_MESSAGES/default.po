@@ -239,10 +239,10 @@ msgid "Description example"
 msgstr "Ejemplo de descripción"
 
 #: web/templates/product/form.html.eex:62
-msgid "Escriba para probar"
-msgstr ""
+msgid "Write to test"
+msgstr "Escriba para probar"
 
-#: lib/order/call.ex:47 web/templates/layout/translations.html.eex:24
+#: web/templates/layout/translations.html.eex:24
 msgid "New order"
 msgstr "Nuevo pedido"
 
@@ -259,7 +259,7 @@ msgstr "Categoría"
 msgid "Logout"
 msgstr "Salir"
 
-#: lib/order/status_service.ex:125 web/views/api/transport_view.ex:9
+#: lib/order/status_service.ex:127 web/views/api/transport_view.ex:9
 #: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr "Pedido no encontrado"
@@ -297,9 +297,9 @@ msgstr "camión"
 msgid "walk"
 msgstr "caminata"
 
-#: lib/order/call.ex:48
+#: lib/order/call.ex:49 lib/order/call_service.ex:63
 msgid "New order from %{org}"
-msgstr ""
+msgstr "Nuevo pedido de %{org}"
 
 #: web/templates/layout/translations.html.eex:31
 msgid "Transport has arrived"
@@ -311,25 +311,25 @@ msgstr "Su transporte esta cerca"
 
 #: web/services/pos_service.ex:97
 msgid "Your order is arriving"
-msgstr "Su transporte ya llego"
+msgstr "Su transporte esta llegando"
 
-#: lib/order/status_service.ex:146
+#: lib/order/status_service.ex:148
 msgid "Order transporting"
 msgstr "Pedido en transporte"
 
-#: lib/order/status_service.ex:112
+#: lib/order/status_service.ex:114
 msgid "User transport not found"
 msgstr "No se encontro transporte al pedido"
 
-#: lib/order/status_service.ex:146
+#: lib/order/status_service.ex:148
 msgid "Your order is on the way"
 msgstr "Su pedido esta en camino"
 
-#: lib/order/status_service.ex:162
+#: lib/order/status_service.ex:164
 msgid "Order delivered"
 msgstr "Pedido entregado"
 
-#: lib/order/status_service.ex:162
+#: lib/order/status_service.ex:164
 msgid "Your order has been delivered"
 msgstr "Su pedido fue entregado"
 
@@ -350,7 +350,7 @@ msgid "Obtain position using GPS"
 msgstr "Obtener posición usando el GPS"
 
 #: web/templates/layout/translations.html.eex:9
-msgid "Click then map to select your position"
+msgid "Click the map to select your position"
 msgstr "Hacer click en el mapa para seleccionar su posición"
 
 #: web/templates/layout/translations.html.eex:34
@@ -363,16 +363,16 @@ msgstr "Configuración"
 
 #: web/templates/layout/translations.html.eex:20
 msgid "Open for sale"
-msgstr "Abrir para la venta"
+msgstr "Abrir a la venta"
 
 #: web/templates/layout/translations.html.eex:12
 msgid "Close sale"
-msgstr "Cerrar venta"
+msgstr "Parar venta"
 
-#: web/models/user_authentication.ex:72
+#: web/models/user_authentication.ex:74
 msgid "Invalid email"
 msgstr "Email inválido"
 
-#: web/models/user_authentication.ex:74
+#: web/models/user_authentication.ex:77
 msgid "Invalid password"
 msgstr "Contraseña inválida"
