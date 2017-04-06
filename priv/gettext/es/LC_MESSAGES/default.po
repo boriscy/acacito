@@ -351,7 +351,7 @@ msgstr "Obtener posición usando el GPS"
 
 #: web/templates/layout/translations.html.eex:9
 msgid "Click the map to select your position"
-msgstr "Hacer click en el mapa para seleccionar su posición"
+msgstr "Haga click en el mapa para seleccionar su posición"
 
 #: web/templates/layout/translations.html.eex:34
 msgid "Update data and position"

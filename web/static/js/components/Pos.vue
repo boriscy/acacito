@@ -3,7 +3,7 @@
     <div>
       <button class="btn btn-default" :class="getActiveCSS('selpos')" @click="selectPos()">
         <i class="material-icons">location_on</i>
-        {{gettext("Click then map to select your position")}}
+        {{gettext("Click the map to select your position")}}
       </button>
       <button class="btn btn-default" :class="getActiveCSS('getpos')" @click="getPos()">
         <i class="material-icons">navigation</i>
