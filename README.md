@@ -79,3 +79,37 @@ mix edeliver build upgrade --from=cab9bc9
 mix edeliver deploy upgrade to production
 
 mix edeliver upgrade
+
+`.deliver/config`
+
+```
+pre_erlang_clean_compile() {
+  status "Installing NPM dependencies"
+  __sync_remote "
+    [ -f ~/.profile ] && source ~/.profile
+    set -e
+
+    cd '$BUILD_AT'
+    npm install $SILENCE
+  "
+
+  status "Building static files"
+  __sync_remote "
+    [ -f ~/.profile ] && source ~/.profile
+    set -e
+
+    cd '$BUILD_AT'
+    mkdir -p priv/static
+    npm run deploy $SILENCE
+  "
+
+  status "Running phoenix.digest"
+  __sync_remote "
+    [ -f ~/.profile ] && source ~/.profile
+    set -e
+
+    cd '$BUILD_AT'
+    APP='$APP' MIX_ENV='$TARGET_MIX_ENV' $MIX_CMD phoenix.digest $SILENCE
+  "
+}
+```
