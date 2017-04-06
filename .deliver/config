@@ -20,7 +20,7 @@ AUTO_VERSION=git-revision
 USING_DISTILLERY=true
 
 pre_erlang_clean_compile() {
-  status "Installing NPM dependencies"
+  status "Installing NPM dependencies with yarn"
   __sync_remote "
     [ -f ~/.profile ] && source ~/.profile
     set -e
