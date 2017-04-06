@@ -1,1 +1,3 @@
+<h1>Bienvenido</h1>
+
 <%= link gettext("New product"), to: product_path(@conn, :new) %>
