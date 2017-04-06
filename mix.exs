@@ -3,7 +3,7 @@ defmodule Publit.Mixfile do
 
   def project do
     [app: :publit,
-     version: "0.9.3",
+     version: "0.9.3+#{committed_at()}",
      elixir: "~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -92,6 +92,6 @@ defmodule Publit.Mixfile do
 
   @doc "Unix timestamp of the last commit."
   def committed_at do
-    System.cmd("git", ~w[git rev-parse HEAD]) |> elem(0) |> String.slice(0..7)
+    System.cmd("git", ~w[rev-parse HEAD]) |> elem(0) |> String.slice(0..7)
   end
 end
