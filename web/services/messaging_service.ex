@@ -22,6 +22,7 @@ defmodule Publit.MessagingService do
   def send_message(tokens, msg, cb_ok, cb_error, cb_net_error \\ fn(_v) -> :ok end) do
     Task.Supervisor.start_child(Publit.Messaging.Supervisor, fn() ->
         resp = @message_api.send_message(tokens, msg)
+
         case resp.status do
           :ok -> cb_ok.(resp)
           :error -> cb_error.(resp)

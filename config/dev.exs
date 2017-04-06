@@ -65,4 +65,3 @@ config :ex_aws,
   ]
 
 config :publit, :message_api, Publit.MessageApiDev
-
