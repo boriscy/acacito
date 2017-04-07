@@ -57,7 +57,7 @@ defmodule Publit.TransApi.OrderControllerTest do
       uc = insert(:user_client)
       order = create_order_only(uc, org)
 
-      oc = create_order_call(order)
+      oc = create_order_call(order, %{status: "delivered"})
 
       conn = conn
       |> put_req_header("authorization", token)
@@ -76,7 +76,7 @@ defmodule Publit.TransApi.OrderControllerTest do
       uc = insert(:user_client)
       order = create_order_only(uc, org, %{transport: %Order.Transport{calculated_price: Decimal.new("-5")} })
 
-      oc = create_order_call(order)
+      oc = create_order_call(order, %{status: "delivered"})
 
       conn = conn
       |> put_req_header("authorization", token)

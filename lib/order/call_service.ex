@@ -15,6 +15,7 @@ defmodule Publit.Order.CallService do
 
   def accept(order, ut, params) do
     q = from order_call_query(order), limit: 1
+
     case Repo.one(q) do
       nil -> :empty
       oc ->
@@ -48,7 +49,7 @@ defmodule Publit.Order.CallService do
     |> cast_embed(:transport, [with: &Order.Transport.changeset_update/2])
   end
 
-  defp order_call_query(order, statuses \\ ["new"]) do
+  defp order_call_query(order, statuses \\ ["delivered"]) do
     from oc in Order.Call, where: oc.order_id == ^order.id and oc.status in ^statuses
   end
 
