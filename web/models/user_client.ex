@@ -1,10 +1,11 @@
 defmodule Publit.UserClient do
   use Publit.Web, :model
   use Publit.Device
+  import Publit.UserUtil
   alias Publit.{UserClient, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
-  @number_reg ~r|^\d{8}$|
+  @number_reg ~r|^591[6,7]\d{7}$|
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "user_clients" do
@@ -15,6 +16,7 @@ defmodule Publit.UserClient do
     field :settings, :map, default: %{}
     field :extra_data, :map, default: %{}
     field :mobile_number, :string
+    field :verified, :boolean, default: false
 
     field :password, :string, virtual: true
 
@@ -39,8 +41,7 @@ defmodule Publit.UserClient do
     cs = create_changeset(%UserClient{}, params)
 
     if cs.valid? do
-      cs = Publit.User.generate_encrypted_password(cs)
-      Repo.insert(cs)
+      create_and_send_verification(cs)
     else
       {:error , cs}
     end

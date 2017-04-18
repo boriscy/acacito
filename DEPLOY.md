@@ -14,5 +14,5 @@ cp  _build/prod/rel/publit/releases/0.9.4+de65ea0d/publit.tar.gz ~/tmp/
 
 cp tar.gz
 tar -xzf publit.tar.gz
-bin/start
+bin/publit start
 ```

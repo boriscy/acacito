@@ -25,3 +25,5 @@ config :arc,
 
 # in test/support/messaging_api_mock.ex
 config :publit, :message_api, Publit.MessageApiMock
+
+config :publit, :sms_api, Publit.SmsApiMock
