@@ -9,9 +9,16 @@ defmodule Publit.ClientApi.RegistrationView do
     %{user: to_api(user)}
   end
 
-
   def render("errors.json", %{cs: cs}) do
     %{errors: get_errors(cs)}
+  end
+
+  def render("invalid_number.json", %{msg: msg}) do
+    %{msg: msg}
+  end
+
+  def render("not_found.json", %{msg: msg}) do
+    %{error: msg}
   end
 
   def to_api(user) do

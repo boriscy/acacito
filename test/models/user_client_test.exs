@@ -27,7 +27,7 @@ defmodule Publit.UserClientTest do
 
       refute user.verified
 
-      Process.sleep(120)
+      Process.sleep(55)
 
       u = Repo.get(UserClient, user.id)
 
@@ -58,7 +58,7 @@ defmodule Publit.UserClientTest do
 
       refute user.verified
 
-      Process.sleep(120)
+      Process.sleep(55)
 
       user = Repo.get(UserClient, user.id)
 
@@ -66,9 +66,10 @@ defmodule Publit.UserClientTest do
       refute user.verified
 
       Agent.update(:sms_mock, fn(v) -> Map.merge(v, %{status: "0"}) end)
-      {:ok, user} = Publit.UserUtil.resend_verification_number(user, "59177889911")
+      {:ok, user} = Publit.UserUtil.resend_verification_code(user, "59177123456")
 
-      Process.sleep(120)
+      assert user.mobile_number == "59177123456"
+      Process.sleep(55)
 
       msg = Agent.get(:sms_mock, fn(v) -> v end)
       [[num]] = Regex.scan(~r/\d+/, msg[:msg])
@@ -91,23 +92,23 @@ defmodule Publit.UserClientTest do
 
       refute user.verified
 
-      Process.sleep(120)
+      Process.sleep(55)
 
       user = Repo.get(UserClient, user.id)
 
       assert user.extra_data["mobile_number_sends"] == 1
       refute user.verified
 
-      {:ok, user} = Publit.UserUtil.resend_verification_number(user, "59177889911")
+      {:ok, user} = Publit.UserUtil.resend_verification_code(user, "59177889911")
 
-      Process.sleep(120)
+      Process.sleep(55)
 
       msg = Agent.get(:sms_mock, fn(v) -> v end)
 
       user = Repo.get(UserClient, user.id)
       assert {:error, msg} = Publit.UserUtil.verify_mobile_number(user, "00")
 
-      {:error, msg} = Publit.UserUtil.resend_verification_number(user, "59177889911")
+      {:error, msg} = Publit.UserUtil.resend_verification_code(user, "59177889911")
       assert msg == gettext("You have reached the max retries verifications for the day, please try in 24 hours")
     end
 

@@ -19,8 +19,13 @@ defmodule Publit.Factory do
       email: "amaru@mail.com",
       full_name: "Amaru Barroso",
       password: "demo1234",
-      mobile_number: "73731234",
-      extra_data: %{"device_token" => "devtokencli1234"},
+      mobile_number: "59173731234",
+      extra_data: %{
+        "device_token" => "devtokencli1234",
+        "mobile_number_key" => Publit.AES.encrypt("123456"),
+        "mobile_number_send_at" => to_string(DateTime.utc_now()),
+        "mobile_number_sends" => 0
+      },
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
     }
   end
@@ -33,7 +38,12 @@ defmodule Publit.Factory do
       mobile_number: "66778899",
       vehicle: "motorcycle",
       plate: "HUT321",
-      extra_data: %{"device_token" => "devtokentrans1234"},
+      extra_data: %{
+        "device_token" => "devtokentrans1234",
+        "mobile_number_key" => Publit.AES.encrypt("123456"),
+        "mobile_number_send_at" => to_string(DateTime.utc_now()),
+        "mobile_number_sends" => 0
+      },
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
     }
   end

@@ -67,7 +67,10 @@ defmodule Publit.Router do
     post "/login", SessionController, :create
     delete "/login", SessionController, :delete
     get "/valid_token/:token", SessionController, :valid_token
+    # Registration
     post "/registration", RegistrationController, :create
+    put "/validate_mobile_number/:id", RegistrationController, :validate_mobile_number
+    put "/resend_verification_code/:id", RegistrationController, :resend_verification_code
 
     # Authorized API
     scope "/" do
@@ -94,6 +97,7 @@ defmodule Publit.Router do
     delete "/login", SessionController, :delete
     get "/valid_token/:token", SessionController, :valid_token
     get "/valid_token_user/:token", SessionController, :valid_token_user
+
     post "/registration", RegistrationController, :create
 
     # Authorized API

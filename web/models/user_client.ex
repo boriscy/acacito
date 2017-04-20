@@ -41,7 +41,7 @@ defmodule Publit.UserClient do
     cs = create_changeset(%UserClient{}, params)
 
     if cs.valid? do
-      create_and_send_verification(cs)
+      create_and_send_verification_code(cs)
     else
       {:error , cs}
     end

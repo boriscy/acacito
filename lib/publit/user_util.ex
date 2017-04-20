@@ -22,31 +22,17 @@ defmodule Publit.UserUtil do
     end
   end
 
-  defp set_random_verification_number_and_encrypt(cs, num) do
-    enc = num
-    |> to_string()
-    |> Publit.AES.encrypt()
-
-    ed = Map.merge(cs.data.extra_data, %{
-      "mobile_number_key" => enc,
-      "mobile_number_send_at" => to_string(DateTime.utc_now()),
-      "mobile_number_sends" => 0
-    })
-
-    cs |> put_change(:extra_data, ed)
-  end
-
-  def create_and_send_verification(cs) do
-    m_ver_num = generate_random_numbers(6) |> to_string()
+  def create_and_send_verification_code(cs) do
+    ver_code = generate_random_numbers(6) |> to_string()
 
     resp = cs
     |> generate_encrypted_password()
-    |> set_random_verification_number_and_encrypt(m_ver_num)
+    |> set_verification_data(ver_code)
     |> Publit.Repo.insert()
 
     case resp do
       {:ok, user} ->
-        msg = gettext("Your %{app} code is: %{code}", app: app_name(), code: m_ver_num)
+        msg = gettext("Your %{app} code is: %{code}", app: app_name(), code: ver_code)
         Publit.SmsService.send_message(user.mobile_number, msg, ok_fn(user), error_fn(user))
       {:error, cs} ->
     end
@@ -67,7 +53,7 @@ defmodule Publit.UserUtil do
     end
   end
 
-  def resend_verification_number(user, number) do
+  def resend_verification_code(user, number) do
     if user.extra_data["mobile_number_sends"] < @max_retry do
       m_ver_num = generate_random_numbers(6) |> to_string()
 
@@ -90,6 +76,20 @@ defmodule Publit.UserUtil do
     else
       {:error, gettext("You have reached the max retries verifications for the day, please try in 24 hours")}
     end
+  end
+
+  defp set_verification_data(cs, num) do
+    enc = num
+    |> to_string()
+    |> Publit.AES.encrypt()
+
+    ed = Map.merge(cs.data.extra_data, %{
+      "mobile_number_key" => enc,
+      "mobile_number_send_at" => to_string(DateTime.utc_now()),
+      "mobile_number_sends" => 0
+    })
+
+    cs |> put_change(:extra_data, ed)
   end
 
   defp ok_fn(user), do: cb_fun(user, true)
