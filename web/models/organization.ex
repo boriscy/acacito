@@ -133,6 +133,8 @@ defmodule Publit.Organization do
     with tags as (
       select unnest(p.tags) as tag from products p
       where p.publish = true and p.organization_id = $1
+      union
+      select 'producto'
     ),
     res as (
       select count(tag) as count, tag from tags

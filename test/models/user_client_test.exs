@@ -1,5 +1,6 @@
 defmodule Publit.UserClientTest do
   use Publit.ModelCase
+  import Publit.Gettext
   alias Publit.{UserClient, Repo}
 
   @valid_attrs %{full_name: "Amaru Barroso", email: "amaru@mail.com",
@@ -70,11 +71,44 @@ defmodule Publit.UserClientTest do
       Process.sleep(120)
 
       msg = Agent.get(:sms_mock, fn(v) -> v end)
-      num = Regex.scan(~r/\d+/, msg[:msg]) |> List.first() |> List.first()
+      [[num]] = Regex.scan(~r/\d+/, msg[:msg])
 
       {:ok, user} = Publit.UserUtil.verify_mobile_number(user, num)
 
       assert user.verified
+    end
+
+    test "max retries" do
+      Agent.start_link(fn -> %{status: "9"} end, name: :sms_mock)
+
+      {:ok, user} = UserClient.create(@valid_attrs)
+      assert %UserClient{} = user
+
+      assert user.email == "amaru@mail.com"
+
+      assert user.extra_data["mobile_number_send_at"]
+      assert user.extra_data["mobile_number_sends"] == 0
+
+      refute user.verified
+
+      Process.sleep(120)
+
+      user = Repo.get(UserClient, user.id)
+
+      assert user.extra_data["mobile_number_sends"] == 1
+      refute user.verified
+
+      {:ok, user} = Publit.UserUtil.resend_verification_number(user, "59177889911")
+
+      Process.sleep(120)
+
+      msg = Agent.get(:sms_mock, fn(v) -> v end)
+
+      user = Repo.get(UserClient, user.id)
+      assert {:error, msg} = Publit.UserUtil.verify_mobile_number(user, "00")
+
+      {:error, msg} = Publit.UserUtil.resend_verification_number(user, "59177889911")
+      assert msg == gettext("You have reached the max retries verifications for the day, please try in 24 hours")
     end
 
     test "Error invalid email, blank password" do

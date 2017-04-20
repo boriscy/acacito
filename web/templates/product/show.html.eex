@@ -14,10 +14,6 @@
   <%= published(@product) %>
 </h2>
 
-<h4 class="text-muted">
-  <%= @product.category %>
-</h4>
-
 
 <img src="<%= img_url(@product, :big) %>" />
 

@@ -18,7 +18,6 @@ defmodule Publit.Product do
     field :pos, :integer, default: 1
     field :has_inventory, :boolean, default: true
     field :moderated, :boolean, default: false, null: false
-    field :category, :string
 
     belongs_to :organization, Publit.Organization, type: :binary_id
 
@@ -39,8 +38,8 @@ defmodule Publit.Product do
   """
   @spec create(map) :: any
   def create(params) do
-    %Product{}
-    |> cast(params, [:name, :description, :organization_id, :tags, :category])
+    cs = %Product{}
+    |> cast(params, [:name, :description, :organization_id, :tags])
     |> put_change(:id, Ecto.UUID.generate())
     |> cast_attachments(params, [:image])
     |> validate_required([:name, :organization_id])
@@ -53,7 +52,7 @@ defmodule Publit.Product do
   """
   def update(product, params) do
     cs = product
-    |> cast(params, [:name, :description, :publish, :tags, :category])
+    |> cast(params, [:name, :description, :publish, :tags])
     |> set_image(params)
     |> cast_embed(:variations)
     |> validate_required([:name])
