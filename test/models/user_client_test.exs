@@ -1,5 +1,5 @@
 defmodule Publit.UserClientTest do
-  use Publit.ModelCase
+  use Publit.ModelCase, async: false
   import Publit.Gettext
   alias Publit.{UserClient, Repo}
 
@@ -38,6 +38,8 @@ defmodule Publit.UserClientTest do
       {:ok, user} = Publit.UserUtil.verify_mobile_number(user, num)
 
       assert user.verified
+
+      Agent.stop(:sms_mock)
     end
 
     test "Created error verify" do
@@ -77,6 +79,8 @@ defmodule Publit.UserClientTest do
       {:ok, user} = Publit.UserUtil.verify_mobile_number(user, num)
 
       assert user.verified
+
+      Agent.stop(:sms_mock)
     end
 
     test "max retries" do
@@ -103,13 +107,15 @@ defmodule Publit.UserClientTest do
 
       Process.sleep(55)
 
-      msg = Agent.get(:sms_mock, fn(v) -> v end)
+      #msg = Agent.get(:sms_mock, fn(v) -> v end)
 
       user = Repo.get(UserClient, user.id)
-      assert {:error, msg} = Publit.UserUtil.verify_mobile_number(user, "00")
+      assert {:error, _msg} = Publit.UserUtil.verify_mobile_number(user, "00")
 
       {:error, msg} = Publit.UserUtil.resend_verification_code(user, "59177889911")
       assert msg == gettext("You have reached the max retries verifications for the day, please try in 24 hours")
+
+      Agent.stop(:sms_mock)
     end
 
     test "Error invalid email, blank password" do
@@ -122,6 +128,8 @@ defmodule Publit.UserClientTest do
       assert cs.errors[:password]
       assert cs.errors[:full_name]
       assert cs.errors[:mobile_number]
+
+      Agent.stop(:sms_mock)
     end
 
   end
@@ -156,6 +164,8 @@ defmodule Publit.UserClientTest do
 
       assert user.extra_data["device_token"] == @device_token
       assert user.extra_data["device_token_updated_at"] == t
+
+      Agent.stop(:sms_mock)
     end
 
     test "does not override" do
@@ -180,6 +190,8 @@ defmodule Publit.UserClientTest do
 
       assert user.extra_data["device_token"] == @device_token
       assert user.extra_data["device_token_updated_at"]
+
+      Agent.stop(:sms_mock)
     end
   end
 end

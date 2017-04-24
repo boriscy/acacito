@@ -98,6 +98,7 @@ defmodule Publit.UserUtil do
 
   defp cb_fun(user, val) do
     fn (_resp) ->
+      user = get_updated_user(user)
       ed = Map.merge(user.extra_data, %{
         "mobile_number_sends" => 1 + (user.extra_data["mobile_number_sends"] || 0),
         "mobile_number_send_ok" => val
@@ -106,6 +107,14 @@ defmodule Publit.UserUtil do
       change(user)
       |> put_change(:extra_data, ed)
       |> Repo.update()
+    end
+  end
+
+  defp get_updated_user(user) do
+    case user do
+      %Publit.User{} -> Repo.get(Publit.User, user.id)
+      %Publit.UserClient{} -> Repo.get(Publit.UserClient, user.id)
+      %Publit.UserTransport{} -> Repo.get(Publit.UserTransport, user.id)
     end
   end
 

@@ -10,10 +10,6 @@ defmodule Publit.SmsApi do
   }
   """
 
-
-  # POST https://api.pushy.me/push?api_key=PUSHY_SECRET_API_KEY
-  @messaging_url "https://api.pushy.me/push?api_key=#{System.get_env["PUSHY_SECRET_API_KEY"]}"
-
   def server_key do
     System.get_env["PUSHY_SECRET_API_KEY"]
   end
@@ -38,6 +34,7 @@ defmodule Publit.SmsApi do
     try do
       HTTPoison.start()
       resp = HTTPoison.post!(url, body, headers)
+
       body = Poison.decode!(resp.body)
 
       st = List.first(body["messages"])["status"]
@@ -51,22 +48,15 @@ defmodule Publit.SmsApi do
         {200, "9"} ->
           # "Partner quota excedded"
           {:error, :quota}
-        {200, _} ->
+        {200, st} ->
           {:error, st}
       end
 
-      if resp.status_code == 200 do
-        %Publit.MessageApi.Response{status: :ok, resp: resp, body: body}
-        {:ok, body}
-      else
-        {:error, "Invalid"}
-      end
     rescue
       HTTPoison.Error ->
         %Publit.MessageApi.Response{status: :network_error, message: "Network error", body: "{}"}
     end
   end
-
 
   defp api_key, do: System.get_env("NEXMO_API_KEY")
   defp api_secret, do: System.get_env("NEXMO_API_SECRET")

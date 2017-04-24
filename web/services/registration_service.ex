@@ -8,6 +8,7 @@ defmodule Publit.RegistrationService do
     field :email
     field :password
     field :name
+    field :mobile_number
     field :category, :string, default: "restaurant"
     field :address
   end
@@ -35,17 +36,20 @@ defmodule Publit.RegistrationService do
   end
 
   defp set_user_multi(changes, org) do
-    {:ok, %User{
-        email: changes.email,
-        encrypted_password: Comeonin.Bcrypt.hashpwsalt(changes.password),
-        organizations: [%UserOrganization{
-          name: org.name,
-          organization_id: org.id,
-          active: true,
-          role: "admin"
-        }]
-      }
-    }
+    cs = User.create_changeset(%User{}, changes)
+    |> put_embed(:organizations, [%UserOrganization{
+          name: org.name, organization_id: org.id,
+          active: true, role: "admin"
+        }])
+    |> unique_constraint(:email)
+    |> unique_constraint(:mobile_number)
+
+    cs = if cs.valid? do
+      pw = Comeonin.Bcrypt.hashpwsalt(cs.changes.password)
+      cs = cs |> put_change(:encrypted_password, pw)
+    end
+
+    {:ok, cs}
   end
 
   defp create_user_multi(data) do
@@ -54,8 +58,8 @@ defmodule Publit.RegistrationService do
 
   def changeset(params) do
     %RegistrationService{}
-    |> cast(params, [:email, :password, :name, :category, :address])
-    |> validate_required([:email, :password, :name, :category, :address])
+    |> cast(params, [:email, :mobile_number, :password, :name, :category, :address])
+    |> validate_required([:email, :mobile_number, :password, :name, :category, :address])
     |> validate_format(:email, @email_reg)
     |> validate_length(:password, min: 8)
     |> validate_length(:address, min: 8)

@@ -17,22 +17,27 @@ defmodule Publit.ClientApi.RegistrationController do
   end
 
   # PUT /api_client/validate_mobile_number
-  def validate_mobile_number(conn, %{"id" => id, "verification_number" => verification_number}) do
+  def validate_mobile_number(conn, %{"id" => id, "verification_code" => verification_code}) do
     user = Repo.get(UserClient, id)
 
-    if %UserClient{} = user do
-      case UserUtil.verify_mobile_number(user, verification_number) do
-        {:ok, user} ->
-          render(conn, "show.json", user: user, token: UserAuthentication.encrypt_user_id(user.id))
-        {:error, msg} ->
-          conn
-          |> put_status(:unprocessable_entity)
-          |> render("invalid_number.json", msg: msg)
-      end
-    else
-      conn
-      |> put_status(:not_found)
-      |> render("not_found.json", msg: gettext("User not found"))
+    case user do
+      %UserClient{verified: true} ->
+        conn
+        |> put_status(:precondition_required)
+        |> render("error.json", msg: gettext("The mobile number has been verified"))
+      %UserClient{} ->
+        case UserUtil.verify_mobile_number(user, verification_code) do
+          {:ok, user} ->
+            render(conn, "show.json", user: user, token: UserAuthentication.encrypt_user_id(user.id))
+          {:error, msg} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render("error.json", msg: msg)
+        end
+      _ ->
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", msg: gettext("User not found"))
     end
   end
 

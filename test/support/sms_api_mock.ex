@@ -48,7 +48,7 @@ defmodule Publit.SmsApiMock do
 
   defp sleep_time do
     if Process.whereis(:sms_mock) do
-      Agent.get(:sms_mock, fn(v) -> v end)[:sleep_time] || 50
+      Agent.get(:sms_mock, fn(v) -> v end)[:sleep_time] || 30
     else
       100
     end

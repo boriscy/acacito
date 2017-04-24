@@ -53,7 +53,7 @@ defmodule Publit.Mixfile do
     [{:phoenix, "~> 1.2.1"},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.2.1"},
-     {:ecto, "~>2.1.1", override: true},
+     {:ecto, "~>2.1.4", override: true},
      {:ex_doc, "~> 0.15", only: :dev, runtime: false},
      {:postgrex, "~> 0.13", override: true},
      {:phoenix_html, "~> 2.9"},

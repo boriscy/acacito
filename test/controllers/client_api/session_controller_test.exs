@@ -8,7 +8,7 @@ defmodule Publit.ClientApi.SessionControllerTest do
 
   describe "POST /client_api/login" do
     test "OK", %{conn: conn} do
-      Repo.insert(%UserClient{email: "amaru@mail.com", encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321")} )
+      Repo.insert(%UserClient{email: "amaru@mail.com", mobile_number: "59177112233", encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321")} )
       conn = post(conn, "/client_api/login", %{"login" => %{"email" => "amaru@mail.com", "password" => "demo4321"}})
 
        assert conn.status == 200
@@ -19,7 +19,7 @@ defmodule Publit.ClientApi.SessionControllerTest do
     end
 
     test "ERROR", %{conn: conn} do
-      Repo.insert(%UserClient{email: "amaru@mail.com", encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321")} )
+      Repo.insert(%UserClient{email: "amaru@mail.com", mobile_number: "59177112233", encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321")} )
       conn = post(conn, "/client_api/login", %{"login" => %{"email" => "amaru@mail.com", "password" => "demo1234"}})
 
        assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)

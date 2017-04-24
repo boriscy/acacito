@@ -1,7 +1,6 @@
 defmodule Publit.UserClient do
   use Publit.Web, :model
   use Publit.Device
-  import Publit.UserUtil
   alias Publit.{UserClient, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
@@ -35,13 +34,14 @@ defmodule Publit.UserClient do
     |> validate_format(:mobile_number, @number_reg)
     |> validate_length(:password, min: 8)
     |> unique_constraint(:email)
+    |> unique_constraint(:mobile_number)
   end
 
   def create(params) do
     cs = create_changeset(%UserClient{}, params)
 
     if cs.valid? do
-      create_and_send_verification_code(cs)
+      Publit.UserUtil.create_and_send_verification_code(cs)
     else
       {:error , cs}
     end

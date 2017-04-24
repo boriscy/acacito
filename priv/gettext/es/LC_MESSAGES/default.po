@@ -18,7 +18,7 @@ msgstr "Dirección"
 msgid "Create Product"
 msgstr "Crear Producto"
 
-#: web/templates/product/index.html.eex:22 web/templates/product/show.html.eex:7
+#: web/templates/product/index.html.eex:21 web/templates/product/show.html.eex:7
 msgid "Edit"
 msgstr "Editar"
 
@@ -27,7 +27,7 @@ msgstr "Editar"
 msgid "Email"
 msgstr "Email"
 
-#: web/templates/product/form.html.eex:33
+#: web/templates/product/form.html.eex:27
 msgid "Image"
 msgstr "Imagen"
 
@@ -41,7 +41,7 @@ msgstr "Ingresar"
 msgid "Name"
 msgstr "Nombre"
 
-#: web/templates/dashboard/index.html.eex:1
+#: web/templates/dashboard/index.html.eex:3
 msgid "New product"
 msgstr "Nuevo Producto"
 
@@ -69,7 +69,7 @@ msgid "Shop name"
 msgstr "Nombre de la venta"
 
 #: web/templates/layout/translations.html.eex:29
-#: web/templates/product/form.html.eex:23
+#: web/templates/product/form.html.eex:17
 msgid "Tags"
 msgstr "Etiquetas"
 
@@ -81,7 +81,7 @@ msgstr "Actualizar producto"
 msgid "You have entered invalid data please fix the errors"
 msgstr "Ingreso datos inválidos por favor corrija los errores"
 
-#: web/templates/product/form.html.eex:40
+#: web/templates/product/form.html.eex:34
 msgid "Description"
 msgstr "Descripción"
 
@@ -106,12 +106,12 @@ msgstr "Producto actualizado."
 msgid "There are errors in the product."
 msgstr "Hay errores en el producto."
 
-#: web/templates/product/index.html.eex:25
+#: web/templates/product/index.html.eex:24
 #: web/templates/product/show.html.eex:10
 msgid "Are you sure to delete the product \"%{name}\"?"
 msgstr "Esta segur@ de eliminar el producto \"%{name}\"?"
 
-#: web/templates/product/index.html.eex:24 web/templates/product/show.html.eex:9
+#: web/templates/product/index.html.eex:23 web/templates/product/show.html.eex:9
 msgid "Delete"
 msgstr "Borrar"
 
@@ -214,7 +214,7 @@ msgid "Call Transport"
 msgstr "Llamar Transporte"
 
 #: web/templates/layout/translations.html.eex:27
-#: web/templates/product/form.html.eex:25
+#: web/templates/product/form.html.eex:19
 msgid "Separate tags with commas"
 msgstr "Separe las etiquetas con comas"
 
@@ -226,21 +226,17 @@ msgstr "Nombre de variación"
 msgid "Enter tags"
 msgstr "Ingrese etiquetas"
 
-#: web/templates/product/form.html.eex:43
+#: web/templates/product/form.html.eex:37
 msgid "View examples"
 msgstr "Ver ejemplos"
 
-#: web/templates/product/form.html.eex:42
+#: web/templates/product/form.html.eex:36
 msgid "You can format the text"
 msgstr "Puede darle formato al texto"
 
-#: web/templates/product/form.html.eex:58
+#: web/templates/product/form.html.eex:52
 msgid "Description example"
 msgstr "Ejemplo de descripción"
-
-#: web/templates/product/form.html.eex:62
-msgid "Write to test"
-msgstr "Escriba para probar"
 
 #: web/templates/layout/translations.html.eex:24
 msgid "New order"
@@ -250,10 +246,6 @@ msgstr "Nuevo pedido"
 #: web/controllers/client_api/order_controller.ex:39
 msgid "Could not find the order"
 msgstr "No se pudo encontrar el pedido"
-
-#: web/templates/product/form.html.eex:11
-msgid "Category"
-msgstr "Categoría"
 
 #: web/templates/layout/navigation.html.eex:31
 msgid "Logout"
@@ -297,7 +289,7 @@ msgstr "camión"
 msgid "walk"
 msgstr "caminata"
 
-#: lib/order/call.ex:49 lib/order/call_service.ex:63
+#: lib/order/call.ex:49 lib/order/call_service.ex:64
 msgid "New order from %{org}"
 msgstr "Nuevo pedido de %{org}"
 
@@ -313,23 +305,19 @@ msgstr "Su transporte esta cerca"
 msgid "Your order is arriving"
 msgstr "Su transporte esta llegando"
 
-#: lib/order/status_service.ex:148
-msgid "Order transporting"
-msgstr "Pedido en transporte"
-
 #: lib/order/status_service.ex:114
 msgid "User transport not found"
 msgstr "No se encontro transporte al pedido"
 
-#: lib/order/status_service.ex:148
+#: lib/order/status_service.ex:156
 msgid "Your order is on the way"
 msgstr "Su pedido esta en camino"
 
-#: lib/order/status_service.ex:164
+#: lib/order/status_service.ex:168
 msgid "Order delivered"
 msgstr "Pedido entregado"
 
-#: lib/order/status_service.ex:164
+#: lib/order/status_service.ex:168
 msgid "Your order has been delivered"
 msgstr "Su pedido fue entregado"
 
@@ -348,10 +336,6 @@ msgstr "Buscar lugar"
 #: web/templates/layout/translations.html.eex:19
 msgid "Obtain position using GPS"
 msgstr "Obtener posición usando el GPS"
-
-#: web/templates/layout/translations.html.eex:9
-msgid "Click the map to select your position"
-msgstr "Haga click en el mapa para seleccionar su posición"
 
 #: web/templates/layout/translations.html.eex:34
 msgid "Update data and position"
@@ -376,3 +360,32 @@ msgstr "Email inválido"
 #: web/models/user_authentication.ex:77
 msgid "Invalid password"
 msgstr "Contraseña inválida"
+
+#: web/templates/layout/translations.html.eex:9
+msgid "Click the map to select your position"
+msgstr "Haga click en el mapa para seleccionar su posición"
+
+#: lib/publit/user_util.ex:52
+msgid "Invalid verification code"
+msgstr "Código de verificación invalido"
+
+#: web/controllers/client_api/registration_controller.ex:27
+msgid "The mobile number has been verified"
+msgstr "El número de su móbil fue verificado"
+
+#: web/controllers/client_api/registration_controller.ex:40
+#: web/controllers/client_api/registration_controller.ex:60
+msgid "User not found"
+msgstr "Usuario no encontrado"
+
+#: web/templates/product/form.html.eex:56
+msgid "Write to test"
+msgstr "Escriba para probar"
+
+#: lib/publit/user_util.ex:77
+msgid "You have reached the max retries verifications for the day, please try in 24 hours"
+msgstr "Usted ha alcanzado el número maximo de verificationes por el día, por favor intente en 24 horas"
+
+#: lib/publit/user_util.ex:35 lib/publit/user_util.ex:70
+msgid "Your %{app} code is: %{code}"
+msgstr "Su codigo de %{app} es %{code}"

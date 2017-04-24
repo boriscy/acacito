@@ -19,7 +19,7 @@ msgstr ""
 msgid "Create Product"
 msgstr ""
 
-#: web/templates/product/index.html.eex:22 web/templates/product/show.html.eex:7
+#: web/templates/product/index.html.eex:21 web/templates/product/show.html.eex:7
 msgid "Edit"
 msgstr ""
 
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: web/templates/product/form.html.eex:33
+#: web/templates/product/form.html.eex:27
 msgid "Image"
 msgstr ""
 
@@ -42,7 +42,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: web/templates/dashboard/index.html.eex:1
+#: web/templates/dashboard/index.html.eex:3
 msgid "New product"
 msgstr ""
 
@@ -70,7 +70,7 @@ msgid "Shop name"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:29
-#: web/templates/product/form.html.eex:23
+#: web/templates/product/form.html.eex:17
 msgid "Tags"
 msgstr ""
 
@@ -82,7 +82,7 @@ msgstr ""
 msgid "You have entered invalid data please fix the errors"
 msgstr ""
 
-#: web/templates/product/form.html.eex:40
+#: web/templates/product/form.html.eex:34
 msgid "Description"
 msgstr ""
 
@@ -107,12 +107,12 @@ msgstr ""
 msgid "There are errors in the product."
 msgstr ""
 
-#: web/templates/product/index.html.eex:25
+#: web/templates/product/index.html.eex:24
 #: web/templates/product/show.html.eex:10
 msgid "Are you sure to delete the product \"%{name}\"?"
 msgstr ""
 
-#: web/templates/product/index.html.eex:24 web/templates/product/show.html.eex:9
+#: web/templates/product/index.html.eex:23 web/templates/product/show.html.eex:9
 msgid "Delete"
 msgstr ""
 
@@ -215,7 +215,7 @@ msgid "Call Transport"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:27
-#: web/templates/product/form.html.eex:25
+#: web/templates/product/form.html.eex:19
 msgid "Separate tags with commas"
 msgstr ""
 
@@ -227,20 +227,16 @@ msgstr ""
 msgid "Enter tags"
 msgstr ""
 
-#: web/templates/product/form.html.eex:43
+#: web/templates/product/form.html.eex:37
 msgid "View examples"
 msgstr ""
 
-#: web/templates/product/form.html.eex:42
+#: web/templates/product/form.html.eex:36
 msgid "You can format the text"
 msgstr ""
 
-#: web/templates/product/form.html.eex:58
+#: web/templates/product/form.html.eex:52
 msgid "Description example"
-msgstr ""
-
-#: web/templates/product/form.html.eex:62
-msgid "Escriba para probar"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:24
@@ -250,10 +246,6 @@ msgstr ""
 #: web/controllers/api/order_controller.ex:42
 #: web/controllers/client_api/order_controller.ex:39
 msgid "Could not find the order"
-msgstr ""
-
-#: web/templates/product/form.html.eex:11
-msgid "Category"
 msgstr ""
 
 #: web/templates/layout/navigation.html.eex:31
@@ -298,7 +290,7 @@ msgstr ""
 msgid "walk"
 msgstr ""
 
-#: lib/order/call.ex:49 lib/order/call_service.ex:63
+#: lib/order/call.ex:49 lib/order/call_service.ex:64
 msgid "New order from %{org}"
 msgstr ""
 
@@ -314,23 +306,19 @@ msgstr ""
 msgid "Your order is arriving"
 msgstr ""
 
-#: lib/order/status_service.ex:148
-msgid "Order transporting"
-msgstr ""
-
 #: lib/order/status_service.ex:114
 msgid "User transport not found"
 msgstr ""
 
-#: lib/order/status_service.ex:148
+#: lib/order/status_service.ex:156
 msgid "Your order is on the way"
 msgstr ""
 
-#: lib/order/status_service.ex:164
+#: lib/order/status_service.ex:168
 msgid "Order delivered"
 msgstr ""
 
-#: lib/order/status_service.ex:164
+#: lib/order/status_service.ex:168
 msgid "Your order has been delivered"
 msgstr ""
 
@@ -348,10 +336,6 @@ msgstr ""
 
 #: web/templates/layout/translations.html.eex:19
 msgid "Obtain position using GPS"
-msgstr ""
-
-#: web/templates/layout/translations.html.eex:9
-msgid "Click then map to select your position"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:34
@@ -376,4 +360,33 @@ msgstr ""
 
 #: web/models/user_authentication.ex:77
 msgid "Invalid password"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:9
+msgid "Click the map to select your position"
+msgstr ""
+
+#: lib/publit/user_util.ex:52
+msgid "Invalid verification code"
+msgstr ""
+
+#: web/controllers/client_api/registration_controller.ex:27
+msgid "The mobile number has been verified"
+msgstr ""
+
+#: web/controllers/client_api/registration_controller.ex:40
+#: web/controllers/client_api/registration_controller.ex:60
+msgid "User not found"
+msgstr ""
+
+#: web/templates/product/form.html.eex:56
+msgid "Write to test"
+msgstr ""
+
+#: lib/publit/user_util.ex:77
+msgid "You have reached the max retries verifications for the day, please try in 24 hours"
+msgstr ""
+
+#: lib/publit/user_util.ex:35 lib/publit/user_util.ex:70
+msgid "Your %{app} code is: %{code}"
 msgstr ""

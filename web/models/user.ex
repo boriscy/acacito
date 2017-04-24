@@ -33,6 +33,7 @@ defmodule Publit.User do
     |> validate_format(:email, @email_reg)
     |> validate_length(:password, min: 8)
     |> unique_constraint(:email)
+    |> unique_constraint(:mobile_number)
   end
 
   def create(params) do

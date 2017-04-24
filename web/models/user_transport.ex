@@ -48,6 +48,7 @@ defmodule Publit.UserTransport do
     |> unique_constraint(:mobile_number)
     |> valid_transport()
     |> unique_constraint(:email)
+    |> unique_constraint(:mobile_number)
   end
 
   def create(params) do

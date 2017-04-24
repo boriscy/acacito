@@ -48,10 +48,10 @@ defmodule Publit.ClientApi.RegistrationControllerTest do
 
       user = Repo.get(UserClient, json["user"]["id"])
 
-      ver_num = Publit.AES.decrypt(user.extra_data["mobile_number_key"])
+      ver_code = Publit.AES.decrypt(user.extra_data["mobile_number_key"])
 
       conn = put(conn, "/client_api/validate_mobile_number/#{user.id}",
-        %{"verification_number" => ver_num})
+        %{"verification_code" => ver_code})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -70,12 +70,26 @@ defmodule Publit.ClientApi.RegistrationControllerTest do
       json["user"]
 
       conn = put(conn, "/client_api/validate_mobile_number/#{json["user"]["id"]}",
-        %{"verification_number" => "000"})
+        %{"verification_code" => "000"})
 
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
       json = Poison.decode!(conn.resp_body)
 
-      assert json["msg"] == gettext("Invalid verification code")
+      assert json["error"] == gettext("Invalid verification code")
+    end
+
+    test "verified code", %{conn: conn} do
+      Agent.start_link(fn -> %{} end, name: :sms_mock)
+
+      user = insert(:user_client, verified: true)
+
+      conn = put(conn, "/client_api/validate_mobile_number/#{user.id}",
+        %{"verification_code" => "123456"})
+
+      assert conn.status == Plug.Conn.Status.code(:precondition_required)
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["error"] == gettext("The mobile number has been verified")
     end
   end
 
