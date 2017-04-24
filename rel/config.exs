@@ -21,6 +21,10 @@ use Mix.Releases.Config,
 # when building in that environment, this combination of release
 # and environment configuration is called a profile
 
+#environment :default do
+#  set pos_start_hook: "rel/hooks/post_start"
+#end
+
 environment :dev do
   set dev_mode: true
   set include_erts: false

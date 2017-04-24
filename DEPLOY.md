@@ -3,6 +3,7 @@ Change version for deployment
 ssh -A deploy@acacito.com
 cd repos/publit
 git pull origin master
+MIX_ENV=prod mix ecto.migrate
 MIX_ENV=prod mix compile
 npm run deploy
 MIX_ENV=prod mix phoenix.digest

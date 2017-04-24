@@ -3,7 +3,7 @@ defmodule Publit.Mixfile do
 
   def project do
     [app: :publit,
-     version: "0.9.4",
+     version: "0.9.5",
      elixir: "~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
@@ -38,8 +38,7 @@ defmodule Publit.Mixfile do
       :geo,
       :hackney,
       :poison,
-      :sweet_xml,
-      :edeliver]]
+      :sweet_xml]]
   end
 
   # Specifies which paths to compile per environment.
@@ -74,7 +73,6 @@ defmodule Publit.Mixfile do
      {:sweet_xml, "~> 0.6"},
      {:ex_machina, "~> 2.0", only: [:dev, :test]},
      {:mock, "~> 0.2.0", only: :test},
-     {:edeliver, "~> 1.4.2"},
      {:distillery, "~> 1.0", warn_missing: false}]
   end
 
