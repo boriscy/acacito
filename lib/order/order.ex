@@ -1,6 +1,6 @@
 defmodule Publit.Order do
   use Publit.Web, :model
-  alias Publit.{Order, Order.Call, Order.Transport, UserClient, UserTransport, Order.Detail, Product, Organization, Repo}
+  alias Publit.{Order, UserClient, UserTransport, Product, Organization, Repo}
   alias Ecto.Multi
   import Ecto.Query
   import Publit.Gettext

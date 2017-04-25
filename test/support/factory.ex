@@ -9,7 +9,7 @@ defmodule Publit.Factory do
       email: "lucas@mail.com",
       password: "demo1234",
       full_name: "Lucas Estrella",
-      mobile_number: "73731234",
+      mobile_number: "59173731234",
       encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234")
     }
   end
@@ -35,7 +35,7 @@ defmodule Publit.Factory do
       email: "juan@mail.com",
       full_name: "Juan Perez",
       password: "demo1234",
-      mobile_number: "66778899",
+      mobile_number: "59166778899",
       vehicle: "motorcycle",
       plate: "HUT321",
       extra_data: %{

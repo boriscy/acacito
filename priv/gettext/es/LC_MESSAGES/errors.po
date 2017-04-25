@@ -17,19 +17,19 @@ msgid "has already been taken"
 msgstr "Ha sido tomado"
 
 msgid "is invalid"
-msgstr "es invalido"
+msgstr "es inválido"
 
 msgid "has invalid format"
-msgstr "tiene formato invalido"
+msgstr "tiene formato inválido"
 
 msgid "has an invalid entry"
-msgstr "es un valor invalido"
+msgstr "es un valor inválido"
 
 msgid "is reserved"
 msgstr "es reservado"
 
 msgid "does not match confirmation"
-msgstr "no es igual a la confirmacion"
+msgstr "no es igual a la confirmación"
 
 msgid "is still associated to this entry"
 msgstr "esta asociado con la entrada"
@@ -59,13 +59,13 @@ msgstr[1] "debe tener al menos %{count} items"
 
 msgid "should be at most %{count} character(s)"
 msgid_plural "should be at most %{count} character(s)"
-msgstr[0] "debe tener maximo %{count} caracteres"
-msgstr[1] "debe tener maximo %{count} caracteres"
+msgstr[0] "debe tener máximo %{count} caracteres"
+msgstr[1] "debe tener máximo %{count} caracteres"
 
 msgid "should have at most %{count} item(s)"
 msgid_plural "should have at most %{count} item(s)"
-msgstr[0] "debe tener maximo %{count} item"
-msgstr[1] "debe tener maximo %{count} items"
+msgstr[0] "debe tener máximo %{count} item"
+msgstr[1] "debe tener máximo %{count} items"
 
 msgid "must be less than %{number}"
 msgstr "debe ser menor que %{number}"
@@ -83,7 +83,10 @@ msgid "must be equal to %{number}"
 msgstr "debe ser igual a %{number}"
 
 msgid "Invalid email"
-msgstr "Email invalido"
+msgstr "Email inválido"
 
 msgid "Invalid password"
-msgstr "Contrasenia invalida"
+msgstr "Contraseña inválida"
+
+msgid "Invalid email or mobile number"
+msgstr "Email o número mobil inválido"

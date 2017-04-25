@@ -1,6 +1,6 @@
 defmodule Publit.Order.CallTest do
   use Publit.ModelCase
-  alias Publit.{UserTransport, Order.Call, Order}
+  alias Publit.{UserTransport, Order}
   require Publit.Gettext
   import Publit.Gettext
 

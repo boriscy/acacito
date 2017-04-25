@@ -16,7 +16,7 @@ defmodule Publit.ClientApi.ProductView do
 
   def get_image(prod) do
     if prod.image do
-      Publit.ProductImage.img_url(:big, prod)
+      Publit.ProductImage.path(:big, prod)
     else
       nil
     end

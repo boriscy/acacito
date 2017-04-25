@@ -25,6 +25,7 @@ defmodule Publit.UserTransport do
     field :status, :string, default: "off"
     field :vehicle, :string
     field :orders, Publit.Array, default: []
+    field :verified, :boolean, default: false
 
     field :password, :string, virtual: true
 

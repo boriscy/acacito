@@ -4,7 +4,7 @@ defmodule Publit.Order.CallService do
   import Publit.Gettext
   alias Ecto.Multi
 
-  alias Publit.{Order, Order.Call, Order.Transport, Repo}
+  alias Publit.{Order, Repo}
 
   @token_id "device_token"
 
@@ -27,7 +27,7 @@ defmodule Publit.Order.CallService do
 
         case Repo.transaction(multi) do
           {:ok, res} ->
-            {:ok, pid} = send_message(oc, ut, order)
+            {:ok, pid} = send_message(oc, order)
             {:ok, res.order, pid}
           {:error, :order, cs, _} ->
             {:error, :order, cs}
@@ -53,7 +53,7 @@ defmodule Publit.Order.CallService do
     from oc in Order.Call, where: oc.order_id == ^order.id and oc.status in ^statuses
   end
 
-  defp send_message(oc, ut, order) do
+  defp send_message(oc, order) do
     uts = Repo.all(from ut in Publit.UserTransport, where: ut.id in ^oc.transport_ids)
     tokens = Enum.map(uts, fn(t) -> t.extra_data[@token_id] end)
 

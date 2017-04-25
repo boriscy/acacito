@@ -35,7 +35,8 @@ defmodule Publit.Order.StatusService do
       {:ok, res} ->
         send_message(res.order)
         {:ok, res.order}
-      {:error, res} -> {:error, res}
+      {:error, res} ->
+        {:error, res}
     end
   end
 

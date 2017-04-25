@@ -15,6 +15,7 @@ defmodule Publit.User do
     field :settings, :map, default: %{}
     field :extra_data, :map, default: %{}
     field :mobile_number, :string
+    field :verified, :boolean, default: false
 
     field :password, :string, virtual: true
 

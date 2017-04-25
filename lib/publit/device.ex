@@ -17,8 +17,7 @@ defmodule Publit.Device do
       end
 
       def get_by_email_or_mobile(email_or_mobile) do
-        q = from ut in __MODULE__, where: ut.email == ^email_or_mobile or ut.mobile_number == ^email_or_mobile
-
+        q = from u in __MODULE__, where: (u.email == ^email_or_mobile or u.mobile_number == ^email_or_mobile) and u.verified == ^true
         Repo.one(q)
       end
     end

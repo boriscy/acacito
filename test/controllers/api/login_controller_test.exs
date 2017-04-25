@@ -8,7 +8,7 @@ defmodule Publit.Api.LoginControllerTest do
 
   describe "POST /api/login" do
     test "OK", %{conn: conn} do
-      Repo.insert(%User{email: "amaru@mail.com", mobile_number: "59177112233", encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321")} )
+      Repo.insert(%User{email: "amaru@mail.com", mobile_number: "59177112233", encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321"), verified: true} )
       conn = post(conn, "/api/login", %{"login" => %{"email" => "amaru@mail.com", "password" => "demo4321"}})
 
        assert conn.status == 200

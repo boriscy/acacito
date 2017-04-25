@@ -7,15 +7,15 @@ defmodule Publit.TransApi.SessionControllerTest do
   end
 
   defp user do
-    {:ok, u} = Repo.insert(%UserTransport{email: "juan@mail.com", mobile_number: "12345678",
-      encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321")} )
+    {:ok, u} = Repo.insert(%UserTransport{email: "juan@mail.com", mobile_number: "59177123456",
+      encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321"), verified: true} )
     u
   end
 
   describe "POST /trans_api/login" do
     test "OK", %{conn: conn} do
       user()
-      conn = post(conn, "/trans_api/login", %{"login" => %{"email" => "juan@mail.com", "password" => "demo4321"}})
+      conn = post(conn, "/trans_api/login", %{"login" => %{"email" => "59177123456", "password" => "demo4321"}})
 
        assert conn.status == 200
        json = Poison.decode!(conn.resp_body)
@@ -26,7 +26,7 @@ defmodule Publit.TransApi.SessionControllerTest do
 
     test "ERROR", %{conn: conn} do
       user()
-      conn = post(conn, "/trans_api/login", %{"login" => %{"email" => "juan@mail.com", "password" => "demo1234"}})
+      conn = post(conn, "/trans_api/login", %{"login" => %{"email" => "59177123456", "password" => "demo1234"}})
 
        assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
     end

@@ -10,14 +10,14 @@ defmodule Publit.UserAuthenticationTest do
   end
 
   test "valid_user true" do
-    insert(:user, email: "lucas@mail.com")
+    insert(:user, email: "lucas@mail.com", verified: true)
 
     {:ok, user} = UserAuthentication.valid_user(%{"email" => "lucas@mail.com", "password" => "demo1234"})
     assert user.id
   end
 
   test "valid_user false wrong password" do
-    insert(:user, email: "lucas@mail.com")
+    insert(:user, email: "lucas@mail.com", verified: true)
 
     {:error, cs} = UserAuthentication.valid_user(%{"email" => "lucas@mail.com", "password" => "demo123"})
 
@@ -32,7 +32,7 @@ defmodule Publit.UserAuthenticationTest do
   end
 
   test "encrypt_user_id" do
-    user = insert(:user)
+    user = insert(:user, verified: true)
 
     token = UserAuthentication.encrypt_user_id(user.id)
     {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", token)
@@ -40,7 +40,7 @@ defmodule Publit.UserAuthenticationTest do
   end
 
   test "valid_user_transport" do
-    user = insert(:user_transport)
+    user = insert(:user_transport, verified: true)
 
     assert {:ok, user} = UserAuthentication.valid_user_transport(%{"email" => user.email, "password" => "demo1234"})
     assert %UserTransport{} = user

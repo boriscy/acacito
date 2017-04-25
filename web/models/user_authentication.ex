@@ -41,7 +41,7 @@ defmodule Publit.UserAuthentication do
         {:ok, user}
     else
       {:user, _} ->
-        cs = changeset(params) |> add_error(:email, "Invalid email")
+        cs = changeset(params) |> add_error(:email, "Invalid email or mobile number")
         {:error, cs}
       {:pass, _} ->
         cs = changeset(params) |> add_error(:password, "Invalid password")
@@ -65,7 +65,7 @@ defmodule Publit.UserAuthentication do
   defp valid_user(schema, params) do
     email = String.trim(params["email"] || "")
 
-    with user <- Repo.get_by(schema, email: email),
+    with user <- Repo.get_by(schema, email: email, verified: true),
       {:email, false} <- {:email, is_nil(user)},
       {:pass, true} <- {:pass, valid_password?(user, params["password"])} do
         {:ok, user}

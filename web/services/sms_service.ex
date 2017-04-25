@@ -31,8 +31,8 @@ defmodule Publit.SmsService do
     end)
   end
 
-  def send_direct_message(tokens, data) do
-    @message_api.send_message(tokens, data)
+  def send_direct_message(number, msg) do
+    @sms_api.send_message(number, msg)
   end
 
 end
