@@ -26,6 +26,7 @@ defmodule Publit.OrderTest do
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "client_name" => user_client.full_name, "organization_name" => org.name,
+      "address" => "Los Pinos, B777","comments" => "cambio de 200",
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -76,6 +77,7 @@ defmodule Publit.OrderTest do
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "client_name" => user_client.full_name, "organization_name" => org.name,
+      "address" => "Los Pinos, B777","comments" => "cambio de 200",
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -98,6 +100,7 @@ defmodule Publit.OrderTest do
       params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => Geo.WKT.decode("POINT(30 -90)"),
       "client_name" => "Fake name", "organization_name" => org.name,
+      "address" => "Los Pinos, B777","comments" => "cambio de 200",
       "details" => %{
           "0" => %{"product_id" => Ecto.UUID.generate, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -110,6 +113,7 @@ defmodule Publit.OrderTest do
 
       params = %{"user_id" => user.id, "organization_id" => org.id, "currency" => org.currency,
       "pos" => Geo.WKT.decode("POINT(30 -90)"),
+      "address" => "Los Pinos, B777","comments" => "cambio de 200",
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => Ecto.UUID.generate(), "quantity" => "2"}
