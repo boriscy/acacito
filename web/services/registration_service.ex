@@ -25,7 +25,7 @@ defmodule Publit.RegistrationService do
     case cs.valid? do
       true ->
         multi = Multi.new
-        |> Multi.insert(:org, %Organization{name: cs.changes.name})
+        |> Multi.insert(:org, %Organization{name: cs.changes.name, address: cs.changes.address})
         |> Multi.run(:user_org, fn(%{org: org}) -> set_user_multi(cs.changes, org) end)
         |> Multi.merge(&create_user_multi/1)
 

@@ -11,7 +11,7 @@ defmodule Publit.Support.Order do
 
     params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
     "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"}, "client_name" => user_client.full_name,
-    "address" => "Los Nuevos Pinos, B100 7", "comments" => "Cambio de 200BS.",
+    "client_address" => "Los Nuevos Pinos, B100 7", "comments" => "Cambio de 200BS.",
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
         "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}

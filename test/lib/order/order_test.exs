@@ -26,7 +26,7 @@ defmodule Publit.OrderTest do
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "client_name" => user_client.full_name, "organization_name" => org.name,
-      "address" => "Los Pinos, B777","comments" => "cambio de 200",
+      "client_address" => "Los Pinos, B777","comments" => "cambio de 200",
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -43,6 +43,9 @@ defmodule Publit.OrderTest do
       assert order.status == "new"
       assert order.client_name == user_client.full_name
       assert order.organization_name == org.name
+      assert order.organization_address == org.address
+      assert order.client_name == user_client.full_name
+      assert order.client_address == "Los Pinos, B777"
 
       assert order.details |> Enum.count() == 2
 
@@ -77,7 +80,7 @@ defmodule Publit.OrderTest do
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "client_name" => user_client.full_name, "organization_name" => org.name,
-      "address" => "Los Pinos, B777","comments" => "cambio de 200",
+      "client_address" => "Los Pinos, B777","comments" => "cambio de 200",
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}

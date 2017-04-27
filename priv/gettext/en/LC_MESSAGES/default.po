@@ -160,7 +160,7 @@ msgstr ""
 msgid "Unpublished"
 msgstr ""
 
-#: lib/order/order.ex:114
+#: lib/order/order.ex:118
 msgid "Invalid product"
 msgstr ""
 
@@ -251,7 +251,7 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: lib/order/status_service.ex:127 web/views/api/transport_view.ex:9
+#: lib/order/status_service.ex:128 web/views/api/transport_view.ex:9
 #: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr ""
@@ -305,19 +305,19 @@ msgstr ""
 msgid "Your order is arriving"
 msgstr ""
 
-#: lib/order/status_service.ex:114
+#: lib/order/status_service.ex:115
 msgid "User transport not found"
 msgstr ""
 
-#: lib/order/status_service.ex:156
+#: lib/order/status_service.ex:157
 msgid "Your order is on the way"
 msgstr ""
 
-#: lib/order/status_service.ex:168
+#: lib/order/status_service.ex:169
 msgid "Order delivered"
 msgstr ""
 
-#: lib/order/status_service.ex:168
+#: lib/order/status_service.ex:169
 msgid "Your order has been delivered"
 msgstr ""
 
@@ -361,7 +361,6 @@ msgstr ""
 msgid "Invalid password"
 msgstr ""
 
-#, fuzzy
 #: web/templates/layout/translations.html.eex:9
 msgid "Click the map to select your position"
 msgstr ""
@@ -389,4 +388,8 @@ msgstr ""
 
 #: lib/publit/user_util.ex:35 lib/publit/user_util.ex:70
 msgid "Your %{app} code is: %{code}"
+msgstr ""
+
+#: web/controllers/order_controller.ex:14
+msgid "You must set your position."
 msgstr ""

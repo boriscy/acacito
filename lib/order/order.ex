@@ -13,10 +13,11 @@ defmodule Publit.Order do
     field :num, :integer
     field :currency, :string
     field :client_pos, Geo.Geometry
+    field :client_name, :string
+    field :client_address, :string
     field :organization_pos, Geo.Geometry
     field :organization_name, :string
-    field :client_name, :string
-    field :address, :string
+    field :organization_address, :string
     field :comments, :string
 
     embeds_one :transport, Order.Transport
@@ -48,9 +49,9 @@ defmodule Publit.Order do
   """
   def create(params) do
     cs = %Order{}
-    |> cast(params, [:user_client_id, :client_pos, :client_name, :currency, :organization_id, :address, :comments])
-    |> validate_required([:user_client_id, :details, :client_pos, :currency, :client_name, :address])
-    |> validate_length(:address, min: 8)
+    |> cast(params, [:user_client_id, :client_pos, :client_name, :currency, :organization_id, :client_address, :comments])
+    |> validate_required([:user_client_id, :details, :client_pos, :currency, :client_name, :client_address])
+    |> validate_length(:client_address, min: 8)
     |> cast_embed(:details)
     |> set_and_validate_details()
 
@@ -151,6 +152,7 @@ defmodule Publit.Order do
     cs
     |> put_assoc(:organization,  org)
     |> put_change(:organization_name, org.name)
+    |> put_change(:organization_address, org.address)
   end
 
 end

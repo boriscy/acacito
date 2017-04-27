@@ -14,6 +14,7 @@ defmodule Publit.RegistrationServiceTest do
       assert {:ok, %{org: org, user: user}} = resp
       assert user.id
       assert org.id
+      assert org.address == @valid_attrs[:address]
 
       user_org = Enum.find(user.organizations, fn(o) -> o.active && o.organization_id == org.id end)
 
