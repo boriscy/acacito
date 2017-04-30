@@ -1,6 +1,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
+<!--Required for the autocomplete-->
 <script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&key=AIzaSyDQwB6IOvELaaXQX1keoMuH-gaN3QbPRqM"></script>
 
 <div id="map" style="height:100%">

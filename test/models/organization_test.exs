@@ -5,7 +5,8 @@ defmodule Publit.OrganizationTest do
 
   @valid_attrs %{currency: "USD", name: "Home",  settings: %{theme: "dark"},
    description: "One of the finest places in Samaipata",
-    info: %{address: "Samaipata", mobile: "73732677", age: 40, valid: true, list: [%{a: 1}, %{a: "String"}] }
+    mobile_number: "59173732677",
+    info: %{address: "Samaipata", age: 40, valid: true, list: [%{a: 1}, %{a: "String"}] }
   }
   #@invalid_attrs %{}
 
@@ -27,7 +28,7 @@ defmodule Publit.OrganizationTest do
     end
 
     test "OK with default" do
-      {:ok, org} = Organization.create(%{"name" => "A new name"})
+      {:ok, org} = Organization.create(%{"name" => "A new name", "mobile_number" => "59177889911"})
 
       assert org.name == "A new name"
       assert org.currency == "BOB"
@@ -35,7 +36,7 @@ defmodule Publit.OrganizationTest do
     end
 
     test "open_close" do
-      {:ok, org} = Organization.create(%{"name" => "A new name"})
+      {:ok, org} = Organization.create(%{"name" => "A new name", "mobile_number" => "59177889911"})
 
       assert org.name == "A new name"
       assert org.currency == "BOB"
@@ -62,12 +63,15 @@ defmodule Publit.OrganizationTest do
       org = insert(:organization, currency: "USD")
       assert org.currency == "USD"
 
-      {:ok, org} = Organization.update(org, %{name: "Changes to name", currency: "BOB", address: "The other address",
-        pos: %{"coordinates" => [-63, -18], "type" => "Point"}})
+      {:ok, org} = Organization.update(org, %{
+        name: "Changes to name", currency: "BOB", address: "The other address",
+        mobile_number: "59177112233",
+        pos: %{"coordinates" => [-63, -18], "type" => "Point"}, })
 
       assert org.name == "Changes to name"
       assert org.address == "The other address"
       assert org.currency == "USD"
+      assert org.mobile_number == "59177112233"
     end
 
     test "OK pos" do
@@ -78,26 +82,6 @@ defmodule Publit.OrganizationTest do
       assert org.pos == %Geo.Point{coordinates: {-100, 30}, srid: nil}
     end
 
-  end
-
-  test "to_api" do
-    org = %Organization{
-      name: "Org 1",
-      address: "Near here",
-      category: "cat 1",
-      currency: "ABC",
-      pos: %Geo.Point{coordinates: {-17.8145819, -63.1560853}, srid: nil},
-      description: "A good place"
-    }
-
-    assert Organization.to_api(org) == %{
-      name: "Org 1",
-      address: "Near here",
-      category: "cat 1",
-      currency: "ABC",
-      pos: %{"coordinates" => [-17.8145819, -63.1560853], "type" => "Point"},
-      description: "A good place"
-    }
   end
 
 end

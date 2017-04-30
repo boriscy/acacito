@@ -2,7 +2,7 @@ defmodule Publit.OrganizationControllerTest do
   use Publit.ConnCase
 
   defp user_conn do
-    {user, _org} = create_user_org(%{mobile_number: "66778899"})
+    {user, _org} = create_user_org(%{mobile_number: "59166778899"})
     build_conn() |> assign(:current_user, user)
   end
 
@@ -26,7 +26,8 @@ defmodule Publit.OrganizationControllerTest do
   describe "PUT /organizations/:id" do
     test "OK html", %{conn: conn} do
       conn = put(conn, "/organizations/current", %{"organization" => %{
-         "name" => "Other org name", "pos" => %{"coordinates" => [10, 10], "type" => "Point"} } })
+         "name" => "Other org name", "mobile_number" => "59176543210",
+         "pos" => %{"coordinates" => [10, 10], "type" => "Point"} } })
 
       assert redirected_to(conn) == "/organizations/#{conn.assigns.current_organization.id}"
     end
@@ -40,9 +41,11 @@ defmodule Publit.OrganizationControllerTest do
 
     test "OK json", %{conn: conn} do
       conn = put(conn, "/organizations/current", %{"organization" => %{
+        "mobile_number" => "59176543210",
          "pos" => %{"coordinates" => ["-120", "30"], "type" => "Point"} }, "format" => "json" })
 
       org = Poison.decode!(conn.resp_body)
+      assert org["organization"]["mobile_number"] == "59176543210"
       assert org["organization"]["pos"] == %{"coordinates" => ["-120", "30"], "type" => "Point"}
     end
 

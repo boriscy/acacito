@@ -18,7 +18,7 @@ defmodule Publit.Support.Order do
       }, "transport" => %{"calculated_price" => "7"}
     }
 
-    {:ok, order} = Order.create(params)
+    {:ok, order} = Order.create(params, user_client)
 
     order
   end

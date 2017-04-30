@@ -23,6 +23,7 @@ defmodule Publit.OrderTest do
       v1 = Enum.at(p1.variations, 1)
       v2 = Enum.at(p2.variations, 0)
 
+
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "client_name" => user_client.full_name, "organization_name" => org.name,
@@ -33,7 +34,7 @@ defmodule Publit.OrderTest do
         }, "transport" => %{"calculated_price" => "5"}
       }
 
-      assert {:ok, order} = Order.create(params)
+      assert {:ok, order} = Order.create(params, user_client)
 
       assert order.client_pos == %Geo.Point{coordinates: {-100, 30}, srid: nil}
       assert order.organization_pos == org.pos
@@ -41,11 +42,16 @@ defmodule Publit.OrderTest do
       assert order.total == Decimal.new("71.0")
       assert order.currency == org.currency
       assert order.status == "new"
-      assert order.client_name == user_client.full_name
-      assert order.organization_name == org.name
-      assert order.organization_address == org.address
+
+      assert order.user_client_id == user_client.id
       assert order.client_name == user_client.full_name
       assert order.client_address == "Los Pinos, B777"
+      assert order.client_number == user_client.mobile_number
+
+      assert order.organization_id == org.id
+      assert order.organization_name == org.name
+      assert order.organization_address == org.address
+      assert order.organization_number == org.mobile_number
 
       assert order.details |> Enum.count() == 2
 
@@ -87,7 +93,7 @@ defmodule Publit.OrderTest do
         }, "transport" => %{"calculated_price" => "3"}
       }
 
-      {:ok, order} =  Order.create(params)
+      {:ok, order} =  Order.create(params, user_client)
 
       assert order.num == 2
       assert order.organization.name == "Publit"
@@ -110,7 +116,7 @@ defmodule Publit.OrderTest do
         }
       }
 
-      assert {:error, cs} = Order.create(params)
+      assert {:error, cs} = Order.create(params, user)
       det = cs.changes.details |> Enum.at(0)
       assert det.errors[:product_id]
 
@@ -123,7 +129,7 @@ defmodule Publit.OrderTest do
         }
       }
 
-      assert {:error, cs} = Order.create(params)
+      assert {:error, cs} = Order.create(params, user)
       det = cs.changes.details |> Enum.at(1)
       assert det.errors[:product_id]
     end

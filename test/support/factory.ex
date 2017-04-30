@@ -53,6 +53,7 @@ defmodule Publit.Factory do
       name: "Publit",
       currency: "BOB",
       address: "Calle 1 Near Here",
+      mobile_number: "59166554433",
       pos: Geo.JSON.decode(%{"coordinates" => [-18.18, -63.87], "type" => "Point"})
     }
   end

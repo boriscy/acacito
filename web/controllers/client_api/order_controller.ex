@@ -23,9 +23,7 @@ defmodule Publit.ClientApi.OrderController do
 
   # POST /client_api/orders
   def create(conn, %{"order" => order_params}) do
-    order_params = get_params(conn, order_params)
-
-    case Order.create(order_params) do
+    case Order.create(order_params, conn.assigns.current_user_client) do
       {:ok, order} ->
         Publit.OrganizationChannel.broadcast_order(order)
         render(conn, "show.json", order: order)
@@ -40,13 +38,6 @@ defmodule Publit.ClientApi.OrderController do
     conn
     |> put_status(:not_found)
     |> render("not_found.json", msg: args.msg)
-  end
-
-  defp get_params(conn, order_params) do
-    uc = conn.assigns.current_user_client
-    order_params
-    |> Map.put("user_client_id", uc.id)
-    |> Map.put("client_name", uc.full_name)
   end
 
 end

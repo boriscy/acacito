@@ -15,9 +15,11 @@ defmodule Publit.Order do
     field :client_pos, Geo.Geometry
     field :client_name, :string
     field :client_address, :string
+    field :client_number, :string
     field :organization_pos, Geo.Geometry
     field :organization_name, :string
     field :organization_address, :string
+    field :organization_number, :string
     field :comments, :string
 
     embeds_one :transport, Order.Transport
@@ -47,10 +49,10 @@ defmodule Publit.Order do
   @doc """
   Creates a new order with details
   """
-  def create(params) do
+  def create(params, user_client) do
     cs = %Order{}
-    |> cast(params, [:user_client_id, :client_pos, :client_name, :currency, :organization_id, :client_address, :comments])
-    |> validate_required([:user_client_id, :details, :client_pos, :currency, :client_name, :client_address])
+    |> cast(params, [:client_pos, :currency, :organization_id, :client_address, :comments])
+    |> validate_required([:details, :client_pos, :currency, :client_address])
     |> validate_length(:client_address, min: 8)
     |> cast_embed(:details)
     |> set_and_validate_details()
@@ -58,6 +60,7 @@ defmodule Publit.Order do
     with true <- cs.valid? do
       cs
       |> set_organization()
+      |> set_client(user_client)
       |> set_transport()
       |> set_total()
       |> set_num()
@@ -153,6 +156,14 @@ defmodule Publit.Order do
     |> put_assoc(:organization,  org)
     |> put_change(:organization_name, org.name)
     |> put_change(:organization_address, org.address)
+    |> put_change(:organization_number, org.mobile_number)
+  end
+
+  defp set_client(cs, uc) do
+    cs
+    |> put_assoc(:user_client, uc)
+    |> put_change(:client_name, uc.full_name)
+    |> put_change(:client_number, uc.mobile_number)
   end
 
 end

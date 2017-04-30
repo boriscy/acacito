@@ -15,6 +15,7 @@ defmodule Publit.RegistrationServiceTest do
       assert user.id
       assert org.id
       assert org.address == @valid_attrs[:address]
+      assert org.mobile_number == @valid_attrs[:mobile_number]
 
       user_org = Enum.find(user.organizations, fn(o) -> o.active && o.organization_id == org.id end)
 
@@ -27,7 +28,7 @@ defmodule Publit.RegistrationServiceTest do
     test "taken email" do
       resp = RegistrationService.register(@valid_attrs)
 
-      assert {:ok, %{org: org, user: user}} = resp
+      assert {:ok, %{org: _org, user: _user}} = resp
 
       {:error, :user, user, _b} = RegistrationService.register(@valid_attrs)
 
@@ -37,9 +38,9 @@ defmodule Publit.RegistrationServiceTest do
     test "take mobile_number" do
       resp = RegistrationService.register(Map.merge(@valid_attrs, %{email: "other@mail.com"}))
 
-      assert {:ok, %{org: org, user: user}} = resp
+      assert {:ok, %{org: _org, user: _user}} = resp
 
-      {:error, :user, user, _b} = RegistrationService.register(@valid_attrs)
+      {:error, :user, user, _org} = RegistrationService.register(@valid_attrs)
 
       assert user.errors[:mobile_number] == {"has already been taken", []}
     end

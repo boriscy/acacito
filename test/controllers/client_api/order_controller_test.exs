@@ -31,7 +31,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
 
     %{"organization_id" => org.id, "currency" => org.currency,
     "client_pos" => %{"coordinates" => [-120, 30], "type" => "Point"},
-    "client_address" => "Los Pinox B100",
+    "client_address" => "Los Pinos B100",
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
         "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}

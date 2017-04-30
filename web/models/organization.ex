@@ -7,6 +7,8 @@ defmodule Publit.Organization do
 
   alias Publit.{Organization, Repo, Product}
 
+  @number_reg ~r|^591[6,7]\d{7}$|
+
   @derive {Poison.Encoder, only: [:id, :name, :currency, :tenant, :info, :settings]}
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -23,6 +25,7 @@ defmodule Publit.Organization do
     field :rating, :decimal
     field :rating_count, :integer
     field :description, :string
+    field :mobile_number, :string
 
     has_many :products, Product
 
@@ -42,9 +45,10 @@ defmodule Publit.Organization do
   """
   def create(params) do
     %Organization{}
-    |> cast(params, [:name, :currency, :address, :description])
-    |> validate_required([:name, :currency])
+    |> cast(params, [:name, :currency, :address, :description, :mobile_number])
+    |> validate_required([:name, :currency, :mobile_number])
     |> validate_inclusion(:currency, @currencies)
+    |> validate_format(:mobile_number, @number_reg)
     |> Repo.insert()
   end
 
@@ -53,8 +57,9 @@ defmodule Publit.Organization do
   """
   def update(org, params) do
     org
-    |> cast(params, [:name, :address, :pos, :description])
-    |> validate_required([:name, :currency, :pos])
+    |> cast(params, [:name, :address, :pos, :description, :mobile_number])
+    |> validate_required([:name, :currency, :pos, :mobile_number])
+    |> validate_format(:mobile_number, @number_reg)
     |> Repo.update()
   end
 
@@ -102,20 +107,6 @@ defmodule Publit.Organization do
       {:ok, usrs} ->
         Enum.into(usrs, %{}, fn(u) -> {u["id"], u} end)
     end
-  end
-
-  @doc """
-  returns data to encode json for the API
-  """
-  def to_api(org) do
-    %{
-      name: org.name,
-      currency: org.currency,
-      address: org.address,
-      pos: coords(org),
-      category: org.category,
-      description: org.description
-    }
   end
 
   def coords(org) do

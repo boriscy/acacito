@@ -4,6 +4,7 @@
 
     <div class="flex">
       <div>
+        <label>Nombre</label>
         <h2>
           <input v-model="org.name"/>
         </h2>
@@ -12,6 +13,15 @@
         </span>
 
         <div>
+          <label>Numero movil</label>
+          <input v-model="org.mobile_number"/>
+          <span class="error">
+            {{this.errors.mobile_number}}
+          </span>
+        </div>
+
+        <div>
+          <label>Direccion</label>
           <textarea v-model="org.address" cols="50" rows="4">
           </textarea>
           <span class="error">
@@ -75,6 +85,7 @@ export default {
         name: this.org.name,
         address: this.org.address,
         description: this.org.description,
+        mobile_number: this.org.mobile_number,
         pos: {coordinates: [pos.lng, pos.lat], type: 'Point'}
       }
     },
