@@ -10,11 +10,14 @@ defmodule Publit.Order.StatusService do
   Changes the status of an order to the next
   """
   def next_status(%Order{status: "new"} = order, user) do
-    update_status(order, "process", %{"msg" => "Change status from new to process", "user_id" => user.id})
+    log = %{"msg" => "Change status from new to process", "user_id" => user.id}
+    update_status(order, "process", log, gettext("Yor order will be processed"))
   end
   def next_status(%Order{status: "process"} = order, user) do
-    update_status(order, "transport", %{"msg" => "Change status from process to transport", "user_id" => user.id})
+    log = %{"msg" => "Change status from process to transport", "user_id" => user.id}
+    update_status(order, "transport", log, gettext("Your order has transportation"))
   end
+
   @doc """
   change Order from status `process` to `transport`
   it recognizes which kind of user makes the changes and passes the field :user or :user_client
@@ -33,7 +36,7 @@ defmodule Publit.Order.StatusService do
 
     case Repo.transaction(multi) do
       {:ok, res} ->
-        send_message(res.order)
+        send_message(res.order, gettext("Your order is on the way"))
         {:ok, res.order}
       {:error, res} ->
         {:error, res}
@@ -75,16 +78,19 @@ defmodule Publit.Order.StatusService do
   Move to previous status
   """
   def previous_status(%Order{status: "process"} = order, user) do
-    update_status(order, "new", %{"msg" => "Change status from process to new", "user_id" => user.id })
+    log = %{"msg" => "Change status from process to new", "user_id" => user.id }
+    update_status(order, "new", log, "")
   end
 
-  defp update_status(order, status, log) do
+  defp update_status(order, status, log, msg) do
     multi = Multi.new()
     |> Multi.update(:order, set_order_status(order, status))
     |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
 
     case Repo.transaction(multi) do
-      {:ok, res} -> {:ok, res.order}
+      {:ok, res} ->
+        send_message(order, msg)
+        {:ok, res.order}
       {:erro, res} -> {:error, res.order}
     end
   end
@@ -138,7 +144,7 @@ defmodule Publit.Order.StatusService do
     end
   end
 
-  defp send_message(order) do
+  defp send_message(order, msg) do
     order = Repo.preload(order, [:user_transport, :user_client])
 
     tokens = [order.user_client.extra_data[@token_id]]
@@ -154,7 +160,7 @@ defmodule Publit.Order.StatusService do
     cb_err = fn(_) -> "" end
 
     msg = %{
-      message: gettext("Your order is on the way"),
+      message: msg,
       data: %{order: ord, status: "order:updated"}
     }
 

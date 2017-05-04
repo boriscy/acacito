@@ -49,6 +49,21 @@ defmodule Publit.Order.StatusServiceTest do
       assert data[:tokens] == [uc.extra_data["device_token"]]
     end
 
+    test "messages", %{uc: uc, org: org} do
+      Agent.start_link(fn -> %{} end, name: :api_mock)
+
+      ord = create_order(uc, org)
+      u = build(:user, id: Ecto.UUID.generate())
+
+      {:ok, ord} = Order.StatusService.next_status(ord, u)
+      Process.sleep(50)
+
+      resp = Agent.get(:api_mock, fn(v) -> v end)
+
+      assert resp[:tokens] == ["devtokencli1234"]
+      assert resp[:msg][:message] == gettext("Yor order will be processed")
+    end
+
     test "transport to transporting", %{uc: uc, org: org} do
       Agent.start_link(fn -> %{} end, name: :api_mock)
 

@@ -29,17 +29,22 @@ defmodule Publit.MessageApiDev do
 
   @doc """
   Receives a list of device_tokens in Pushy and sends the message in the msg map
+  ```SQL
+  create view users_view as
+  select id, extra_data, mobile_number, 'client' as usr from user_clients
+  union
+  select id, extra_data, mobile_number, 'trans' as usr from user_transports
+  union
+  select id, extra_data, mobile_number, 'org' as usr from users
+  ```
   """
   #headers = [{"Authorization", "Basic #{server_key()}"}, {"Content-Type", "application/json"}]
   #@type send_message(list, map) ::
   def send_message(tokens, msg) do
-    q = from ut in UserTransport, where: fragment("?->>'device_token'", ut.extra_data) in ^tokens, select: ut.id
+    q = from u in "users_view", where: fragment("?->>'device_token'", u.extra_data) in ^tokens, select: fragment("?::text", u.id)
     ids = Repo.all(q)
-    q = from uc in UserClient, where: fragment("?->>'device_token'", uc.extra_data) in ^tokens, select: uc.id
-    ids = ids ++ Repo.all(q)
 
-    msg2 = msg
-    msg2 = Map.put(msg2, :data, Poison.encode!(msg2.data))
+    msg2 = Map.put(msg, :data, Poison.encode!(msg.data))
 
     Enum.each(ids, fn(id) -> Publit.Endpoint.broadcast("users:" <> id, "message", msg2) end)
 
