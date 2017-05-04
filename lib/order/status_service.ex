@@ -86,10 +86,9 @@ defmodule Publit.Order.StatusService do
     multi = Multi.new()
     |> Multi.update(:order, set_order_status(order, status))
     |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
-
     case Repo.transaction(multi) do
       {:ok, res} ->
-        send_message(order, msg)
+        send_message(res.order, msg)
         {:ok, res.order}
       {:erro, res} -> {:error, res.order}
     end

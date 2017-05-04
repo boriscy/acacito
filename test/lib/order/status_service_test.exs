@@ -56,12 +56,14 @@ defmodule Publit.Order.StatusServiceTest do
       u = build(:user, id: Ecto.UUID.generate())
 
       {:ok, ord} = Order.StatusService.next_status(ord, u)
+
       Process.sleep(50)
 
       resp = Agent.get(:api_mock, fn(v) -> v end)
 
       assert resp[:tokens] == ["devtokencli1234"]
       assert resp[:msg][:message] == gettext("Yor order will be processed")
+      assert resp[:msg][:data][:order][:status] == "process"
     end
 
     test "transport to transporting", %{uc: uc, org: org} do
