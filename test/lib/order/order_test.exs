@@ -29,8 +29,8 @@ defmodule Publit.OrderTest do
       "client_name" => user_client.full_name, "organization_name" => org.name,
       "client_address" => "Los Pinos, B777","comments" => "cambio de 200",
       "details" => %{
-          "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
-          "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
+          "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "image_thumb" => "thumb1.jpg"},
+          "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2", "image_thumb" => "thumb2.jpg"}
         }, "transport" => %{"calculated_price" => "5"}
       }
 
@@ -61,6 +61,7 @@ defmodule Publit.OrderTest do
       assert d1.variation_id == v1.id
       assert d1.name == p1.name
       assert d1.variation == v1.name
+      assert d1.image_thumb == "thumb1.jpg"
 
       assert d2.price == Decimal.new("20.5")
       assert d2.quantity == Decimal.new("2")

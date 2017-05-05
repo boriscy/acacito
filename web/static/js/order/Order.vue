@@ -31,19 +31,28 @@
         </a>
       </div>
     </div>
+
+    <div>
+      <a class="pointer" @click="$refs.detail.open()">{{gettext("View order detail")}}</a>
+    </div>
     <!--It will update the view-->
     <span style="display:none">{{now}}</span>
-  </div>
 
+    <OrderDetail ref="detail" :order="order"/>
+  </div>
 </template>
 
 <script>
 import {translate, format} from '../mixins'
 import orderMixin from './orderMixin'
+import OrderDetail from './OrderDetail.vue'
 
 export default {
   name: 'Order',
   mixins: [translate, format, orderMixin],
+  components: {
+    OrderDetail
+  },
   computed: {
     user_client() { return this.order.user_client }
   }

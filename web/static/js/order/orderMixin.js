@@ -6,7 +6,9 @@ export default {
       } else {
         return true
       }
-    }
+    },
+    client() { return this.order.user_name },
+    organization() { return this.order.organization }
   },
   props: {
     order: {

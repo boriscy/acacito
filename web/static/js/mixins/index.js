@@ -22,6 +22,14 @@ const defaults = {
 const md = new Markdown('commonmark', {html: false})
 
 export const format = {
+  filters: {
+    number(val, decs, sep) {
+      return format.methods.formatNumber(val, decs, sep)
+    },
+    phone(num) {
+      return `+${num.slice(0, 3)} ${num.slice(3, 12)}`
+    }
+  },
   methods: {
     md(txt) {
       if(txt) {

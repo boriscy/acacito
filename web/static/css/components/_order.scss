@@ -183,3 +183,55 @@ badge.delivered {
   background: $delivered;
   color: white;
 }
+
+////////////////////////////////////////////////////////
+// Order detail modal
+.order-detail {
+
+  .details {
+    margin-bottom: 4px;
+    border-bottom: 1px solid $grayLighter;
+    padding: 4px 0px 8px;
+  }
+
+  .currency {
+    font-size: 70%;
+    color: $gray;
+  }
+
+  .left {
+    width: 100px;
+    img {
+      width: 100%;
+    }
+  }
+  .right {
+    width: 90%;
+    margin-left: 10px;
+
+    .title {
+      display: block;
+      margin: 0px;
+      font-size: 1.4em;
+      .variation {
+        color: $gray;
+      }
+    }
+
+    .price-line {
+      font-size: 1.3em;
+      .det {
+        width: 60%;
+      }
+      .subtotal {
+        width: 40%;
+        text-align: right;
+      }
+    }
+  }
+
+  .total {
+    text-align: right;
+    font-size: 1.4em;
+  }
+}
