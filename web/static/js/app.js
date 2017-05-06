@@ -23,6 +23,8 @@ window.currencies = {
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+window.Vue = Vue
+
 Vue.use(VueRouter)
 
 import moment from 'moment'
@@ -63,3 +65,6 @@ switch(true) {
 
 // set moment locale
 moment.locale(window.locale)
+
+const event = new CustomEvent('appLoaded')
+document.dispatchEvent(event)

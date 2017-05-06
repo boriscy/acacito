@@ -26,7 +26,7 @@
 <script>
 import {format} from '../mixins'
 
-const md = new Markdown('commonmark', {html: false});
+const md = new Markdown('commonmark', {html: false})
 
 
 export default {
