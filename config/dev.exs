@@ -42,10 +42,10 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :publit, Publit.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "publit_dev",
-  hostname: "localhost",
+  username: System.get_env("PUBLIT_USERNAME"),
+  password: System.get_env("PUBLIT_PASSWORD"),
+  database: System.get_env("PUBLIT_DATABASE"),
+  hostname: System.get_env("PUBLIT_HOSTNAME"),
   pool_size: 10,
   types: Publit.PostgresTypes
 
