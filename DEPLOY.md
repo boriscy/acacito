@@ -5,7 +5,6 @@ cd repos/publit
 git pull origin master
 MIX_ENV=dev mix ecto.migrate
 MIX_ENV=prod mix compile
-npm run deploy
 yarn run deploy
 MIX_ENV=prod mix phoenix.digest
 MIX_ENV=prod mix release --env=prod
