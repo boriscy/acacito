@@ -56,6 +56,8 @@ defmodule Publit.RegistrationControllerTest do
       assert view_template(conn) == "index.html"
       assert conn.assigns.valid == false
       assert conn.assigns.registration.valid? == false
+
+      assert conn.assigns.registration.errors[:mobile_number]
     end
   end
 end

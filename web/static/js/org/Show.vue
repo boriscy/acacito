@@ -5,31 +5,30 @@
     <div class="flex">
       <div>
         <label>Nombre</label>
-        <h2>
-          <input v-model="org.name"/>
-        </h2>
+        <input v-model="org.name" class="form-control"/>
         <span class="error">
           {{this.errors.name}}
         </span>
 
         <div>
-          <label>Numero movil</label>
-          <input v-model="org.mobile_number"/>
+          <label>{{ gettext("Mobile number") }}</label>
+          <input v-model="org.mobile_number" class="form-control"/>
           <span class="error">
             {{this.errors.mobile_number}}
           </span>
         </div>
 
         <div>
-          <label>Direccion</label>
-          <textarea v-model="org.address" cols="50" rows="4">
+          <label>{{ gettext("Address") }}</label>
+          <textarea v-model="org.address" cols="50" rows="4" class="form-control">
           </textarea>
           <span class="error">
             {{this.errors.address}}
           </span>
         </div>
         <div>
-          <textarea v-model="org.description" cols="50" rows="7">
+          <label>{{ gettext("Description") }}</label>
+          <textarea v-model="org.description" cols="50" rows="7" class="form-control">
           </textarea>
         </div>
       </div>

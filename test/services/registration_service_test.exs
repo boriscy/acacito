@@ -50,6 +50,7 @@ defmodule Publit.RegistrationServiceTest do
 
       assert reg_cs.errors[:email]
       assert reg_cs.errors[:password]
+      assert reg_cs.errors[:mobile_number]
       assert reg_cs.errors[:name]
       refute reg_cs.errors[:category]
       assert reg_cs.errors[:address]
@@ -58,6 +59,10 @@ defmodule Publit.RegistrationServiceTest do
 
       assert reg_cs.errors[:email]
       assert reg_cs.errors[:password]
+
+
+      assert {:error, reg_cs} = RegistrationService.register(%{mobile_number: "59155112233"})
+      assert reg_cs.errors[:mobile_number]
     end
 
   end

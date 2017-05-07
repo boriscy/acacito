@@ -10,7 +10,8 @@ msgid ""
 msgstr ""
 "Language: en\n"
 
-#: web/templates/registration/index.html.eex:31
+#: web/templates/layout/translations.html.eex:4
+#: web/templates/registration/index.html.eex:36
 msgid "Address"
 msgstr ""
 
@@ -18,7 +19,7 @@ msgstr ""
 msgid "Create Product"
 msgstr ""
 
-#: web/templates/product/index.html.eex:21 web/templates/product/show.html.eex:7
+#: web/templates/product/index.html.eex:29 web/templates/product/show.html.eex:7
 msgid "Edit"
 msgstr ""
 
@@ -36,7 +37,7 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:23
+#: web/templates/layout/translations.html.eex:26
 #: web/templates/product/form.html.eex:5
 msgid "Name"
 msgstr ""
@@ -56,7 +57,7 @@ msgstr ""
 msgid "Products"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:36
+#: web/templates/registration/index.html.eex:41
 msgid "Register shop"
 msgstr ""
 
@@ -64,11 +65,11 @@ msgstr ""
 msgid "Register your shop"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:26
+#: web/templates/registration/index.html.eex:31
 msgid "Shop name"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:29
+#: web/templates/layout/translations.html.eex:33
 #: web/templates/product/form.html.eex:17
 msgid "Tags"
 msgstr ""
@@ -106,12 +107,12 @@ msgstr ""
 msgid "There are errors in the product."
 msgstr ""
 
-#: web/templates/product/index.html.eex:24
+#: web/templates/product/index.html.eex:32
 #: web/templates/product/show.html.eex:10
 msgid "Are you sure to delete the product \"%{name}\"?"
 msgstr ""
 
-#: web/templates/product/index.html.eex:23 web/templates/product/show.html.eex:9
+#: web/templates/product/index.html.eex:31 web/templates/product/show.html.eex:9
 msgid "Delete"
 msgstr ""
 
@@ -127,11 +128,11 @@ msgstr ""
 msgid "You don't have permission to access this page"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:14
+#: web/templates/layout/translations.html.eex:17
 msgid "Latitude"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:15
+#: web/templates/layout/translations.html.eex:18
 msgid "Longitude"
 msgstr ""
 
@@ -164,7 +165,7 @@ msgstr ""
 msgid "Invalid product"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:17
+#: web/templates/layout/translations.html.eex:20
 msgid "New Orders"
 msgstr ""
 
@@ -173,11 +174,11 @@ msgstr ""
 msgid "Orders"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:30
+#: web/templates/layout/translations.html.eex:34
 msgid "Transporting Orders"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:21
+#: web/templates/layout/translations.html.eex:24
 msgid "Orders in Process"
 msgstr ""
 
@@ -185,44 +186,44 @@ msgstr ""
 msgid "Add line"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:4
+#: web/templates/layout/translations.html.eex:5
 msgid "Big"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:16
+#: web/templates/layout/translations.html.eex:19
 msgid "Medium"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:25
+#: web/templates/layout/translations.html.eex:28
 msgid "Price"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:26
+#: web/templates/layout/translations.html.eex:29
 msgid "Remove"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:35
+#: web/templates/layout/translations.html.eex:40
 msgid "Variations"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:28
+#: web/templates/layout/translations.html.eex:31
 msgid "Small"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:6
+#: web/templates/layout/translations.html.eex:7
 msgid "Call Transport"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:27
+#: web/templates/layout/translations.html.eex:30
 #: web/templates/product/form.html.eex:19
 msgid "Separate tags with commas"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:36
+#: web/templates/layout/translations.html.eex:41
 msgid "Variation name"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:13
+#: web/templates/layout/translations.html.eex:16
 msgid "Enter tags"
 msgstr ""
 
@@ -238,7 +239,7 @@ msgstr ""
 msgid "Description example"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:24
+#: web/templates/layout/translations.html.eex:27
 msgid "New order"
 msgstr ""
 
@@ -251,41 +252,41 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: lib/order/status_service.ex:134 web/views/api/transport_view.ex:9
+#: lib/order/status_service.ex:133 web/views/api/transport_view.ex:9
 #: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:18
+#: web/templates/layout/translations.html.eex:21
 #: web/views/trans_api/order_view.ex:19
 msgid "No transport available"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:7
+#: web/templates/layout/translations.html.eex:8
 msgid "Calling transport"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:11
+#: web/templates/layout/translations.html.eex:13
 msgid "Cancel call"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:5
+#: web/templates/layout/translations.html.eex:6
 msgid "bike"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:10
+#: web/templates/layout/translations.html.eex:12
 msgid "car"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:22
+#: web/templates/layout/translations.html.eex:25
 msgid "motorcycle"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:32
+#: web/templates/layout/translations.html.eex:37
 msgid "truck"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:37
+#: web/templates/layout/translations.html.eex:43
 msgid "walk"
 msgstr ""
 
@@ -293,7 +294,7 @@ msgstr ""
 msgid "New order from %{org}"
 msgstr "Nuevo pedido de %{org}"
 
-#: web/templates/layout/translations.html.eex:31
+#: web/templates/layout/translations.html.eex:35
 msgid "Transport has arrived"
 msgstr ""
 
@@ -305,7 +306,7 @@ msgstr ""
 msgid "Your order is arriving"
 msgstr ""
 
-#: lib/order/status_service.ex:121
+#: lib/order/status_service.ex:120
 msgid "User transport not found"
 msgstr ""
 
@@ -313,19 +314,19 @@ msgstr ""
 msgid "Your order is on the way"
 msgstr ""
 
-#: lib/order/status_service.ex:175
+#: lib/order/status_service.ex:174
 msgid "Order delivered"
 msgstr ""
 
-#: lib/order/status_service.ex:175
+#: lib/order/status_service.ex:174
 msgid "Your order has been delivered"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:8
+#: web/templates/layout/translations.html.eex:9
 msgid "Click to edit"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:33
+#: web/templates/layout/translations.html.eex:38
 msgid "Update position"
 msgstr ""
 
@@ -333,11 +334,11 @@ msgstr ""
 msgid "Search place"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:19
+#: web/templates/layout/translations.html.eex:22
 msgid "Obtain position using GPS"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:34
+#: web/templates/layout/translations.html.eex:39
 msgid "Update data and position"
 msgstr ""
 
@@ -345,11 +346,11 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:20
+#: web/templates/layout/translations.html.eex:23
 msgid "Open for sale"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:12
+#: web/templates/layout/translations.html.eex:14
 msgid "Close sale"
 msgstr ""
 
@@ -361,7 +362,7 @@ msgstr ""
 msgid "Invalid password"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:9
+#: web/templates/layout/translations.html.eex:10
 msgid "Click the map to select your position"
 msgstr ""
 
@@ -400,4 +401,28 @@ msgstr ""
 
 #: lib/order/status_service.ex:18
 msgid "Your order has transportation"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:11
+msgid "Close"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:42
+msgid "View order detail"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:15
+msgid "Detail"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:32
+msgid "Subtotal"
+msgstr ""
+
+#: web/templates/layout/translations.html.eex:36
+msgid "Total"
+msgstr ""
+
+#: web/templates/registration/index.html.eex:26
+msgid "Mobile number"
 msgstr ""

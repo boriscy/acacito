@@ -33,7 +33,7 @@
     </div>
 
     <div>
-      <a class="pointer" @click="$refs.detail.open()">{{gettext("View order detail")}}</a>
+      <a class="pointer" @click="$refs.detail.open()">{{gettext("Detail")}}</a>
     </div>
     <!--It will update the view-->
     <span style="display:none">{{now}}</span>

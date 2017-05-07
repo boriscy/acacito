@@ -4,9 +4,15 @@
 
     <div slot="body" class="order-detail">
       <h4>
+        <i class="material-icons text-gray">person</i>
         <strong>{{order.client_name}}</strong>
+        <i class="material-icons text-gray">smartphone</i>
         {{order.client_number | phone}}
       </h4>
+      <p>
+        <span class="text-gray">{{ gettext("Address") }}:</span>
+        {{order.client_address}}
+      </p>
 
       <div v-for="det in order.details" class="flex details">
 
@@ -15,7 +21,10 @@
         </div>
 
         <div class="right">
-          <a :href="'/products/' + det.product_id" class="title" target="_blank">{{det.name}} <span class="variation">({{det.variation}})</span></a>
+          <a :href="'/products/' + det.product_id" class="title" target="_blank">
+            {{det.name}}
+            <span class="variation" v-if="det.variation">({{det.variation}})</span>
+          </a>
 
           <div class="price-line flex">
             <div class="det">
@@ -31,7 +40,7 @@
       </div>
 
       <div class="total">
-        Total
+        {{ gettext("Total") }}
         <span class="currency">{{order.currency}}</span>
         {{(order.total) | number}}
       </div>

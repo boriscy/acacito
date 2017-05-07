@@ -23,3 +23,18 @@ a.text-red:focus
 .text-green2 {
   color: $green2;
 }
+
+.text-gray {
+  color: $gray;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  i {
+    vertical-align: bottom;
+  }
+}

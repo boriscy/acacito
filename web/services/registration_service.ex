@@ -1,6 +1,7 @@
 defmodule Publit.RegistrationService do
   use Ecto.Schema
   import Ecto.Changeset
+  import Publit.Gettext
   alias Publit.{RegistrationService, Organization, User, UserOrganization, Repo}
   alias Ecto.Multi
 
@@ -15,6 +16,7 @@ defmodule Publit.RegistrationService do
 
   @categories ["restaurant", "store"]
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
+  @number_reg ~r|^591[6,7]\d{7}$|
 
   @doc """
   Creates the user, organization and user_organization
@@ -61,8 +63,9 @@ defmodule Publit.RegistrationService do
     |> cast(params, [:email, :mobile_number, :password, :name, :category, :address])
     |> validate_required([:email, :mobile_number, :password, :name, :category, :address])
     |> validate_format(:email, @email_reg)
-    |> validate_length(:password, min: 8)
-    |> validate_length(:address, min: 8)
+    |> validate_format(:mobile_number, @number_reg)
+    |> validate_length(:password, min: 8, message: err_gettext("should be at least %{count} character(s)", count: 8))
+    |> validate_length(:address, min: 8, message: err_gettext("should be at least %{count} character(s)", count: 8))
     |> validate_inclusion(:category, @categories)
   end
 

@@ -21,4 +21,12 @@ defmodule Publit.Gettext do
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
   use Gettext, otp_app: :publit
+
+  def err_gettext(msg, opts \\ []) do
+    if opts[:count] do
+      Gettext.dngettext(Publit.Gettext, "errors", msg, msg, opts[:count])
+    else
+      Gettext.dgettext(Publit.Gettext, "errors", msg, opts)
+    end
+  end
 end

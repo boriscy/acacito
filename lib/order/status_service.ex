@@ -53,6 +53,7 @@ defmodule Publit.Order.StatusService do
     case Repo.transaction(multi) do
       {:ok, res} ->
         Publit.OrganizationChannel.broadcast_order(res.order, "order:updated")
+        send_message_deliver(res.order)
         {:ok, res.order}
       {:error, cs} -> {:error, cs}
     end
@@ -178,7 +179,7 @@ defmodule Publit.Order.StatusService do
     cb_err = fn(_) -> "" end
 
     Publit.MessagingService.send_message(tokens,
-      %{title: title, message: msg, status: "order:updated", order: ord},
+      %{title: title, message: msg, data: %{status: "order:updated", order: ord} },
       cb_ok, cb_err)
   end
 
