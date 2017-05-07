@@ -30,8 +30,5 @@
     </div> <!-- /container -->
     <%= render Publit.LayoutView, "translations.html" %>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
-    <script>
-      console.log("Version: <%= Publit.Mixfile.project[:version] %>");
-    </script>
   </body>
 </html>

@@ -9,10 +9,11 @@ npm run deploy
 yarn run deploy
 MIX_ENV=prod mix phoenix.digest
 MIX_ENV=prod mix release --env=prod
-git_rev=`git rev-parse HEAD|head -c 8`
-ver="0.9.3+$git_rev"
 
-cp  _build/prod/rel/publit/releases/0.9.4+de65ea0d/publit.tar.gz ~/tmp/
+rm -r ~/tmp
+mkdir ~/tmp
+
+cp  _build/prod/rel/publit/releases/0.9.7/publit.tar.gz ~/tmp/
 
 cd /home/deploy/tmp/
 tar -xzf publit.tar.gz
