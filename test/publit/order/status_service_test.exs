@@ -134,6 +134,7 @@ defmodule Publit.Order.StatusServiceTest do
     end
 
     test "previous", %{uc: uc, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       ord = create_order(uc, org)
       u = build(:user, id: Ecto.UUID.generate())
 

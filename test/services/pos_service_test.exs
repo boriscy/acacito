@@ -7,6 +7,7 @@ defmodule PublitPosServiceTest do
 
   describe "update_position" do
     test "OK" do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       pos = %{"coordinates" => [-17.8145819, -63.1560853], "type" => "Point"}
       user = insert(:user_transport)
 
@@ -19,6 +20,7 @@ defmodule PublitPosServiceTest do
     end
 
     test "invalid" do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       pos = %{"coordinates" => [-182.8145819, -63.1560853], "type" => "Point"}
       user = insert(:user_transport)
 
@@ -83,7 +85,7 @@ defmodule PublitPosServiceTest do
     test_with_mock "OK near_client", Publit.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
 
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       org = insert(:organization)
       uc = insert(:user_client)
@@ -112,9 +114,9 @@ defmodule PublitPosServiceTest do
       token = uc.extra_data["device_token"]
       assert token
 
-      assert Publit.MessageApiMock.get_data() == %{msg: %{
+      assert Publit.MessageApiMock.get_data() == [%{msg: %{
         title: gettext("Transport near"), message: gettext("Your order is arriving"),
-        status: "order:near_client"}, tokens: [token]}
+        status: "order:near_client"}, tokens: [token], server_key: "server_key_cli"}]
 
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
 
@@ -139,7 +141,7 @@ defmodule PublitPosServiceTest do
     test_with_mock "ERROR send message near_client", Publit.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
 
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       org = insert(:organization)
       uc = insert(:user_client, %{extra_data: %{"device_token" => "nn"}})

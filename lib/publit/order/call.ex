@@ -53,7 +53,7 @@ defmodule Publit.Order.Call do
           }
         }
 
-        {:ok, pid} = Publit.MessagingService.send_message(tokens, msg, cb_ok, cb_error)
+        {:ok, pid} = Publit.MessagingService.send_message_trans(tokens, msg, cb_ok, cb_error)
 
         {:ok, oc, pid}
       {:error, cs} ->

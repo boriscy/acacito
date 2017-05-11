@@ -25,6 +25,7 @@ defmodule Publit.TransApi.OrderControllerTest do
 
   describe "GET /trans_api/orders" do
     test "OK", %{conn: conn, ut: ut, token: token} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       org = insert(:organization)
       uc = insert(:user_client)
 
@@ -52,7 +53,7 @@ defmodule Publit.TransApi.OrderControllerTest do
   describe "PUT /trans_api/accept/:order_id" do
     test_with_mock "OK", %{conn: conn, token: token}, Publit.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org)
@@ -72,6 +73,7 @@ defmodule Publit.TransApi.OrderControllerTest do
     end
 
     test "Error", %{conn: conn, token: token} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org, %{transport: %Order.Transport{calculated_price: Decimal.new("-5")} })
@@ -89,6 +91,7 @@ defmodule Publit.TransApi.OrderControllerTest do
     end
 
     test "Empty", %{conn: conn, token: token} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org, %{transport: %Order.Transport{calculated_price: Decimal.new("-5")} })
@@ -104,6 +107,7 @@ defmodule Publit.TransApi.OrderControllerTest do
     end
 
     test "not_found", %{conn: conn, token: token} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       id = Ecto.UUID.generate()
       conn = conn
       |> put_req_header("authorization", token)
@@ -125,6 +129,7 @@ defmodule Publit.TransApi.OrderControllerTest do
              "speed" => 30}}
 
     test "OK", %{conn: conn, ut: ut} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       uc = insert(:user_client)
       org = insert(:organization)
       order = create_order_only(uc, org, %{status: "transporting"})

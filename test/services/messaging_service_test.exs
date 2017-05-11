@@ -5,7 +5,7 @@ defmodule Publit.MessagingServiceTest do
 
   describe "message" do
     test "OK" do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       {:ok, agent} = Agent.start_link fn -> %{resp: nil} end
       cb_ok = fn(resp) ->
@@ -14,7 +14,7 @@ defmodule Publit.MessagingServiceTest do
       cb_error = fn(_v) -> "" end
       data = %{title: "Test", body: "A test body"}
 
-      {:ok, pid} = MessagingService.send_message(["demo1234"], data, cb_ok, cb_error)
+      {:ok, pid} = MessagingService.send_message_cli(["demo1234"], data, cb_ok, cb_error)
       ref = Process.monitor(pid)
 
       receive do
@@ -27,7 +27,7 @@ defmodule Publit.MessagingServiceTest do
     end
 
     test "ERROR" do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
       {:ok, agent} = Agent.start_link fn -> %{resp: nil} end
 
       cb_ok = fn(_v) -> "" end
@@ -36,7 +36,7 @@ defmodule Publit.MessagingServiceTest do
       end
       data = %{title: "Test", body: "A test body"}
 
-      {:ok, pid} = MessagingService.send_message(["demo123"], data, cb_ok, cb_error)
+      {:ok, pid} = MessagingService.send_message_trans(["demo123"], data, cb_ok, cb_error)
       ref = Process.monitor(pid)
 
       receive do

@@ -96,7 +96,7 @@ defmodule Publit.PosService do
 
         {title, msg} = {gettext("Transport near"), gettext("Your order is arriving")}
         Publit.OrganizationChannel.broadcast_order(order, "order:near_client")
-        Publit.MessagingService.send_message(tokens, %{title: title, message: msg, status: "order:near_client"}, ok_cb, err_cb)
+        Publit.MessagingService.send_message_cli(tokens, %{title: title, message: msg, status: "order:near_client"}, ok_cb, err_cb)
     end
   end
 

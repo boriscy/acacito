@@ -27,7 +27,7 @@ defmodule Publit.Order.CallTest do
 
   describe "create" do
     test "OK" do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)
@@ -51,7 +51,7 @@ defmodule Publit.Order.CallTest do
           assert body["success"]
       end
 
-      r = Agent.get(:api_mock, fn(v) -> v end)
+      r = Agent.get(:api_mock, fn(v) -> v end) |> List.first()
 
       r[:tokens] == ["11223344", "22334455", "44556677", "55667788"]
       assert r[:msg][:message] == gettext("New order from %{org}", %{org: org.name})
@@ -63,7 +63,7 @@ defmodule Publit.Order.CallTest do
     end
 
     test "ERROR" do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)

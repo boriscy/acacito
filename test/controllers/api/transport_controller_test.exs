@@ -27,7 +27,7 @@ defmodule Publit.Api.TransportControllerTest do
 
   describe "POST /api/transport" do
     test "OK", %{conn: conn, org: org} do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       uc = insert(:user_client)
       {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
@@ -43,6 +43,7 @@ defmodule Publit.Api.TransportControllerTest do
     end
 
     test "Not found", %{conn: conn} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       conn = post(conn, "/api/transport", %{order_id: Ecto.UUID.generate() })
 
       assert conn.status == 404
@@ -51,6 +52,7 @@ defmodule Publit.Api.TransportControllerTest do
     end
 
     test "empty", %{conn: conn, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       uc = insert(:user_client)
       {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
 
@@ -61,6 +63,7 @@ defmodule Publit.Api.TransportControllerTest do
 
   describe "DELETE /api/transport/:id" do
     test "OK", %{conn: conn, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
       uc = insert(:user_client)
       order = create_order_only(uc, org)
       assert {:ok, _} = Repo.insert(%Order.Call{order_id: order.id, status: "new"})
