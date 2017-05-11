@@ -23,8 +23,20 @@ defmodule Publit.MessageApiDev do
     defstruct [:status, :resp, :error, :message, :body]
   end
 
-  def server_key do
-    System.get_env["PUSHY_SECRET_API_KEY"]
+  def server_key_cli do
+    "server_key_cli"
+  end
+
+  def server_key_trans do
+    "server_key_trans"
+  end
+
+  def send_message_cli(tokens, msg) do
+    send_message(tokens, msg, server_key_cli())
+  end
+
+  def send_message_trans(tokens, msg) do
+    send_message(tokens, msg, server_key_trans())
   end
 
   @doc """
@@ -40,7 +52,7 @@ defmodule Publit.MessageApiDev do
   """
   #headers = [{"Authorization", "Basic #{server_key()}"}, {"Content-Type", "application/json"}]
   #@type send_message(list, map) ::
-  def send_message(tokens, msg) do
+  defp send_message(tokens, msg, server_key) do
     q = from u in "users_view", where: fragment("?->>'device_token'", u.extra_data) in ^tokens, select: fragment("?::text", u.id)
     ids = Repo.all(q)
 
@@ -56,4 +68,5 @@ defmodule Publit.MessageApiDev do
       %Publit.MessageApi.Response{status: :error, resp: @resp_error, body: body}
     end
   end
+
 end

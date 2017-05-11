@@ -147,14 +147,6 @@ defmodule Publit.Order.StatusService do
   defp send_message(order, msg) do
     order = Repo.preload(order, [:user_transport, :user_client])
 
-    tokens = [order.user_client.extra_data[@token_id]]
-
-    if order.user_transport_id do
-      tokens = tokens ++ [order.user_transport.extra_data[@token_id]]
-    end
-    tokens = Enum.filter(tokens, fn(t) -> to_string(t) != "" end)
-
-
     ord = Publit.TransApi.OrderView.to_api(order)
     cb_ok = fn(_) -> "" end
     cb_err = fn(_) -> "" end
@@ -163,8 +155,14 @@ defmodule Publit.Order.StatusService do
       message: msg,
       data: %{order: ord, status: "order:updated"}
     }
+    if order.user_transport_id do
+      tokens = [order.user_transport.extra_data[@token_id]]
+      Publit.MessagingService.send_message_trans(tokens, msg, cb_ok, cb_err)
+    end
 
-    Publit.MessagingService.send_message(tokens, msg, cb_ok, cb_err)
+    tokens = [order.user_client.extra_data[@token_id]]
+
+    Publit.MessagingService.send_message_cli(tokens, msg, cb_ok, cb_err)
   end
 
   def send_message_deliver(order) do
@@ -178,7 +176,7 @@ defmodule Publit.Order.StatusService do
     cb_ok = fn(_) -> "" end
     cb_err = fn(_) -> "" end
 
-    Publit.MessagingService.send_message(tokens,
+    Publit.MessagingService.send_message_cli(tokens,
       %{title: title, message: msg, data: %{status: "order:updated", order: ord} },
       cb_ok, cb_err)
   end

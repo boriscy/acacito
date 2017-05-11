@@ -12,8 +12,25 @@ defmodule Publit.MessageApiMock do
    {"Vary", "Accept-Encoding"}, {"Content-Length", "55"},
    {"Connection", "keep-alive"}], status_code: 400}
 
-  def send_message(tokens, msg) do
-    update_agent(tokens, msg)
+
+  def server_key_trans do
+    "server_key_trans"
+  end
+
+  def server_key_cli do
+    "server_key_cli"
+  end
+
+  def send_message_trans(tokens, msg) do
+    send_message(tokens, msg, server_key_trans())
+  end
+
+  def send_message_cli(tokens, msg) do
+    send_message(tokens, msg, server_key_cli())
+  end
+
+  defp send_message(tokens, msg, server_key) do
+    update_agent(tokens, msg, server_key)
 
     headers = [{"Content-Type", "application/json"}]
 
@@ -26,12 +43,13 @@ defmodule Publit.MessageApiMock do
     end
   end
 
-  defp update_agent(tokens, msg) do
+  defp update_agent(tokens, msg, server_key) do
     if !Process.whereis(:api_mock) do
       raise "Error, the agent :api_mock has not been started, start in your tests with: Agent.start_link(fn -> %{} end, name: :api_mock)"
     end
 
-    Agent.update(:api_mock, fn(v) -> Map.merge(v, %{tokens: tokens, msg: msg}) end)
+    m = %{tokens: tokens, msg: msg, server_key: server_key}
+    Agent.update(:api_mock, fn(v) -> v ++ [m] end)
   end
 
   def get_data do

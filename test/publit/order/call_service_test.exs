@@ -6,7 +6,7 @@ defmodule Publit.Order.CallServiceTest do
 
   describe "update_transport" do
     test "OK" do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       {uc, org} = {insert(:user_client), insert(:organization)}
       order = create_order_only(uc, org, %{status: "process"})
@@ -43,11 +43,11 @@ defmodule Publit.Order.CallServiceTest do
 
       assert Repo.one(from oc in Order.Call, select: count(oc.id)) == 0
 
-      resp = Publit.MessageApiMock.get_data()
+      data = Publit.MessageApiMock.get_data() |> List.first()
 
-      #assert resp[:msg][:message] == gettext("New order from %{org}", org: org.name)
-      assert resp[:msg][:data][:order_call_id] == oc.id
-      ord = resp[:msg][:data][:order]
+      assert data[:tokens] |> Enum.sort() == ["devtoken3456789", "devtokentrans1234"]
+      assert data[:msg][:data][:order_call_id] == oc.id
+      ord = data[:msg][:data][:order]
       assert ord[:id] == order.id
     end
 

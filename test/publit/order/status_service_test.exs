@@ -9,7 +9,7 @@ defmodule Publit.Order.StatusServiceTest do
 
   describe "Change status" do
     test "change all statuses", %{uc: uc, org: org} do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       ord = create_order(uc, org)
       u = build(:user, id: Ecto.UUID.generate())
@@ -46,20 +46,22 @@ defmodule Publit.Order.StatusServiceTest do
 
       data = Publit.MessageApiMock.get_data()
 
-      assert data[:tokens] == [uc.extra_data["device_token"]]
+      Enum.each(data, fn(v) ->
+        assert ["devtokencli1234"] == v[:tokens]
+      end)
     end
 
     test "messages", %{uc: uc, org: org} do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       ord = create_order(uc, org)
       u = build(:user, id: Ecto.UUID.generate())
 
-      {:ok, ord} = Order.StatusService.next_status(ord, u)
+      {:ok, _ord} = Order.StatusService.next_status(ord, u)
 
       Process.sleep(50)
 
-      resp = Agent.get(:api_mock, fn(v) -> v end)
+      resp = Agent.get(:api_mock, fn(v) -> v end) |> List.first()
 
       assert resp[:tokens] == ["devtokencli1234"]
       assert resp[:msg][:message] == gettext("Yor order will be processed")
@@ -67,7 +69,7 @@ defmodule Publit.Order.StatusServiceTest do
     end
 
     test "transport to transporting", %{uc: uc, org: org} do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
 
       ord = create_order_only(uc, org, %{status: "transport"})
       {ord, ut} = update_order_and_create_user_transport(ord)
@@ -89,15 +91,23 @@ defmodule Publit.Order.StatusServiceTest do
       assert ordt["status"] == "transporting"
 
       data = Publit.MessageApiMock.get_data()
+      dt = data |> List.first()
 
-      assert data[:msg][:message] == gettext("Your order is on the way")
-      assert data[:msg][:data][:order][:id] == ord.id
+      assert dt[:msg][:message] == gettext("Your order is on the way")
+      assert dt[:msg][:data][:order][:id] == ord.id
 
-      assert data[:tokens] == [uc.extra_data["device_token"], ut.extra_data["device_token"]]
+      assert dt[:tokens] == [ut.extra_data["device_token"]]
+
+      dc = data |> List.last()
+
+      assert dc[:msg][:message] == gettext("Your order is on the way")
+      assert dc[:msg][:data][:order][:id] == ord.id
+
+      assert dc[:tokens] == [uc.extra_data["device_token"]]
     end
 
     test "transporting to delivered", %{uc: uc, org: org} do
-      Agent.start_link(fn -> %{} end, name: :api_mock)
+      Agent.start_link(fn -> [] end, name: :api_mock)
       ord = create_order_only(uc, org, %{status: "transporting"})
       {ord, ut} = update_order_and_create_user_transport(ord)
 
@@ -113,6 +123,9 @@ defmodule Publit.Order.StatusServiceTest do
       assert ut.orders |> Enum.count() == 0
 
       data = Publit.MessageApiMock.get_data()
+
+      assert Enum.count(data) == 1
+      data = data |> List.first()
 
       assert data[:tokens] == [uc.extra_data["device_token"]]
       assert data[:msg][:data][:status] == "order:updated"

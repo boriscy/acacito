@@ -68,7 +68,7 @@ defmodule Publit.Order.CallService do
       }
     }
 
-    Publit.MessagingService.send_message(tokens, msg, cb_ok, cb_err)
+    Publit.MessagingService.send_message_trans(tokens, msg, cb_ok, cb_err)
   end
 
   defp set_user_transport_cs(order, ut) do

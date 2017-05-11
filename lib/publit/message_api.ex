@@ -19,8 +19,20 @@ defmodule Publit.MessageApi do
   # POST https://api.pushy.me/push?api_key=PUSHY_SECRET_API_KEY
   @messaging_url "https://api.pushy.me/push?api_key=#{System.get_env["PUSHY_SECRET_API_KEY"]}"
 
-  def server_key do
+  def server_key_trans do
     System.get_env["PUSHY_SECRET_API_KEY"]
+  end
+
+  def server_key_cli do
+    System.get_env["PUSHY_SECRET_API_KEY_CLI"]
+  end
+
+  def send_message_trans(tokens, msg) do
+    send_message(tokens, msg, server_key_trans())
+  end
+
+  def send_message_cli(tokens, msg) do
+    send_message(tokens, msg, server_key_cli())
   end
 
   @doc """
@@ -28,7 +40,7 @@ defmodule Publit.MessageApi do
   """
   #headers = [{"Authorization", "Basic #{server_key()}"}, {"Content-Type", "application/json"}]
   #@type send_message(list, map) ::
-  def send_message(tokens, msg) do
+  defp send_message(tokens, msg, server_key) do
     url = "https://api.pushy.me/push?api_key=#{server_key}"
 
     headers = [{"Content-Type", "application/json"}]

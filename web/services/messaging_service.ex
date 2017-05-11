@@ -18,10 +18,25 @@ defmodule Publit.MessagingService do
 
   @doc """
   """
-  #@type send_message(tokens, data, cb_ok, cb_error, cb_net_error) ::
-  def send_message(tokens, msg, cb_ok, cb_error, cb_net_error \\ fn(_v) -> :ok end) do
+  #@type send_message_trans(tokens, data, cb_ok, cb_error, cb_net_error) ::
+  def send_message_cli(tokens, msg, cb_ok, cb_error, cb_net_error \\ fn(_v) -> :ok end) do
     Task.Supervisor.start_child(Publit.Messaging.Supervisor, fn() ->
-        resp = @message_api.send_message(tokens, msg)
+        resp = @message_api.send_message_cli(tokens, msg)
+
+        case resp.status do
+          :ok -> cb_ok.(resp)
+          :error -> cb_error.(resp)
+          :network_error -> cb_net_error.(resp)
+        end
+    end)
+  end
+
+  @doc """
+  """
+  #@type send_message_trans(tokens, data, cb_ok, cb_error, cb_net_error) ::
+  def send_message_trans(tokens, msg, cb_ok, cb_error, cb_net_error \\ fn(_v) -> :ok end) do
+    Task.Supervisor.start_child(Publit.Messaging.Supervisor, fn() ->
+        resp = @message_api.send_message_trans(tokens, msg)
 
         case resp.status do
           :ok -> cb_ok.(resp)
