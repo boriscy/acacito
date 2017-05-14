@@ -42,10 +42,7 @@ defmodule Publit.UserAuthenticationTest do
   test "valid_user_transport" do
     user = insert(:user_transport, verified: true)
 
-    assert {:ok, user} = UserAuthentication.valid_user_transport(%{"email" => user.email, "password" => "demo1234"})
-    assert %UserTransport{} = user
-
-    assert {:ok, user} = UserAuthentication.valid_user_transport(%{"email" => user.mobile_number, "password" => "demo1234"})
+    assert {:ok, user} = UserAuthentication.valid_user_transport(%{"mobile_number" => user.mobile_number, "password" => "demo1234"})
     assert %UserTransport{} = user
   end
 end

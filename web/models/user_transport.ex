@@ -4,7 +4,7 @@ defmodule Publit.UserTransport do
   alias Publit.{UserTransport, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
-  @number_reg ~r|^\d{8}$|
+  @number_reg ~r|^591[6,7]\d{7}$|
 
   #defmodule Order do
   #  defstruct [:id, :status]

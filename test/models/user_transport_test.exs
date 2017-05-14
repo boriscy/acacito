@@ -4,7 +4,7 @@ defmodule Publit.UserTransportTest do
   alias Publit.UserTransport
 
   @valid_attrs %{full_name: "Julio Juarez", email: "julio@mail.com",
-   password: "demo1234", mobile_number: "73732655", plate: "TUK123", vehicle: "motorcycle"}
+   password: "demo1234", mobile_number: "59173732655", plate: "TUK123", vehicle: "motorcycle"}
   @invalid_attrs %{email: "to", mobile_number: "22", status: "invalid status"}
 
   describe "create" do
@@ -14,12 +14,12 @@ defmodule Publit.UserTransportTest do
 
       assert user.encrypted_password
       assert user.email == "julio@mail.com"
-      assert user.mobile_number == "73732655"
+      assert user.mobile_number == "59173732655"
       assert user.status == "off"
       assert user.vehicle == "motorcycle"
     end
 
-    test "Error invalid email, blank password" do
+    test "Errors" do
       {:error, cs} = UserTransport.create(@invalid_attrs)
 
       assert cs.valid? == false
@@ -27,6 +27,20 @@ defmodule Publit.UserTransportTest do
       assert cs.errors[:password]
       assert cs.errors[:full_name]
       assert cs.errors[:mobile_number]
+    end
+
+    test "Error mobile_number" do
+      {:error, cs} = UserTransport.create(%{"mobile_number" => ""})
+      assert cs.errors[:mobile_number]
+
+      {:error, cs} = UserTransport.create(%{"mobile_number" => "77112233"})
+      assert cs.errors[:mobile_number]
+
+      {:error, cs} = UserTransport.create(%{"mobile_number" => "59157112233"})
+      assert cs.errors[:mobile_number]
+
+      {:error, cs} = UserTransport.create(%{"mobile_number" => "59167112233"})
+      refute cs.errors[:mobile_number]
     end
 
     test "plate validation" do

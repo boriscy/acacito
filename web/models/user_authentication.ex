@@ -50,14 +50,14 @@ defmodule Publit.UserAuthentication do
   end
 
   def valid_user_transport(params) do
-    email_or_mobile = String.trim(params["email"] || "")
+    mobile_number = String.trim(params["mobile_number"] || "")
 
-    with user <- UserTransport.get_by_email_or_mobile(email_or_mobile),
+    with user <- Repo.get_by(UserTransport, mobile_number: mobile_number),
       {:user, false} <- {:user, is_nil(user)},
       {:pass, true} <- {:pass, valid_password?(user, params["password"])} do
         {:ok, user}
     else
-      {:user, _} -> {:error, changeset(params) |> add_error(:email, "Invalid email")}
+      {:user, _} -> {:error, changeset(params) |> add_error(:mobile_number, "Invalid mobile number")}
       {:pass, _} -> {:error, changeset(params) |> add_error(:password, "Invalid password") }
     end
   end

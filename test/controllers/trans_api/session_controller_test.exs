@@ -15,7 +15,7 @@ defmodule Publit.TransApi.SessionControllerTest do
   describe "POST /trans_api/login" do
     test "OK", %{conn: conn} do
       user()
-      conn = post(conn, "/trans_api/login", %{"login" => %{"email" => "59177123456", "password" => "demo4321"}})
+      conn = post(conn, "/trans_api/login", %{"login" => %{"mobile_number" => "59177123456", "password" => "demo4321"}})
 
        assert conn.status == 200
        json = Poison.decode!(conn.resp_body)
@@ -26,7 +26,7 @@ defmodule Publit.TransApi.SessionControllerTest do
 
     test "ERROR", %{conn: conn} do
       user()
-      conn = post(conn, "/trans_api/login", %{"login" => %{"email" => "59177123456", "password" => "demo1234"}})
+      conn = post(conn, "/trans_api/login", %{"login" => %{"mobile_number" => "59177123456", "password" => "demo1234"}})
 
        assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
     end

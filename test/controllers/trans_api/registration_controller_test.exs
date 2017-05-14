@@ -12,7 +12,7 @@ defmodule Publit.TransApi.RegistrationControllerTest do
     "password"=> "demo1234",
     "vehicle" => "car",
     "plate" => "CAR-123",
-    "mobile_number" => "73732655"}
+    "mobile_number" => "59173732655"}
 
   describe "POST /trans_api/registration" do
     test "OK", %{conn: conn} do
@@ -48,7 +48,7 @@ defmodule Publit.TransApi.RegistrationControllerTest do
         "full_name" => "Amaru Barroso",
         "password"=> "demo1234",
         "vehicle" => "bike",
-        "mobile_number" => "73732655"}
+        "mobile_number" => "59173732655"}
 
       conn = post(conn, "/trans_api/registration", %{"user" => params })
 
