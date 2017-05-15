@@ -1,38 +1,55 @@
-<div class="actions fs120p text-right">
-  <%= form_for Ecto.Changeset.change(@product), product_path(@conn, :update, @product), fn f -> %>
-    <%= checkbox(f, :publish, value: !@product.publish, class: "hidden") %>
-    <%= publish_button(@product) %>
-  <% end %>
+<%= link gettext("Products"), to: product_path(@conn, :index), class: "back" %>
 
-  <%= link gettext("Edit"), to: product_path(@conn, :edit, @product) %>
-  &nbsp;
-  <%= link gettext("Delete"), to: product_path(@conn, :delete, @product), method: :delete,
-  data: [confirm: gettext("Are you sure to delete the product \"%{name}\"?", %{name: @product.name})], class: "text-red" %>
+
+<div class="product-show">
+  <h2 class="w70">
+    <%= @product.name %>
+    <%= published(@product) %>
+  </h2>
+
+  <div class="actions fs120p flex">
+
+    <%= link gettext("Edit"), to: product_path(@conn, :edit, @product) %>
+    &nbsp;
+    <%= link gettext("Delete"), to: product_path(@conn, :delete, @product), method: :delete,
+    data: [confirm: gettext("Are you sure to delete the product \"%{name}\"?", %{name: @product.name})], class: "text-red" %>
+
+    <%= form_for Ecto.Changeset.change(@product), product_path(@conn, :update, @product), [class: "w100 text-right"], fn f -> %>
+      <%= checkbox(f, :publish, value: !@product.publish, class: "hidden") %>
+      <%= publish_button(@product) %>
+    <% end %>
+  </div>
+
+  <img src="<%= img_url(@product, :big) %>" />
+
+  <div>
+    <%= for pv <- @product.variations do %>
+      <div class="price fs120p">
+        <%= pv.name %>
+        <strong><%= pv.price %></strong>
+        bs.
+      </div>
+    <% end %>
+
+    <p class="md"><%= @product.description %></p>
+
+  </div>
+
+  <div>
+    <%= for tag <- @product.tags do %>
+     <span class="tag"><%= tag %></span>
+    <% end %>
+  </div>
+
 </div>
 
-<h2 class="w70">
-  <%= @product.name %>
-  <%= published(@product) %>
-</h2>
+<script>
+document.addEventListener('appLoaded', function() {
+  var md = new Markdown('commonmark', {html: false});
 
-
-<img src="<%= img_url(@product, :big) %>" />
-
-<div>
-  <%= for pv <- @product.variations do %>
-    <div class="price fs120p">
-      <%= pv.name %>
-      <strong><%= pv.price %></strong>
-      bs.
-    </div>
-  <% end %>
-  <p class="description">
-    <%= @product.description %>
-  </p>
-</div>
-
-<div>
-  <%= for tag <- @product.tags do %>
-   <span class="tag"><%= tag %></span>
-  <% end %>
-</div>
+  document.querySelectorAll('.md').forEach(v => {
+    var html = md.render(v.textContent);
+    v.innerHTML = html;
+  })
+});
+</script>

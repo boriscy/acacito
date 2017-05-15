@@ -1,7 +1,10 @@
 <div class="title flex">
   <h2><%= gettext("Products") %></h2>
   <div class="actions">
-    <%= link gettext("New Product"), to: product_path(@conn, :new), class: "btn" %>
+    <%= link to: product_path(@conn, :new), class: "btn" do %>
+      <i class="material-icons">add_circle</i>
+      <%= gettext("New Product") %>
+    <% end %>
   </div>
 </div>
 
