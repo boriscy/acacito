@@ -60,13 +60,8 @@ defmodule Publit.MessageApiDev do
 
     Enum.each(ids, fn(id) -> Publit.Endpoint.broadcast("users:" <> id, "message", msg2) end)
 
-    if Enum.all?(tokens, fn(token) -> String.length(to_string(token)) > 7 end) do
-      body = Poison.decode!(@resp.body)
-      %Publit.MessageApi.Response{status: :ok, resp: @resp, body: body}
-    else
-      body = Poison.decode!(@resp_error.body)
-      %Publit.MessageApi.Response{status: :error, resp: @resp_error, body: body}
-    end
+    body = Poison.decode!(@resp_error.body)
+    %Publit.MessageApi.Response{status: :ok, resp: @resp, body: body}
   end
 
 end

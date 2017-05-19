@@ -167,6 +167,19 @@ export DB_PASSWORD=my_db_password
 export DB_DATABASE=acacito
 export DB_HOSTNAME=localhost
 
+export SECRET_KEY_BASE=asecretkey
+
+export PUBLIT_USERNAME=postgres
+export PUBLIT_PASSWORD=postgres
+export PUBLIT_DATABASE=publit_dev
+export PUBLIT_HOSTNAME=localhost
+
+export PUSHY_SECRET_API_KEY_CLI=pushy_cli
+export PUSHY_SECRET_API_KEY_TRANS=pushy_trans
+
+export NEXMO_API_KEY=nex_api_key
+export NEXMO_API_SECRET=nex_api_secret
+
 MIX_ENV=prod
 ```
 

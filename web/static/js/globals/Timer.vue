@@ -36,6 +36,10 @@ export default {
     reset() {
       clearInterval(this.inter)
       this.count = 0
+    },
+    restart() {
+      this.reset()
+      this.start()
     }
   },
   created() {

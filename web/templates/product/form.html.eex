@@ -73,5 +73,3 @@
   window.organization = <%= raw Poison.encode!(@conn.assigns.current_organization) %>;
   window.vueLoad = 'ProductForm';
 </script>
-<style>
-</style>

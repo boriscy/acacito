@@ -22,12 +22,12 @@
           <span class="help-block">{{readError(prodVar, 'price')}}</span>
         </div>
         <div class="col remove">
-          <button class="btn btn-danger btn-sm remove" @click.prevent="removeLine(prodVar, index)" v-show="index != 0">
-            {{gettext("Remove")}}
+          <button class="btn btn-danger btn-xs remove" @click.prevent="removeLine(prodVar, index)" v-show="index != 0" :title="gettext('Remove')">
+            <i class="material-icons">delete</i>
           </button>
         </div>
       </div>
-      <button class="btn btn-primary" @click.prevent="addLine()">{{gettext("Add line")}}</button>
+      <button class="btn btn-primary btn-sm" @click.prevent="addLine()">{{gettext("Add line")}}</button>
     </div>
   </div>
 </template>

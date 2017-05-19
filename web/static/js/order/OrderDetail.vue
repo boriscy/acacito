@@ -1,6 +1,7 @@
 <template>
-  <Modal ref="modal">
-  <h3 slot="title">{{order.client_name}} <strong>{{order.total | number}}</strong></h3>
+  <Modal ref="modal" class="order-detail-modal">
+    <h3 slot="title">{{order.client_name}} <strong>{{order.total | number}}</strong></h3>
+
 
     <div slot="body" class="order-detail">
       <h4>

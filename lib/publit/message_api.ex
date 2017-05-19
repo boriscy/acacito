@@ -20,7 +20,7 @@ defmodule Publit.MessageApi do
   @messaging_url "https://api.pushy.me/push?api_key=#{System.get_env["PUSHY_SECRET_API_KEY"]}"
 
   def server_key_trans do
-    System.get_env["PUSHY_SECRET_API_KEY"]
+    System.get_env["PUSHY_SECRET_API_KEY_TRANS"]
   end
 
   def server_key_cli do
@@ -41,6 +41,10 @@ defmodule Publit.MessageApi do
   #headers = [{"Authorization", "Basic #{server_key()}"}, {"Content-Type", "application/json"}]
   #@type send_message(list, map) ::
   defp send_message(tokens, msg, server_key) do
+    if System.get_env("MIX_ENV") != "prod" do
+      present_warning_env()
+    end
+
     url = "https://api.pushy.me/push?api_key=#{server_key}"
 
     headers = [{"Content-Type", "application/json"}]
@@ -64,6 +68,14 @@ defmodule Publit.MessageApi do
       HTTPoison.Error ->
         %Publit.MessageApi.Response{status: :network_error, message: "Network error", body: "{}"}
     end
+  end
+
+  defp present_warning_env do
+    [:yellow, "-----------------------------------------------------------------\nWARNING:\nYou aren't running the message_api in ",
+     :bright, "prod",
+     :normal, " mode\n-----------------------------------------------------------------"]
+    |> IO.ANSI.format()
+    |> IO.puts()
   end
 
 end

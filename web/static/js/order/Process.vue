@@ -1,43 +1,3 @@
-<template>
-  <Order :order="order" nextProcess="transport-next">
-    <div slot="transport" class="transport">
-      <div v-if="order.transport.start">
-        <i class="icon-cab"></i>
-        {{timeAgo(order.transport.start)}}
-      </div>
-
-      <div v-if="!order.transport_status">
-        <a class="call" @click="callTransport()">{{gettext("Call Transport")}}</a>
-      </div>
-
-      <div v-show="order.transport_status=='calling'" class="well well-sm">
-        <div>
-          <Timer ref="timer"/>
-          <span class="text-muted">{{gettext('Calling transport')}}</span>
-        </div>
-        <button class="btn btn-danger btn-sm" v-if="timerCount > cancelTimerCount" @click="cancelCall()">{{gettext('Cancel call')}}</button>
-      </div>
-
-      <div v-if="order.transport_status=='responded'" class="transport text-muted">
-        <div>
-          <i class="material-icons" :title="gettext(vehicle)">{{getVehicleIcon(vehicle)}}</i>
-          {{order.transport.transporter_name}}
-        </div>
-        <div>{{timeAgo(order.transport.responded_at)}}</div>
-
-        <div v-if="!trans.picked_at && trans.picked_arrived_at">
-          <strong class="text-red">{{gettext("Transport has arrived")}}</strong>
-        </div>
-      </div>
-
-      <div v-if="order.transport_status=='call_empty'" class="alert alert-warning">
-        <strong>{{gettext("No transport available")}}</strong>
-      </div>
-
-    </div>
-  </Order>
-</template>
-
 <script>
 /********************************************************
  * This is the process order component that uses the Order.vue component and sets the slot `transport`
@@ -100,7 +60,7 @@ export default {
   methods: {
     callTransport() {
       this.$store.dispatch('callTransport', {id: this.order.id})
-      this.$refs.timer.start()
+      this.$refs.timer.restart()
     },
     setTimer() {
       const count = (new Date().getTime() - Date.parse(this.order_call.inserted_at)) / 1000
@@ -145,3 +105,43 @@ export default {
   }
 }
 </script>
+
+<template>
+  <Order :order="order" nextProcess="transport-next">
+    <div slot="transport" class="transport">
+      <div v-if="order.transport.start">
+        <i class="icon-cab"></i>
+        {{timeAgo(order.transport.start)}}
+      </div>
+
+      <div v-if="!order.transport_status">
+        <a class="call" @click="callTransport()">{{gettext("Call Transport")}}</a>
+      </div>
+
+      <div v-show="order.transport_status=='calling'" class="well well-sm">
+        <div>
+          <Timer ref="timer"/>
+          <span class="text-muted">{{gettext('Calling transport')}}</span>
+        </div>
+        <button class="btn btn-danger btn-sm" v-if="timerCount > cancelTimerCount" @click="cancelCall()">{{gettext('Cancel call')}}</button>
+      </div>
+
+      <div v-if="order.transport_status=='responded'" class="transport text-muted">
+        <div>
+          <i class="material-icons" :title="gettext(vehicle)">{{getVehicleIcon(vehicle)}}</i>
+          {{order.transport.transporter_name}}
+        </div>
+        <div>{{timeAgo(order.transport.responded_at)}}</div>
+
+        <div v-if="!trans.picked_at && trans.picked_arrived_at">
+          <strong class="text-red">{{gettext("Transport has arrived")}}</strong>
+        </div>
+      </div>
+
+      <div v-if="order.transport_status=='call_empty'" class="alert alert-warning">
+        <strong>{{gettext("No transport available")}}</strong>
+      </div>
+
+    </div>
+  </Order>
+</template>

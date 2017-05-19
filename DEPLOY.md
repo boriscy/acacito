@@ -12,7 +12,7 @@ MIX_ENV=prod mix release --env=prod
 rm -r ~/tmp
 mkdir ~/tmp
 
-cp  _build/prod/rel/publit/releases/0.9.7/publit.tar.gz ~/tmp/
+cp  _build/prod/rel/publit/releases/0.9.9/publit.tar.gz ~/tmp/
 
 cd /home/deploy/tmp/
 tar -xzf publit.tar.gz

@@ -113,3 +113,21 @@ pre_erlang_clean_compile() {
   "
 }
 ```
+
+
+425b5ebe-0299-440f-9446-42f18fded63d | b66ba320-d01a-433a-958e-7a77f9cf23b7 | {324489d4-c482-4ef5-a06c-91ed57914d59} | error  | {"body": "{\"error\":\"Please supply the device tokens as an array of strings.\"}", "headers": {"Date": "Tue, 16 May 2017 11:51:36 GMT", "Vary": "Accept-Encoding", "Server": "nginx/1.8.0", "Connection": "keep-alive", "Content-Type": "application/json; charset=utf-8", "Content-Length": "67"}, "status_code": 400} | 2017-05-16 11:51:35.894032 | 2017-05-16 11:51:36.249101
+
+```
+cb_ok = fn(resp) -> IO.inspect(resp) end
+cb_error = fn(resp) -> IO.puts "Error" end
+
+msg = %{
+  message: "Hola Boris desde local",
+  data: %{
+    status: "calling",
+    order_call: %{name: "JEJEJE"}
+  }
+}
+
+{:ok, pid} = Publit.MessagingService.send_message_trans(tokens, msg, cb_ok, cb_error)
+```
