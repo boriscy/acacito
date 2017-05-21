@@ -2,6 +2,8 @@ defmodule Publit.Order.Query do
   import Ecto.Query
   alias Publit.{Order, Repo}
 
+  @limit 25
+
   # Query methods
   @doc """
   Returns the active orders ["new", "process", "transport"] for the current organization
@@ -19,7 +21,7 @@ defmodule Publit.Order.Query do
   end
 
   def user_orders(user_client_id) do
-    q = from o in Order, where: o.user_client_id == ^user_client_id, order_by: [desc: o.inserted_at]
+    q = from o in Order, where: o.user_client_id == ^user_client_id, order_by: [desc: o.inserted_at], limit: @limit
 
     Repo.all(q)
   end

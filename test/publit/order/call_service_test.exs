@@ -47,8 +47,22 @@ defmodule Publit.Order.CallServiceTest do
 
       assert data[:tokens] |> Enum.sort() == ["devtoken3456789", "devtokentrans1234"]
       assert data[:msg][:data][:order_call_id] == oc.id
+      assert data[:server_key] == "server_key_trans"
+
       ord = data[:msg][:data][:order]
       assert ord[:id] == order.id
+      assert ord[:status] == "transport"
+
+
+      data = Publit.MessageApiMock.get_data() |> List.last()
+
+      assert data.msg.message == gettext("Your order has transportation")
+      assert data.msg.data.status == "order:updated"
+      assert data[:server_key] == "server_key_cli"
+
+      ord = data[:msg][:data][:order]
+      assert ord[:id] == order.id
+      assert ord[:status] == "transport"
     end
 
     test "empty" do

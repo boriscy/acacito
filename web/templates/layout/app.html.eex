@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Boris Barroso">
     <meta name="csrf" content="<%= Plug.CSRFProtection.get_csrf_token() %>">
 
     <title>Acacito</title>

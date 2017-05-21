@@ -8,7 +8,7 @@ defmodule Publit.ClientApi.OrderController do
   def index(conn, _params) do
     user_id = conn.assigns.current_user_client.id
 
-    render(conn, "index.json", orders: Order.Query.user_active_orders(user_id))
+    render(conn, "index.json", orders: Order.Query.user_orders(user_id))
   end
 
   # GET /api/orders/:id

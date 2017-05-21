@@ -19,7 +19,8 @@ msgstr "Dirección"
 msgid "Create Product"
 msgstr "Crear Producto"
 
-#: web/templates/product/index.html.eex:29 web/templates/product/show.html.eex:7
+#: web/templates/product/index.html.eex:32
+#: web/templates/product/show.html.eex:12
 msgid "Edit"
 msgstr "Editar"
 
@@ -53,7 +54,7 @@ msgstr "Contraseña"
 
 #: web/templates/layout/app_full.html.eex:22
 #: web/templates/layout/navigation.html.eex:13
-#: web/templates/product/index.html.eex:2
+#: web/templates/product/index.html.eex:2 web/templates/product/show.html.eex:1
 msgid "Products"
 msgstr "Productos"
 
@@ -87,7 +88,7 @@ msgstr "Ingreso datos inválidos por favor corrija los errores"
 msgid "Description"
 msgstr "Descripción"
 
-#: web/templates/product/index.html.eex:4
+#: web/templates/product/index.html.eex:6
 msgid "New Product"
 msgstr "Nuevo Producto"
 
@@ -108,12 +109,13 @@ msgstr "Producto actualizado."
 msgid "There are errors in the product."
 msgstr "Hay errores en el producto."
 
-#: web/templates/product/index.html.eex:32
-#: web/templates/product/show.html.eex:10
+#: web/templates/product/index.html.eex:35
+#: web/templates/product/show.html.eex:15
 msgid "Are you sure to delete the product \"%{name}\"?"
 msgstr "Esta segur@ de eliminar el producto \"%{name}\"?"
 
-#: web/templates/product/index.html.eex:31 web/templates/product/show.html.eex:9
+#: web/templates/product/index.html.eex:34
+#: web/templates/product/show.html.eex:14
 msgid "Delete"
 msgstr "Borrar"
 
@@ -400,7 +402,7 @@ msgstr "Debe seleccionar su posición"
 msgid "Yor order will be processed"
 msgstr "Su pedido sera preparado"
 
-#: lib/publit/order/status_service.ex:18
+#: lib/publit/order/call_service.ex:74 lib/publit/order/status_service.ex:18
 msgid "Your order has transportation"
 msgstr "Su pedido tiene transporte"
 

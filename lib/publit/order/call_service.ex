@@ -27,7 +27,7 @@ defmodule Publit.Order.CallService do
 
         case Repo.transaction(multi) do
           {:ok, res} ->
-            {:ok, pid} = send_message(oc, order)
+            {:ok, pid} = send_message(oc, res.order)
             {:ok, res.order, pid}
           {:error, :order, cs, _} ->
             {:error, :order, cs}
@@ -69,6 +69,17 @@ defmodule Publit.Order.CallService do
     }
 
     Publit.MessagingService.send_message_trans(tokens, msg, cb_ok, cb_err)
+    order = Repo.preload(order, :user_client)
+    token = order.user_client.extra_data["device_token"]
+    msg = %{
+      message: gettext("Your order has transportation"),
+      data: %{
+        status: "order:updated",
+        order: Publit.TransApi.OrderView.to_api(order)
+      }
+    }
+
+    Publit.MessagingService.send_message_cli([token], msg, cb_ok, cb_err)
   end
 
   defp set_user_transport_cs(order, ut) do
