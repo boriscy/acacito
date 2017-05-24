@@ -24,6 +24,8 @@ defmodule Publit.Order.CallServiceTest do
 
       assert order.transport.transporter_id == ut.id
       assert order.transport.transporter_name == ut.full_name
+      assert order.transport.mobile_number == ut.mobile_number
+
       assert order.transport.final_price == Decimal.new("7")
       assert order.transport.responded_at
       assert order.transport.vehicle == "motorcycle"

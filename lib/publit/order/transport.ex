@@ -4,6 +4,7 @@ defmodule Publit.Order.Transport do
   embedded_schema do
     field :transporter_id, :binary
     field :transporter_name, :string
+    field :mobile_number, :string
     field :vehicle, :string
     field :plate, :string
     field :calculated_price, :decimal
@@ -26,7 +27,7 @@ defmodule Publit.Order.Transport do
 
   def changeset_update(ot, params) do
     ot
-    |> cast(params, [:transporter_id, :transporter_name, :final_price, :plate, :vehicle])
+    |> cast(params, [:transporter_id, :transporter_name, :mobile_number, :final_price, :plate, :vehicle])
     |> validate_required([:transporter_id, :transporter_name, :final_price, :vehicle])
     |> validate_number(:final_price, greater_than_or_equal_to: 0)
     |> put_change(:responded_at, DateTime.utc_now())

@@ -40,7 +40,7 @@ defmodule Publit.Order.CallService do
   #"""
   defp set_order_cs(order, ut, %{final_price: fp}) do
     params = %{transport: %{id: order.transport.id, transporter_id: ut.id, final_price: fp, transporter_name: ut.full_name,
-               vehicle: ut.vehicle, plate: ut.plate} }
+               vehicle: ut.vehicle, plate: ut.plate, mobile_number: ut.mobile_number} }
 
     order
     |> cast(params, [])
