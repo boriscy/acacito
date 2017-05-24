@@ -20,4 +20,9 @@ defmodule Publit.UserChannel do
     Publit.Endpoint.broadcast("users:" <> order.user_client_id, status, order)
   end
 
+  def broadcast_position(user, status \\ "position") do
+    u_pos = Publit.TransApi.PositionView.encode_user_pos(user)
+    Publit.Endpoint.broadcast("users:" <> user.id, status, u_pos)
+  end
+
 end

@@ -62,7 +62,9 @@ defmodule Publit.PosService do
       end
     end)
 
-    Repo.all(from o in Order, where: o.id in ^order_ids) |> Repo.preload(:user_client)
+    (from o in Order, where: o.id in ^order_ids and o.status in ^["transport", "transporting"])
+    |> Repo.all()
+    |> Repo.preload(:user_client)
   end
 
   defp set_order_changeset(order, messaging, pos) do

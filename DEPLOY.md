@@ -13,7 +13,7 @@ rm -r ~/tmp
 mkdir ~/tmp
 
 # Careful with the version
-cp  _build/prod/rel/publit/releases/0.9.9/publit.tar.gz ~/tmp/
+cp  _build/prod/rel/publit/releases/0.9.11/publit.tar.gz ~/tmp/
 
 cd /home/deploy/tmp/
 tar -xzf publit.tar.gz

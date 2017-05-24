@@ -1,5 +1,6 @@
 defmodule Publit.TransApi.PositionControllerTest do
   use Publit.ConnCase
+  import Mock
 
   setup do
     conn = build_conn()
@@ -9,7 +10,10 @@ defmodule Publit.TransApi.PositionControllerTest do
   end
 
   describe "PUT /trans_api/position" do
-    test "OK", %{conn: conn} do
+    test_with_mock "OK", %{conn: conn}, Publit.UserChannel, [],
+      [broadcast_position: fn(u) ->
+        assert %Publit.UserTransport{} = u
+      end] do
 
       data = %{"altitude" => 1687, "pos" => %{"type" => "Point",
         "coordinates" => [-17.8145819, -63.1560853]},  "speed" => 23, "status" => "listen"}
@@ -18,6 +22,7 @@ defmodule Publit.TransApi.PositionControllerTest do
 
       json = Poison.decode!(conn.resp_body)
       user = conn.assigns[:current_user_transport]
+      #assert called Publit.UserChannel.broadcast_position(:_, "position")
 
       assert json["user"]["id"] == user.id
       assert json["user"]["mobile_number"] == user.mobile_number

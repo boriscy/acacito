@@ -10,8 +10,11 @@ defmodule Publit.TransApi.PositionController do
   # PUT /trans_api/position
   def position(conn, %{"position" => position}) do
     ut = conn.assigns.current_user_transport
+
     case PosService.update_pos(ut, position) do
       {:ok, user} ->
+        Publit.UserChannel.broadcast_position(user)
+
         render(conn, "position.json", user: user)
       {:error, cs} ->
         conn

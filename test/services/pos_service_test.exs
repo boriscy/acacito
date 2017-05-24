@@ -51,6 +51,7 @@ defmodule PublitPosServiceTest do
   describe "update position and send message if it has orders" do
     test_with_mock "OK near_org", Publit.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
+
       org = insert(:organization)
       uc = insert(:user_client)
       order = create_order_only(uc, org, %{status: "transport"})
@@ -58,7 +59,7 @@ defmodule PublitPosServiceTest do
       {lng, lat} = order.organization_pos.coordinates
 
       ut = insert(:user_transport, %{status: "order", pos: %Geo.Point{coordinates: {lng + 0.05, lat + 0.05}, srid: nil},
-                orders: [%{"id" => order.id, "status" => "transport"}] })
+                orders: [%{"id" => order.id, "status" => "transporting"}] })
 
       pos = %{"coordinates" => [lng + 0.0001, lat - 0.0001], "type" => "Point"}
 
@@ -121,6 +122,12 @@ defmodule PublitPosServiceTest do
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
 
       Process.sleep(100)
+
+      m = Agent.get(:api_mock, fn(v) -> v end) |> List.first()
+
+      assert m.msg.message == gettext("Your order is arriving")
+      assert m.msg.status == "order:near_client"
+      assert m.server_key == "server_key_cli"
       ord = Repo.get(Order, order.id)
 
       assert ord.transport.delivered_arrived_at
