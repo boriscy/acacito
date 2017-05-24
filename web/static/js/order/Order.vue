@@ -26,9 +26,10 @@
         <div class="currency">
           <small>{{currency()}}</small> {{ formatNumber(order.total) }}
         </div>
-        <a v-if="next" @click="moveNext()" class="next" v-bind:class="nextStatus(order.status)">
+
+        <button v-if="next" @click="moveNext()" class="next" :class="nextStatus(order.status)" :disabled="order.loading">
           <i class="material-icons">forward</i>
-        </a>
+        </button>
       </div>
     </div>
 

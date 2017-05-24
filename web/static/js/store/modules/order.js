@@ -17,7 +17,7 @@ const getTransportStatus = (order) => {
     obj = {transport_status: null, responded_at: null}
   }
 
-  return obj
+  return Object.assign(obj, {loading: false})
 }
 
 const mutations = {
@@ -80,6 +80,14 @@ const mutations = {
 
     if(idx > -1) {
       Object.assign(state.orders[idx], {order_calls: [], transport_status: null})
+    }
+  },
+  [types.ORDER_LOADING] (state, {val, order_id}) {
+    console.log();
+    const idx = state.orders.findIndex((ord) => { return ord.id == order_id})
+
+    if(idx > -1) {
+      Object.assign(state.orders[idx], {loading: val})
     }
   }
 }

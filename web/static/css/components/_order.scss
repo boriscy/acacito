@@ -134,12 +134,31 @@ body{
 
   .next {
     border-radius: 50%;
+    border: none;
     display: inline-block;
     width: 35px;
     height: 35px;
     cursor: pointer;
     line-height: 1.15;
     position: relative;
+    color: white;
+    background: $green;
+    &:hover{
+      background: darken($green, 10%);
+    }
+    i {
+      position: absolute;
+      left: 0.15em;
+      top: 0.09em;
+      font-size: 2em;
+    }
+    &:disabled {
+      background: lighten($green, 20%);
+      i {
+        color: $grayLighter;
+      }
+    }
+    /*
     &.new {
       background: $new;
       color: white;
@@ -157,12 +176,8 @@ body{
       background: $delivered;
       color: white;
     }
-    i {
-      position: absolute;
-      left: 0.1em;
-      top: 0.07em;
-      font-size: 2.2em;
-    }
+    */
+
   }
 
 }
