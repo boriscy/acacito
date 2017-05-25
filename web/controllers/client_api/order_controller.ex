@@ -11,7 +11,7 @@ defmodule Publit.ClientApi.OrderController do
     render(conn, "index.json", orders: Order.Query.user_orders(user_id))
   end
 
-  # GET /api/orders/:id
+  # GET /client_api/orders/:id
   def show(conn, %{"id" => id}) do
     case (Repo.get(Order, id) |> Repo.preload(:organization)) do
       nil ->
