@@ -85,5 +85,12 @@ msgstr "debe ser igual a %{number}"
 msgid "Invalid email"
 msgstr "Email inválido"
 
+#: web/models/user_authentication.ex:44
+msgid "Invalid email or mobile number"
+msgstr "Email or número móvil inválido"
+
 msgid "Invalid password"
 msgstr "Contraseña inválida"
+
+msgid "Invalid mobile number"
+msgstr  "Número móvil nválido"

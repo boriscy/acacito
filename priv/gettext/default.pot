@@ -302,11 +302,11 @@ msgstr ""
 msgid "Transport has arrived"
 msgstr ""
 
-#: web/services/pos_service.ex:97
+#: web/services/pos_service.ex:99
 msgid "Transport near"
 msgstr ""
 
-#: web/services/pos_service.ex:97
+#: web/services/pos_service.ex:99
 msgid "Your order is arriving"
 msgstr ""
 
@@ -403,7 +403,7 @@ msgstr ""
 msgid "Yor order will be processed"
 msgstr ""
 
-#: lib/publit/order/call_service.ex:74 lib/publit/order/status_service.ex:18
+#: lib/publit/order/call_service.ex:75 lib/publit/order/status_service.ex:18
 msgid "Your order has transportation"
 msgstr ""
 
@@ -430,4 +430,8 @@ msgstr ""
 #: web/templates/layout/translations.html.eex:26
 #: web/templates/registration/index.html.eex:29
 msgid "Mobile number"
+msgstr ""
+
+#: web/models/user_authentication.ex:44
+msgid "Invalid email or mobile number"
 msgstr ""

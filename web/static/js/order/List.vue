@@ -2,7 +2,7 @@
   <div class="orders">
     <h3 class="title">
       {{gettext(title)}}
-      <span class="badge" v-bind:class="cssClass">{{orders.length}}</span>
+      <span class="badge order-status" v-bind:class="cssClass">{{orders.length}}</span>
     </h3>
 
     <div v-for="order in orders">

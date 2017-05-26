@@ -301,11 +301,11 @@ msgstr "Nuevo pedido de %{org}"
 msgid "Transport has arrived"
 msgstr "Su transporte ya llego"
 
-#: web/services/pos_service.ex:97
+#: web/services/pos_service.ex:99
 msgid "Transport near"
 msgstr "Su transporte esta cerca"
 
-#: web/services/pos_service.ex:97
+#: web/services/pos_service.ex:99
 msgid "Your order is arriving"
 msgstr "Su transporte esta llegando"
 
@@ -402,7 +402,7 @@ msgstr "Debe seleccionar su posición"
 msgid "Yor order will be processed"
 msgstr "Su pedido sera preparado"
 
-#: lib/publit/order/call_service.ex:74 lib/publit/order/status_service.ex:18
+#: lib/publit/order/call_service.ex:75 lib/publit/order/status_service.ex:18
 msgid "Your order has transportation"
 msgstr "Su pedido tiene transporte"
 

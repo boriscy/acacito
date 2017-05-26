@@ -20,7 +20,7 @@
       </ProcessOrders>
 
       <TransportOrders :orders="transportOrders" title="Transporting Orders"
-        css-class="transport" v-bind:orderComp="processComp">
+        css-class="transporting" v-bind:orderComp="processComp">
       </TransportOrders>
     </div>
   </div>

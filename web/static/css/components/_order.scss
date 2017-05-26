@@ -158,45 +158,30 @@ body{
         color: $grayLighter;
       }
     }
-    /*
-    &.new {
-      background: $new;
-      color: white;
-    }
-    &.process,
-    &.transport {
-      background: $process;
-      color: white;
-    }
-    &.transporting {
-      background: $transport;
-      color: white;
-    }
-    &.delivered {
-      background: $delivered;
-      color: white;
-    }
-    */
-
   }
 
 }
 
-.badge.new {
-  background: $new;
+.order-status {
   color: white;
-}
-.badge.process {
-  background: $process;
-  color: $white;
-}
-.badge.transport {
-  background: $transport;
-  color: white;
-}
-badge.delivered {
-  background: $delivered;
-  color: white;
+  &.new {
+    background: $new;
+  }
+  &.process {
+    background: $process;
+  }
+  &.transport {
+    background: $transport;
+  }
+  &.transporting {
+    background: $transporting;
+  }
+  &.delivered {
+    background: $delivered;
+  }
+  &.nulled {
+    background: $nulled;
+  }
 }
 
 ////////////////////////////////////////////////////////
