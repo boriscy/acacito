@@ -119,7 +119,6 @@ defmodule Publit.Order.CallTest do
       org = insert(:organization)
 
       ord = create_order(uc, org)
-
       {:ok, oc} = Repo.insert(%Order.Call{transport_ids: [Ecto.UUID.generate()], status: "new", order_id: ord.id })
       oc = Map.put(oc, :order, ord)
 

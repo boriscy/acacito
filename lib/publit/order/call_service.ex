@@ -89,7 +89,7 @@ defmodule Publit.Order.CallService do
   end
 
   defp log_error(resp) do
-    IO.inspect(resp)
+    IO.inspect(resp, label: "Log error")
   end
 
 end

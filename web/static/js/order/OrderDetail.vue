@@ -14,6 +14,10 @@
         <span class="text-gray">{{ gettext("Address") }}:</span>
         {{order.client_address}}
       </p>
+      <p>
+        <span class="text-gray">{{ gettext("More details") }}:</span>
+        {{order.other_details}}
+      </p>
 
       <div v-for="det in order.details" class="flex details">
 

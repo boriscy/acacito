@@ -18,6 +18,7 @@ window.translations = {
   "Latitude": "<%= gettext("Latitude") %>",
   "Longitude": "<%= gettext("Longitude") %>",
   "Medium": "<%= gettext("Medium") %>",
+  "More details": "<%= gettext("More details") %>",
   "New Orders": "<%= gettext("New Orders") %>",
   "No transport available": "<%= gettext("No transport available") %>",
   "Obtain position using GPS": "<%= gettext("Obtain position using GPS") %>",

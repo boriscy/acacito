@@ -11,7 +11,7 @@ defmodule Publit.Support.Order do
 
     params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
     "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"}, "client_name" => user_client.full_name,
-    "client_address" => "Los Nuevos Pinos, B100 7", "comments" => "Cambio de 200BS.",
+    "client_address" => "Los Nuevos Pinos, B100 7", "other_details" => "Cambio de 200BS.",
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
         "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
@@ -28,7 +28,7 @@ defmodule Publit.Support.Order do
     lng = lng + 0.0001
     lat = lat + 0.0001
     {:ok, order} = Repo.insert(%Order{
-      organization_id: org.id, organization_pos: org.pos, organization_name: org.name,
+      organization_id: org.id, organization_pos: org.pos, organization_name: org.name, other_details: "Another detail",
       user_client_id: user_client.id, client_pos: %Geo.Point{coordinates: {lng, lat}, srid: nil}, client_name: user_client.full_name,
       transport: %Order.Transport{calculated_price: Decimal.new("5")},
       details: [

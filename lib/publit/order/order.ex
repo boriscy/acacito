@@ -20,7 +20,8 @@ defmodule Publit.Order do
     field :organization_name, :string
     field :organization_address, :string
     field :organization_number, :string
-    field :comments, :string
+    field :other_details, :string
+    field :comment_types, {:array, :string}, default: []
 
     embeds_one :transport, Order.Transport
     embeds_many :details, Order.Detail
@@ -51,7 +52,7 @@ defmodule Publit.Order do
   """
   def create(params, user_client) do
     cs = %Order{}
-    |> cast(params, [:client_pos, :currency, :organization_id, :client_address, :comments])
+    |> cast(params, [:client_pos, :currency, :organization_id, :client_address, :other_details])
     |> validate_required([:details, :client_pos, :currency, :client_address])
     |> validate_length(:client_address, min: 8)
     |> cast_embed(:details)

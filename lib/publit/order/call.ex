@@ -6,7 +6,7 @@ defmodule Publit.Order.Call do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "order_calls" do
-    field :transport_ids, Publit.Array, default: []
+    field :transport_ids, {:array, :string}, default: []
     field :status, :string, default: "new"
     field :resp, :map
 
