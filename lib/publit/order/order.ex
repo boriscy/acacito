@@ -1,7 +1,7 @@
 defmodule Publit.Order do
   use Publit.Web, :model
   alias Publit.{Order, UserClient, UserTransport, Product, Organization, Repo}
-  alias Ecto.Multi
+  #alias Ecto.Multi
   import Ecto.Query
   import Publit.Gettext
 
@@ -21,7 +21,7 @@ defmodule Publit.Order do
     field :organization_address, :string
     field :organization_number, :string
     field :other_details, :string
-    field :comment_types, {:array, :string}, default: []
+    field :comment_details, :map, default: %{}
 
     embeds_one :transport, Order.Transport
     embeds_many :details, Order.Detail
