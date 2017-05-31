@@ -84,6 +84,8 @@ defmodule Publit.Router do
       get "/user_transport_position/:id", PositionController, :user_transport
 
       resources "/orders", OrderController
+
+      resources "/comments", CommentController
     end
   end
 

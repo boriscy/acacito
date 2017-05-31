@@ -10,7 +10,10 @@ defmodule Publit.Order.CommentTest do
       order = create_order_only(cli, org)
       params = %{"comment" => "My cli comment", "rating" => 3, "comment_type" => "cli_org"}
 
-      assert {:ok, order, comment} = Order.Comment.create(order, cli, params)
+      assert {:ok, res} = Order.Comment.create(order, cli, params)
+
+      comment = res.comment
+      order = res.order
 
       assert order.comment_details["cli_org"]
       assert order.comment_details["cli_org_rating"] == 3
@@ -26,7 +29,9 @@ defmodule Publit.Order.CommentTest do
       order = create_order_only(cli, org, %{user_transport_id: trans.id})
       params = %{"comment" => "My cli comment", "rating" => 4, "comment_type" => "cli_trans"}
 
-      assert {:ok, order, comment} = Order.Comment.create(order, cli, params)
+      assert {:ok, res} = Order.Comment.create(order, cli, params)
+      comment = res.comment
+      order = res.order
 
       assert order.comment_details["cli_trans"]
       assert order.comment_details["cli_trans_rating"] == 4
@@ -43,7 +48,9 @@ defmodule Publit.Order.CommentTest do
       order = create_order_only(cli, org)
       params = %{"comment" => "My org comment", "rating" => 4, "comment_type" => "org_cli"}
 
-      assert {:ok, order, comment} = Order.Comment.create(order, org, params)
+      assert {:ok, res} = Order.Comment.create(order, org, params)
+      comment = res.comment
+      order = res.order
 
       assert order.comment_details["org_cli"]
       assert order.comment_details["org_cli_rating"] == 4
@@ -59,7 +66,9 @@ defmodule Publit.Order.CommentTest do
       order = create_order_only(cli, org, %{user_transport_id: trans.id})
       params = %{"comment" => "My org comment", "rating" => 4, "comment_type" => "org_trans"}
 
-      assert {:ok, order, comment} = Order.Comment.create(order, org, params)
+      assert {:ok, res} = Order.Comment.create(order, org, params)
+      comment = res.comment
+      order = res.order
 
       assert order.comment_details["org_trans"]
       assert order.comment_details["org_trans_rating"] == 4
@@ -77,7 +86,9 @@ defmodule Publit.Order.CommentTest do
       order = create_order_only(cli, org, %{user_transport_id: trans.id})
       params = %{"comment" => "My trans comment", "rating" => 4, "comment_type" => "trans_org"}
 
-      assert {:ok, order, comment} = Order.Comment.create(order, trans, params)
+      assert {:ok, res} = Order.Comment.create(order, trans, params)
+      comment = res.comment
+      order = res.order
 
       assert order.comment_details["trans_org"]
       assert order.comment_details["trans_org_rating"] == 4
@@ -93,7 +104,9 @@ defmodule Publit.Order.CommentTest do
       order = create_order_only(cli, org, %{user_transport_id: trans.id})
       params = %{"comment" => "My trans comment", "rating" => 3, "comment_type" => "trans_cli"}
 
-      assert {:ok, order, comment} = Order.Comment.create(order, trans, params)
+      assert {:ok, res} = Order.Comment.create(order, trans, params)
+      comment = res.comment
+      order = res.order
 
       assert order.comment_details["trans_cli"]
       assert order.comment_details["trans_cli_rating"] == 3

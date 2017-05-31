@@ -46,7 +46,7 @@ defmodule Publit.Order.Comment do
 
     case Repo.transaction(multi) do
       {:ok, res} ->
-        {:ok, res.order, res.comment}
+        {:ok, res}
       {:erro, res} -> {:error, res.order}
     end
   end
