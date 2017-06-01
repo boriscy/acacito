@@ -5,6 +5,14 @@ defmodule Publit.ClientApi.CommentView do
     %{comment: to_api(comment), order: Publit.OrderView.to_api(order)}
   end
 
+  def render("show.json", %{comment: comment}) do
+    %{comment: to_api(comment)}
+  end
+
+  def render("error.json", %{error: error}) do
+    %{error: error}
+  end
+
   def to_api(comment) do
     comment |> Map.drop([:__meta__, :__struct__, :order])
   end

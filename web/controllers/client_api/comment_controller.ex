@@ -3,23 +3,15 @@ defmodule Publit.ClientApi.CommentController do
   plug :scrub_params, "comment" when action in [:create]
   alias Publit.{Order}
 
-
-  # GET /client_api/orders
-  #def index(conn, _params) do
-  #  user_id = conn.assigns.current_user_client.id
-
-  #  render(conn, "index.json", orders: Order.Query.user_orders(user_id))
-  #end
-
   # GET /client_api/orders/:id
-  #def show(conn, %{"id" => id}) do
-  #  case (Repo.get(Order, id) |> Repo.preload(:organization)) do
-  #    nil ->
-  #      render_not_found(conn)
-  #    order ->
-  #      render(conn, "show.json", order: order)
-  #  end
-  #end
+  def show(conn, %{"id" => id}) do
+    case Repo.get(Comment, id) do
+      nil ->
+        render_not_found(conn)
+      comment ->
+        render(conn, "show.json", comment: comment)
+    end
+  end
 
   # POST /client_api/comment/:order_id
   def create(conn, %{"comment" => comment_params}) do
@@ -33,7 +25,9 @@ defmodule Publit.ClientApi.CommentController do
           {:ok, res} ->
             render(conn, "show.json", comment: res.comment, order: res.order)
           {:error, err} ->
-            IO.inspect err
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render("error.json", error: err)
         end
     end
   end

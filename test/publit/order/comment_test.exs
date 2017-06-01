@@ -1,8 +1,21 @@
 defmodule Publit.Order.CommentTest do
   use Publit.ModelCase
   alias Publit.{Order}
+  import Publit.Gettext
 
   describe "create client" do
+    test "errors" do
+      org = insert(:organization)
+      cli = insert(:user_client)
+
+      order = create_order_only(cli, org)
+      params = %{"comment" => "My cli comment", "rating" => nil, "comment_type" => "cli_org"}
+
+      assert {:error, error} = Order.Comment.create(order, cli, params)
+
+      assert error == gettext("Invalid rating")
+    end
+
     test "cli_org" do
       org = insert(:organization)
       cli = insert(:user_client)

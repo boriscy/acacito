@@ -1,6 +1,7 @@
 defmodule Publit.ClientApi.OrderControllerTest do
   use Publit.ConnCase
   require Publit.Gettext
+  import Publit.Gettext
 
   setup do
     user_client = insert(:user_client)
@@ -36,6 +37,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
 
     test "OK trans", %{conn: conn, user_client: uc, org: org} do
       order = create_order_only(uc, org, %{status: "delivered"})
+      conn2 = conn
 
       params = %{"comment" => %{"order_id" => order.id, "rating" => 3,
         "comment_type" => "cli_trans", "comment" => "This is a trans comment"}}
@@ -53,18 +55,16 @@ defmodule Publit.ClientApi.OrderControllerTest do
       order = json["order"]
       assert order["comment_details"]["cli_trans"]
       assert order["comment_details"]["cli_trans_rating"] == 3
+
+      conn = post(conn2, "/client_api/comments", params)
+
+      assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
+
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["error"] == gettext("Comment done")
     end
 
-    #test "unauthorized" do
-    #  conn = build_conn() |> put_req_header("user_token", Phoenix.Token.sign(Endpoint, salt(), Ecto.UUID.generate()))
-
-    #  conn = post(conn, "/client_api/orders", %{"order" => %{}})
-
-    #  assert conn.status == Plug.Conn.Status.code(:unauthorized)
-    #  json = Poison.decode!(conn.resp_body)
-
-    #  assert json["message"] == Publit.Gettext.gettext("You need to login")
-    #end
   end
 
 end
