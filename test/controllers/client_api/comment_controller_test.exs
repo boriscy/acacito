@@ -14,7 +14,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
   defp salt, do: Application.get_env(:publit, Publit.Endpoint)[:secret_key_base]
 
   describe "POST /client_api/comments" do
-    test "OK", %{conn: conn, user_client: uc, org: org} do
+    test "OK cli", %{conn: conn, user_client: uc, org: org} do
       order = create_order_only(uc, org, %{status: "delivered"})
 
       params = %{"comment" => %{"order_id" => order.id, "rating" => 4,
@@ -43,7 +43,6 @@ defmodule Publit.ClientApi.OrderControllerTest do
         "comment_type" => "cli_trans", "comment" => "This is a trans comment"}}
 
       conn = post(conn, "/client_api/comments", params)
-
       json = Poison.decode!(conn.resp_body)
       assert conn.status == 200
 
@@ -63,6 +62,32 @@ defmodule Publit.ClientApi.OrderControllerTest do
       json = Poison.decode!(conn.resp_body)
 
       assert json["error"] == gettext("Comment done")
+    end
+
+    test "not found", %{conn: conn} do
+      params = %{"comment" => %{"order_id" => Ecto.UUID.generate(), "rating" => 3,
+        "comment_type" => "cli_trans", "comment" => "This is a trans comment"}}
+
+      conn = post(conn, "/client_api/comments", params)
+
+      assert conn.status == 404
+    end
+
+    test "comments", %{conn: conn, user_client: uc, org: org} do
+      u_trans = insert(:user_transport)
+
+      order = create_order_only(uc, org, %{status: "delivered", user_transport_id: u_trans.id})
+      c_cli = insert(:comment, %{order_id: order.id, comment_type: "cli_org", from_id: uc.id, to_id: org.id})
+      c_trans = insert(:comment, %{order_id: order.id, comment_type: "cli_trans", from_id: uc.id, to_id: u_trans.id})
+
+      conn = get(conn, "/client_api/comments/#{order.id}/comments")
+
+      assert conn.status == 200
+
+      json = Poison.decode!(conn.resp_body)
+
+      assert Enum.count(json["comments"]) == 2
+      assert Enum.map(json["comments"], fn(v) -> v["order_id"] end) == [order.id, order.id]
     end
 
   end

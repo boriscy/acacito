@@ -4,13 +4,10 @@ defmodule Publit.ClientApi.CommentController do
   alias Publit.{Order}
 
   # GET /client_api/orders/:id
-  def show(conn, %{"id" => id}) do
-    case Repo.get(Comment, id) do
-      nil ->
-        render_not_found(conn)
-      comment ->
-        render(conn, "show.json", comment: comment)
-    end
+  def comments(conn, %{"order_id" => order_id}) do
+    q = from c in Order.Comment, where: c.order_id == ^order_id and c.comment_type in ^["cli_org", "cli_trans"]
+
+    render(conn, "comments.json", comments: Repo.all(q))
   end
 
   # POST /client_api/comment/:order_id
@@ -37,7 +34,7 @@ defmodule Publit.ClientApi.CommentController do
   defp render_not_found(conn, args \\ %{msg: gettext("Could not find the order")}) do
     conn
     |> put_status(:not_found)
-    |> render("not_found.json", msg: args.msg)
+    |> render(Publit.TransApi.OrderView, "not_found.json")
   end
 
 end

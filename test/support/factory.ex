@@ -83,4 +83,12 @@ defmodule Publit.Factory do
     %Publit.Order.Log{}
   end
 
+  def comment_factory do
+    %Publit.Order.Comment{
+      rating: 5,
+      comment: "This is a comment",
+      comment_type: "cli_org"
+    }
+  end
+
 end

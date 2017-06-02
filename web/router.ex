@@ -85,7 +85,8 @@ defmodule Publit.Router do
 
       resources "/orders", OrderController
 
-      resources "/comments", CommentController
+      resources "/comments", CommentController, only: [:create, :update]
+      get "/comments/:order_id/comments", CommentController, :comments
     end
   end
 
