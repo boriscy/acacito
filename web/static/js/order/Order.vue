@@ -1,3 +1,22 @@
+<script>
+import {format} from '../mixins'
+import orderMixin from './orderMixin'
+import OrderDetail from './OrderDetail.vue'
+import NullOrder from  './NullOrder.vue'
+
+export default {
+  name: 'Order',
+  mixins: [format, orderMixin],
+  components: {
+    OrderDetail,
+    NullOrder
+  },
+  computed: {
+    user_client() { return this.order.user_client }
+  }
+}
+</script>
+
 <template>
   <div class="order">
 
@@ -34,28 +53,12 @@
     </div>
 
     <div>
-      <a class="pointer" @click="$refs.detail.open()">{{gettext("Detail")}}</a>
+      <NullOrder :order="order" />
+      <a class="pointer" @click="$refs.detail.open()">{{'Detail' | translate}}</a>
     </div>
     <!--It will update the view-->
     <span style="display:none">{{now}}</span>
 
-    <OrderDetail ref="detail" :order="order"/>
+    <OrderDetail ref="detail" :order="order" />
   </div>
 </template>
-
-<script>
-import {translate, format} from '../mixins'
-import orderMixin from './orderMixin'
-import OrderDetail from './OrderDetail.vue'
-
-export default {
-  name: 'Order',
-  mixins: [translate, format, orderMixin],
-  components: {
-    OrderDetail
-  },
-  computed: {
-    user_client() { return this.order.user_client }
-  }
-}
-</script>

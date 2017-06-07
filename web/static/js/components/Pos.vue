@@ -3,25 +3,25 @@
     <div>
       <button class="btn btn-default" :class="getActiveCSS('selpos')" @click="selectPos()">
         <i class="material-icons">location_on</i>
-        {{gettext("Click the map to select your position")}}
+        {{'Click the map to select your position' | translate}}
       </button>
       <button class="btn btn-default" :class="getActiveCSS('getpos')" @click="getPos()">
         <i class="material-icons">navigation</i>
-        {{gettext("Obtain position using GPS")}}
+        {{'Obtain position using GPS' | translate}}
       </button>
     </div>
 
     <div>
-      {{gettext("Latitude")}}:
+      {{'Latitude' | translate}}:
       <input v-model="lat" type="number" class="form-control pos lat input-sm"/>
-      {{gettext("Longitude")}}:
+      {{'Longitude' | translate}}:
       <input v-model="lng" type="number" class="form-control pos lng input-sm"/>
     </div>
   </div>
 </template>
 
 <script>
-import {translate, format} from '../mixins'
+import {format} from '../mixins'
 
 let that
 export default {
@@ -39,7 +39,7 @@ export default {
       }
     }
   },
-  mixins: [format, translate],
+  mixins: [format],
   data() {
     return {
       lat: null,

@@ -13,7 +13,6 @@ defmodule Publit.ClientApi.OrderView do
   end
 
   def render("errors.json", %{cs: cs}) do
-    #err = Map.put(get_errors(cs), :transport_errors, get_errors(cs.changes.transport))
     %{errors: get_errors(cs)}
   end
 

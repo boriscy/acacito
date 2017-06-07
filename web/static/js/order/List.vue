@@ -1,7 +1,7 @@
 <template>
   <div class="orders">
     <h3 class="title">
-      {{gettext(title)}}
+      {{title | translate}}
       <span class="badge order-status" v-bind:class="cssClass">{{orders.length}}</span>
     </h3>
 
@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import {translate, format} from '../mixins'
+import {format} from '../mixins'
 import Order from './Order.vue'
 
 export default {
   name: 'OrderList',
-  mixins: [translate, format],
+  mixins: [format],
   components: {
     Order
   },

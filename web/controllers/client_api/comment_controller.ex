@@ -16,7 +16,7 @@ defmodule Publit.ClientApi.CommentController do
 
     case Repo.get(Order, comment_params["order_id"]) do
       nil ->
-        render_not_found(conn)
+        render_order_not_found(conn)
       order ->
         case Order.Comment.create(order, uc, comment_params) do
           {:ok, res} ->
@@ -30,12 +30,32 @@ defmodule Publit.ClientApi.CommentController do
   end
 
   # PUT /client_api/comment/:id
+  def update(conn, %{"id" => id, "comment" => comment_params}) do
+    case Repo.get(Order.Comment, id) do
+      nil ->
+        render_comment_not_found(conn)
+      comment ->
+        case Order.Comment.update(comment, comment_params) do
+          {:ok, res} ->
+            render(conn, "show.json", comment: res.comment, order: res.order)
+          {:error, err} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render("errors.json", cs: err)
+        end
+    end
+  end
 
-  defp render_not_found(conn, args \\ %{msg: gettext("Could not find the order")}) do
+  defp render_order_not_found(conn, args \\ %{msg: gettext("Could not find the order")}) do
     conn
     |> put_status(:not_found)
     |> render(Publit.TransApi.OrderView, "not_found.json")
   end
 
+  defp render_comment_not_found(conn) do
+    conn
+    |> put_status(:not_found)
+    |> text(gettext("Comment not found"))
+  end
 end
 

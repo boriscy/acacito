@@ -11,11 +11,11 @@
         {{order.client_number | phone}}
       </h4>
       <p>
-        <span class="text-gray">{{ gettext("Address") }}:</span>
+        <span class="text-gray">{{ 'Address' | translate }}:</span>
         {{order.client_address}}
       </p>
       <p>
-        <span class="text-gray">{{ gettext("More details") }}:</span>
+        <span class="text-gray">{{ 'More details' | translate }}:</span>
         {{order.other_details}}
       </p>
 
@@ -45,26 +45,26 @@
       </div>
 
       <div class="total">
-        {{ gettext("Total") }}
+        {{ 'Total' | translate }}
         <span class="currency">{{order.currency}}</span>
         {{(order.total) | number}}
       </div>
     </div>
 
     <div slot="footer">
-      <button class="btn" @click="$refs.modal.close()">{{gettext("Close")}}</button>
+      <button class="btn" @click="$refs.modal.close()">{{'Close' | translate}}</button>
     </div>
   </Modal>
 </template>
 
 <script>
 import Modal from '../globals/Modal.vue'
-import {translate, format} from '../mixins'
+import {format} from '../mixins'
 import orderMixin from './orderMixin'
 
 export default {
   name: 'OrderDetail',
-  mixins: [translate, format, orderMixin],
+  mixins: [format, orderMixin],
   computed: {
     user_client() { return this.order.user_client }
   },

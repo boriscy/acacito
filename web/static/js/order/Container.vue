@@ -2,12 +2,12 @@
   <div class="orders-main-cont">
     <div v-if="!org.open" class="text-center">
       <br/>
-      <button class="btn btn-success btn-lg" @click="openCloseOrg()" :disabled="saving">{{gettext("Open for sale")}}</button>
+      <button class="btn btn-success btn-lg" @click="openCloseOrg()" :disabled="saving">{{'Open for sale' | translate}}</button>
     </div>
 
     <button class="close-org" v-if="org.open" @click="openCloseOrg()" :disabled="saving">
       <i class="material-icons">close</i>
-      <span class="text">{{gettext("Close sale")}}</span>
+      <span class="text">{{'Close sale' | translate}}</span>
     </button>
 
     <div class="orders-container" v-if="org.open">
@@ -33,12 +33,12 @@ import OrderList from './List.vue'
 import Order from './Order.vue'
 import OrderProcess from './Process.vue'
 import { mapGetters, mapActions } from 'vuex'
-import {translate, format} from '../mixins'
+import {format} from '../mixins'
 import types from '../store/mutation-types'
 
 export default {
   name: 'OrderContainer',
-  mixins: [translate, format],
+  mixins: [format],
   data() {
     return {
       orderComp: Order,
@@ -77,7 +77,7 @@ export default {
       })
     },
     createMessage(order) {
-      return `${this.gettext('New order')}, ${order.user_client.full_name}: ${this.currency(order.currency)}
+      return `${this.$t('New order')}, ${order.user_client.full_name}: ${this.currency(order.currency)}
       ${this.formatNumber(order.total)}`
     },
     setChannel() {

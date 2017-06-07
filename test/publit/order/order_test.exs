@@ -2,7 +2,7 @@ defmodule Publit.OrderTest do
   use Publit.ModelCase
   import Publit.Support.Session, only: [create_user_org: 1]
 
-  alias Publit.{Order, ProductVariation}
+  alias Publit.{Order, ProductVariation, Repo}
 
   defp create_products2(org) do
     p1 = insert(:product, organization_id: org.id, publish: true)
@@ -136,6 +136,46 @@ defmodule Publit.OrderTest do
       assert det.errors[:product_id]
     end
 
+  end
+
+  describe "null" do
+    test "new" do
+      Agent.start_link(fn() -> []  end, name: :api_mock )
+      org = insert(:organization)
+      uc = insert(:user_client)
+      user = insert(:user)
+
+      order = create_order_only(uc, org)
+      insert(:order_log, %{order_id: order.id, log: []})
+
+      assert order.status == "new"
+
+      {:ok, ord} = Order.null(order, user, %{"null_reason" => "No more items"})
+
+      assert ord.status == "nulled"
+      assert ord.null_reason == "No more items"
+
+      ord = Repo.preload(ord, :log)
+
+      log = ord.log
+
+      msg = log.log |> List.first
+
+      assert msg["type"] == "status:nulled"
+      assert msg["user_id"] == user.id
+    end
+
+    test "invalid" do
+      org = insert(:organization)
+      uc = insert(:user_client)
+      user = build(:user)
+
+      order = create_order_only(uc, org, %{status: "delivered"})
+
+      assert order.status == "delivered"
+
+      assert catch_error(Order.null(order, user, %{"null_reason" => "No more items"}) )
+    end
   end
 
 end

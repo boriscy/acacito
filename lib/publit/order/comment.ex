@@ -4,6 +4,8 @@ defmodule Publit.Order.Comment do
   alias Publit.{Order, UserClient, UserTransport, Organization, Repo}
   alias Ecto.Multi
 
+  @seconds_diff 120
+
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "comments" do
     field :to_id, :binary_id
@@ -51,6 +53,33 @@ defmodule Publit.Order.Comment do
     end
   end
 
+  def update(comment, params) do
+    comment = Repo.preload(comment, :order)
+
+    c_cs = comment
+    |> cast(params, [:rating, :comment])
+    |> validate_required(:rating)
+    |> validate_number(:rating, greater_than: 0, less_than_or_equal_to: 5)
+    |> valid_time_diff()
+
+    data = Map.put(comment.order.comment_details, comment.comment_type, Ecto.DateTime.utc())
+    |> Map.put("#{comment.comment_type}_rating", params["rating"])
+
+    o_cs = Ecto.Changeset.change(comment.order)
+    |> put_change(:comment_details, data)
+
+    multi = Multi.new()
+    |> Multi.update(:comment, c_cs)
+    |> Multi.update(:order, o_cs)
+
+    case Repo.transaction(multi) do
+      {:ok, res} ->
+        {:ok, res}
+      {:error, :comment, cs, _} ->
+        {:error, cs}
+    end
+  end
+
   defp valid_comment?(order, %UserClient{id: id}, params) do
     valid_comment?(order, id, :user_client_id, ["cli_org", "cli_trans"], params)
   end
@@ -89,6 +118,26 @@ defmodule Publit.Order.Comment do
 
   defp valid_rating?(rating) do
     is_integer(rating) && rating > 0 && rating < 6
+  end
+
+  defp valid_time_diff(cs) do
+    t2 = naive_datetime_to_seconds(NaiveDateTime.utc_now())
+    t1 = naive_datetime_to_seconds(cs.data.inserted_at)
+
+    if (t2  - t1) <= @seconds_diff do
+      cs
+    else
+      cs |> add_error(:inserted_at, "Invalid time lapse")
+    end
+  end
+
+  def naive_datetime_to_seconds(dt) do
+    dt |> NaiveDateTime.to_erl() |> :calendar.datetime_to_gregorian_seconds()
+  end
+
+  # unix seconds 62167219200
+  def ecto_datetime_to_seconds(dt) do
+    dt |> Ecto.DateTime.to_erl() |> :calendar.datetime_to_gregorian_seconds()
   end
 
 end

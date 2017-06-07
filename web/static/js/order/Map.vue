@@ -4,10 +4,10 @@
   </div>
 </template>
 <script>
-import {translate, format} from '../mixins'
+import {format} from '../mixins'
 
 export default {
-  mixins:[translate, format],
+  mixins:[format],
   mounted: function() {
     console.log('Map')
   }

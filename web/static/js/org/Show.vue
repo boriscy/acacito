@@ -1,6 +1,6 @@
 <script>
 import Pos from '../components/Pos.vue'
-import {translate, format} from '../mixins'
+import {format} from '../mixins'
 import axios from 'axios'
 
 const xhr = axios.create({
@@ -12,7 +12,7 @@ const xhr = axios.create({
 export default {
   name: 'OrgData',
   components: { Pos },
-  mixins: [translate, format],
+  mixins: [format],
   data() {
     return {
       org: {},
@@ -72,7 +72,7 @@ export default {
         </span>
 
         <div>
-          <label>{{ gettext("Mobile number") }}</label>
+          <label>{{ 'Mobile number' | translate }}</label>
           <input v-model="org.mobile_number" class="form-control"/>
           <span class="error">
             {{this.errors.mobile_number}}
@@ -80,7 +80,7 @@ export default {
         </div>
 
         <div>
-          <label>{{ gettext("Address") }}</label>
+          <label>{{ 'Address' | translate }}</label>
           <textarea v-model="org.address" cols="50" rows="4" class="form-control">
           </textarea>
           <span class="error">
@@ -88,7 +88,7 @@ export default {
           </span>
         </div>
         <div>
-          <label>{{ gettext("Description") }}</label>
+          <label>{{ 'Description' | translate }}</label>
           <textarea v-model="org.description" cols="50" rows="7" class="form-control">
           </textarea>
         </div>
@@ -104,9 +104,9 @@ export default {
 
       </div>
     </div>
-    <button class="btn btn-primary" @click="update()" :disabled="saving">{{gettext("Update data and position")}}</button>
+    <button class="btn btn-primary" @click="update()" :disabled="saving">{{'Update data and position' | translate}}</button>
     <span v-if="saving">
-      {{gettext("Saving")}}
+      {{'Saving' | translate}}
     </span>
   </div>
 </template>

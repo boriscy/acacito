@@ -13,6 +13,10 @@ defmodule Publit.ClientApi.CommentView do
     %{error: error}
   end
 
+  def render("errors.json", %{cs: cs}) do
+    %{errors: get_errors(cs)}
+  end
+
   def render("comments.json", %{comments: comments}) do
     %{comments: Enum.map(comments, fn(c) -> to_api(c) end)}
   end

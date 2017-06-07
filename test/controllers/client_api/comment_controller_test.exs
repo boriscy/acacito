@@ -2,6 +2,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
   use Publit.ConnCase
   require Publit.Gettext
   import Publit.Gettext
+  alias Publit.{Order}
 
   setup do
     user_client = insert(:user_client)
@@ -90,6 +91,48 @@ defmodule Publit.ClientApi.OrderControllerTest do
       assert Enum.map(json["comments"], fn(v) -> v["order_id"] end) == [order.id, order.id]
     end
 
+  end
+
+  describe "PUT /client_api/comments/:id" do
+    test "OK", %{conn: conn, user_client: cli, org: org} do
+      order = create_order_only(cli, org, %{status: "delivered"})
+      params = %{"comment" => "My org comment", "rating" => 3, "comment_type" => "cli_org"}
+
+      assert {:ok, res} = Order.Comment.create(order, cli, params)
+
+      params = %{"comment" => "My updated org comment", "rating" => 5}
+
+      conn = put(conn, "/client_api/comments/#{res.comment.id}", %{"comment" => params})
+
+      assert conn.status == 200
+
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["order"]["comment_details"]["cli_org_rating"] == 5
+    end
+
+    test "not_found", %{conn: conn} do
+      params = %{"comment" => "My updated org comment", "rating" => 5}
+
+      conn = put(conn, "/client_api/comments/#{Ecto.UUID.generate()}", %{"comment" => params})
+    end
+
+    test "error", %{conn: conn, user_client: cli, org: org} do
+      order = create_order_only(cli, org, %{status: "delivered"})
+      params = %{"comment" => "My org comment", "rating" => 3, "comment_type" => "cli_org"}
+
+      assert {:ok, res} = Order.Comment.create(order, cli, params)
+
+      params = %{"comment" => "My updated org comment", "rating" => 0}
+
+      conn = put(conn, "/client_api/comments/#{res.comment.id}", %{"comment" => params})
+
+      assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
+
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["errors"]["rating"]
+    end
   end
 
 end

@@ -96,6 +96,9 @@ body{
         color: $grayDark;
       }
       .transport {
+        .material-icons {
+          font-size: 1em;
+        }
         .call {
           font-weight: bold;
           font-size: 1.15em;
@@ -103,7 +106,7 @@ body{
           padding: 0.3em 0;
           cursor: pointer;
         }
-        [class*=icon] {
+        .trans-icon {
           font-size: 1.3em;
         }
         .transport {
@@ -112,7 +115,7 @@ body{
           line-height: 1.1;
           //border: 1px solid $grayLighter;
           background: lighten($grayLighter, 15%);
-          border: 1px solid darken($transport, 10%);
+          border: 1px solid $grayLight;
         }
       }
     }

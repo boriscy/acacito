@@ -27,10 +27,7 @@
 </template>
 
 <script>
-import {translate} from '../mixins'
-
 export default {
-  mixins: [translate],
   data() {
     return {
       open: false,

@@ -4,7 +4,7 @@
  * for putting all related data from transport
  */
 import Order from './Order.vue'
-import {translate, format} from '../mixins'
+import {format} from '../mixins'
 import orderMixin from './orderMixin'
 import Timer from '../globals/Timer.vue'
 import types from '../store/mutation-types'
@@ -13,7 +13,7 @@ let that = null
 
 export default {
   name: 'Process',
-  mixins: [translate, format, orderMixin],
+  mixins: [format, orderMixin],
   components: {
     Order: Order,
     Timer: Timer
@@ -109,37 +109,35 @@ export default {
 <template>
   <Order :order="order" nextProcess="transport-next">
     <div slot="transport" class="transport">
-      <div v-if="order.transport.start">
-        <i class="icon-cab"></i>
-        {{timeAgo(order.transport.start)}}
-      </div>
-
       <div v-if="!order.transport_status">
-        <a class="call" @click="callTransport()">{{gettext("Call Transport")}}</a>
+        <a class="call" @click="callTransport()">{{'Call Transport' | translate}}</a>
       </div>
 
       <div v-show="order.transport_status=='calling'" class="well well-sm">
         <div>
           <Timer ref="timer"/>
-          <span class="text-muted">{{gettext('Calling transport')}}</span>
+          <span class="text-muted">{{'Calling transport' | translate}}</span>
         </div>
-        <button class="btn btn-danger btn-sm" v-if="timerCount > cancelTimerCount" @click="cancelCall()">{{gettext('Cancel call')}}</button>
+        <button class="btn btn-danger btn-sm" v-if="timerCount > cancelTimerCount" @click="cancelCall()">{{'Cancel call' | translate}}</button>
       </div>
 
       <div v-if="order.transport_status=='responded'" class="transport text-muted">
         <div>
-          <i class="material-icons" :title="gettext(vehicle)">{{getVehicleIcon(vehicle)}}</i>
-          {{order.transport.transporter_name}}
+          <i class="material-icons trans-icon" :title="$t('vehicle')">{{getVehicleIcon(vehicle)}}</i>
+          <strong>{{order.transport.transporter_name}}</strong>
+        </div>
+        <div>
+          <i>{{order.transport.mobile_number | phone}}</i>
         </div>
         <div>{{timeAgo(order.transport.responded_at)}}</div>
 
         <div v-if="!trans.picked_at && trans.picked_arrived_at">
-          <strong class="text-red">{{gettext("Transport has arrived")}}</strong>
+          <strong class="text-red">{{'Transport has arrived' | translate}}</strong>
         </div>
       </div>
 
       <div v-if="order.transport_status=='call_empty'" class="alert alert-warning">
-        <strong>{{gettext("No transport available")}}</strong>
+        <strong>{{'No transport available' | translate}}</strong>
       </div>
 
     </div>

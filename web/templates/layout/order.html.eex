@@ -22,7 +22,6 @@
       </div>
     </div>
 
-    <%= render Publit.LayoutView, "translations.html" %>
     <script>
     window.vueLoad = 'orders';
     window.locale = '<%= @conn.assigns.current_user.locale %>';
