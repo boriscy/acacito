@@ -74,6 +74,9 @@ body{
   .alert {
     padding: 4px;
   }
+  &.selected {
+    background: lighten($blue, 40%);
+  }
 
   .header{
     display: flex;

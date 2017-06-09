@@ -18,6 +18,10 @@ defmodule Publit.Api.OrderView do
     %{errors: err}
   end
 
+  def render("null_errors.json", %{cs: cs}) do
+    %{errors: get_errors(cs)}
+  end
+
   def render("not_found.json", %{msg: msg}) do
     %{error: msg}
   end

@@ -28,6 +28,10 @@ export const addOrder = ({commit}, data) => {
   commit(types.ADD_ORDER, data)
 }
 
+export const setOrderViewStatus = ({commit}, data) => {
+  commit(types.ORDER_VIEW_STATUS, {order: data.order, viewStatus: data.viewStatus})
+}
+
 // Transport
 export const callTransport = ({commit}, data) => {
   commit(types.ORDER_CALLING, {order_id: data.id})

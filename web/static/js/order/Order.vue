@@ -18,8 +18,7 @@ export default {
 </script>
 
 <template>
-  <div class="order">
-
+  <div class="order" :class="order.viewStatus">
     <div class="header">
       <div class="left">
         <div class="title">{{formatNum(order.num)}} - {{order.client_name}}</div>
@@ -53,10 +52,11 @@ export default {
     </div>
 
     <div>
-      <NullOrder :order="order" />
+      <NullOrder :order="order" v-if="'new'==order.status"/>
       <a class="pointer" @click="$refs.detail.open()">{{'Detail' | translate}}</a>
     </div>
-    <!--It will update the view-->
+
+    <!--It will update the view time ago-->
     <span style="display:none">{{now}}</span>
 
     <OrderDetail ref="detail" :order="order" />

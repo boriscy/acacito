@@ -28,10 +28,30 @@ defmodule Publit.Api.OrderController do
 
         case Order.StatusService.next_status(ord, user) do
           {:ok, order} ->
-            UserChannel.broadcast_order(order)
+            #UserChannel.broadcast_order(order)
             render(conn, "show.json", order: order)
           _ ->
             render(conn, "error.json")
+        end
+    else
+      _ ->
+        render_not_found(conn)
+    end
+  end
+
+  # PUT /api/org_orders/:id/null
+  def null(conn, %{"id" => id, "order" => order_params}) do
+    with ord <- get_order(conn, id),
+      %Order{} <- ord do
+        user = conn.assigns.current_user
+
+        case Order.Null.null(ord, user, order_params) do
+          {:ok, order} ->
+            render(conn, "show.json", order: order)
+          {:error, :order, cs} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render("null_errors.json", cs: cs)
         end
     else
       _ ->

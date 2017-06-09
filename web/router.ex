@@ -50,6 +50,8 @@ defmodule Publit.Router do
       pipe_through [:organization_api_auth]
       resources "/orders", OrderController, only: [:index, :show]
       put "/orders/:id/move_next", OrderController, :move_next
+      put "/orders/:id/null", OrderController, :null
+
       get "/user_transport_position/:id", PositionController, :user_transport
 
       resources "/transport", TransportController, only: [:create, :delete]

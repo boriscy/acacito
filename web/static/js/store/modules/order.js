@@ -6,6 +6,10 @@ const state = {
   order: {}
 }
 
+const setOrder = (order) => {
+  return Object.assign(order, getTransportStatus(order), {viewStatus: ''})
+}
+
 const getTransportStatus = (order) => {
   let obj = {}
 
@@ -17,16 +21,13 @@ const getTransportStatus = (order) => {
     obj = {transport_status: null, responded_at: null}
   }
 
-  return Object.assign(obj, {loading: false})
+  return obj
 }
 
 const mutations = {
   [types.FETCH_ORDERS] (state, {orders}) {
-    orders.forEach((order) => {
-      Object.assign(order, getTransportStatus(order))
-    })
 
-    state.orders = orders
+    state.orders = orders.map(ord => { return setOrder(ord) })
   },
   [types.FETCH_ORDER] (state, {order}) {
     state.order = order
@@ -83,11 +84,17 @@ const mutations = {
     }
   },
   [types.ORDER_LOADING] (state, {val, order_id}) {
-    console.log();
     const idx = state.orders.findIndex((ord) => { return ord.id == order_id})
 
     if(idx > -1) {
       Object.assign(state.orders[idx], {loading: val})
+    }
+  },
+  [types.ORDER_VIEW_STATUS] (state, {order, viewStatus}) {
+    const idx = state.orders.findIndex((ord) => { return ord.id == order.id})
+
+    if(idx > -1) {
+      Object.assign(state.orders[idx], {viewStatus})
     }
   }
 }
