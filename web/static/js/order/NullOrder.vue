@@ -4,7 +4,7 @@ import orderMixin from './orderMixin'
 import types from '../store/mutation-types'
 import {auth} from '../store/api/xhr'
 import Modal from '../globals/Modal.vue'
-import VueNotifications from 'vue-notifications'
+//import VueNotifications from 'vue-notifications'
 
 export default {
   name: 'NullOrder',
