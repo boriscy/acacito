@@ -121,6 +121,7 @@ defmodule Publit.Order.StatusServiceTest do
       ut = Repo.get(UserTransport, ut.id)
 
       assert ut.orders |> Enum.count() == 0
+      assert ut.extra_data["trans_status"] == "listen"
 
       data = Publit.MessageApiMock.get_data()
 

@@ -32,7 +32,6 @@ defmodule Publit.Order.Call do
       |> put_assoc(:order, order)
 
       tokens = Enum.map(transports, fn(t) -> t.extra_data[@token_id] end)
-
       create_and_send_message(occs, tokens)
     else
       {:empty, %Order.Call{}}
@@ -76,7 +75,8 @@ defmodule Publit.Order.Call do
 
     q = from ut in UserTransport, where: ut.status == "listen"
       and fragment("ST_DISTANCE_SPHERE(?, ST_MakePoint(?, ?)) <= ?", ut.pos, ^lng, ^lat, ^radius)
-
+      and (fragment("?->>'trans_status' !='transport'", ut.extra_data) or fragment("?->>'trans_status' IS NULL", ut.extra_data))
+IO.puts Ecto.Adapters.SQL.to_sql(:all, Repo, q) |> elem(0)
     Repo.all(q)
   end
 

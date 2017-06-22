@@ -127,8 +127,13 @@ defmodule Publit.Order.StatusService do
       {:ok, idx} ->
         orders = List.delete_at(ut.orders, idx)
 
-        change(ut)
+        cs = change(ut)
         |> put_change(:orders, orders)
+        if Enum.count(orders) <= 0 do
+          cs |> put_change(:extra_data, Map.put(ut.extra_data, "trans_status", "listen") )
+        else
+          cs
+        end
       :error ->
         change(ut)
         |> add_error(:orders, gettext("Order not found"))

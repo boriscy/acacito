@@ -33,6 +33,7 @@ defmodule Publit.Order.CallServiceTest do
 
       user_t = Repo.get(UserTransport, ut.id)
       assert Enum.count(user_t.orders) == 1
+      assert user_t.extra_data["trans_status"] == "transport"
       ut_order = user_t.orders |> List.first()
 
       assert ut_order["id"] == order.id

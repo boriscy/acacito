@@ -86,6 +86,7 @@ defmodule Publit.Order.CallService do
     ut
     |> change()
     |> put_change(:orders, ut.orders ++ [%{"id" => order.id, "status" => "transporting" }])
+    |> put_change(:extra_data, Map.put(ut.extra_data, "trans_status", "transport"))
   end
 
   defp log_error(resp) do
