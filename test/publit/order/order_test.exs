@@ -23,7 +23,6 @@ defmodule Publit.OrderTest do
       v1 = Enum.at(p1.variations, 1)
       v2 = Enum.at(p2.variations, 0)
 
-
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "client_name" => user_client.full_name, "organization_name" => org.name,
@@ -43,6 +42,7 @@ defmodule Publit.OrderTest do
       assert order.currency == org.currency
       assert order.status == "new"
       assert order.other_details == "cambio de 200"
+      assert order.transport.transport_type == "deliver"
 
       assert order.user_client_id == user_client.id
       assert order.client_name == user_client.full_name
@@ -100,6 +100,38 @@ defmodule Publit.OrderTest do
       assert order.num == 2
       assert order.organization.name == "Publit"
       assert order.inserted_at
+    end
+
+    test "transport type" do
+      org = insert(:organization)
+      user_client = insert(:user_client)
+      [p1, p2] = create_products2(org)
+      v1 = Enum.at(p1.variations, 1)
+      v2 = Enum.at(p2.variations, 0)
+
+      params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
+      "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
+      "client_name" => user_client.full_name, "organization_name" => org.name,
+      "client_address" => "Los Pinos, B777", "other_details" => "cambio de 200",
+      "details" => %{
+          "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "image_thumb" => "thumb1.jpg"},
+          "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2", "image_thumb" => "thumb2.jpg"}
+        }, "transport" => %{"calculated_price" => "5", "transport_type" => "deliver"}
+      }
+
+      {:ok, order} =  Order.create(params, user_client)
+      assert order.transport.transport_type == "deliver"
+
+      params = Map.put(params, "transport", %{"calculated_price" => "5", "transport_type" => "pickandpay"})
+
+      {:ok, order} =  Order.create(params, user_client)
+
+      assert order.transport.transport_type == "pickandpay"
+
+      params = Map.put(params, "transport", %{"calculated_price" => "5", "transport_type" => "nonono"})
+
+      {:error, cs} =  Order.create(params, user_client)
+      assert cs.changes.transport.errors[:transport_type]
     end
 
     test "ERROR" do
