@@ -1,7 +1,7 @@
 defmodule Publit.Support.Order do
   alias Publit.{Repo, Product, Order, Order.Transport, ProductVariation}
 
-  def create_order(user_client, org) do
+  def create_order(user_client, org, p \\ %{}) do
     prods = create_products(org)
     p1 = Enum.at(prods, 0)
     p2 = Enum.at(prods, 1)
@@ -9,16 +9,18 @@ defmodule Publit.Support.Order do
     v1 = Enum.at(p1.variations, 0)
     v2 = Enum.at(p2.variations, 1)
 
-    params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
-    "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"}, "client_name" => user_client.full_name,
-    "client_address" => "Los Nuevos Pinos, B100 7", "other_details" => "Cambio de 200BS.",
-    "details" => %{
-        "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
-        "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-      }, "transport" => %{"calculated_price" => "7"}
+    params = %{
+      user_client_id: user_client.id, organization_id: org.id, currency: org.currency,
+      client_pos: %Geo.Point{coordinates: {-100, 30}, srid: nil}, client_name: user_client.full_name,
+      client_address: "Los Nuevos Pinos, B100 7", other_details: "Cambio de 200BS.",
+      details: [
+        %{product_id: p1.id, variation_id: v1.id, quantity: "1"},
+        %{product_id: p2.id, variation_id: v2.id, quantity: "2"}
+      ],
+      transport: %{"calculated_price" => "7", "transport_type" => "deliver"}
     }
 
-    {:ok, order} = Order.create(params, user_client)
+    {:ok, order} = Order.create(Map.merge(params, p), user_client)
 
     order
   end
@@ -30,7 +32,7 @@ defmodule Publit.Support.Order do
     {:ok, order} = Repo.insert(%Order{
       organization_id: org.id, organization_pos: org.pos, organization_name: org.name, other_details: "Another detail",
       user_client_id: user_client.id, client_pos: %Geo.Point{coordinates: {lng, lat}, srid: nil}, client_name: user_client.full_name,
-      transport: %Order.Transport{calculated_price: Decimal.new("5")},
+      transport: %Order.Transport{calculated_price: Decimal.new("5"), transport_type: "deliver"},
       details: [
         %{product_id: Ecto.UUID.generate(), name: "First product", price: Decimal.new("5"), quantity: Decimal.new("1")},
         %{product_id: Ecto.UUID.generate(), name: "Second product", price: Decimal.new("7.5"), quantity: Decimal.new("2")}

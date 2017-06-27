@@ -14,7 +14,7 @@ defmodule Publit.Order.Transport do
     field :picked_at, :string
     field :delivered_arrived_at, :string
     field :delivered_at, :string
-    field :transport_type, :string, default: "deliver"
+    field :transport_type, :string
   end
 
   @transport_types ["deliver", "pickandpay"]
@@ -24,7 +24,7 @@ defmodule Publit.Order.Transport do
   """
   def changeset(pv, params) do
     cast(pv, params, [:calculated_price, :transport_type])
-    |> validate_required([:calculated_price])
+    |> validate_required([:calculated_price, :transport_type])
     |> validate_inclusion(:transport_type, @transport_types)
     |> validate_number(:calculated_price, greater_than_or_equal_to: 0)
   end

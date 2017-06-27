@@ -108,9 +108,9 @@ export default {
 
 <template>
   <Order :order="order" nextProcess="transport-next">
-    <div slot="transport" class="transport">
+    <div slot="transport" class="transport" v-if="'deliver' == order.transport.transport_type">
       <div v-if="!order.transport_status">
-        <a class="call" @click="callTransport()">{{'Call Transport' | translate}}</a>
+        <button class="btn btn-primary" @click="callTransport()">{{'Call Transport' | translate}}</button>
       </div>
 
       <div v-show="order.transport_status=='calling'" class="well well-sm">
@@ -121,15 +121,17 @@ export default {
         <button class="btn btn-danger btn-sm" v-if="timerCount > cancelTimerCount" @click="cancelCall()">{{'Cancel call' | translate}}</button>
       </div>
 
-      <div v-if="order.transport_status=='responded'" class="transport text-muted">
+      <div v-if="order.transport_status=='responded'" class="transport-set">
         <div>
-          <i class="material-icons trans-icon" :title="$t('vehicle')">{{getVehicleIcon(vehicle)}}</i>
+          <i class="material-icons trans-icon" :title="$t('vehicle')">{{getVehicleIcon(vehicle)}}</i>&nbsp;
           <strong>{{order.transport.transporter_name}}</strong>
         </div>
         <div>
-          <i>{{order.transport.mobile_number | phone}}</i>
+          {{order.transport.mobile_number | phone}}
+          &nbsp;
+          &nbsp;
+          <small><i class="material-icons">watch_later</i> {{timeAgo(order.transport.responded_at)}}</small>
         </div>
-        <div>{{timeAgo(order.transport.responded_at)}}</div>
 
         <div v-if="!trans.picked_at && trans.picked_arrived_at">
           <strong class="text-red">{{'Transport has arrived' | translate}}</strong>
@@ -140,6 +142,11 @@ export default {
         <strong>{{'No transport available' | translate}}</strong>
       </div>
 
+    </div>
+
+    <div slot="transport" v-if="'pickandpay' == order.transport.transport_type" class="pick-and-pay">
+      <i class="material-icons">shopping_basket</i>&nbsp;
+      <small>{{'Client will pick order' | translate}}</small>
     </div>
   </Order>
 </template>

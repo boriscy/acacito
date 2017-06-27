@@ -30,7 +30,7 @@ defmodule Publit.OrderTest do
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "image_thumb" => "thumb1.jpg"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2", "image_thumb" => "thumb2.jpg"}
-        }, "transport" => %{"calculated_price" => "5"}
+        }, "transport" => %{"calculated_price" => "5", "transport_type" => "deliver"}
       }
 
       assert {:ok, order} = Order.create(params, user_client)
@@ -92,7 +92,7 @@ defmodule Publit.OrderTest do
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-        }, "transport" => %{"calculated_price" => "3"}
+        }, "transport" => %{"calculated_price" => "3", "transport_type" => "deliver"}
       }
 
       {:ok, order} =  Order.create(params, user_client)
@@ -112,20 +112,14 @@ defmodule Publit.OrderTest do
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
       "client_name" => user_client.full_name, "organization_name" => org.name,
-      "client_address" => "Los Pinos, B777", "other_details" => "cambio de 200",
+      "client_address" => "", "other_details" => "cambio de 200",
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "image_thumb" => "thumb1.jpg"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2", "image_thumb" => "thumb2.jpg"}
-        }, "transport" => %{"calculated_price" => "5", "transport_type" => "deliver"}
+        }, "transport" => %{"calculated_price" => "5", "transport_type" => "pickandpay"}
       }
 
       {:ok, order} =  Order.create(params, user_client)
-      assert order.transport.transport_type == "deliver"
-
-      params = Map.put(params, "transport", %{"calculated_price" => "5", "transport_type" => "pickandpay"})
-
-      {:ok, order} =  Order.create(params, user_client)
-
       assert order.transport.transport_type == "pickandpay"
 
       params = Map.put(params, "transport", %{"calculated_price" => "5", "transport_type" => "nonono"})
@@ -147,7 +141,8 @@ defmodule Publit.OrderTest do
       "details" => %{
           "0" => %{"product_id" => Ecto.UUID.generate, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-        }
+        },
+      "transport" => %{"calculated_price" => "5", "transport_type" => "deliver"}
       }
 
       assert {:error, cs} = Order.create(params, user)
@@ -160,7 +155,8 @@ defmodule Publit.OrderTest do
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => Ecto.UUID.generate(), "quantity" => "2"}
-        }
+        },
+      "transport" => %{"calculated_price" => "5", "transport_type" => "deliver"}
       }
 
       assert {:error, cs} = Order.create(params, user)

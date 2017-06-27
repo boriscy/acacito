@@ -1,4 +1,4 @@
-defmodule Publit.ClientApi.OrderControllerTest do
+defmodule Publit.ClientApi.CommentControllerTest do
   use Publit.ConnCase
   require Publit.Gettext
   import Publit.Gettext

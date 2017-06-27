@@ -53,7 +53,6 @@ msgid "Password"
 msgstr ""
 
 #: web/templates/layout/app_full.html.eex:22
-#: web/templates/layout/navigation.html.eex:13
 #: web/templates/product/index.html.eex:2 web/templates/product/show.html.eex:1
 msgid "Products"
 msgstr ""
@@ -164,7 +163,7 @@ msgstr ""
 msgid "Unpublished"
 msgstr ""
 
-#: lib/publit/order/order.ex:122
+#: lib/publit/order/order.ex:128
 msgid "Invalid product"
 msgstr ""
 
@@ -173,7 +172,6 @@ msgid "New Orders"
 msgstr ""
 
 #: web/templates/layout/app_full.html.eex:23
-#: web/templates/layout/navigation.html.eex:19
 msgid "Orders"
 msgstr ""
 
@@ -246,16 +244,13 @@ msgstr ""
 msgid "New order"
 msgstr ""
 
-#: web/controllers/api/order_controller.ex:42
+#: web/controllers/api/order_controller.ex:62
+#: web/controllers/client_api/comment_controller.ex:49
 #: web/controllers/client_api/order_controller.ex:37
 msgid "Could not find the order"
 msgstr ""
 
-#: web/templates/layout/navigation.html.eex:31
-msgid "Logout"
-msgstr ""
-
-#: lib/publit/order/status_service.ex:134 web/views/api/transport_view.ex:9
+#: lib/publit/order/status_service.ex:144 web/views/api/transport_view.ex:9
 #: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr ""
@@ -293,7 +288,7 @@ msgstr ""
 msgid "walk"
 msgstr ""
 
-#: lib/publit/order/call.ex:49 lib/publit/order/call_service.ex:64
+#: lib/publit/order/call.ex:48 lib/publit/order/call_service.ex:64
 msgid "New order from %{org}"
 msgstr "Nuevo pedido de %{org}"
 
@@ -309,19 +304,19 @@ msgstr ""
 msgid "Your order is arriving"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:121
+#: lib/publit/order/status_service.ex:126
 msgid "User transport not found"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:39
+#: lib/publit/order/status_service.ex:44
 msgid "Your order is on the way"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:173
+#: lib/publit/order/status_service.ex:183
 msgid "Order delivered"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:173
+#: lib/publit/order/status_service.ex:183
 msgid "Your order has been delivered"
 msgstr ""
 
@@ -343,10 +338,6 @@ msgstr ""
 
 #: web/templates/layout/translations.html.eex:42
 msgid "Update data and position"
-msgstr ""
-
-#: web/templates/layout/navigation.html.eex:25
-msgid "Settings"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:25
@@ -433,4 +424,32 @@ msgstr ""
 
 #: web/templates/layout/translations.html.eex:21
 msgid "More details"
+msgstr ""
+
+#: lib/publit/order/comment.ex:103
+msgid "Comment done"
+msgstr ""
+
+#: web/controllers/client_api/comment_controller.ex:58
+msgid "Comment not found"
+msgstr ""
+
+#: lib/publit/order/comment.ex:102
+msgid "Invalid comment type"
+msgstr ""
+
+#: lib/publit/order/comment.ex:104
+msgid "Invalid rating"
+msgstr ""
+
+#: lib/publit/order/comment.ex:101
+msgid "Invalid user"
+msgstr ""
+
+#: lib/publit/order/null.ex:24
+msgid "We could not complete your order"
+msgstr ""
+
+#: lib/publit/order/status_service.ex:23
+msgid "Your order is ready"
 msgstr ""

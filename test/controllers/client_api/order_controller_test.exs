@@ -35,7 +35,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
     "details" => %{
         "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
         "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-      }, "transport" => %{"calculated_price" => "3"}
+      }, "transport" => %{"calculated_price" => "3", "transport_type" => "deliver"}
     }
   end
 
@@ -50,6 +50,23 @@ defmodule Publit.ClientApi.OrderControllerTest do
       assert ord["client_pos"] == %{"coordinates" => [-120, 30], "type" => "Point"}
 
       assert json["order"]["organization_name"] == org.name
+      assert json["order"]["transport"]["transport_type"] == "deliver"
+
+      assert called Publit.OrganizationChannel.broadcast_order(:_)
+    end
+
+    test_with_mock "OK pick and pay", %{conn: conn, org: org}, Publit.OrganizationChannel, [],
+      [broadcast_order: fn(_ord) -> :ok end] do
+      p = Map.put(order_params(org), "transport", %{"calculated_price" => "3", "transport_type" => "pickandpay"})
+      conn = post(conn, "/client_api/orders", %{"order" => p})
+
+      assert conn.status == 200
+      json = Poison.decode!(conn.resp_body)
+      ord = json["order"]
+      assert ord["client_pos"] == %{"coordinates" => [-120, 30], "type" => "Point"}
+
+      assert json["order"]["organization_name"] == org.name
+      assert json["order"]["transport"]["transport_type"] == "pickandpay"
 
       assert called Publit.OrganizationChannel.broadcast_order(:_)
     end

@@ -10,7 +10,7 @@ defmodule Publit.Order.Query do
   """
   def active(organization_id) do
     q = from o in Order,
-    where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport", "transporting"]
+    where: o.organization_id == ^organization_id and o.status in ["new", "process", "transport", "transporting", "ready"]
 
     Repo.all(q) |> Repo.preload(:user_client)
   end

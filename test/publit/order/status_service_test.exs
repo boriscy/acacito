@@ -134,6 +134,44 @@ defmodule Publit.Order.StatusServiceTest do
       assert data[:msg][:message] == gettext("Your order has been delivered")
     end
 
+    test "process to ready", %{uc: uc, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
+
+      ord = create_order_only(uc, org, %{status: "process", transport: %Order.Transport{calculated_price: Decimal.new("5"), transport_type: "pickandpay"} })
+      user = build(:user, id: Ecto.UUID.generate())
+
+      assert ord.transport.transport_type == "pickandpay"
+
+      {:ok, ord} = Order.StatusService.next_status(ord, user)
+
+      assert ord.status == "ready"
+
+      data = Publit.MessageApiMock.get_data()
+      dt = data |> List.first()
+
+      assert dt[:msg][:message] == gettext("Your order is ready")
+      assert dt[:msg][:data][:order][:id] == ord.id
+    end
+
+    test "ready to delivered", %{uc: uc, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
+
+      ord = create_order_only(uc, org, %{status: "ready", transport: %Order.Transport{calculated_price: Decimal.new("5"), transport_type: "pickandpay"} })
+      user = build(:user, id: Ecto.UUID.generate())
+
+      assert ord.transport.transport_type == "pickandpay"
+
+      {:ok, ord} = Order.StatusService.next_status(ord, user)
+
+      assert ord.status == "delivered"
+
+      data = Publit.MessageApiMock.get_data()
+      dt = data |> List.first()
+
+      assert dt[:msg][:message] == gettext("Your order has been delivered")
+      assert dt[:msg][:data][:order][:id] == ord.id
+    end
+
     test "previous", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
       ord = create_order(uc, org)

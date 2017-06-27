@@ -13,9 +13,14 @@ defmodule Publit.Order.StatusService do
     log = %{"msg" => "Change status from new to process", "user_id" => user.id}
     update_status(order, "process", log, gettext("Yor order will be processed"))
   end
-  def next_status(%Order{status: "process"} = order, user) do
+  def next_status(%Order{status: "process", transport: %Order.Transport{transport_type: "deliver"}} = order, user) do
     log = %{"msg" => "Change status from process to transport", "user_id" => user.id}
     update_status(order, "transport", log, gettext("Your order has transportation"))
+  end
+
+  def next_status(%Order{status: "process", transport: %Order.Transport{transport_type: "pickandpay"}} = order, user) do
+    log = %{"msg" => "Change status from process to ready", "user_id" => user.id}
+    update_status(order, "ready", log, gettext("Your order is ready"))
   end
 
   @doc """
@@ -65,6 +70,22 @@ defmodule Publit.Order.StatusService do
     |> Multi.update(:order, set_order_transport_status(order, "delivered", :delivered_at, log))
     |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
     |> Multi.update(:user_transport, set_user_transport(order, user, "delivered"))
+
+    case Repo.transaction(multi) do
+      {:ok, res} ->
+        Publit.OrganizationChannel.broadcast_order(res.order, "order:updated")
+        send_message_deliver(res.order)
+        {:ok, res.order}
+      {:error, cs} -> {:error, cs}
+    end
+  end
+
+  def next_status(%Order{status: "ready"} = order, %User{} = user) do
+    log = %{"msg" => "Change status from ready to delivered", "user_id" => user.id}
+
+    multi = Multi.new()
+    |> Multi.update(:order, set_order_transport_status(order, "delivered", :delivered_at, log))
+    |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
 
     case Repo.transaction(multi) do
       {:ok, res} ->

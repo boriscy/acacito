@@ -36,7 +36,7 @@ defmodule Publit.Order do
 
     timestamps()
   end
-  @statuses ["new", "process", "transport", "transporting", "delivered", "nulled"]
+  @statuses ["new", "process", "transport", "transporting", "delivered", "nulled", "ready"]
 
 
   @doc"""
@@ -52,11 +52,17 @@ defmodule Publit.Order do
   """
   def create(params, user_client) do
     cs = %Order{}
-    |> cast(params, [:client_pos, :currency, :organization_id, :client_address, :other_details])
-    |> validate_required([:details, :client_pos, :currency, :client_address])
-    |> validate_length(:client_address, min: 8)
+    |> cast(params, [:client_pos, :currency, :organization_id, :other_details, :client_address])
+    |> validate_required([:details, :client_pos, :currency])
     |> cast_embed(:details)
+    |> cast_embed(:transport)
     |> set_and_validate_details()
+
+    cs = if cs.changes.transport.valid? && cs.changes.transport.changes.transport_type == "deliver" do
+      cs |> validate_required([:client_address]) |> validate_length(:client_address, min: 8)
+    else
+      cs
+    end
 
     with true <- cs.valid? do
       cs

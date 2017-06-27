@@ -41,6 +41,7 @@ body{
   }
 
 }
+
 .orders-container {
   display: flex;
   .orders {
@@ -67,7 +68,7 @@ body{
 }
 
 .order {
-  border-bottom: 1px solid $grayLighter;
+  border-bottom: 2px solid $grayLighter;
   .material-icons {
     max-width: 18px;
   }
@@ -78,62 +79,78 @@ body{
     background: lighten($blue, 40%);
   }
 
-  .header{
-    display: flex;
 
-    .left {
-      width: 60%;
-      .title {
-        font-size: 1.3em;
-        margin: 0px;
-      }
-      .order-time-ago {
-        color: $grayDark;
-        margin-bottom: 0.5em;
-        i {
-          vertical-align: middle;
-          font-size: 1.2em;
-        }
-      }
-      .details {
-        color: $grayDark;
-      }
-      .transport {
-        .material-icons {
-          font-size: 1em;
-        }
-        .call {
-          font-weight: bold;
-          font-size: 1.15em;
-          display: inline-block;
-          padding: 0.3em 0;
-          cursor: pointer;
-        }
-        .trans-icon {
-          font-size: 1.3em;
-        }
-        .transport {
-          border-radius: 4px;
-          padding: 1px 4px;
-          line-height: 1.1;
-          //border: 1px solid $grayLighter;
-          background: lighten($grayLighter, 15%);
-          border: 1px solid $grayLight;
-        }
+  .left {
+    width: 70%;
+    .title {
+      font-size: 1.3em;
+      margin: 0px;
+    }
+    .order-time-ago {
+      color: $grayDark;
+      margin-bottom: 0.5em;
+      i {
+        vertical-align: middle;
+        font-size: 1.2em;
       }
     }
-    .right {
-      width: 40%;
-      text-align: right;
-      .currency {
-        font-size: 1.3em;
-        color: $money;
-        font-weight: bold;
-        small {
-          color: $grayDark;
-          font-weight: normal;
-          font-size: 70%;
-        }
+    .details {
+      color: $grayDark;
+    }
+
+  }
+
+  .transport {
+    .material-icons {
+      font-size: 1em;
+    }
+    .call {
+      font-weight: bold;
+      font-size: 1.15em;
+      display: inline-block;
+      padding: 0.3em 0;
+      cursor: pointer;
+    }
+    .trans-icon {
+      font-size: 1.5em;
+    }
+    .transport-set {
+      background: #2196f3;
+      color: white;
+      border-radius: 3px;
+      padding: 1px 4px;
+      line-height: 1.1;
+      > div {
+        margin-bottom: 0.3em;
+      }
+    }
+  }
+  .pick-and-pay {
+    padding: 2px 4px;
+    background: $green2;
+    border-radius: 3px;
+    color: white;
+    i {
+      vertical-align: middle;
+      line-height: 1;
+    }
+    small {
+      vertical-align: middle;
+      line-height: 1;
+    }
+  }
+
+  .right {
+    width: 30%;
+    text-align: right;
+    .currency {
+      font-size: 1.3em;
+      color: $money;
+      font-weight: bold;
+      small {
+        color: $grayDark;
+        font-weight: normal;
+        font-size: 70%;
       }
     }
   }

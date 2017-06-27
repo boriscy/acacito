@@ -9,6 +9,7 @@ export default {
   "Calling transport": "Llamando transporte",
   "Click to edit": "Haga click para editar",
   "Click the map to select your position": "Haga click en el mapa para seleccionar su posición",
+  "Client will pick order": "El cliente recoge su pedido",
   "Close": "Cerrar",
   "car": "auto",
   "Cancel call": "Cancelar llamada",
