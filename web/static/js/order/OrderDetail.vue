@@ -2,7 +2,6 @@
   <Modal ref="modal" class="order-detail-modal">
     <h3 slot="title">{{order.client_name}} <strong>{{order.total | number}}</strong></h3>
 
-
     <div slot="body" class="order-detail">
       <h4>
         <i class="material-icons text-gray">person</i>

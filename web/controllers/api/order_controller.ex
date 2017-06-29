@@ -21,6 +21,24 @@ defmodule Publit.Api.OrderController do
   end
 
   # PUT /api/org_orders/:id/move_next
+  def move_next(conn, %{"id" => id, "order" => order_params}) do
+    with ord <- get_order(conn, id),
+      %Order{} <- ord do
+        user = conn.assigns.current_user
+
+        case Order.StatusService.next_status(ord, user, order_params) do
+          {:ok, order} ->
+            render(conn, "show.json", order: order)
+          _ ->
+            render(conn, "error.json")
+        end
+    else
+      _ ->
+        render_not_found(conn)
+    end
+  end
+
+  # PUT /api/org_orders/:id/move_next
   def move_next(conn, %{"id" => id}) do
     with ord <- get_order(conn, id),
       %Order{} <- ord do
@@ -28,7 +46,6 @@ defmodule Publit.Api.OrderController do
 
         case Order.StatusService.next_status(ord, user) do
           {:ok, order} ->
-            #UserChannel.broadcast_order(order)
             render(conn, "show.json", order: order)
           _ ->
             render(conn, "error.json")

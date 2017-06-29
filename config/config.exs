@@ -28,7 +28,8 @@ config :logger, :console,
 config :arc,
   storage: Arc.Storage.Local
 
-config :publit, :session_max_age, 2 * 7 * 24 * 60 * 60
+############################### weeks
+config :publit, :session_max_age, 10 * 7 * 24 * 60 * 60
 
 config :publit, :sms_api, Publit.SmsApi
 

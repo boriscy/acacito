@@ -3,13 +3,15 @@ import {format} from '../mixins'
 import orderMixin from './orderMixin'
 import OrderDetail from './OrderDetail.vue'
 import NullOrder from  './NullOrder.vue'
+import Modal from '../globals/Modal.vue'
 
 export default {
   name: 'Order',
   mixins: [format, orderMixin],
   components: {
     OrderDetail,
-    NullOrder
+    NullOrder,
+    Modal
   },
   computed: {
     user_client() { return this.order.user_client }
@@ -37,6 +39,12 @@ export default {
           </div>
         </div>
 
+        <div v-if="order.process_time">
+          {{order.inserted_at | datetime}}
+          <span class="text-muted">Tiempo estimado:</span>
+          {{order.process_time}} {{'minutes' | translate}}
+        </div>
+
         <slot name="transport"></slot>
       </div>
 
@@ -60,5 +68,26 @@ export default {
     <span style="display:none">{{now}}</span>
 
     <OrderDetail ref="detail" :order="order" />
+
+    <Modal ref="timeModal" headerCSS="blue">
+    <div slot="title">
+      <strong>{{formatNum(order.num)}}</strong>
+      {{'Estimated time for preparation?' | translate}}
+    </div>
+
+      <div slot="body">
+        <div class="form-group form-inline">
+          <label>{{'Estimated time for preparation?' | translate}}</label>
+          <select v-model="form.process_time" class="form-control">
+            <option v-for="v in 18" :value="v*5">{{v * 5}} {{'minutes' | translate}}</option>
+          </select>
+        </div>
+      </div>
+      <div slot="footer">
+        <button class="btn btn-default" @click="$refs.timeModal.close()">{{'Cancel' | translate}}</button>
+        <button class="btn btn-success" @click="moveNextConfirm()">{{'Confirm time' | translate}}</button>
+      </div>
+    </Modal>
+
   </div>
 </template>

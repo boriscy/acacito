@@ -7,6 +7,11 @@ defmodule Publit.Order.StatusServiceTest do
     %{uc: insert(:user_client), org: insert(:organization)}
   end
 
+  def utc_diff_mins(mins \\ 5) do
+    utc = :erlang.universaltime() |> :calendar.datetime_to_gregorian_seconds()
+    (utc + mins * 60) |> :calendar.gregorian_seconds_to_datetime() |> Ecto.DateTime.cast!()
+  end
+
   describe "Change status" do
     test "change all statuses", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
@@ -14,9 +19,11 @@ defmodule Publit.Order.StatusServiceTest do
       ord = create_order(uc, org)
       u = build(:user, id: Ecto.UUID.generate())
 
-      {:ok, ord} = Order.StatusService.next_status(ord, u)
+      ptime = utc_diff_mins(5)
+      {:ok, ord} = Order.StatusService.next_status(ord, u, %{"process_time" => Ecto.DateTime.to_iso8601(ptime)})
 
       assert ord.status == "process"
+      assert ord.process_time == ptime
 
       {:ok, ord} = Order.StatusService.next_status(ord, u)
       assert ord.status == "transport"
@@ -51,13 +58,27 @@ defmodule Publit.Order.StatusServiceTest do
       end)
     end
 
+    test "Error process_time", %{uc: uc, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
+
+      ord = create_order(uc, org)
+      u = build(:user, id: Ecto.UUID.generate())
+
+      ptime = utc_diff_mins(0)
+
+      assert :error == Order.StatusService.next_status(ord, u, %{"process_time" => Ecto.DateTime.to_iso8601(ptime)})
+    end
+
     test "messages", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
 
       ord = create_order(uc, org)
       u = build(:user, id: Ecto.UUID.generate())
 
-      {:ok, _ord} = Order.StatusService.next_status(ord, u)
+      ptime = utc_diff_mins(5)
+
+      {:ok, ord} = Order.StatusService.next_status(ord, u, %{"process_time" => Ecto.DateTime.to_iso8601(ptime) })
+      assert ord.process_time == ptime
 
       Process.sleep(50)
 
@@ -165,6 +186,7 @@ defmodule Publit.Order.StatusServiceTest do
 
       assert ord.status == "delivered"
 
+      Process.sleep(10) # Required, sometimes agent is not updated at the same time
       data = Publit.MessageApiMock.get_data()
       dt = data |> List.first()
 
@@ -177,8 +199,10 @@ defmodule Publit.Order.StatusServiceTest do
       ord = create_order(uc, org)
       u = build(:user, id: Ecto.UUID.generate())
 
-      {:ok, ord} = Order.StatusService.next_status(ord, u)
+      ptime = utc_diff_mins(5)
+      {:ok, ord} = Order.StatusService.next_status(ord, u, %{"process_time" => Ecto.DateTime.to_iso8601(ptime)})
       assert ord.status == "process"
+      assert ord.process_time == ptime
 
       {:ok, ord} = Order.StatusService.previous_status(ord, u)
       assert ord.status == "new"

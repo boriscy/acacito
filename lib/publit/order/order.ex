@@ -22,6 +22,8 @@ defmodule Publit.Order do
     field :organization_number, :string
     field :other_details, :string
     field :comment_details, :map, default: %{}
+    field :process_time, :utc_datetime
+    field :transport_time, :utc_datetime
 
     embeds_one :transport, Order.Transport
     embeds_many :details, Order.Detail

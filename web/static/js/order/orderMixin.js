@@ -23,7 +23,8 @@ export default {
     return {
       socket: null,
       channel: null,
-      now: 0
+      now: 0,
+      form: {process_time: 5}
     }
   },
   methods: {
@@ -57,7 +58,15 @@ export default {
     },
     //
     moveNext() {
-      this.$store.dispatch('moveNext', this.order)
+      if('new' == this.order.status) {
+        this.$refs.timeModal.open()
+      } else {
+        this.$store.dispatch('moveNext', this.order)
+      }
+    },
+    moveNextConfirm() {
+      this.$store.dispatch('moveNextConfirm', {order: this.order, params: this.form})
+      this.$refs.timeModal.close()
     },
     //
     presentNext(order) {

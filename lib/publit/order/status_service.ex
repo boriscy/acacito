@@ -9,15 +9,21 @@ defmodule Publit.Order.StatusService do
   @doc"""
   Changes the status of an order to the next
   """
-  def next_status(%Order{status: "new"} = order, user) do
+  def next_status(%Order{status: "new"} = order, user, params) do
     log = %{"msg" => "Change status from new to process", "user_id" => user.id}
-    update_status(order, "process", log, gettext("Yor order will be processed"))
-  end
-  def next_status(%Order{status: "process", transport: %Order.Transport{transport_type: "deliver"}} = order, user) do
-    log = %{"msg" => "Change status from process to transport", "user_id" => user.id}
-    update_status(order, "transport", log, gettext("Your order has transportation"))
+
+    case get_valid_time(params["process_time"]) do
+      {:ok, dt} ->
+        update_status(order, "process", dt, log, gettext("Yor order will be processed"))
+      :error -> :error
+    end
   end
 
+  def next_status(%Order{status: "process", transport: %Order.Transport{transport_type: "deliver"}} = order, user) do
+    log = %{"msg" => "Change status from process to transport", "user_id" => user.id}
+
+    update_status(order, "transport", log, gettext("Your order has transportation"))
+  end
   def next_status(%Order{status: "process", transport: %Order.Transport{transport_type: "pickandpay"}} = order, user) do
     log = %{"msg" => "Change status from process to ready", "user_id" => user.id}
     update_status(order, "ready", log, gettext("Your order is ready"))
@@ -107,6 +113,20 @@ defmodule Publit.Order.StatusService do
   defp update_status(order, status, log, msg) do
     multi = Multi.new()
     |> Multi.update(:order, set_order_status(order, status))
+    |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
+    case Repo.transaction(multi) do
+      {:ok, res} ->
+        send_message(res.order, msg)
+        {:ok, res.order}
+      {:erro, res} -> {:error, res.order}
+    end
+  end
+
+  defp update_status(order, status, ptime, log, msg) do
+    ocs = set_order_status(order, status) |> put_change(:process_time, ptime)
+
+    multi = Multi.new()
+    |> Multi.update(:order, ocs)
     |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
     case Repo.transaction(multi) do
       {:ok, res} ->
@@ -207,4 +227,13 @@ defmodule Publit.Order.StatusService do
       cb_ok, cb_err)
   end
 
+  defp get_valid_time(dtime) do
+    with {:ok, dt} <- Ecto.DateTime.cast(dtime),
+      {:ok, :gt} <- {:ok, Ecto.DateTime.Utils.compare(dt, Ecto.DateTime.utc() )} do
+        {:ok, dt}
+    else
+      _a ->
+        :error
+    end
+  end
 end

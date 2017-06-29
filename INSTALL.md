@@ -189,3 +189,20 @@ MIX_ENV=prod
 https://gist.github.com/cecilemuller/a26737699a7e70a7093d4dc115915de8
 
 sudo letsencrypt certonly --standalone -w /var/www/letsencrypt -d www.acacito.com -d acacito.com -d app.acacito.com -d cli.acacito.com admin.acacito.com --email boriscyber@gmail.com --agree-tos
+
+# OSRM
+
+https://www.digitalocean.com/community/tutorials/how-to-set-up-an-osrm-server-on-ubuntu-14-04
+
+https://github.com/Project-OSRM/osrm-backend/wiki/Building-OSRM
+
+## Run
+
+https://github.com/Project-OSRM/osrm-backend/wiki/Running-OSRM
+
+go to `/home/boris/dev/c++/osrm-backend` and run
+```
+osrm-routed bolivia-latest.osrm
+```
+http://localhost:5000/route/v1/driving/-63.1657058,-17.8090250009;-63.15578699,-17.81522523?overview=false&alternatives=true
+http://localhost:5000/route/v1/driving/-63.18569898605346,-17.786040393023463;-63.18583846092224,-17.78297555504648?overview=false&alternatives=true&steps=true

@@ -7,19 +7,28 @@ export default {
       cb(res.data.orders)
     })
   },
-  getOrder(cb, id) {
+  getOrder(id, cb) {
     auth.get(`/api/orders/${id}`)
     .then((res) => {
       cb(res.data.order)
     })
   },
-  moveNext(cb, order) {
+  moveNext(order, cb) {
     auth.put(`/api/orders/${order.id}/move_next`)
     .then((res) => {
       cb(res.data)
     })
   },
-  callTransport(cb, order_id) {
+  moveNextConfirm({order, params}, cb) {
+    auth.put(`/api/orders/${order.id}/move_next`, {order: params})
+    .then((res) => {
+      cb(res.data)
+    })
+    .catch((error) => {
+      alert('there was an error')
+    })
+  },
+  callTransport(order_id, cb) {
     auth.post('/api/transport', {order_id: order_id})
     .then((res) => {
       cb(res)
@@ -28,7 +37,7 @@ export default {
       cb(error.response, order_id)
     })
   },
-  cancelCall(cb, order_id) {
+  cancelCall(order_id, cb) {
     auth.delete(`/api/transport/${order_id}`)
     .then((res) => {
       return cb(res)

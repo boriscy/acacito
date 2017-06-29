@@ -10,18 +10,27 @@ export const getOrders = ({commit}) => {
   })
 }
 
-export const getOrder = ({commit}, ord_id) => {
-  orderApi.getOrder(order => {
+export const getOrder = ({commit}, order_id) => {
+  orderApi.getOrder(order_id, order => {
     commit(types.FETCH_ORDER, {order})
-  }, ord_id)
+  })
 }
 
 export const moveNext = ({commit}, order) => {
   commit(types.ORDER_LOADING, {val: true, order_id: order.id})
-  orderApi.moveNext(data => {
+  orderApi.moveNext(order, data => {
     commit(types.ORDER_UPDATED, data)
     commit(types.ORDER_LOADING, {val: false, order_id: order.id})
-  }, order)
+  })
+}
+
+export const moveNextConfirm = ({commit}, {order, params}) => {
+  commit(types.ORDER_LOADING, {val: true, order_id: order.id})
+
+  orderApi.moveNextConfirm({order, params}, data => {
+    commit(types.ORDER_UPDATED, data)
+    commit(types.ORDER_LOADING, {val: false, order_id: order.id})
+  })
 }
 
 export const addOrder = ({commit}, data) => {

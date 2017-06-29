@@ -1,0 +1,17 @@
+.modal-header.blue,
+.modal-header.green,
+.modal-header.red
+{
+  color: white;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.modal-header.blue {
+  background: #2196F3;
+}
+.modal-header.green {
+  background: #4caf50;
+}
+.modal-header.red {
+  background: #f44336;
+}

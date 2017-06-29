@@ -45,7 +45,7 @@ defmodule Publit.UserAuthentication do
         {:error, cs}
       {:pass, _} ->
         cs = changeset(params) |> add_error(:password, "Invalid password")
-        {:error, cs }
+        {:error, cs}
     end
   end
 
