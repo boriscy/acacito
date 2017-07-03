@@ -1,21 +1,86 @@
 <script>
 import {format} from '../mixins'
-import orderMixin from './orderMixin'
 import OrderDetail from './OrderDetail.vue'
 import NullOrder from  './NullOrder.vue'
-import Modal from '../globals/Modal.vue'
+import OrderTime from  './OrderTime.vue'
 
 export default {
   name: 'Order',
-  mixins: [format, orderMixin],
+  mixins: [format],
   components: {
     OrderDetail,
     NullOrder,
-    Modal
+    OrderTime
   },
   computed: {
-    user_client() { return this.order.user_client }
-  }
+    user_client() { return this.order.user_client },
+    next() {
+      if('transporting' == this.order.status && this.order.user_transport_id) {
+        return false
+      } else {
+        return true
+      }
+    },
+    client() { return this.order.user_name },
+    organization() { return this.order.organization }
+  },
+  props: {
+    order: {
+      type:Object,
+      required: true
+    },
+    nextProcess: {
+      default: 'process-next'
+    }
+  },
+  methods: {
+    currency(order) {
+      return window.currencies[this.order.currency]
+    },
+    // returns the next status for an Order
+    nextStatus(status) {
+      switch(status) {
+        case 'new':
+          return 'process'
+        case 'process':
+        case 'transport':
+          return 'transporting'
+        case 'transporting':
+          return 'delivered'
+        default:
+          return ''
+      }
+    },
+    //
+    moveNext() {
+      if('new' == this.order.status) {
+        this.$refs.timeModal.open()
+      } else {
+        this.$store.dispatch('moveNext', this.order)
+      }
+    },
+    moveNextConfirm() {
+      console.log(this.$refs.timeModal.getTime())
+      return
+      this.$store.dispatch('moveNextConfirm', {order: this.order, params: this.form})
+      this.$refs.timeModal.close()
+    },
+    //
+    presentNext(order) {
+      console.log(order.status, order.user_transport_id)
+    }
+  },
+  created() {
+    setInterval(() => { this.now = new Date()}, 1000 * 60)
+  },
+  data() {
+    return {
+      socket: null,
+      channel: null,
+      now: 0,
+      form: {process_time: 5}
+    }
+  },
 }
 </script>
 
@@ -67,27 +132,10 @@ export default {
     <!--It will update the view time ago-->
     <span style="display:none">{{now}}</span>
 
+    <OrderTime ref="timeModal" :order="order"  />
+
     <OrderDetail ref="detail" :order="order" />
 
-    <Modal ref="timeModal" headerCSS="blue">
-    <div slot="title">
-      <strong>{{formatNum(order.num)}}</strong>
-      {{'Estimated time for preparation?' | translate}}
-    </div>
-
-      <div slot="body">
-        <div class="form-group form-inline">
-          <label>{{'Estimated time for preparation?' | translate}}</label>
-          <select v-model="form.process_time" class="form-control">
-            <option v-for="v in 18" :value="v*5">{{v * 5}} {{'minutes' | translate}}</option>
-          </select>
-        </div>
-      </div>
-      <div slot="footer">
-        <button class="btn btn-default" @click="$refs.timeModal.close()">{{'Cancel' | translate}}</button>
-        <button class="btn btn-success" @click="moveNextConfirm()">{{'Confirm time' | translate}}</button>
-      </div>
-    </Modal>
 
   </div>
 </template>

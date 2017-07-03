@@ -5,7 +5,6 @@
  */
 import Order from './Order.vue'
 import {format} from '../mixins'
-import orderMixin from './orderMixin'
 import Timer from '../globals/Timer.vue'
 import types from '../store/mutation-types'
 
@@ -13,10 +12,15 @@ let that = null
 
 export default {
   name: 'Process',
-  mixins: [format, orderMixin],
+  mixins: [format],
   components: {
     Order: Order,
     Timer: Timer
+  },
+  props: {
+    order: {
+      type: Object
+    }
   },
   computed: {
     timerCount() {

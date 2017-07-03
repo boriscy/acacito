@@ -95,6 +95,17 @@ const formatMethods = {
       default:
         return 'Bs.'
     }
+  },
+  formatNum(num) {
+    let str = String(num)
+    switch(str.length) {
+      case 1:
+        return '00' + num
+      case 2:
+        return '0' + num
+      default:
+        return num
+    }
   }
 }
 
@@ -110,8 +121,10 @@ export const format = {
       return formatMethods.dateFormat(date, format)
     },
     datetime(date, format = defaults.format.datetimeFormat) {
-      console.log('datetime filter', date, format);
       return formatMethods.datetimeFormat(date, format)
+    },
+    num(num) {
+      return formatMethods.formatNum(num)
     }
   },
   methods: formatMethods

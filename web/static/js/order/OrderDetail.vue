@@ -1,3 +1,35 @@
+<script>
+import Modal from '../globals/Modal.vue'
+import {format} from '../mixins'
+
+export default {
+  name: 'OrderDetail',
+  mixins: [format],
+  computed: {
+    user_client() { return this.order.user_client }
+  },
+  components: {
+    Modal
+  },
+  props: {
+    order: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    open() {
+      this.$refs.modal.open()
+    },
+    getSrc(src) {
+      return src
+    }
+  },
+  mounted() {
+  }
+}
+</script>
+
 <template>
   <Modal ref="modal" class="order-detail-modal">
     <h3 slot="title">{{order.client_name}} <strong>{{order.total | number}}</strong></h3>
@@ -55,37 +87,4 @@
     </div>
   </Modal>
 </template>
-
-<script>
-import Modal from '../globals/Modal.vue'
-import {format} from '../mixins'
-import orderMixin from './orderMixin'
-
-export default {
-  name: 'OrderDetail',
-  mixins: [format, orderMixin],
-  computed: {
-    user_client() { return this.order.user_client }
-  },
-  components: {
-    Modal
-  },
-  props: {
-    order: {
-      type: Object,
-      required: true
-    }
-  },
-  methods: {
-    open() {
-      this.$refs.modal.open()
-    },
-    getSrc(src) {
-      return src
-    }
-  },
-  mounted() {
-  }
-}
-</script>
 
