@@ -148,9 +148,5 @@ export default {
 
     </div>
 
-    <div slot="transport" v-if="'pickandpay' == order.transport.transport_type" class="pick-and-pay">
-      <i class="material-icons">shopping_basket</i>&nbsp;
-      <small>{{'Client will pick order' | translate}}</small>
-    </div>
   </Order>
 </template>

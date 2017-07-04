@@ -9,10 +9,6 @@ export default {
   components: {
     Modal
   },
-  watch: {
-    //'form.hour': function (a) { console.log('watch', a) },
-    'form.time_num': function (a) { console.log('watch tn', a) }
-  },
   computed: {
     hours() {
       let h = []
@@ -52,19 +48,20 @@ export default {
       this.setTime()
       this.$refs.modal.open()
     },
+    close() {
+      this.$refs.modal.close()
+    },
     getTime() {
-      if('num' == time_type) {
+      if('num' == this.time_type) {
         let d = new Date()
-        return new Date(d.getTime() + +this.form.time_num * 1000 * 60).toJSON()
+        return new Date(d.getTime() + +this.form.time_num * 1000 * 60)
       } else {
-        return this.dateTime()
+        return this.fullDate
       }
     },
     dateTime() {
       let d = new Date()
-      //console.log(this.form.hour, this.form.minutes)
       let d2 = new Date(new Date(d.getFullYear(), d.getMonth(), d.getDate(), +this.form.hour, +this.form.minutes))
-      //console.log(d, d2)
 
       if(d.getTime() > d2.getTime()) {
         return new Date(new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1, +this.form.hour, +this.form.minutes))
@@ -109,7 +106,7 @@ export default {
         <div>
           <label>
             <input type="radio" v-model="time_type" value="num" />
-            {{'Minutes for preparation?' | translate}}
+            {{'Minutes till order is ready' | translate}}
           </label>
         </div>
 
@@ -122,7 +119,7 @@ export default {
         <div>
           <label>
             <input type="radio" v-model="time_type" value="time" />
-            {{'Time for preparation?' | translate}}
+            {{'Time till order is ready' | translate}}
           </label>
         </div>
 
@@ -133,9 +130,10 @@ export default {
           <select v-model="form.minutes" class="form-control">
             <option v-for="m in minutes" :value="m">{{m}}</option>
           </select>
+
+          <span>{{fullDate | date}} <strong>{{fullDate | time}}</strong></span>
         </div>
 
-        {{dateTime() | datetime}}
 
       </div>
     </div>

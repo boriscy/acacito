@@ -60,9 +60,8 @@ export default {
       }
     },
     moveNextConfirm() {
-      console.log(this.$refs.timeModal.getTime())
-      return
-      this.$store.dispatch('moveNextConfirm', {order: this.order, params: this.form})
+      const t = this.$refs.timeModal.getTime().toJSON()
+      this.$store.dispatch('moveNextConfirm', {order: this.order, params: {process_time: t}})
       this.$refs.timeModal.close()
     },
     //
@@ -104,12 +103,6 @@ export default {
           </div>
         </div>
 
-        <div v-if="order.process_time">
-          {{order.inserted_at | datetime}}
-          <span class="text-muted">Tiempo estimado:</span>
-          {{order.process_time}} {{'minutes' | translate}}
-        </div>
-
         <slot name="transport"></slot>
       </div>
 
@@ -122,6 +115,19 @@ export default {
           <i class="material-icons">forward</i>
         </button>
       </div>
+
+    </div>
+
+    <div v-if="order.process_time" class="process-time">
+      <span class="text-muted">{{'Order ready at' | translate}}:</span>
+      <strong>{{order.process_time | time('hh:mm a')}}</strong>
+      &nbsp;
+      {{timeAgo(order.process_time)}}
+    </div>
+
+    <div slot="transport" v-if="'pickandpay' == order.transport.transport_type" class="pick-and-pay">
+      <i class="material-icons">shopping_basket</i>&nbsp;
+      <small>{{'Client will pick order' | translate}}</small>
     </div>
 
     <div>

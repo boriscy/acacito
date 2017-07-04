@@ -6,7 +6,8 @@ const defaults = {
     decs: 2,
     numSep: ' ',
     date: 'DD MMM YYYY',
-    datetime: 'DD MMM YYYY kk:mm:ss'
+    datetime: 'DD MMM YYYY hh:mm:ss',
+    time: 'hh:mm:ss a'
   }
 }
 
@@ -34,6 +35,13 @@ const formatMethods = {
     }
   },
   datetimeFormat(date, format = defaults.format.datetime, utc = true) {
+    if(utc) {
+      return moment.utc(date).local().format(format)
+    } else {
+      return moment(date).format(format)
+    }
+  },
+  timeFormat(date, format = defaults.format.time,utc = true) {
     if(utc) {
       return moment.utc(date).local().format(format)
     } else {
@@ -122,6 +130,9 @@ export const format = {
     },
     datetime(date, format = defaults.format.datetimeFormat) {
       return formatMethods.datetimeFormat(date, format)
+    },
+    time(date, format = defaults.format.timeFormat) {
+      return formatMethods.timeFormat(date, format)
     },
     num(num) {
       return formatMethods.formatNum(num)
