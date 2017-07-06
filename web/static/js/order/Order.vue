@@ -118,14 +118,14 @@ export default {
 
     </div>
 
-    <div v-if="order.process_time" class="process-time">
+    <div v-if="order.process_time" class="process-time line">
       <span class="text-muted">{{'Order ready at' | translate}}:</span>
       <strong>{{order.process_time | time('hh:mm a')}}</strong>
       &nbsp;
       {{timeAgo(order.process_time)}}
     </div>
 
-    <div slot="transport" v-if="'pickandpay' == order.transport.transport_type" class="pick-and-pay">
+    <div v-if="'pickandpay' == order.transport.transport_type" class="pick-and-pay line">
       <i class="material-icons">shopping_basket</i>&nbsp;
       <small>{{'Client will pick order' | translate}}</small>
     </div>
