@@ -148,7 +148,7 @@ defmodule Publit.Order do
 
   defp set_transport(cs) do
     if cs.changes.organization_id do
-      p = Map.merge(cs.params["transport"] || %{"calculated_price" => ""}, %{})
+      p = Map.merge(cs.params["transport"] , %{"calculated_price" => Publit.Distance.calculate_price("car")})
 
       cs
       |> put_change(:organization_pos, cs.changes.organization.data.pos)
