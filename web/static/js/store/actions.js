@@ -45,10 +45,14 @@ export const setOrderViewStatus = ({commit}, data) => {
 export const callTransport = ({commit}, data) => {
   commit(types.ORDER_CALLING, {order_id: data.id})
 
-  orderApi.callTransport((data, order_id) => {
+  orderApi.callTransport(data.id, (data, order_id) => {
     // No transports
-    if(data.status == 424) {
-      commit(types.ORDER_CALL_EMPTY, order_id)
+    if(data.status == 424 || data.status == 400) {
+      commit(types.ORDER_CALL_EMPTY, data.id)
+    }
+    // Internal error
+    if(data.status == 400) {
+      commit(types.ORDER_CALL_EMPTY, data.id)
     }
     // Error
     if(data.status == 422) {
@@ -60,11 +64,11 @@ export const callTransport = ({commit}, data) => {
     }
 
     //commit(types.ORDER_TRANSPORTER, {order_id: data.id})
-  }, data.id)
+  })
 }
 
 export const cancelCall = ({commit}, order_id) => {
-  orderApi.cancelCall((data) => {
+  orderApi.cancelCall(order_id, (data) => {
     if(data.status == 404) {
       // TODO nor found
       commit(types.ORDER_CALL_EMPTY, order_id)
@@ -73,7 +77,7 @@ export const cancelCall = ({commit}, order_id) => {
     if(data.status == 200) {
       commit(types.REMOVE_ORDER_CALLS, order_id)
     }
-  }, order_id)
+  })
 }
 
 //////////////////////////////////
