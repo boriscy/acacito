@@ -11,7 +11,7 @@ msgstr ""
 "Language: es\n"
 
 #: web/templates/layout/translations.html.eex:4
-#: web/templates/registration/index.html.eex:42
+#: web/templates/registration/index.html.eex:47
 msgid "Address"
 msgstr "Dirección"
 
@@ -57,7 +57,7 @@ msgstr "Contraseña"
 msgid "Products"
 msgstr "Productos"
 
-#: web/templates/registration/index.html.eex:47
+#: web/templates/registration/index.html.eex:52
 msgid "Register shop"
 msgstr "Registrar Venta"
 
@@ -65,7 +65,7 @@ msgstr "Registrar Venta"
 msgid "Register your shop"
 msgstr "Registre su venta"
 
-#: web/templates/registration/index.html.eex:37
+#: web/templates/registration/index.html.eex:42
 msgid "Shop name"
 msgstr "Nombre de la venta"
 
@@ -163,7 +163,7 @@ msgstr "Ocultar"
 msgid "Unpublished"
 msgstr "Oculto"
 
-#: lib/publit/order/order.ex:128
+#: lib/publit/order/order.ex:130
 msgid "Invalid product"
 msgstr "Producto inválido"
 
@@ -244,13 +244,13 @@ msgstr "Ejemplo de descripción"
 msgid "New order"
 msgstr "Nuevo pedido"
 
-#: web/controllers/api/order_controller.ex:62
+#: web/controllers/api/order_controller.ex:79
 #: web/controllers/client_api/comment_controller.ex:49
 #: web/controllers/client_api/order_controller.ex:37
 msgid "Could not find the order"
 msgstr "No se pudo encontrar el pedido"
 
-#: lib/publit/order/status_service.ex:144 web/views/api/transport_view.ex:9
+#: lib/publit/order/status_service.ex:180 web/views/api/transport_view.ex:9
 #: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr "Pedido no encontrado"
@@ -304,19 +304,19 @@ msgstr "Su transporte esta cerca"
 msgid "Your order is arriving"
 msgstr "Su transporte esta llegando"
 
-#: lib/publit/order/status_service.ex:126
+#: lib/publit/order/status_service.ex:162
 msgid "User transport not found"
 msgstr "No se encontro transporte al pedido"
 
-#: lib/publit/order/status_service.ex:44
+#: lib/publit/order/status_service.ex:50
 msgid "Your order is on the way"
 msgstr "Su pedido esta en camino"
 
-#: lib/publit/order/status_service.ex:183
+#: lib/publit/order/status_service.ex:219
 msgid "Order delivered"
 msgstr "Pedido entregado"
 
-#: lib/publit/order/status_service.ex:183
+#: lib/publit/order/status_service.ex:219
 msgid "Your order has been delivered"
 msgstr "Su pedido fue entregado"
 
@@ -389,11 +389,11 @@ msgstr "Su codigo de %{app} es %{code}"
 msgid "You must set your position."
 msgstr "Debe seleccionar su posición"
 
-#: lib/publit/order/status_service.ex:14
+#: lib/publit/order/status_service.ex:17
 msgid "Yor order will be processed"
 msgstr "Su pedido sera preparado"
 
-#: lib/publit/order/call_service.ex:75 lib/publit/order/status_service.ex:18
+#: lib/publit/order/call_service.ex:75 lib/publit/order/status_service.ex:25
 msgid "Your order has transportation"
 msgstr "Su pedido tiene transporte"
 
@@ -418,7 +418,7 @@ msgid "Total"
 msgstr "Total"
 
 #: web/templates/layout/translations.html.eex:27
-#: web/templates/registration/index.html.eex:29
+#: web/templates/registration/index.html.eex:34
 msgid "Mobile number"
 msgstr "Número móvil"
 
@@ -450,6 +450,10 @@ msgstr "Usuario inválido"
 msgid "We could not complete your order"
 msgstr "No pudimos completar su pedido"
 
-#: lib/publit/order/status_service.ex:23
+#: lib/publit/order/status_service.ex:29
 msgid "Your order is ready"
 msgstr "Su pedido esta listo"
+
+#: web/templates/registration/index.html.eex:27
+msgid "Full name"
+msgstr "Nombre completo"

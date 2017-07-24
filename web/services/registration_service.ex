@@ -9,6 +9,7 @@ defmodule Publit.RegistrationService do
     field :email
     field :password
     field :name
+    field :full_name
     field :mobile_number
     field :category, :string, default: "restaurant"
     field :address
@@ -38,7 +39,7 @@ defmodule Publit.RegistrationService do
   end
 
   defp set_user_multi(changes, org) do
-    cs = User.create_changeset(%User{}, changes)
+    cs = Ecto.Changeset.change(%User{}, changes)
     |> put_embed(:organizations, [%UserOrganization{
           name: org.name, organization_id: org.id,
           active: true, role: "admin"
@@ -60,12 +61,13 @@ defmodule Publit.RegistrationService do
 
   def changeset(params) do
     %RegistrationService{}
-    |> cast(params, [:email, :mobile_number, :password, :name, :category, :address])
-    |> validate_required([:email, :mobile_number, :password, :name, :category, :address])
+    |> cast(params, [:email, :mobile_number, :password, :name, :full_name, :category, :address])
+    |> validate_required([:email, :mobile_number, :password, :name, :full_name, :category, :address])
     |> validate_format(:email, @email_reg)
     |> validate_format(:mobile_number, @number_reg)
     |> validate_length(:password, min: 8, message: err_gettext("should be at least %{count} character(s)", count: 8))
     |> validate_length(:address, min: 8, message: err_gettext("should be at least %{count} character(s)", count: 8))
+    |> validate_length(:full_name, min: 5, message: err_gettext("should be at least %{count} character(s)", count: 3))
     |> validate_inclusion(:category, @categories)
   end
 

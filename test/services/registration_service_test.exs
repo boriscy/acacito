@@ -4,7 +4,7 @@ defmodule Publit.RegistrationServiceTest do
 
   @valid_attrs %{email: "amaru@mail.com", password: "demo1234",
                  name: "La Pizzeria", category: "restaurant",
-                 mobile_number: "59177889900",
+                 mobile_number: "59177889900", full_name: "Amaru Barroso",
                  address: "Samaipata, frente al Jaguar Azul"}
 
   describe "register" do
@@ -16,6 +16,8 @@ defmodule Publit.RegistrationServiceTest do
       assert org.id
       assert org.address == @valid_attrs[:address]
       assert org.mobile_number == @valid_attrs[:mobile_number]
+
+      assert user.full_name == "Amaru Barroso"
 
       user_org = Enum.find(user.organizations, fn(o) -> o.active && o.organization_id == org.id end)
 
@@ -54,6 +56,7 @@ defmodule Publit.RegistrationServiceTest do
       assert reg_cs.errors[:name]
       refute reg_cs.errors[:category]
       assert reg_cs.errors[:address]
+      assert reg_cs.errors[:full_name]
 
       assert {:error, reg_cs} = RegistrationService.register(%{email: "fake@mail", password: "demo123", addres: "Small"})
 

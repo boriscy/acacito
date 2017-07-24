@@ -13,8 +13,8 @@ defmodule Publit.Order.StatusService do
     log = %{"msg" => "Change status from new to process", "user_id" => user.id}
 
     case get_valid_time(params["process_time"]) do
-      {:ok, dt} ->
-        update_status(order, "process", dt, log, gettext("Yor order will be processed"))
+      {:ok, pt} ->
+        update_status(order, "process", pt, log, gettext("Yor order will be processed"))
       :error -> :error
     end
   end
@@ -230,10 +230,16 @@ defmodule Publit.Order.StatusService do
   defp get_valid_time(dtime) do
     with {:ok, dt} <- Ecto.DateTime.cast(dtime),
       {:ok, :gt} <- {:ok, Ecto.DateTime.Utils.compare(dt, Ecto.DateTime.utc() )} do
-        {:ok, dt}
+        {:ok, ecto_to_datetime(dt)}
     else
       _a ->
         :error
     end
+  end
+
+  def ecto_to_datetime(dt) do
+    Ecto.DateTime.to_erl(dt)
+    |> NaiveDateTime.from_erl!()
+    |> DateTime.from_naive!("Etc/UTC")
   end
 end

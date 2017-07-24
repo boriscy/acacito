@@ -12,6 +12,12 @@ defmodule Publit.Order.StatusServiceTest do
     (utc + mins * 60) |> :calendar.gregorian_seconds_to_datetime() |> Ecto.DateTime.cast!()
   end
 
+  def ecto_to_datetime(dt) do
+    Ecto.DateTime.to_erl(dt)
+    |> NaiveDateTime.from_erl!()
+    |> DateTime.from_naive!("Etc/UTC")
+  end
+
   describe "Change status" do
     test "change all statuses", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
@@ -23,7 +29,7 @@ defmodule Publit.Order.StatusServiceTest do
       {:ok, ord} = Order.StatusService.next_status(ord, u, %{"process_time" => Ecto.DateTime.to_iso8601(ptime)})
 
       assert ord.status == "process"
-      assert ord.process_time == ptime
+      assert ord.process_time == ecto_to_datetime(ptime)
 
       {:ok, ord} = Order.StatusService.next_status(ord, u)
       assert ord.status == "transport"
@@ -78,7 +84,7 @@ defmodule Publit.Order.StatusServiceTest do
       ptime = utc_diff_mins(5)
 
       {:ok, ord} = Order.StatusService.next_status(ord, u, %{"process_time" => Ecto.DateTime.to_iso8601(ptime) })
-      assert ord.process_time == ptime
+      assert ord.process_time == ecto_to_datetime(ptime)
 
       Process.sleep(50)
 
@@ -167,6 +173,7 @@ defmodule Publit.Order.StatusServiceTest do
 
       assert ord.status == "ready"
 
+      Process.sleep(10)
       data = Publit.MessageApiMock.get_data()
       dt = data |> List.first()
 
@@ -202,7 +209,7 @@ defmodule Publit.Order.StatusServiceTest do
       ptime = utc_diff_mins(5)
       {:ok, ord} = Order.StatusService.next_status(ord, u, %{"process_time" => Ecto.DateTime.to_iso8601(ptime)})
       assert ord.status == "process"
-      assert ord.process_time == ptime
+      assert ord.process_time == ecto_to_datetime(ptime)
 
       {:ok, ord} = Order.StatusService.previous_status(ord, u)
       assert ord.status == "new"

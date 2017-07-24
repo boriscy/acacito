@@ -11,7 +11,7 @@ msgstr ""
 "Language: en\n"
 
 #: web/templates/layout/translations.html.eex:4
-#: web/templates/registration/index.html.eex:42
+#: web/templates/registration/index.html.eex:47
 msgid "Address"
 msgstr ""
 
@@ -57,7 +57,7 @@ msgstr ""
 msgid "Products"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:47
+#: web/templates/registration/index.html.eex:52
 msgid "Register shop"
 msgstr ""
 
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Register your shop"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:37
+#: web/templates/registration/index.html.eex:42
 msgid "Shop name"
 msgstr ""
 
@@ -163,7 +163,7 @@ msgstr ""
 msgid "Unpublished"
 msgstr ""
 
-#: lib/publit/order/order.ex:128
+#: lib/publit/order/order.ex:130
 msgid "Invalid product"
 msgstr ""
 
@@ -244,13 +244,13 @@ msgstr ""
 msgid "New order"
 msgstr ""
 
-#: web/controllers/api/order_controller.ex:62
+#: web/controllers/api/order_controller.ex:79
 #: web/controllers/client_api/comment_controller.ex:49
 #: web/controllers/client_api/order_controller.ex:37
 msgid "Could not find the order"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:144 web/views/api/transport_view.ex:9
+#: lib/publit/order/status_service.ex:180 web/views/api/transport_view.ex:9
 #: web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr ""
@@ -304,19 +304,19 @@ msgstr ""
 msgid "Your order is arriving"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:126
+#: lib/publit/order/status_service.ex:162
 msgid "User transport not found"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:44
+#: lib/publit/order/status_service.ex:50
 msgid "Your order is on the way"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:183
+#: lib/publit/order/status_service.ex:219
 msgid "Order delivered"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:183
+#: lib/publit/order/status_service.ex:219
 msgid "Your order has been delivered"
 msgstr ""
 
@@ -389,11 +389,11 @@ msgstr ""
 msgid "You must set your position."
 msgstr ""
 
-#: lib/publit/order/status_service.ex:14
+#: lib/publit/order/status_service.ex:17
 msgid "Yor order will be processed"
 msgstr ""
 
-#: lib/publit/order/call_service.ex:75 lib/publit/order/status_service.ex:18
+#: lib/publit/order/call_service.ex:75 lib/publit/order/status_service.ex:25
 msgid "Your order has transportation"
 msgstr ""
 
@@ -418,7 +418,7 @@ msgid "Total"
 msgstr ""
 
 #: web/templates/layout/translations.html.eex:27
-#: web/templates/registration/index.html.eex:29
+#: web/templates/registration/index.html.eex:34
 msgid "Mobile number"
 msgstr ""
 
@@ -450,6 +450,10 @@ msgstr ""
 msgid "We could not complete your order"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:23
+#: lib/publit/order/status_service.ex:29
 msgid "Your order is ready"
+msgstr ""
+
+#: web/templates/registration/index.html.eex:27
+msgid "Full name"
 msgstr ""

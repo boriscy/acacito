@@ -30,9 +30,10 @@ defmodule Publit.User do
   def create_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:email, :full_name, :password, :mobile_number])
-    |> validate_required([:email, :password])
+    |> validate_required([:email, :password, :full_name])
     |> validate_format(:email, @email_reg)
     |> validate_length(:password, min: 8)
+    |> validate_length(:full_name, min: 5)
     |> unique_constraint(:email)
     |> unique_constraint(:mobile_number)
   end

@@ -23,6 +23,11 @@
         <%= error_tag f, :password %>
       </div>
 
+      <div class="form-group <%= has_error(f, :full_name) %>">
+        <%= password_input f, :full_name, class: "form-control", placeholder: gettext("Full name") %>
+        <%= error_tag f, :full_name %>
+      </div>
+
       <div class="form-group <%= has_error(f, :mobile_number) %>">
         <div class="flex">
           <strong class="text-gray" style="padding:8px">+591</strong>&nbsp;

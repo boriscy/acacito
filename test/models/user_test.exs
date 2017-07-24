@@ -3,7 +3,8 @@ defmodule Publit.UserTest do
 
   alias Publit.User
 
-  @valid_attrs %{email: "amaru@mail.com", password: "demo1234", mobile_number: "59177665544"}
+  @valid_attrs %{email: "amaru@mail.com", password: "demo1234",
+        mobile_number: "59177665544", full_name: "Amaru Barroso"}
   @invalid_attrs %{email: "to"}
 
   describe "create" do

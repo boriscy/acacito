@@ -24,7 +24,7 @@ defmodule Publit.RegistrationControllerTest do
       conn = post(conn, "/registration", %{"registration_service" =>
         %{
           "email" => "amaru@mail.com", "password"=> "demo1234", "mobile_number" => "59177112233",
-          "name" => "La Pizzeria", "address"=> "Samaipata, frente al Jaguar Azul"
+          "name" => "La Pizzeria", "full_name" => "Amaru Barroso", "address"=> "Samaipata, frente al Jaguar Azul"
         }
       })
 
@@ -49,7 +49,7 @@ defmodule Publit.RegistrationControllerTest do
       conn = post(conn, "/registration", %{"registration_service" =>
         %{
           "email" => "", "password"=> "demo1234",
-          "name" => "La Pizzeria", "address"=> "Samaipata, frente al Jaguar Azul"
+          "name" => "La Pizzeria", "full_name" => "Amaru Barroso", "address"=> "Samaipata, frente al Jaguar Azul"
         }
       })
 

@@ -16,6 +16,12 @@ defmodule Publit.Api.OrderControllerTest do
     (utc + mins * 60) |> :calendar.gregorian_seconds_to_datetime() |> Ecto.DateTime.cast!()
   end
 
+  def ecto_to_datetime(dt) do
+    Ecto.DateTime.to_erl(dt)
+    |> NaiveDateTime.from_erl!()
+    |> DateTime.from_naive!("Etc/UTC")
+  end
+
   describe "GET /api/orders" do
     test "OK", %{conn: conn, org: org} do
       user_client = insert(:user_client)
@@ -79,7 +85,7 @@ defmodule Publit.Api.OrderControllerTest do
       json = Poison.decode!(conn.resp_body)
 
       assert json["order"]["status"] == "process"
-      assert json["order"]["process_time"] == ptime
+      assert json["order"]["process_time"] == ptime <> "Z"
 
       assert json["order"]["organization"] == %{}
     end
