@@ -108,7 +108,7 @@ export default {
 
       <div class="right">
         <div class="currency">
-          <small>{{currency()}}</small> {{ formatNumber(order.total) }}
+          {{ formatNumber(order.total) }} <small>{{currency()}}</small>
         </div>
 
         <button v-if="next" @click="moveNext()" class="next" :class="nextStatus(order.status)" :disabled="order.loading">

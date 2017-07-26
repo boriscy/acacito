@@ -65,6 +65,9 @@ body{
 
 .currency {
   color: $money;
+  small {
+    color: $gray;
+  }
 }
 
 .order {
@@ -227,10 +230,10 @@ body{
     padding: 4px 0px 8px;
   }
 
-  .currency {
-    font-size: 70%;
-    color: $gray;
-  }
+  //.currency {
+  //  font-size: 70%;
+  //  color: $gray;
+  //}
 
   .left {
     width: 100px;

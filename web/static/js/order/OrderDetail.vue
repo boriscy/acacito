@@ -6,7 +6,8 @@ export default {
   name: 'OrderDetail',
   mixins: [format],
   computed: {
-    user_client() { return this.order.user_client }
+    user_client() { return this.order.user_client },
+    currency() { return window.currencies[this.order.currency] },
   },
   components: {
     Modal
@@ -65,11 +66,12 @@ export default {
           <div class="price-line flex">
             <div class="det">
               {{det.quantity}} x
-              <span class="currency">{{order.currency}}</span> {{det.price | number}}
+              {{det.price | number}}
+              <small class="text-gray">{{currency}}</small>
             </div>
             <div class="subtotal">
-              <span class="currency">{{order.currency}}</span>
               {{(det.quantity * det.price) | number}}
+              <small class="text-gray">{{currency}}</small>
             </div>
           </div>
         </div>
@@ -77,8 +79,8 @@ export default {
 
       <div class="total">
         {{ 'Total' | translate }}
-        <span class="currency">{{order.currency}}</span>
         {{(order.total) | number}}
+        <small class="text-gray">{{currency}}</small>
       </div>
     </div>
 
