@@ -35,9 +35,10 @@ defmodule Publit.Order.Null do
 
     cb_ok = fn(_) -> "" end
     cb_err = fn(_) -> "" end
+    ord = Publit.TransApi.OrderView.to_api(order)
 
     Publit.MessagingService.send_message_cli(tokens,
-      %{title: title, message: title, data: %{status: "order:updated", order: order} },
+      %{title: title, message: title, data: %{status: "order:updated", order: ord} },
       cb_ok, cb_err)
   end
 end

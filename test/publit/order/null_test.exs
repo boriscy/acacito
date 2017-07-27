@@ -29,6 +29,16 @@ defmodule Publit.Order.NullTest do
 
       assert msg["type"] == "status:nulled"
       assert msg["user_id"] == user.id
+
+      msg = Agent.get(:api_mock, fn(v) -> v end) |> List.first
+
+      ord = msg[:msg][:data][:order]
+      assert Map.keys(ord) == [:chat, :client_address, :client_name, :client_number,
+       :client_pos, :comment_details, :currency, :details, :id, :inserted_at,
+       :log, :null_reason, :num, :order_calls, :organization, :organization_address,
+       :organization_id, :organization_name, :organization_number, :organization_pos, :other_details,
+       :process_time, :status, :total, :transport, :transport_time, :updated_at,
+       :user_client, :user_client_id, :user_transport, :user_transport_id]
     end
 
     test "invalid" do
