@@ -102,12 +102,44 @@ defmodule Publit.Order.StatusService do
     end
   end
 
+  def previous_status(%Order{status: "transport"} = order, user) do
+    log = %{"msg" => "Change status from process to new", "user_id" => user.id }
+    msg = gettext("Don't worry we are working on your order, there was a small error updating your order status")
+
+    ord_cs = change(order)
+    |> put_change(:status, "process")
+    |> put_embed(:transport, change(order.transport, %{responded_at: nil, calculated_price: nil}))
+
+    multi = Multi.new()
+    |> Multi.update(:order, ord_cs)
+    |> Multi.run(:log, fn(_) -> Order.Log.add(order.id, log) end)
+
+    case Repo.transaction(multi) do
+      {:ok, res} ->
+        send_message(res.order, msg)
+        {:ok, res.order}
+      {:erro, res} -> {:error, res.order}
+    end
+  end
+
   @doc"""
   Move to previous status
   """
-  def previous_status(%Order{status: "process"} = order, user) do
-    log = %{"msg" => "Change status from process to new", "user_id" => user.id }
-    update_status(order, "new", log, "")
+  def previous_status(%Order{} = order, user) do
+    prev_st = get_previous_status(order.status)
+    log = %{"msg" => "Change status from #{order.status} to #{prev_st}", "user_id" => user.id }
+    msg = gettext("Don't worry we are working on your order, there was a small error updating your order status")
+
+    update_status(order, prev_st, log, msg)
+  end
+
+  defp get_previous_status(st) do
+    case st do
+      "process" -> "new"
+      "ready" -> "process"
+      "transport" -> "process"
+      "transporting" -> "transport"
+    end
   end
 
   defp update_status(order, status, log, msg) do

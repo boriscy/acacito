@@ -27,6 +27,7 @@ export default {
   "Mobile number": "Número móvil",
   "motorcycle": "Motocicleta",
   "More details": "Mas detalles",
+  "Move Back": "Mover atras",
   "New Orders": "Nuevos pedidos",
   "No transport available": "No hay transporte disponible",
   "Name": "Nombre",

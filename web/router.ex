@@ -51,6 +51,7 @@ defmodule Publit.Router do
       resources "/orders", OrderController, only: [:index, :show]
       put "/orders/:id/move_next", OrderController, :move_next
       put "/orders/:id/null", OrderController, :null
+      put "/orders/:id/move_back", OrderController, :move_back
 
       get "/user_transport_position/:id", PositionController, :user_transport
 

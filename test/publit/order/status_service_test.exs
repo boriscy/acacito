@@ -18,7 +18,7 @@ defmodule Publit.Order.StatusServiceTest do
     |> DateTime.from_naive!("Etc/UTC")
   end
 
-  describe "Change status" do
+  describe "next_status cange status" do
     test "change all statuses", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
 
@@ -201,7 +201,10 @@ defmodule Publit.Order.StatusServiceTest do
       assert dt[:msg][:data][:order][:id] == ord.id
     end
 
-    test "previous", %{uc: uc, org: org} do
+  end
+
+  describe "previous" do
+    test "process -> new", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
       ord = create_order(uc, org)
       u = build(:user, id: Ecto.UUID.generate())
@@ -223,7 +226,61 @@ defmodule Publit.Order.StatusServiceTest do
       assert Enum.at(log.log, 1)["time"]
       assert Enum.at(log.log, 1)["user_id"] == u.id
       assert Enum.at(log.log, 1)["msg"] == "Change status from process to new"
+
+      msg = Agent.get(:api_mock, fn(v) -> v end) |> List.last()
+      assert msg[:msg][:message] == gettext("Don't worry we are working on your order, there was a small error updating your order status")
+      assert msg[:msg][:data][:order][:status] == "new"
     end
 
+    test "transport -> process", %{uc: uc, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
+
+      ot = %Order.Transport{id: "4b93eb0a-9bc9-4946-b6c3-20004ac19837", plate: "AA", vehicle: "bike", picked_at: nil, delivered_at: nil, responded_at: "2017-07-31T12:00:11.641217Z",
+       mobile_number: "59173737788", transport_type: "delivery", transporter_id: "4b93eb0a-9bc9-4946-b6c3-20004ac19838", calculated_price: Decimal.new("10"),
+       transporter_name: "Fercho", picked_arrived_at: "12:33", final_price: Decimal.new("10"), delivered_at: "12:22"
+      }
+      ord = create_order_only(uc, org, %{status: "transport", transport: ot})
+
+      assert ord.status == "transport"
+
+      assert %Order.Transport{vehicle: "bike", plate: "AA", responded_at: "2017-07-31T12:00:11.641217Z"} = ord.transport
+
+      u = build(:user, id: Ecto.UUID.generate())
+      {:ok, ord} = Order.StatusService.previous_status(ord, u)
+
+      assert ord.status == "process"
+      assert ord.transport.responded_at == nil
+      msg = Agent.get(:api_mock, fn(v) -> v end) |> List.last()
+      assert msg[:msg][:data][:order][:status] == "process"
+      ot = msg[:msg][:data][:order][:transport]
+      assert ot.responded_at == nil
+    end
+
+    test "ready -> process", %{uc: uc, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
+
+      ord = create_order_only(uc, org, %{status: "ready"})
+
+      assert ord.status == "ready"
+
+      u = build(:user, id: Ecto.UUID.generate())
+      {:ok, ord} = Order.StatusService.previous_status(ord, u)
+
+      assert ord.status == "process"
+    end
+
+    test "transporting -> transport", %{uc: uc, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
+
+      ord = create_order_only(uc, org, %{status: "transporting"})
+
+      assert ord.status == "transporting"
+
+      u = build(:user, id: Ecto.UUID.generate())
+      {:ok, ord} = Order.StatusService.previous_status(ord, u)
+
+      assert ord.status == "transport"
+    end
   end
+
 end

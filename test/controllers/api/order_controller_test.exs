@@ -137,4 +137,24 @@ defmodule Publit.Api.OrderControllerTest do
       assert json["errors"]["null_reason"]
     end
   end
+
+  describe "PUT /api/orders/:id/move_back" do
+    test "OK" do
+      Agent.start_link(fn -> [] end, name: :api_mock)
+      user_client = insert(:user_client)
+      ord = create_order_only(user_client, org)
+
+      assert ord.status == "new"
+      ptime = Ecto.DateTime.to_iso8601(utc_diff_mins(5))
+      conn = put(conn, "/api/orders/#{ord.id}/move_next", %{"order" => %{"process_time" => ptime}})
+
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["order"]["status"] == "process"
+      assert json["order"]["process_time"] == ptime <> "Z"
+
+      assert json["order"]["organization"] == %{}
+    end
+  end
+
 end

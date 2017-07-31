@@ -244,7 +244,7 @@ msgstr "Ejemplo de descripción"
 msgid "New order"
 msgstr "Nuevo pedido"
 
-#: web/controllers/api/order_controller.ex:79
+#: web/controllers/api/order_controller.ex:81
 #: web/controllers/client_api/comment_controller.ex:49
 #: web/controllers/client_api/order_controller.ex:37
 msgid "Could not find the order"
@@ -457,3 +457,7 @@ msgstr "Su pedido esta listo"
 #: web/templates/registration/index.html.eex:27
 msgid "Full name"
 msgstr "Nombre completo"
+
+#: lib/publit/order/status_service.ex:110
+msgid "Don't worry we are working on your order, there was a small error updating your order status"
+msgstr "No se preocupe estamos trabajando en su pedido, existio un pequeño error actualizando el estado de su pedido"

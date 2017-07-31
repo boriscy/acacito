@@ -85,8 +85,12 @@ export default {
     </div>
 
     <div slot="footer">
+      <button class="btn btn-danger" @click="back()" style="float:left">
+        <i class="material-icons rotate-180">forward</i>
+        {{'Move Back' | translate}}
+      </button>
+
       <button class="btn" @click="$refs.modal.close()">{{'Close' | translate}}</button>
     </div>
   </Modal>
 </template>
-
