@@ -41,6 +41,74 @@ defmodule Publit.Order.NullTest do
        :user_client, :user_client_id, :user_transport, :user_transport_id]
     end
 
+    test "process" do
+      Agent.start_link(fn() -> []  end, name: :api_mock )
+      org = insert(:organization)
+      uc = insert(:user_client)
+      user = insert(:user)
+
+      order = create_order_only(uc, org, %{status: "process"})
+      insert(:order_log, %{order_id: order.id, log: []})
+
+      assert order.status == "process"
+
+      {:ok, ord} = Order.Null.null(order, user, %{"null_reason" => "No more items"})
+
+      assert ord.status == "nulled"
+      assert ord.null_reason == "No more items"
+    end
+
+    test "ready" do
+      Agent.start_link(fn() -> []  end, name: :api_mock )
+      org = insert(:organization)
+      uc = insert(:user_client)
+      user = insert(:user)
+
+      order = create_order_only(uc, org, %{status: "ready"})
+      insert(:order_log, %{order_id: order.id, log: []})
+
+      assert order.status == "ready"
+
+      {:ok, ord} = Order.Null.null(order, user, %{"null_reason" => "No more items"})
+
+      assert ord.status == "nulled"
+      assert ord.null_reason == "No more items"
+    end
+
+    test "transport" do
+      Agent.start_link(fn() -> []  end, name: :api_mock )
+      org = insert(:organization)
+      uc = insert(:user_client)
+      user = insert(:user)
+
+      order = create_order_only(uc, org, %{status: "transport"})
+      insert(:order_log, %{order_id: order.id, log: []})
+
+      assert order.status == "transport"
+
+      {:ok, ord} = Order.Null.null(order, user, %{"null_reason" => "No more items"})
+
+      assert ord.status == "nulled"
+      assert ord.null_reason == "No more items"
+    end
+
+    test "transporting" do
+      Agent.start_link(fn() -> []  end, name: :api_mock )
+      org = insert(:organization)
+      uc = insert(:user_client)
+      user = insert(:user)
+
+      order = create_order_only(uc, org, %{status: "transporting"})
+      insert(:order_log, %{order_id: order.id, log: []})
+
+      assert order.status == "transporting"
+
+      {:ok, ord} = Order.Null.null(order, user, %{"null_reason" => "No more items"})
+
+      assert ord.status == "nulled"
+      assert ord.null_reason == "No more items"
+    end
+
     test "invalid" do
       org = insert(:organization)
       uc = insert(:user_client)

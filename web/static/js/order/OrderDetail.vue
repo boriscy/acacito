@@ -26,9 +26,12 @@ export default {
     },
     getSrc(src) {
       return src
+    },
+    moveBack() {
+      if(confirm(this.$t('Are you sure to move the order status back?')) ) {
+        this.$store.dispatch('moveBack', {order: this.order})
+      }
     }
-  },
-  mounted() {
   }
 }
 </script>
@@ -87,10 +90,12 @@ export default {
     </div>
 
     <div slot="footer">
-      <button class="btn btn-danger" @click="back()" style="float:left">
+      <button class="btn btn-danger" @click="moveBack()" style="float:left" v-if="'process' != order.status">
         <i class="material-icons rotate-180">forward</i>
         {{'Move Back' | translate}}
       </button>
+
+      <NullOrder :order="order" />
 
       <button class="btn" @click="$refs.modal.close()">{{'Close' | translate}}</button>
     </div>

@@ -33,6 +33,15 @@ export const moveNextConfirm = ({commit}, {order, params}) => {
   })
 }
 
+export const moveBack = ({commit}, {order}) => {
+  commit(types.ORDER_LOADING, {val: true, order_id: order.id})
+
+  orderApi.moveBack({order}, data => {
+    commit(types.ORDER_UPDATED, data)
+    commit(types.ORDER_LOADING, {val: false, order_id: order.id})
+  })
+}
+
 export const addOrder = ({commit}, data) => {
   commit(types.ADD_ORDER, data)
 }

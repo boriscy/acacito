@@ -5,7 +5,13 @@ defmodule Publit.Order.Null do
   alias Publit.{Order, Repo, User}
   alias Ecto.Multi
 
-  def null(%Order{status: "new"} = order, %User{} = user, params) do
+  def null(%Order{status: "new"} = order, %User{} = user, params), do: null_order(%Order{status: "new"} = order, %User{} = user, params)
+  def null(%Order{status: "process"} = order, %User{} = user, params), do: null_order(%Order{status: "process"} = order, %User{} = user, params)
+  def null(%Order{status: "transport"} = order, %User{} = user, params), do: null_order(%Order{status: "transport"} = order, %User{} = user, params)
+  def null(%Order{status: "transporting"} = order, %User{} = user, params), do: null_order(%Order{status: "transporting"} = order, %User{} = user, params)
+  def null(%Order{status: "ready"} = order, %User{} = user, params), do: null_order(%Order{status: "ready"} = order, %User{} = user, params)
+
+  defp null_order(order, user, params) do
     cs = cast(order, params, [:null_reason])
     |> validate_required(:null_reason)
     |> validate_length(:null_reason, min: 6)

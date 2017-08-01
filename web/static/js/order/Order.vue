@@ -88,6 +88,7 @@ export default {
     <div class="flex">
       <div class="left">
         <div class="title">{{formatNum(order.num)}} - {{order.client_name}}</div>
+        {{order.status}}
 
         <div class="order-time-ago">
           <i class="material-icons">watch_later</i>

@@ -204,7 +204,7 @@ defmodule Publit.Order.StatusServiceTest do
   end
 
   describe "previous" do
-    test "process -> new", %{uc: uc, org: org} do
+    test "process -> process", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
       ord = create_order(uc, org)
       u = build(:user, id: Ecto.UUID.generate())
@@ -215,21 +215,9 @@ defmodule Publit.Order.StatusServiceTest do
       assert ord.process_time == ecto_to_datetime(ptime)
 
       {:ok, ord} = Order.StatusService.previous_status(ord, u)
-      assert ord.status == "new"
+      assert ord.status == "process"
 
       log = Repo.get_by(Order.Log, order_id: ord.id, log_type: "Order")
-
-      assert Enum.at(log.log, 0)["time"]
-      assert Enum.at(log.log, 0)["user_id"] == u.id
-      assert Enum.at(log.log, 0)["type"] == "log"
-      assert Enum.at(log.log, 0)["msg"] == "Change status from new to process"
-      assert Enum.at(log.log, 1)["time"]
-      assert Enum.at(log.log, 1)["user_id"] == u.id
-      assert Enum.at(log.log, 1)["msg"] == "Change status from process to new"
-
-      msg = Agent.get(:api_mock, fn(v) -> v end) |> List.last()
-      assert msg[:msg][:message] == gettext("Don't worry we are working on your order, there was a small error updating your order status")
-      assert msg[:msg][:data][:order][:status] == "new"
     end
 
     test "transport -> process", %{uc: uc, org: org} do

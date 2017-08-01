@@ -1,5 +1,6 @@
 export default {
   "Are you sure to null the selected order?": "Esta segur@ de anular el pedido seleccionado?",
+  "Are you sure to move the order status back?": "Esta segur@ de mover el estado del pedido atras?",
   "Add line": "Add line",
   "Address": "Dirección",
   "Big": "Grande",

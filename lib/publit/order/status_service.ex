@@ -135,7 +135,7 @@ defmodule Publit.Order.StatusService do
 
   defp get_previous_status(st) do
     case st do
-      "process" -> "new"
+      "process" -> "process"
       "ready" -> "process"
       "transport" -> "process"
       "transporting" -> "transport"
