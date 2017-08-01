@@ -250,6 +250,7 @@ defmodule Publit.Order.StatusServiceTest do
 
       assert ord.status == "process"
       assert ord.transport.responded_at == nil
+
       msg = Agent.get(:api_mock, fn(v) -> v end) |> List.last()
       assert msg[:msg][:data][:order][:status] == "process"
       ot = msg[:msg][:data][:order][:transport]
@@ -267,6 +268,9 @@ defmodule Publit.Order.StatusServiceTest do
       {:ok, ord} = Order.StatusService.previous_status(ord, u)
 
       assert ord.status == "process"
+
+      msg = Agent.get(:api_mock, fn(v) -> v end) |> List.last()
+      assert msg[:msg][:data][:order][:status] == "process"
     end
 
     test "transporting -> transport", %{uc: uc, org: org} do
@@ -280,6 +284,8 @@ defmodule Publit.Order.StatusServiceTest do
       {:ok, ord} = Order.StatusService.previous_status(ord, u)
 
       assert ord.status == "transport"
+      msg = Agent.get(:api_mock, fn(v) -> v end) |> List.last()
+      assert msg[:msg][:data][:order][:status] == "transport"
     end
   end
 

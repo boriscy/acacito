@@ -1,6 +1,7 @@
 <script>
 import Modal from '../globals/Modal.vue'
 import {format} from '../mixins'
+import NullOrder from './NullOrder.vue'
 
 export default {
   name: 'OrderDetail',
@@ -10,7 +11,8 @@ export default {
     currency() { return window.currencies[this.order.currency] },
   },
   components: {
-    Modal
+    Modal,
+    NullOrder
   },
   props: {
     order: {

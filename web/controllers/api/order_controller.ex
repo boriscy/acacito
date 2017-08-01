@@ -2,7 +2,7 @@ defmodule Publit.Api.OrderController do
   use Publit.Web, :controller
   alias Publit.{Order, Repo, UserChannel, Order.StatusService}
 
-  # GET /api/org_orders
+  # GET /api/orders
   def index(conn, _params) do
     org_id = conn.assigns.current_organization.id
     orders = Order.Query.active(org_id) |> Repo.preload(:order_calls)
@@ -10,7 +10,7 @@ defmodule Publit.Api.OrderController do
     render(conn, "index.json", orders: orders)
   end
 
-  # GET /api/org_order/:id
+  # GET /api/orders/:id
   def show(conn, %{"id" => id}) do
     case (get_order(conn, id)) do
       nil ->
@@ -20,7 +20,8 @@ defmodule Publit.Api.OrderController do
     end
   end
 
-  # PUT /api/org_orders/:id/move_next
+  # Move order when going from new to process, required process_time
+  # PUT /api/orders/:id/move_next
   def move_next(conn, %{"id" => id, "order" => order_params}) do
     with ord <- get_order(conn, id),
       %Order{} <- ord do
@@ -38,7 +39,7 @@ defmodule Publit.Api.OrderController do
     end
   end
 
-  # PUT /api/org_orders/:id/move_next
+  # PUT /api/orders/:id/move_next
   def move_next(conn, %{"id" => id}) do
     with ord <- get_order(conn, id),
       %Order{} <- ord do
@@ -56,7 +57,25 @@ defmodule Publit.Api.OrderController do
     end
   end
 
-  # PUT /api/org_orders/:id/null
+  # PUT /api/orders/:id/move_back
+  def move_back(conn, %{"id" => id}) do
+    with ord <- get_order(conn, id),
+      %Order{} <- ord do
+        user = conn.assigns.current_user
+
+        case Order.StatusService.previous_status(ord, user) do
+          {:ok, order} ->
+            render(conn, "show.json", order: order)
+          _ ->
+            render(conn, "error.json")
+        end
+    else
+      _ ->
+        render_not_found(conn)
+    end
+  end
+
+  # PUT /api/orders/:id/null
   def null(conn, %{"id" => id, "order" => order_params}) do
     with ord <- get_order(conn, id),
       %Order{} <- ord do

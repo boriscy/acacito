@@ -70,7 +70,6 @@ defmodule Publit.Mixfile do
      {:earmark, "~> 1.0"},
      {:httpoison, "0.11.0"},
      {:hackney, "1.6.5"},
-     {:sweet_xml, "~> 0.6"},
      {:ex_machina, "~> 2.0", only: [:dev, :test]},
      {:mock, "~> 0.2.0", only: :test},
      {:distillery, "~> 1.4", warn_missing: false}]

@@ -1,6 +1,7 @@
 defmodule Publit.Api.OrderControllerTest do
   use Publit.ConnCase
   require Publit.Gettext
+  alias Publit.{Order, Repo}
 
   setup do
     {user, org} = create_user_org()
@@ -139,21 +140,34 @@ defmodule Publit.Api.OrderControllerTest do
   end
 
   describe "PUT /api/orders/:id/move_back" do
-    test "OK" do
+    test "OK transport -> process", %{conn: conn, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
       user_client = insert(:user_client)
-      ord = create_order_only(user_client, org)
+      ord = create_order_only(user_client, org, %{status: "transport", transport: %Order.Transport{responded_at: "2017-07-31T12:00:11.641217Z"}})
 
-      assert ord.status == "new"
+      assert ord.transport.responded_at != nil
+      assert ord.status == "transport"
       ptime = Ecto.DateTime.to_iso8601(utc_diff_mins(5))
-      conn = put(conn, "/api/orders/#{ord.id}/move_next", %{"order" => %{"process_time" => ptime}})
+      conn = put(conn, "/api/orders/#{ord.id}/move_back")
 
       json = Poison.decode!(conn.resp_body)
 
       assert json["order"]["status"] == "process"
-      assert json["order"]["process_time"] == ptime <> "Z"
+      assert json["order"]["transport"]["responded_at"] == nil
+    end
 
-      assert json["order"]["organization"] == %{}
+    test "OK ready -> process", %{conn: conn, org: org} do
+      Agent.start_link(fn -> [] end, name: :api_mock)
+      user_client = insert(:user_client)
+      ord = create_order_only(user_client, org, %{status: "ready"})
+
+      assert ord.status == "ready"
+      ptime = Ecto.DateTime.to_iso8601(utc_diff_mins(5))
+      conn = put(conn, "/api/orders/#{ord.id}/move_back")
+
+      json = Poison.decode!(conn.resp_body)
+
+      assert json["order"]["status"] == "process"
     end
   end
 
