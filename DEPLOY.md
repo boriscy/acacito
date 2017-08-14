@@ -6,6 +6,7 @@ git pull origin master
 MIX_ENV=prod mix deps.get
 MIX_ENV=prod mix compile
 MIX_ENV=dev mix ecto.migrate
+yarn
 yarn run deploy
 MIX_ENV=prod mix phoenix.digest
 MIX_ENV=prod mix release --env=prod
