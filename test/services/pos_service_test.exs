@@ -73,7 +73,7 @@ defmodule PublitPosServiceTest do
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_org")
 
       ord = Repo.get(Order, order.id)
-      assert ord.transport.picked_arrived_at
+      assert ord.trans.picked_arrived_at
 
       ut = Repo.get(UserTransport, ut.id)
       ordt = List.first(ut.orders)
@@ -130,7 +130,7 @@ defmodule PublitPosServiceTest do
       assert m.server_key == "server_key_cli"
       ord = Repo.get(Order, order.id)
 
-      assert ord.transport.delivered_arrived_at
+      assert ord.trans.delivered_arrived_at
 
       ordt = List.first(ut.orders)
 
@@ -175,7 +175,7 @@ defmodule PublitPosServiceTest do
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
 
       ord = Repo.get(Order, order.id)
-      assert ord.transport.delivered_arrived_at
+      assert ord.trans.delivered_arrived_at
     end
   end
 

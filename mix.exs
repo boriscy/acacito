@@ -68,6 +68,7 @@ defmodule Publit.Mixfile do
      {:arc, "~> 0.8.0"},
      {:arc_ecto, "0.7.0"},
      {:sweet_xml, "~> 0.6"},
+     {:plug, "~>1.3.5", override: true},
      {:cors_plug, "~> 1.4"},
      {:earmark, "~> 1.0"},
      {:httpoison, "0.11.0"},

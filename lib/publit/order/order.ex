@@ -14,25 +14,17 @@ defmodule Publit.Order do
     field :num, :integer
     field :currency, :string
     field :client_pos, Geo.Geometry
-    field :client_name, :string
-    #field :client_address, :string
-    field :client_number, :string
     field :organization_pos, Geo.Geometry
-    field :organization_name, :string
-    field :organization_address, :string
-    field :organization_number, :string
     field :other_details, :string
     field :comment_details, :map, default: %{}
     field :process_time, :utc_datetime
     field :transport_time, :utc_datetime
 
-    #embeds_one :transport, Order.Transport
     embeds_many :details, Order.Detail
 
-    embeds_one :cli, Order.Client
+    embeds_one :cli, Order.Client, on_replace: :delete
+    embeds_one :org, Order.Organization, on_replace: :delete
     embeds_one :trans, Order.Transport, on_replace: :delete
-    embeds_one :org, Order.Organization
-    #embeds_one :trans, Order.Transport
 
     belongs_to :user_client, UserClient, type: :binary_id
     belongs_to :user_transport, UserTransport, type: :binary_id

@@ -33,17 +33,17 @@ defmodule Publit.Order.Transport do
     |> validate_number(:calculated_price, greater_than_or_equal_to: 0)
   end
 
-  def changeset_update(ot, params) do
-    ot
-    |> cast(params, [:transporter_id, :name, :mobile_number, :final_price, :plate, :vehicle])
-    |> validate_required([:transporter_id, :name, :final_price, :vehicle])
+  def changeset_update(ot, %Publit.UserTransport{} = ut , params) do
+    Map.merge(ot, %{transporter_id: ut.id, name: ut.full_name,
+               vehicle: ut.vehicle, plate: ut.plate, mobile_number: ut.mobile_number})
+    |> cast(params, [:final_price])
     |> validate_number(:final_price, greater_than_or_equal_to: 0)
     |> put_change(:responded_at, DateTime.utc_now())
   end
 
   def changeset_delivery(ot, params) do
     ot
-    |> cast(params, [:picked_arrived_at, :delivered_arrived_at])
+    |> put_change(params, [:picked_arrived_at, :delivered_arrived_at])
   end
 
   def add_log(o_trans, pos) do

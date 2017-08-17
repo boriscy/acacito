@@ -45,7 +45,7 @@ defmodule Publit.Order.Call do
         cb_error = fn(resp) -> Order.Call.update(oc, %{status: "error", resp: Map.drop(resp.resp, [:__struct__]) }) end
 
         msg = %{
-          message: gettext("New order from %{org}", %{org: oc.order.organization_name}),
+          message: gettext("New order from %{org}", %{org: oc.order.org.name}),
           data: %{
             status: "calling",
             order_call: encode(oc)

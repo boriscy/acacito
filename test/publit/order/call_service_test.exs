@@ -8,7 +8,7 @@ defmodule Publit.Order.CallServiceTest do
     test "OK" do
       Agent.start_link(fn -> [] end, name: :api_mock)
 
-      {uc, org} = {insert(:user_client), insert(:organization)}
+      {uc, org} = {insert(:user_client), insert(:organization, open: true)}
       order = create_order_only(uc, org, %{status: "process"})
       insert(:order_log, order_id: order.id)
 
@@ -22,14 +22,14 @@ defmodule Publit.Order.CallServiceTest do
       assert order.status == "transport"
       assert order.user_transport_id == ut.id
 
-      assert order.transport.transporter_id == ut.id
-      assert order.transport.transporter_name == ut.full_name
-      assert order.transport.mobile_number == ut.mobile_number
+      assert order.trans.transporter_id == ut.id
+      assert order.trans.name == ut.full_name
+      assert order.trans.mobile_number == ut.mobile_number
 
-      assert order.transport.final_price == Decimal.new("7")
-      assert order.transport.responded_at
-      assert order.transport.vehicle == "motorcycle"
-      assert order.transport.plate == ut.plate
+      assert order.trans.final_price == Decimal.new("7")
+      assert order.trans.responded_at
+      assert order.trans.vehicle == "motorcycle"
+      assert order.trans.plate == ut.plate
 
       user_t = Repo.get(UserTransport, ut.id)
       assert Enum.count(user_t.orders) == 1
@@ -75,7 +75,7 @@ defmodule Publit.Order.CallServiceTest do
     end
 
     test "empty2" do
-      {uc, org} = {insert(:user_client), insert(:organization)}
+      {uc, org} = {insert(:user_client), insert(:organization, open: true)}
       order = create_order_only(uc, org, %{status: "process"})
 
       ut = insert(:user_transport, status: "listen")
@@ -84,7 +84,7 @@ defmodule Publit.Order.CallServiceTest do
     end
 
     test "error" do
-      {uc, org} = {insert(:user_client), insert(:organization)}
+      {uc, org} = {insert(:user_client), insert(:organization, open: true)}
       order = create_order_only(uc, org, %{status: "process"})
 
       ut = insert(:user_transport, status: "listen")
@@ -92,8 +92,9 @@ defmodule Publit.Order.CallServiceTest do
       insert(:order_call, transport_ids: [ut.id], order_id: order.id, status: "delivered")
 
       assert {:error, :order, cs} = Order.CallService.accept(order, ut, %{final_price: Decimal.new("-7")})
-      assert cs.changes.transport.errors[:final_price]
+      assert cs.changes.trans.errors[:final_price]
     end
+
 
   end
 

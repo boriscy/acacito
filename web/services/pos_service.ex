@@ -76,13 +76,9 @@ defmodule Publit.PosService do
       _ ->
         %{}
     end
-    |> Map.put(:id, order.transport.id)
 
-    cs = order
-    |> cast(%{transport: t_data}, [])
-    |> cast_embed(:transport, with: &Order.Transport.changeset_delivery/2)
-
-    cs
+    cs = change(order)
+    |> put_embed(:trans, Map.merge(order.trans, t_data))
   end
 
   # sends the actual message
@@ -104,9 +100,9 @@ defmodule Publit.PosService do
 
   defp requires_messaging?(order, pos) do
     cond do
-      order.status == "transport" && !order.transport.picked_arrived_at ->
+      order.status == "transport" && !order.trans.picked_arrived_at ->
         near?(Geo.JSON.encode(order.organization_pos), pos)
-      order.status == "transporting" && !order.transport.delivered_arrived_at ->
+      order.status == "transporting" && !order.trans.delivered_arrived_at ->
         near?(Geo.JSON.encode(order.client_pos), pos)
       true ->
         false

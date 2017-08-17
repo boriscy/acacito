@@ -19,17 +19,11 @@ defmodule Publit.Order.CallTest do
     ] |> Enum.map(&Repo.insert/1)
   end
 
-  defp order do
-   %Order{id: Ecto.UUID.generate(),
-      organization_pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil},
-      client_pos: %Geo.Point{coordinates: { -63.8749, -18.1779 }, srid: nil} }
-  end
-
   describe "create" do
     test "OK" do
       Agent.start_link(fn -> [] end, name: :api_mock)
 
-      org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
+      org = insert(:organization, open: true, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)
       create_user_transports()
       ord = create_order_only(uc, org)
@@ -58,14 +52,15 @@ defmodule Publit.Order.CallTest do
       assert r[:msg][:data][:order_call][:id] == oc.id
 
       order = r[:msg][:data][:order_call][:order]
-      assert order[:client_name] == ord.client_name
-      assert order[:organization_name] == "Publit"
+
+      assert order[:cli][:name] == uc.full_name
+      assert order[:org][:name] == "Publit"
     end
 
     test "ERROR" do
       Agent.start_link(fn -> [] end, name: :api_mock)
 
-      org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
+      org = insert(:organization, open: true, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)
 
       [
@@ -76,7 +71,7 @@ defmodule Publit.Order.CallTest do
       ]
       |> Enum.map(&Repo.insert/1)
 
-      {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
+      ord = create_order_only(uc, org, %{client_pos: %Geo.Point{coordinates: { -63.8749, -18.1779 }, srid: nil}} )
 
       assert {:ok, oc, pid} = Order.Call.create(ord)
 
@@ -94,9 +89,9 @@ defmodule Publit.Order.CallTest do
     end
 
     test "empty set " do
-      org = insert(:organization, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
+      org = insert(:organization, open: true, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)
-      {:ok, ord} = Repo.insert(Map.merge(order(), %{organization_id: org.id, user_client_id: uc.id}))
+      ord = create_order_only(uc, org)
 
       assert {:empty, oc} = Order.Call.create(ord)
       assert oc.transport_ids == []
@@ -116,7 +111,7 @@ defmodule Publit.Order.CallTest do
   describe "encode" do
     test "OK" do
       uc = insert(:user_client)
-      org = insert(:organization)
+      org = insert(:organization, open: true)
 
       ord = create_order(uc, org)
       {:ok, oc} = Repo.insert(%Order.Call{transport_ids: [Ecto.UUID.generate()], status: "new", order_id: ord.id })
