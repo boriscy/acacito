@@ -4,7 +4,7 @@ defmodule Publit.Order.StatusServiceTest do
   import Publit.Gettext
 
   setup do
-    %{uc: insert(:user_client), org: insert(:organization)}
+    %{uc: insert(:user_client), org: insert(:organization, open: true)}
   end
 
   def utc_diff_mins(mins \\ 5) do
@@ -18,7 +18,7 @@ defmodule Publit.Order.StatusServiceTest do
     |> DateTime.from_naive!("Etc/UTC")
   end
 
-  describe "next_status cange status" do
+  describe "next_status change status" do
     test "change all statuses", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
 
@@ -29,17 +29,21 @@ defmodule Publit.Order.StatusServiceTest do
       {:ok, ord} = Order.StatusService.next_status(ord, u, %{"process_time" => Ecto.DateTime.to_iso8601(ptime)})
 
       assert ord.status == "process"
+      assert ord.prev_status == "new"
       assert ord.process_time == ecto_to_datetime(ptime)
 
       {:ok, ord} = Order.StatusService.next_status(ord, u)
       assert ord.status == "transport"
+      assert ord.prev_status == "process"
 
       {:ok, ord} = Order.StatusService.next_status(ord, u)
 
       assert ord.status == "transporting"
+      assert ord.prev_status == "transport"
       {:ok, ord} = Order.StatusService.next_status(ord, u)
 
       assert ord.status == "delivered"
+      assert ord.prev_status == "transporting"
 
       log = Repo.get(Order.Log, ord.log.id)
 
@@ -107,8 +111,9 @@ defmodule Publit.Order.StatusServiceTest do
 
       {:ok, ord} = Order.StatusService.next_status(ord, user)
 
-      assert ord.transport.picked_at
+      assert ord.trans.picked_at
       assert ord.status == "transporting"
+      assert ord.prev_status == "transport"
 
       ut = Repo.get(UserTransport, ut.id)
 
@@ -142,8 +147,9 @@ defmodule Publit.Order.StatusServiceTest do
 
       {:ok, ord} = Order.StatusService.next_status(ord, ut)
 
-      assert ord.transport.delivered_at
+      assert ord.trans.delivered_at
       assert ord.status == "delivered"
+      assert ord.prev_status == "transporting"
 
       ut = Repo.get(UserTransport, ut.id)
 
@@ -164,14 +170,15 @@ defmodule Publit.Order.StatusServiceTest do
     test "process to ready", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
 
-      ord = create_order_only(uc, org, %{status: "process", transport: %Order.Transport{calculated_price: Decimal.new("5"), transport_type: "pickandpay"} })
+      ord = create_order_only(uc, org, %{status: "process", trans: %Order.Transport{calculated_price: Decimal.new("5"), ctype: "pickup"} })
       user = build(:user, id: Ecto.UUID.generate())
 
-      assert ord.transport.transport_type == "pickandpay"
+      assert ord.trans.ctype == "pickup"
 
       {:ok, ord} = Order.StatusService.next_status(ord, user)
 
       assert ord.status == "ready"
+      assert ord.prev_status == "process"
 
       Process.sleep(10)
       data = Publit.MessageApiMock.get_data()
@@ -184,14 +191,15 @@ defmodule Publit.Order.StatusServiceTest do
     test "ready to delivered", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
 
-      ord = create_order_only(uc, org, %{status: "ready", transport: %Order.Transport{calculated_price: Decimal.new("5"), transport_type: "pickandpay"} })
+      ord = create_order_only(uc, org, %{status: "ready", trans: %Order.Transport{calculated_price: Decimal.new("5"), ctype: "pickup"} })
       user = build(:user, id: Ecto.UUID.generate())
 
-      assert ord.transport.transport_type == "pickandpay"
+      assert ord.trans.ctype == "pickup"
 
       {:ok, ord} = Order.StatusService.next_status(ord, user)
 
       assert ord.status == "delivered"
+      assert ord.prev_status == "ready"
 
       Process.sleep(10) # Required, sometimes agent is not updated at the same time
       data = Publit.MessageApiMock.get_data()
@@ -223,27 +231,29 @@ defmodule Publit.Order.StatusServiceTest do
     test "transport -> process", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
 
-      ot = %Order.Transport{id: "4b93eb0a-9bc9-4946-b6c3-20004ac19837", plate: "AA", vehicle: "bike", picked_at: nil, delivered_at: nil, responded_at: "2017-07-31T12:00:11.641217Z",
-       mobile_number: "59173737788", transport_type: "delivery", transporter_id: "4b93eb0a-9bc9-4946-b6c3-20004ac19838", calculated_price: Decimal.new("10"),
-       transporter_name: "Fercho", picked_arrived_at: "12:33", final_price: Decimal.new("10"), delivered_at: "12:22"
+      ot = %Order.Transport{plate: "AA", vehicle: "bike", picked_at: nil, delivered_at: nil, responded_at: "2017-07-31T12:00:11.641217Z",
+       mobile_number: "59173737788", ctype: "delivery", transporter_id: "4b93eb0a-9bc9-4946-b6c3-20004ac19838", calculated_price: Decimal.new("10"),
+       name: "Fercho", picked_arrived_at: "12:33", final_price: Decimal.new("10"), delivered_at: "12:22"
       }
-      ord = create_order_only(uc, org, %{status: "transport", transport: ot})
+      ord = create_order_only(uc, org, %{status: "transport", trans: ot})
 
       assert ord.status == "transport"
 
-      assert %Order.Transport{vehicle: "bike", plate: "AA", responded_at: "2017-07-31T12:00:11.641217Z"} = ord.transport
+      assert %Order.Transport{vehicle: "bike", plate: "AA", responded_at: "2017-07-31T12:00:11.641217Z"} = ord.trans
 
       u = build(:user, id: Ecto.UUID.generate())
-      {:ok, ord} = Order.StatusService.previous_status(ord, u)
+
+      assert {:ok, ord} = Order.StatusService.previous_status(ord, u)
 
       assert ord.status == "process"
-      assert ord.transport.responded_at == nil
+      assert ord.trans.responded_at == nil
 
       msg = Agent.get(:api_mock, fn(v) -> v end) |> List.last()
       assert msg[:msg][:data][:order][:status] == "process"
-      ot = msg[:msg][:data][:order][:transport]
+      ot = msg[:msg][:data][:order][:trans]
       assert ot.responded_at == nil
     end
+
 
     test "ready -> process", %{uc: uc, org: org} do
       Agent.start_link(fn -> [] end, name: :api_mock)
@@ -275,6 +285,7 @@ defmodule Publit.Order.StatusServiceTest do
       msg = Agent.get(:api_mock, fn(v) -> v end) |> List.last()
       assert msg[:msg][:data][:order][:status] == "transport"
     end
+
   end
 
 end

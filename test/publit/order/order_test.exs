@@ -17,7 +17,7 @@ defmodule Publit.OrderTest do
 
   describe "create" do
     test "OK" do
-      org = insert(:organization)
+      org = insert(:organization, open: true)
       user_client = insert(:user_client)
       [p1, p2] = create_products2(org)
       v1 = Enum.at(p1.variations, 1)
@@ -25,34 +25,36 @@ defmodule Publit.OrderTest do
 
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
-      "client_name" => user_client.full_name, "organization_name" => org.name,
-      "client_address" => "Los Pinos, B777", "other_details" => "cambio de 200",
+      "cli" => %{"address" => "Los Pinos, B777"},
+      "other_details" => "cambio de 200",
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "image_thumb" => "thumb1.jpg"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2", "image_thumb" => "thumb2.jpg"}
-        }, "transport" => %{"calculated_price" => "5", "transport_type" => "deliver"}
+        },
+        "trans" => %{"ctype" => "delivery", "calculated_price" => "5"}
       }
 
       assert {:ok, order} = Order.create(params, user_client)
 
       assert order.client_pos == %Geo.Point{coordinates: {-100, 30}, srid: nil}
       assert order.organization_pos == org.pos
+
       assert order.num == 1
       assert order.total == Decimal.new("71.0")
       assert order.currency == org.currency
       assert order.status == "new"
       assert order.other_details == "cambio de 200"
-      assert order.transport.transport_type == "deliver"
+      assert order.trans.ctype == "delivery"
 
       assert order.user_client_id == user_client.id
-      assert order.client_name == user_client.full_name
-      assert order.client_address == "Los Pinos, B777"
-      assert order.client_number == user_client.mobile_number
+      assert order.cli.name == user_client.full_name
+      assert order.cli.address == "Los Pinos, B777"
+      assert order.cli.mobile_number == user_client.mobile_number
 
       assert order.organization_id == org.id
-      assert order.organization_name == org.name
-      assert order.organization_address == org.address
-      assert order.organization_number == org.mobile_number
+      assert order.org.name == org.name
+      assert order.org.address == org.address
+      assert order.org.mobile_number == org.mobile_number
 
       assert order.details |> Enum.count() == 2
 
@@ -77,7 +79,7 @@ defmodule Publit.OrderTest do
     end
 
     test "OK num" do
-      org = insert(:organization)
+      org = insert(:organization, open: true)
       user_client = insert(:user_client)
       Repo.insert(%Order{user_client_id: user_client.id, organization_id: org.id})
 
@@ -87,12 +89,12 @@ defmodule Publit.OrderTest do
 
       params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
       "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
-      "client_name" => user_client.full_name, "organization_name" => org.name,
-      "client_address" => "Los Pinos, B777","other_details" => "cambio de 200",
+      "cli" => %{"address" => "Los Pinos, B777"} ,"other_details" => "cambio de 200",
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
-        }, "transport" => %{"calculated_price" => "3", "transport_type" => "deliver"}
+        },
+        "trans" => %{"calculated_price" => "3", "ctype" => "delivery"}
       }
 
       {:ok, order} =  Order.create(params, user_client)
@@ -102,8 +104,8 @@ defmodule Publit.OrderTest do
       assert order.inserted_at
     end
 
-    test "transport type" do
-      org = insert(:organization)
+    test "transport ctype" do
+      org = insert(:organization, open: true)
       user_client = insert(:user_client)
       [p1, p2] = create_products2(org)
       v1 = Enum.at(p1.variations, 1)
@@ -116,16 +118,40 @@ defmodule Publit.OrderTest do
       "details" => %{
           "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "image_thumb" => "thumb1.jpg"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2", "image_thumb" => "thumb2.jpg"}
-        }, "transport" => %{"calculated_price" => "5", "transport_type" => "pickandpay"}
+        },
+        "trans" => %{"calculated_price" => "5", "ctype" => "pickup"}
       }
 
       {:ok, order} =  Order.create(params, user_client)
-      assert order.transport.transport_type == "pickandpay"
+      assert order.trans.ctype == "pickup"
 
-      params = Map.put(params, "transport", %{"calculated_price" => "5", "transport_type" => "nonono"})
+      params = Map.put(params, "trans", %{"calculated_price" => "5", "ctype" => "nonono"})
 
       {:error, cs} =  Order.create(params, user_client)
-      assert cs.changes.transport.errors[:transport_type]
+      assert cs.changes.trans.errors[:ctype]
+    end
+
+    test "open org" do
+      org = insert(:organization, open: false)
+      user_client = insert(:user_client)
+      [p1, p2] = create_products2(org)
+      v1 = Enum.at(p1.variations, 1)
+      v2 = Enum.at(p2.variations, 0)
+
+      params = %{"user_client_id" => user_client.id, "organization_id" => org.id, "currency" => org.currency,
+      "client_pos" => %{"coordinates" => [-100, 30], "type" => "Point"},
+      "client_name" => user_client.full_name, "organization_name" => org.name,
+      "client_address" => "", "other_details" => "cambio de 200",
+      "details" => %{
+          "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "image_thumb" => "thumb1.jpg"},
+          "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2", "image_thumb" => "thumb2.jpg"}
+        },
+        "trans" => %{"calculated_price" => "5", "ctype" => "pickup"}
+      }
+
+      assert {:error, cs} =  Order.create(params, user_client)
+
+      assert cs.errors[:organization]
     end
 
     test "ERROR" do

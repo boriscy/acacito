@@ -1,9 +1,11 @@
 defmodule Publit.Order.Transport do
   use Publit.Web, :model
+  alias Publit.{Order, Repo}
 
+  @primary_key false
   embedded_schema do
     field :transporter_id, :binary
-    field :transporter_name, :string
+    field :name, :string
     field :mobile_number, :string
     field :vehicle, :string
     field :plate, :string
@@ -14,25 +16,27 @@ defmodule Publit.Order.Transport do
     field :picked_at, :string
     field :delivered_arrived_at, :string
     field :delivered_at, :string
-    field :transport_type, :string
+    field :ctype, :string
   end
 
-  @transport_types ["deliver", "pickandpay"]
+  @ctypes ["delivery", "pickup"]
 
   @doc """
   cangeset for creation of order
   """
-  def changeset(pv, params) do
-    cast(pv, params, [:calculated_price, :transport_type])
-    |> validate_required([:calculated_price, :transport_type])
-    |> validate_inclusion(:transport_type, @transport_types)
+  def changeset_create(cs) do
+    params = cs.params["trans"] || %{}
+
+    cast(%Order.Transport{}, params, [:calculated_price, :ctype])
+    |> validate_required([:calculated_price, :ctype])
+    |> validate_inclusion(:ctype, @ctypes)
     |> validate_number(:calculated_price, greater_than_or_equal_to: 0)
   end
 
   def changeset_update(ot, params) do
     ot
-    |> cast(params, [:transporter_id, :transporter_name, :mobile_number, :final_price, :plate, :vehicle])
-    |> validate_required([:transporter_id, :transporter_name, :final_price, :vehicle])
+    |> cast(params, [:transporter_id, :name, :mobile_number, :final_price, :plate, :vehicle])
+    |> validate_required([:transporter_id, :name, :final_price, :vehicle])
     |> validate_number(:final_price, greater_than_or_equal_to: 0)
     |> put_change(:responded_at, DateTime.utc_now())
   end

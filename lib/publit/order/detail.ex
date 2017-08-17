@@ -1,6 +1,7 @@
 defmodule Publit.Order.Detail do
   use Publit.Web, :model
 
+  @primary_key false
   embedded_schema do
     field :name, :string
     field :variation, :string

@@ -12,12 +12,12 @@ defmodule Publit.Support.Order do
     params = %{
       user_client_id: user_client.id, organization_id: org.id, currency: org.currency,
       client_pos: %Geo.Point{coordinates: {-100, 30}, srid: nil}, client_name: user_client.full_name,
-      client_address: "Los Nuevos Pinos, B100 7", other_details: "Cambio de 200BS.",
+      cli: %{address: "Los Nuevos Pinos, B100 7"}, other_details: "Cambio de 200BS.",
       details: [
         %{product_id: p1.id, variation_id: v1.id, quantity: "1"},
         %{product_id: p2.id, variation_id: v2.id, quantity: "2"}
       ],
-      transport: %{"calculated_price" => "7", "transport_type" => "deliver"}
+      trans: %{"calculated_price" => "7", "ctype" => "delivery"}
     }
 
     {:ok, order} = Order.create(Map.merge(params, p), user_client)
@@ -32,7 +32,7 @@ defmodule Publit.Support.Order do
     {:ok, order} = Repo.insert(%Order{
       organization_id: org.id, organization_pos: org.pos, organization_name: org.name, other_details: "Another detail",
       user_client_id: user_client.id, client_pos: %Geo.Point{coordinates: {lng, lat}, srid: nil}, client_name: user_client.full_name,
-      transport: %Order.Transport{calculated_price: Decimal.new("5"), transport_type: "deliver"},
+      trans: %Order.Transport{calculated_price: Decimal.new("5"), ctype: "delivery"},
       details: [
         %{product_id: Ecto.UUID.generate(), name: "First product", price: Decimal.new("5"), quantity: Decimal.new("1")},
         %{product_id: Ecto.UUID.generate(), name: "Second product", price: Decimal.new("7.5"), quantity: Decimal.new("2")}

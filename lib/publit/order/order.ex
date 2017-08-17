@@ -9,12 +9,13 @@ defmodule Publit.Order do
   schema "orders" do
     field :total, :decimal
     field :status, :string, default: "new"
+    field :prev_status, :string
     field :null_reason, :string
     field :num, :integer
     field :currency, :string
     field :client_pos, Geo.Geometry
     field :client_name, :string
-    field :client_address, :string
+    #field :client_address, :string
     field :client_number, :string
     field :organization_pos, Geo.Geometry
     field :organization_name, :string
@@ -25,8 +26,13 @@ defmodule Publit.Order do
     field :process_time, :utc_datetime
     field :transport_time, :utc_datetime
 
-    embeds_one :transport, Order.Transport
+    #embeds_one :transport, Order.Transport
     embeds_many :details, Order.Detail
+
+    embeds_one :cli, Order.Client
+    embeds_one :trans, Order.Transport, on_replace: :delete
+    embeds_one :org, Order.Organization
+    #embeds_one :trans, Order.Transport
 
     belongs_to :user_client, UserClient, type: :binary_id
     belongs_to :user_transport, UserTransport, type: :binary_id
@@ -54,21 +60,14 @@ defmodule Publit.Order do
   """
   def create(params, user_client) do
     cs = %Order{}
-    |> cast(params, [:client_pos, :currency, :organization_id, :other_details, :client_address])
+    |> cast(params, [:client_pos, :currency, :organization_id, :other_details])
     |> validate_required([:details, :client_pos, :currency])
     |> cast_embed(:details)
-    |> cast_embed(:transport)
     |> set_and_validate_details()
-
-    cs = if cs.changes.transport.valid? && cs.changes.transport.changes.transport_type == "deliver" do
-      cs |> validate_required([:client_address]) |> validate_length(:client_address, min: 8)
-    else
-      cs
-    end
+    |> set_organization()
 
     with true <- cs.valid? do
       cs
-      |> set_organization()
       |> set_client(user_client)
       |> set_transport()
       |> set_total()
@@ -148,31 +147,36 @@ defmodule Publit.Order do
 
   defp set_transport(cs) do
     if cs.changes.organization_id do
-      p = Map.merge(cs.params["transport"] , %{"calculated_price" => Publit.Distance.calculate_price("car")})
+      p = Map.merge(cs.params["trans"] , %{"calculated_price" => Publit.Distance.calculate_price("car")})
 
       cs
       |> put_change(:organization_pos, cs.changes.organization.data.pos)
-      |> Map.put(:params, Map.merge(cs.params, %{"transport" => p}) )
-      |> cast_embed(:transport)
+      |> Map.put(:params, Map.merge(cs.params, %{"trans" => p}) )
+      |> put_embed(:trans, Order.Transport.changeset_create(cs))
     else
       cs
     end
   end
 
   defp set_organization(cs) do
-    org = Repo.get(Organization, cs.changes[:organization_id])
-    cs
-    |> put_assoc(:organization,  org)
-    |> put_change(:organization_name, org.name)
-    |> put_change(:organization_address, org.address)
-    |> put_change(:organization_number, org.mobile_number)
+    org = Repo.one(from o in Organization, where: o.id == ^cs.changes[:organization_id] and o.open == true)
+
+    if org do
+      cs
+      |> put_assoc(:organization,  org)
+      |> put_change(:organization_name, org.name)
+      |> put_change(:organization_address, org.address)
+      |> put_change(:organization_number, org.mobile_number)
+      |> put_embed(:org, %Order.Organization{name: org.name, address: org.address, mobile_number: org.mobile_number})
+    else
+      cs |> add_error(:organization, gettext("Invalid organization"))
+    end
   end
 
   defp set_client(cs, uc) do
     cs
     |> put_assoc(:user_client, uc)
-    |> put_change(:client_name, uc.full_name)
-    |> put_change(:client_number, uc.mobile_number)
+    |> put_embed(:cli, Order.Client.changeset_create(uc, cs))
   end
 
 
