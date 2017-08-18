@@ -126,7 +126,7 @@ export default {
       {{timeAgo(order.process_time)}}
     </div>
 
-    <div v-if="'pickandpay' == order.transport.transport_type" class="pick-and-pay line">
+    <div v-if="'pickup' === order.trans.ctype" class="pickup line">
       <i class="material-icons">shopping_basket</i>&nbsp;
       <small>{{'Client will pick order' | translate}}</small>
     </div>

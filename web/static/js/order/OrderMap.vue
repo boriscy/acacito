@@ -93,7 +93,7 @@ export default {
       })
     },
     checkStatus() {
-      if(this.order.status != 'transport' || this.order.status != 'transporting') {
+      if('transport' !== this.order.status  || 'transporting' !== this.order.status ) {
         this.$router.replace(`/pprivate/orders/${this.$route.params.id}`)
       }
     }

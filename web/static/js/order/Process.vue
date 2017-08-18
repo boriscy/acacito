@@ -41,13 +41,13 @@ export default {
       }
     },
     trans() {
-      if(this.order && this.order.transport) {
-        return this.order.transport
+      if(this.order && this.order.trans) {
+        return this.order.trans
       } else {
         return {}
       }
     },
-    vehicle() { return this.order.transport.vehicle }
+    vehicle() { return this.order.trans.vehicle }
   },
   watch: {
     transportStatus: (a, b) => {
@@ -112,12 +112,12 @@ export default {
 
 <template>
   <Order :order="order" nextProcess="transport-next">
-    <div slot="transport" class="transport" v-if="'deliver' == order.transport.transport_type">
+    <div slot="transport" class="transport" v-if="'deliver' === order.trans.ctype">
       <div v-if="!order.transport_status">
         <button class="btn btn-primary" @click="callTransport()">{{'Call Transport' | translate}}</button>
       </div>
 
-      <div v-show="order.transport_status=='calling'" class="well well-sm">
+      <div v-show="'calling' === order.transport_status" class="well well-sm">
         <div>
           <Timer ref="timer"/>
           <span class="text-muted">{{'Calling transport' | translate}}</span>
@@ -125,16 +125,16 @@ export default {
         <button class="btn btn-danger btn-sm" v-if="timerCount > cancelTimerCount" @click="cancelCall()">{{'Cancel call' | translate}}</button>
       </div>
 
-      <div v-if="order.transport_status=='responded'" class="transport-set">
+      <div v-if="'responded' === order.transport_status" class="transport-set">
         <div>
           <i class="material-icons trans-icon" :title="$t('vehicle')">{{getVehicleIcon(vehicle)}}</i>&nbsp;
-          <strong>{{order.transport.transporter_name}}</strong>
+          <strong>{{order.trans.name}}</strong>
         </div>
         <div>
-          {{order.transport.mobile_number | phone}}
+          {{order.trans.mobile_number | phone}}
           &nbsp;
           &nbsp;
-          <small><i class="material-icons">watch_later</i> {{timeAgo(order.transport.responded_at)}}</small>
+          <small><i class="material-icons">watch_later</i> {{timeAgo(order.trans.responded_at)}}</small>
         </div>
 
         <div v-if="!trans.picked_at && trans.picked_arrived_at">
@@ -142,7 +142,7 @@ export default {
         </div>
       </div>
 
-      <div v-if="order.transport_status=='call_empty'" class="alert alert-warning">
+      <div v-if="'call_empty'===order.transport_status" class="alert alert-warning">
         <strong>{{'No transport available' | translate}}</strong>
       </div>
 

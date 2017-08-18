@@ -7,11 +7,11 @@ export const newOrders = state => {
 }
 
 export const processOrders = state => {
-  return state.order.orders.filter(ord => { return ord.status == 'process'  || ord.status == 'transport' })
+  return state.order.orders.filter(ord => { return 'process' === ord.status || 'transport' === ord.status })
 }
 
 export const transportOrders = state => {
-  return state.order.orders.filter(ord => { return ord.status == 'transporting' })
+  return state.order.orders.filter(ord => { return 'transporting' === ord.status })
 }
 
 export const order = state => {

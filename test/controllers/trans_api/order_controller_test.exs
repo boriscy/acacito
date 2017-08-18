@@ -26,7 +26,7 @@ defmodule Publit.TransApi.OrderControllerTest do
   describe "GET /trans_api/orders" do
     test "OK", %{conn: conn, ut: ut, token: token} do
       Agent.start_link(fn -> [] end, name: :api_mock)
-      org = insert(:organization)
+      org = insert(:organization, open: true)
       uc = insert(:user_client)
 
       insert(:order, %{user_client_id: uc.id, client_pos: @pos, organization_pos: @pos,
@@ -54,7 +54,7 @@ defmodule Publit.TransApi.OrderControllerTest do
     test_with_mock "OK", %{conn: conn, token: token}, Publit.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
       Agent.start_link(fn -> [] end, name: :api_mock)
-      org = insert(:organization)
+      org = insert(:organization, open: true)
       uc = insert(:user_client)
       order = create_order_only(uc, org)
 
@@ -67,16 +67,16 @@ defmodule Publit.TransApi.OrderControllerTest do
       json = Poison.decode!(conn.resp_body)
       ord = json["order"]
       assert ord["status"] == "transport"
-      assert ord["transport"]["final_price"] == to_string(order.transport.calculated_price)
+      assert ord["trans"]["final_price"] == to_string(order.trans.calculated_price)
 
       assert called Publit.OrganizationChannel.broadcast_order(:_, "order:updated")
     end
 
     test "Error", %{conn: conn, token: token} do
       Agent.start_link(fn -> [] end, name: :api_mock)
-      org = insert(:organization)
+      org = insert(:organization, open: true)
       uc = insert(:user_client)
-      order = create_order_only(uc, org, %{transport: %Order.Transport{calculated_price: Decimal.new("-5")} })
+      order = create_order_only(uc, org, %{trans: %Order.Transport{calculated_price: Decimal.new("-5")} })
 
       oc = create_order_call(order, %{status: "delivered"})
 
@@ -87,7 +87,7 @@ defmodule Publit.TransApi.OrderControllerTest do
       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
       json = Poison.decode!(conn.resp_body)
 
-      assert json["errors"]["transport"]["final_price"]
+      assert json["errors"]["trans"]["final_price"]
     end
 
     test "Empty", %{conn: conn, token: token} do

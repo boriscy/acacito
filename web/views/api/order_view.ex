@@ -1,12 +1,10 @@
 defmodule Publit.Api.OrderView do
   use Publit.Web, :view
-  alias Publit.{UserClient, Repo}
+  alias Publit.{Repo}
   #import Publit.ErrorHelpers, only: [get_errors: 1]
 
   def render("index.json", %{orders: orders}) do
-    orders = Enum.map(orders, &to_api/1)
-
-    %{orders: orders}
+    %{orders: Enum.map(orders, &to_api/1)}
   end
 
   def render("show.json", %{order: order}) do
@@ -38,7 +36,7 @@ defmodule Publit.Api.OrderView do
     |> Map.put(:organization_pos, Geo.JSON.encode(order.organization_pos))
   end
 
-
+  # TODO remove function
   defp encode_order_calls(order) do
     case is_list(order.order_calls) do
       true ->

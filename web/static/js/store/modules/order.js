@@ -13,8 +13,8 @@ const setOrder = (order) => {
 const getTransportStatus = (order) => {
   let obj = {}
 
-  if(order.transport && order.transport.transporter_id) {
-    obj = {transport_status: 'responded', responded_at: order.transport.responded_at}
+  if(order.trans && order.trans.transporter_id) {
+    obj = {transport_status: 'responded', responded_at: order.trans.responded_at}
   } else if(order.order_calls.length > 0) {
     obj = {transport_status: 'calling', responded_at: null}
   } else {

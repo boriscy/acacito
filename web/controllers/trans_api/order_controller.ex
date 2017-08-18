@@ -50,7 +50,7 @@ defmodule Publit.TransApi.OrderController do
   end
 
   defp get_accept_params(order) do
-    %{final_price: order.transport.calculated_price}
+    %{final_price: order.trans.calculated_price}
   end
 
   defp get_status(status) do

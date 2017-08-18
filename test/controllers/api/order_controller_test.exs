@@ -4,7 +4,7 @@ defmodule Publit.Api.OrderControllerTest do
   alias Publit.{Order, Repo}
 
   setup do
-    {user, org} = create_user_org()
+    {user, org} = create_user_org(%{org: %{open: true}})
     conn = build_conn()
     |> assign(:current_user, user)
     |> assign(:current_organization, org)
@@ -35,7 +35,7 @@ defmodule Publit.Api.OrderControllerTest do
 
       order = json["orders"] |> List.first()
       assert order["user_client_id"] == user_client.id
-      assert order["client_name"] == user_client.full_name
+      assert order["cli"]["name"] == user_client.full_name
     end
 
     test "not found", %{conn: conn} do
@@ -60,7 +60,7 @@ defmodule Publit.Api.OrderControllerTest do
       assert json["order"]["details"] |> Enum.count() == 2
 
       assert json["order"]["user_client_id"] == user_client.id
-      assert json["order"]["client_name"] == user_client.full_name
+      assert json["order"]["cli"]["name"] == user_client.full_name
     end
 
     test "not found", %{conn: conn} do

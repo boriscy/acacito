@@ -58,10 +58,10 @@ export default {
       return this.state.order.orders.filter(ord => { return ord.status == 'new' })
     },
     processOrders() {
-      return this.state.order.orders.filter(ord => { return 'process' == ord.status || 'transport' == ord.status })
+      return this.state.order.orders.filter(ord => { return 'process' === ord.status || 'transport' === ord.status })
     },
     transportOrders() {
-      return this.state.order.orders.filter(ord => { return 'transporting' == ord.status || 'ready' == ord.status })
+      return this.state.order.orders.filter(ord => { return 'transporting' === ord.status || 'ready' === ord.status })
     },
     org() {
       return this.state.organization.org
