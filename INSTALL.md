@@ -190,6 +190,8 @@ https://gist.github.com/cecilemuller/a26737699a7e70a7093d4dc115915de8
 
 sudo letsencrypt certonly --standalone -w /var/www/letsencrypt -d www.acacito.com -d acacito.com -d app.acacito.com -d cli.acacito.com admin.acacito.com --email boriscyber@gmail.com --agree-tos
 
+sudo -H ./letsencrypt-auto certonly --standalone -d acacito.com -d www.acacito.com  -d acacito.com -d app.acacito.com -d cli.acacito.com admin.acacito.com --email boriscyber@gmail.com
+
 # OSRM
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-an-osrm-server-on-ubuntu-14-04

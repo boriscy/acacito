@@ -122,10 +122,10 @@ defmodule Publit.Organization do
    {:ok, id} = Ecto.UUID.dump(org_id)
     sql = """
     with tags as (
-      select unnest(p.tags) as tag from products p
+      select unnest(p.tags) as tag, p.id from products p
       where p.publish = true and p.organization_id = $1
       union
-      select 'producto'
+      select 'producto', '377ad713-16d2-45c2-8d7c-79c074408140'
     ),
     res as (
       select count(tag) as count, tag from tags
