@@ -1,6 +1,6 @@
 defmodule Publit.UserOrganization do
   @moduledoc """
-  This model has the attributes for a user that belongs to an organization
+  This model has the attributes for a user that belongs to an organization
   """
   use Publit.Web, :model
 

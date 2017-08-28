@@ -155,7 +155,8 @@ defmodule Publit.Router do
     resources "/products", ProductController
 
     get "/organizations/:id", OrganizationController, :show
-    put "/organizations/current", OrganizationController, :update
+    get "/organizations/:id/edit", OrganizationController, :edit
+    put "/organizations/:id", OrganizationController, :update
     put "/organizations/open_close", OrganizationController, :open_close
 
     get "/orders", OrderController, :index

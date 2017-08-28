@@ -18,6 +18,12 @@ defmodule Publit.OrganizationController do
                               user_org: conn.assigns.current_user_org)
   end
 
+  # GET /organizations/:id/edit
+  def edit(conn, _params) do
+    render(conn, "edit.html", organization: conn.assigns.current_organization,
+                              user_org: conn.assigns.current_user_org)
+  end
+
   # PUT /organizations/current
   # render json
   def update(conn, %{"organization" => org_params, "format" => "json"}) do

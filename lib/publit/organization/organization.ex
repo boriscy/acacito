@@ -29,6 +29,8 @@ defmodule Publit.Organization do
 
     has_many :products, Product
 
+    embeds_many :images, Organization.Image, on_replace: :delete
+
     timestamps()
   end
 
@@ -50,6 +52,12 @@ defmodule Publit.Organization do
     |> validate_inclusion(:currency, @currencies)
     |> validate_format(:mobile_number, @number_reg)
     |> Repo.insert()
+  end
+
+  def add_images(org, params) do
+    org
+    |> cast(params, [])
+    |> cast_embed(:images)
   end
 
   @doc """

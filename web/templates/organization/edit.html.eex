@@ -1,1 +1,17 @@
-<h1>Edit Organization</h1>
+<h1><%= gettext("Organization images") %></h1>
+
+<div class="organization-form flex">
+
+<%= form_for Ecto.Changeset.change(@organization), organization_path(@conn, :update, @organization), [multipart: true, style: "width: 900px"], fn f -> %>
+  <div class="form-group">
+    <%= label f, :image, gettext("Image") %>
+    <%= file_input f, :image, class: "form-control", "@change": "previewImage($event)" %>
+    <%= error_tag f, :image %>
+  </div>
+<% end %>
+</div>
+
+<script>
+window.organization = <%= raw Poison.encode!(Publit.OrganizationView.to_api(@organization)) %>;
+window.vueLoad = 'orgImages';
+</script>
