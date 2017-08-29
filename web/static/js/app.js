@@ -40,13 +40,13 @@ const router = new VueRouter({
 const path = window.location.pathname
 
 // Mixins
-import { format } from 'mixins'
+import { format } from './mixins'
 Vue.mixin(format)
 
 //////////////////////////////////////
 import prodForm from './product/productForm'
-import OrgData from './org/Show.vue'
-import OrgImage from './org/Images'
+
+import edit from './organization/edit'
 
 switch(true) {
   case window.vueLoad == 'ProductForm':
@@ -61,9 +61,6 @@ switch(true) {
       components: {OrgData}
     })
   break;
-  case 'orgImages' === window.vueLoad:
-    new Vue({el: '.vue', components: {OrgImage} })
-  break;
   case !!path.match(/orders/):
     new Vue({
       store,
@@ -75,5 +72,5 @@ switch(true) {
 // set moment locale
 moment.locale(window.locale)
 
-const event = new CustomEvent('appLoaded')
+const event = new Event('appLoaded')
 document.dispatchEvent(event)

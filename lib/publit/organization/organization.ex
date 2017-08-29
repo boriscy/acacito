@@ -54,10 +54,11 @@ defmodule Publit.Organization do
     |> Repo.insert()
   end
 
-  def add_images(org, params) do
+  def update_images(org, params) do
     org
     |> cast(params, [])
     |> cast_embed(:images)
+    |> Repo.update()
   end
 
   @doc """

@@ -1,17 +1,34 @@
 <h1><%= gettext("Organization images") %></h1>
 
-<div class="organization-form flex">
+<div class="organization-form vue">
 
-<%= form_for Ecto.Changeset.change(@organization), organization_path(@conn, :update, @organization), [multipart: true, style: "width: 900px"], fn f -> %>
-  <div class="form-group">
-    <%= label f, :image, gettext("Image") %>
-    <%= file_input f, :image, class: "form-control", "@change": "previewImage($event)" %>
-    <%= error_tag f, :image %>
+  <%= form_for Ecto.Changeset.change(@organization), organization_path(@conn, :images, @organization), [multipart: true, style: "width: 900px"], fn f -> %>
+
+
+  <div v-for="(img, idx) in images">
+    <org-image :index="idx" />
   </div>
-<% end %>
+
+  <button class="btn btn-sm" @click.prevent="addLine()">{{ 'Add line' | translate}}</button>
+
+  <br /><br />
+
+  <div>
+    <button class="btn btn-primary">
+      {{ 'Save' | translate }}
+    </button>
+  </div>
+
+  <% end %>
+
 </div>
 
 <script>
 window.organization = <%= raw Poison.encode!(Publit.OrganizationView.to_api(@organization)) %>;
 window.vueLoad = 'orgImages';
+
+document.addEventListener('appLoaded', function() {
+  var ev = new Event('loadOrgEdit');
+  document.dispatchEvent(ev);
+});
 </script>

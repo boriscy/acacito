@@ -19,9 +19,10 @@ defmodule Publit.Organization.Image do
   #  pc
   #end
 
-  def changeset(org, params) do
-    cast(org, params, [:name, :description])
-    |> validate_required([:price])
+  def changeset(org_img, params) do
+    IO.inspect org_img, label: "IMG params"
+    cast(org_img, params, [:name, :description])
+    |> validate_required([:image])
     |> cast_attachments(params, [:image])
   end
 

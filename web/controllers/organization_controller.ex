@@ -26,11 +26,11 @@ defmodule Publit.OrganizationController do
 
   # PUT /organizations/current
   # render json
-  def update(conn, %{"organization" => org_params, "format" => "json"}) do
-    case Organization.update(conn.assigns.current_organization, org_params) do
+  def images(conn, %{"organization" => org_params}) do
+    case Organization.update_images(conn.assigns.current_organization, org_params) do
       {:ok, org} ->
         conn
-        |> render("show.json", organization: org)
+        |> render("edit.json", organization: org)
       {:error, cs} ->
         conn
         |> put_status(:unprocessable_entity)

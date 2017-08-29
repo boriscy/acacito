@@ -51,7 +51,6 @@ config :publit, Publit.Repo,
 
 config :arc,
   storage: Arc.Storage.S3,
-  #virtual_host: true,
   bucket: "acacitodev"
 
 config :ex_aws,

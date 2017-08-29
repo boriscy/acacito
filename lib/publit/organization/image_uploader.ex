@@ -24,10 +24,10 @@ defmodule Publit.Organization.ImageUploader do
   @s3 Application.get_env(:ex_aws, :s3)
   @bucket Application.get_env(:arc, :bucket)
 
-  def path(p, :big), do: s3_url(p, :big)
-  def path(p, :thumb), do: s3_url(p, :thumb)
-  defp s3_url(p, version) do
-    "#{@s3[:scheme]}#{@s3[:host]}/#{@bucket}/organizations/#{p.id}/#{version}#{Path.extname(p.image.file_name)}"
+  def path(org, :big), do: s3_url(org, :big)
+  def path(org, :thumb), do: s3_url(org, :thumb)
+  defp s3_url(org, version) do
+    "#{@s3[:scheme]}#{@s3[:host]}/#{@bucket}/organizations/#{org.id}/#{version}#{Path.extname(org.image.file_name)}"
   end
 
   @doc """
