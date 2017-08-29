@@ -14,7 +14,7 @@ defmodule Publit.ProductImage do
   end
 
   def storage_dir(_, {_, prod}) do
-    "products/#{prod.id}"
+    "#{prod.organization_id}/products/#{prod.id}"
   end
 
   def s3_object_headers(version, {file, scope}) do
@@ -27,7 +27,12 @@ defmodule Publit.ProductImage do
   def path(p, :big), do: s3_url(p, :big)
   def path(p, :thumb), do: s3_url(p, :thumb)
   defp s3_url(p, version) do
-    "#{@s3[:scheme]}#{@s3[:host]}/#{@bucket}/products/#{p.id}/#{version}#{Path.extname(p.image.file_name)}"
+    #"#{@s3[:scheme]}#{@s3[:host]}/#{@bucket}/products/#{p.id}/#{version}#{Path.extname(p.image.file_name)}"
+    "#{main_path(p)}/#{version}#{Path.extname(p.image.file_name)}"
+  end
+
+  defp main_path(p) do
+    "#{@s3[:scheme]}#{@s3[:host]}/#{@bucket}/#{p.organization_id}/products/#{p.id}"
   end
 
   @doc """

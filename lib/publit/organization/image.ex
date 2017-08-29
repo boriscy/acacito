@@ -20,7 +20,6 @@ defmodule Publit.Organization.Image do
   #end
 
   def changeset(org_img, params) do
-    IO.inspect org_img, label: "IMG params"
     cast(org_img, params, [:name, :description])
     |> validate_required([:image])
     |> cast_attachments(params, [:image])
