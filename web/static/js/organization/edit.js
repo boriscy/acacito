@@ -8,18 +8,25 @@ document.addEventListener('loadOrgEdit', () => {
     components: {
       OrgImage
     },
-    data() {
-      return {
-        images: []
-      }
+    computed: {
+      images() {
+        const imgs = window.organization.images
+        const listImg = this.findImg(imgs, 'list') || {ctype: 'list'}
+        const logoImg = this.findImg(imgs, 'logo') || {ctype: 'logo'}
+
+        return [listImg, logoImg]
+      },
+      token() { return document.querySelector('meta[name="csrf"]').content }
     },
     methods: {
-      addLine() {
-        this.images.push({})
+      findImg(arr, ctype) {
+        return arr.find( img => { return ctype === img.ctype })
       }
     },
-    mounted() {
-      this.images = window.organization.images
+    data() {
+      return {
+        saving: false
+      }
     }
   })
 })

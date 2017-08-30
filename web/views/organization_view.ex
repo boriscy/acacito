@@ -1,5 +1,6 @@
 defmodule Publit.OrganizationView do
   use Publit.Web, :view
+  alias Publit.Organization
 
   def render("show.json", %{organization: organization}) do
     %{organization: to_api(organization)}
@@ -22,6 +23,7 @@ defmodule Publit.OrganizationView do
   def to_api(org) do
     org = org
     |> Map.drop([:__meta__, :__struct__, :settings, :products])
+    |> Map.put(:images, get_images(org))
 
     if org.pos do
       org |> Map.put(:pos, Geo.JSON.encode(org.pos))
@@ -29,4 +31,14 @@ defmodule Publit.OrganizationView do
       org
     end
   end
+
+  def get_images(org) do
+    Enum.map(org.images, fn(img) ->
+      img = Map.put(img, :organization_id, org.id)
+      thumb = Organization.ImageUploader.path(img, :thumb)
+      big = Organization.ImageUploader.path(img, :big)
+      %{ctype: img.ctype, thumb: thumb, big: big, filename: img.filename }
+    end)
+  end
+
 end

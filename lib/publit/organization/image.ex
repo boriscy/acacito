@@ -1,28 +1,28 @@
 defmodule Publit.Organization.Image do
   use Publit.Web, :model
-  use Arc.Ecto.Schema
+  alias Publit.{Organization}
 
+  @primary_key false
   embedded_schema do
-    field :image, Publit.Organization.ImageUploader.Type
-    field :name, :string
-    field :description, :string
+    field :ctype, :string
+    field :filename, :string, default: ""
+    field :organization_id, :string, virtual: true
 
     timestamps()
   end
 
-  @doc """
-  Adds product variations to a product changeset
-  """
-  #def add(product_cs, params \\ []) do
-  #  pc = product_cs
-  #  |> put_embed(:variations, set_variations(params))
-  #  pc
-  #end
+  @ctypes ["list", "logo"]
 
-  def changeset(org_img, params) do
-    cast(org_img, params, [:name, :description])
-    |> validate_required([:image])
-    |> cast_attachments(params, [:image])
+  def set_image(org, img) do
+    o_img = Enum.find(org.images, fn(im) -> im.ctype === img.ctype end) || %Organization.Image{ctype: img.ctype}
+    o_img = Map.put(o_img, :organization_id, org.id)
+
+    with %Plug.Upload{} <- img.image,
+      {:ok, filename} <- Organization.ImageUploader.store({img.image, o_img}) do
+        %Organization.Image{ctype: img.ctype, organization_id: org.id, filename: filename}
+    else
+      _ -> o_img
+    end
   end
 
 end

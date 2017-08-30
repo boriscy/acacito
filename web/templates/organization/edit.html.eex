@@ -2,24 +2,25 @@
 
 <div class="organization-form vue">
 
-  <%= form_for Ecto.Changeset.change(@organization), organization_path(@conn, :images, @organization), [multipart: true, style: "width: 900px"], fn f -> %>
+  <form accept-charset="UTF-8" action="<%= organization_path(@conn, :edit_images, "current") %>"
+    enctype="multipart/form-data" method="post" @submit="this.saving=true" style="max-width: 900px">
 
+  <input name="_method" type="hidden" value="put" />
+  <input name="_csrf_token" type="hidden" :value="token" />
 
   <div v-for="(img, idx) in images">
-    <org-image :index="idx" />
+    <org-image :index="idx" :img="img" />
   </div>
-
-  <button class="btn btn-sm" @click.prevent="addLine()">{{ 'Add line' | translate}}</button>
 
   <br /><br />
 
   <div>
-    <button class="btn btn-primary">
-      {{ 'Save' | translate }}
+    <button class="btn btn-primary" :disabled="saving">
+      {{ 'Save images' | translate }}
     </button>
   </div>
 
-  <% end %>
+  </form>
 
 </div>
 

@@ -18,23 +18,23 @@ defmodule Publit.OrganizationController do
                               user_org: conn.assigns.current_user_org)
   end
 
-  # GET /organizations/:id/edit
-  def edit(conn, _params) do
-    render(conn, "edit.html", organization: conn.assigns.current_organization,
-                              user_org: conn.assigns.current_user_org)
+  # GET /organizations/:id/images
+  def edit_images(conn, _params) do
+    org = conn.assigns.current_organization
+    render(conn, "edit.html", organization: org, cs: Ecto.Changeset.change(org))
   end
 
   # PUT /organizations/current
   # render json
-  def images(conn, %{"organization" => org_params}) do
+  def update_images(conn, %{"organization" => org_params}) do
     case Organization.update_images(conn.assigns.current_organization, org_params) do
       {:ok, org} ->
         conn
-        |> render("edit.json", organization: org)
+        |> render("edit.html", organization: org, cs: Ecto.Changeset.change(org))
       {:error, cs} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render("error.json", cs: cs)
+        |> render("edit.html", organization: conn.assigns.current_organization, cs: cs)
     end
   end
 
