@@ -2,7 +2,7 @@
 
 <div class="organization-form vue">
 
-  <form accept-charset="UTF-8" action="<%= organization_path(@conn, :edit_images, "current") %>"
+  <form accept-charset="UTF-8" action="<%= organization_path(@conn, :edit_images) %>"
     enctype="multipart/form-data" method="post" @submit="this.saving=true" style="max-width: 900px">
 
   <input name="_method" type="hidden" value="put" />

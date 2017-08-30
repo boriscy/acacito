@@ -1,2 +1,2 @@
-alias Publit.{User, UserClient, UserTransport, UserOrganization, UserAuth, Product,ProductVariation, Organization, Order, Order.Call, Repo, Distance}
+alias Publit.{User, UserClient, UserTransport, UserOrganization, UserAuth, Product, Organization, Order, Order.Call, Repo, Distance}
 import Ecto.Query

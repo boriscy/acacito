@@ -1,4 +1,4 @@
-defmodule Publit.ProductImage do
+defmodule Publit.Product.ImageUploader do
   use Arc.Definition
   use Arc.Ecto.Definition
 
@@ -24,6 +24,12 @@ defmodule Publit.ProductImage do
   @s3 Application.get_env(:ex_aws, :s3)
   @bucket Application.get_env(:arc, :bucket)
 
+  @doc """
+  Returns the url for the product
+  ## Example
+      p = %Product{image: %{file_name: "prod.jpg"}, organization_id: "76709434-bc00-44f2-9d22-45a340c326a7", id: "5dd1253e-c03a-48dc-9ac6-6dfb559fd627"}
+      Product.ImageUploader.path(p, :thumb) # => "https://s3-sa-east-1.amazonaws.com/acacito/organizations/76709434-bc00-44f2-9d22-45a340c326a7/products/5dd1253e-c03a-48dc-9ac6-6dfb559fd627/thumb.jpg"
+  """
   def path(p, :big), do: s3_url(p, :big)
   def path(p, :thumb), do: s3_url(p, :thumb)
   defp s3_url(p, version) do
@@ -32,20 +38,8 @@ defmodule Publit.ProductImage do
   end
 
   defp main_path(p) do
-    "#{@s3[:scheme]}#{@s3[:host]}/#{@bucket}/#{p.organization_id}/products/#{p.id}"
+    "#{@s3[:scheme]}#{@s3[:host]}/#{@bucket}/organizations/#{p.organization_id}/products/#{p.id}"
   end
-
-  @doc """
-  Deletes the image for the version
-  """
-  #def delete(ver, product) do
-  #  if __storage() == Arc.Storage.Local do
-  #    p = Path.join([System.cwd(), "priv/static", img_url(ver, product)])
-  #    File.rm(p)
-  #  else
-  #    ""
-  #  end
-  #end
 
   defp slugify(name) do
     name = String.downcase(name)

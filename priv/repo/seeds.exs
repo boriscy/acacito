@@ -9,7 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-alias Publit.{Repo, User, UserClient, UserTransport, Organization, UserOrganization, Product, ProductVariation}
+alias Publit.{Repo, User, UserClient, UserTransport, Organization, UserOrganization, Product}
 
 #org = Repo.insert(%Organization{
 #  name: "Amalunchi",
@@ -147,5 +147,3 @@ Repo.insert(%UserTransport{
 })
 
 Ecto.Adapters.SQL.query(Repo, "UPDATE products SET publish=true")
-
-

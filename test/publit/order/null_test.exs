@@ -2,7 +2,7 @@ defmodule Publit.Order.NullTest do
   use Publit.ModelCase
   import Publit.Support.Session, only: [create_user_org: 1]
 
-  alias Publit.{Order, ProductVariation, Repo}
+  alias Publit.{Order, Product, Repo}
 
   describe "null" do
     test "new" do

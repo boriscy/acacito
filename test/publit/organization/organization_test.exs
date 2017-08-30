@@ -1,6 +1,6 @@
 defmodule Publit.OrganizationTest do
   use Publit.ModelCase
-
+  import Mock
   alias Publit.{Organization}
 
   @valid_attrs %{currency: "USD", name: "Home",  settings: %{theme: "dark"},
@@ -80,6 +80,37 @@ defmodule Publit.OrganizationTest do
       {:ok, org} = Organization.update(org, %{name: "Changes to name", pos: p})
 
       assert org.pos == %Geo.Point{coordinates: {-100, 30}, srid: nil}
+    end
+
+  end
+
+  describe "images" do
+    test_with_mock "upload", %{}, Organization.ImageUploader, [],
+     [store: fn({img, upl}) -> {:ok, img.filename } end] do
+       org = insert(:organization, currency: "USD")
+
+       images = [%{ctype: "list", image: %Plug.Upload{filename: "list-img.jpg", path: "list.png", content_type: "image/png"} }]
+
+       assert {:ok, org} = Organization.update_images(org, %{"images" => images})
+
+       img = List.first(org.images)
+       assert %Organization.Image{ctype: "list", filename: "list-img.jpg", inserted_at: _a, updated_at: _b} = img
+    end
+
+    test_with_mock "upload map", %{}, Organization.ImageUploader, [],
+     [store: fn({img, upl}) -> {:ok, img.filename } end] do
+       org = insert(:organization, currency: "USD")
+
+       images = %{"0" => %{"ctype" => "list", "image" => %Plug.Upload{filename: "list-img.jpg"} },
+          "1" => %{"ctype" => "logo", "image" => %Plug.Upload{filename: "logo-img.jpg"}} }
+
+       assert {:ok, org} = Organization.update_images(org, %{"images" => images})
+
+       img = List.first(org.images)
+       assert %Organization.Image{ctype: "list", filename: "list-img.jpg", inserted_at: _a, updated_at: _b} = img
+
+       img = List.last(org.images)
+       assert %Organization.Image{ctype: "logo", filename: "logo-img.jpg", inserted_at: _a, updated_at: _b} = img
     end
 
   end

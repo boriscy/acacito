@@ -23,43 +23,9 @@ defmodule Publit.OrganizationControllerTest do
     end
   end
 
-  describe "PUT /organizations/:id" do
-    test "OK html", %{conn: conn} do
-      conn = put(conn, "/organizations/current", %{"organization" => %{
-         "name" => "Other org name", "mobile_number" => "59176543210",
-         "pos" => %{"coordinates" => [10, 10], "type" => "Point"} } })
-
-      assert redirected_to(conn) == "/organizations/#{conn.assigns.current_organization.id}"
-    end
-
-    test "ERROR html", %{conn: conn} do
-      conn = put(conn, "/organizations/current", %{"organization" => %{
-         "name" => "" } })
-
-      assert view_template(conn) == "edit.html"
-    end
-
-    test "OK json", %{conn: conn} do
-      conn = put(conn, "/organizations/current", %{"organization" => %{
-        "mobile_number" => "59176543210",
-         "pos" => %{"coordinates" => ["-120", "30"], "type" => "Point"} }, "format" => "json" })
-
-      org = Poison.decode!(conn.resp_body)
-      assert org["organization"]["mobile_number"] == "59176543210"
-      assert org["organization"]["pos"] == %{"coordinates" => ["-120", "30"], "type" => "Point"}
-    end
-
-    test "ERROR json", %{conn: conn} do
-      conn = put(conn, "/organizations/current", %{"organization" => %{
-         "pos" => %{"lat" => "30", "lng" => "-190"}, "name" => "" }, "format" => "json" })
-
-      assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
-    end
-  end
-
   describe "PUT /organization/open_close" do
     test "open", %{conn: conn} do
-      conn = put(conn, "/organizations/open_close")
+      conn = put(conn, "/organizations/open_close", %{"organization" => %{} })
 
       json = Poison.decode!(conn.resp_body)
 
@@ -78,6 +44,15 @@ defmodule Publit.OrganizationControllerTest do
 
       assert conn.status == 200
       assert json["organization"]["open"] == false
+    end
+  end
+
+  describe "GET /organizations/current/edit_images" do
+    test "OK", %{conn: conn} do
+      conn = get(conn, "/organizations/images")
+
+      assert conn.status == 200
+      assert view_template(conn) == "images.html"
     end
   end
 end

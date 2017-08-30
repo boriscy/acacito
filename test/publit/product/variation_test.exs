@@ -1,18 +1,18 @@
-defmodule Publit.ProductVariationTest do
+defmodule Publit.Product.VariationTest do
   use Publit.ModelCase
 
-  alias Publit.{Product, ProductVariation}
+  alias Publit.{Product}
 
   describe "schema" do
     test "OK" do
-      pvc = ProductVariation.changeset(%ProductVariation{}, %{"price"=> "20", "name" => "Medium", "description" => "Medium size 15 x 15"})
+      pvc = Product.Variation.changeset(%Product.Variation{}, %{"price"=> "20", "name" => "Medium", "description" => "Medium size 15 x 15"})
 
       assert pvc.valid?
       assert pvc.changes == %{price: Decimal.new("20"), name: "Medium", description: "Medium size 15 x 15"}
     end
 
     test "Error" do
-      pvc = ProductVariation.changeset(%ProductVariation{}, %{"price"=> "-1", "name" => "", "description" => "Medium size 15 x 15"})
+      pvc = Product.Variation.changeset(%Product.Variation{}, %{"price"=> "-1", "name" => "", "description" => "Medium size 15 x 15"})
 
       refute pvc.valid?
       refute pvc.errors[:name]
@@ -29,7 +29,7 @@ defmodule Publit.ProductVariationTest do
         %{"price"=> "20", "name" => "Big", "description" => "Big size 20 x 20"}
       ]
 
-      p = ProductVariation.add(p, variations)
+      p = Product.Variation.add(p, variations)
 
       assert Enum.count(p.changes.variations) == 3
     end

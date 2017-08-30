@@ -1,6 +1,6 @@
 defmodule Publit.ClientApi.OrderControllerTest do
   use Publit.ConnCase, async: false
-  alias Publit.{ProductVariation, Endpoint}
+  alias Publit.{Product, Endpoint}
   require Publit.Gettext
   import Mock
 
@@ -18,7 +18,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
     p1 = insert(:product, organization_id: org.id, publish: true)
     p2 = insert(:product, name: "Super Salad", organization_id: org.id, publish: true,
      variations: [
-      %ProductVariation{price: Decimal.new("20.5")}
+      %Product.Variation{price: Decimal.new("20.5")}
     ])
 
     [p1, p2]

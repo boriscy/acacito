@@ -18,36 +18,22 @@ defmodule Publit.OrganizationController do
                               user_org: conn.assigns.current_user_org)
   end
 
-  # GET /organizations/:id/images
+  # GET /organizations/current/images
   def edit_images(conn, _params) do
     org = conn.assigns.current_organization
-    render(conn, "edit.html", organization: org, cs: Ecto.Changeset.change(org))
+    render(conn, "images.html", organization: org, cs: Ecto.Changeset.change(org))
   end
 
-  # PUT /organizations/current
-  # render json
+  # PUT /organizations/current/images
   def update_images(conn, %{"organization" => org_params}) do
     case Organization.update_images(conn.assigns.current_organization, org_params) do
       {:ok, org} ->
         conn
-        |> render("edit.html", organization: org, cs: Ecto.Changeset.change(org))
+        |> render("images.html", organization: org, cs: Ecto.Changeset.change(org))
       {:error, cs} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render("edit.html", organization: conn.assigns.current_organization, cs: cs)
-    end
-  end
-
-  # PUT /organizations/current
-  def update(conn, %{"organization" => organization_params}) do
-    case Organization.update(conn.assigns.current_organization, organization_params) do
-      {:ok, org} ->
-        conn
-        |> redirect(to: organization_path(conn, :show, org))
-      {:error, cs} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render("edit.html", changeset: cs)
+        |> render("images.html", organization: conn.assigns.current_organization, cs: cs)
     end
   end
 

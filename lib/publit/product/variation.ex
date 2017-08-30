@@ -1,7 +1,7 @@
-defmodule Publit.ProductVariation do
+defmodule Publit.Product.Variation do
   use Publit.Web, :model
 
-  alias Publit.{ProductVariation}
+  alias Publit.{Product}
 
   embedded_schema do
     field :name, :string
@@ -27,9 +27,9 @@ defmodule Publit.ProductVariation do
   defp set_variations(params) do
     cond do
       is_list(params) && Enum.count(params) >  0 ->
-        Enum.map(params, fn(p) -> changeset(%ProductVariation{}, p) end)
+        Enum.map(params, fn(p) -> changeset(%Product.Variation{}, p) end)
       true ->
-        [changeset(%ProductVariation{}, %{})]
+        [changeset(%Product.Variation{}, %{})]
     end
   end
 end

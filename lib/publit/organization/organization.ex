@@ -55,10 +55,8 @@ defmodule Publit.Organization do
   end
 
   def update_images(org, params) do
-    images = Enum.to_list(params["images"])
-    |> Enum.map(fn({_, v}) -> %{ctype: v["ctype"], image: v["image"]} end)
-
-    images = Enum.map(images, fn(img) -> Organization.Image.set_image(org, img) end)
+    images = Publit.Util.map_to_list(params["images"], :atom)
+    |> Enum.map( fn(img) -> Organization.Image.set_image(org, img) end)
 
     change(org)
     |> put_embed(:images, images)

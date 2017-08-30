@@ -1,9 +1,17 @@
 defmodule Publit.ProductView do
   use Publit.Web, :view
+  alias Publit.Product
+
+  def to_api(prod) do
+    Map.drop(prod, [:__meta__, :organization])
+    |> Map.put(:image, img_url(prod, :big))
+    |> Map.put(:image_thumb, img_url(prod, :thumb))
+    |> Map.delete(:extra_info)
+  end
 
   def img_url(product, version \\ :thumb) do
     if product.image && product.image.file_name do
-      Publit.ProductImage.path(product, version)
+      Product.ImageUploader.path(product, version)
     else
       "/images/blank.jpg"
     end

@@ -1,5 +1,6 @@
 defmodule Publit.ProductTest do
   use Publit.ModelCase
+  import Mock
 
   alias Publit.{Product, Organization, Repo}
 
@@ -54,11 +55,21 @@ defmodule Publit.ProductTest do
 
       assert pv.errors[:price]
     end
+
+    test_with_mock "image", Product.ImageUploader, [],
+      [store: fn({img, upl}) -> {:ok, img.filename } end] do
+
+      org = insert :organization
+      attrs = Map.put(valid_attrs(org), "image", %Plug.Upload{filename: "prod1.jpg"})
+      assert {:ok, product} = Product.create(attrs)
+
+      assert %{file_name: "prod1.jpg"} = product.image
+    end
   end
 
   describe "update" do
     test "OK" do
-      org = organization()
+      org = insert :organization, images: [%Organization.Image{filename: "uno.jpg", ctype: "list"}]
       assert {:ok, product} = Product.create(valid_attrs(org))
 
       [pv1, pv2, pv3] = product.variations

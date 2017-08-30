@@ -20,7 +20,7 @@ defmodule Publit.TransApi.OrderView do
   end
 
   def render("errors.json", %{cs: cs}) do
-    errors = Map.merge(get_errors(cs), %{transport: get_errors(cs.changes.transport)})
+    errors = Map.merge(get_errors(cs), %{trans: get_errors(cs.changes.trans)})
     %{errors: errors}
   end
 

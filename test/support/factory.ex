@@ -2,7 +2,7 @@ defmodule Publit.Factory do
   @moduledoc false
 
   use ExMachina.Ecto, repo: Publit.Repo
-  alias Publit.{Product, ProductVariation}
+  alias Publit.{Product, }
 
   def user_factory do
     %Publit.User{
@@ -54,7 +54,8 @@ defmodule Publit.Factory do
       currency: "BOB",
       address: "Calle 1 Near Here",
       mobile_number: "59166554433",
-      pos: Geo.JSON.decode(%{"coordinates" => [-18.18, -63.87], "type" => "Point"})
+      pos: Geo.JSON.decode(%{"coordinates" => [-18.18, -63.87], "type" => "Point"}),
+      images: [%Publit.Organization.Image{ctype: "list"}]
     }
   end
 
@@ -62,9 +63,9 @@ defmodule Publit.Factory do
     %Product{
       name: "Pizza",
       variations: [
-        %ProductVariation{price: Decimal.new("20"), name: "Small"},
-        %ProductVariation{price: Decimal.new("30"), name: "Medium"},
-        %ProductVariation{price: Decimal.new("40"), name: "Big"}
+        %Product.Variation{price: Decimal.new("20"), name: "Small"},
+        %Product.Variation{price: Decimal.new("30"), name: "Medium"},
+        %Product.Variation{price: Decimal.new("40"), name: "Big"}
       ]
     }
   end

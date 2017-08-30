@@ -2,7 +2,7 @@ defmodule Publit.Product do
   use Publit.Web, :model
   use Arc.Ecto.Schema
   import Ecto.Query
-  alias Publit.{Product, Repo, ProductVariation, Organization}
+  alias Publit.{Product, Repo, Organization}
   alias Ecto.Multi
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -13,7 +13,7 @@ defmodule Publit.Product do
     field :currency, :string, default: "BOB"
     field :tags, Publit.Array, default: []
     field :unit, :string
-    field :image, Publit.ProductImage.Type
+    field :image, Product.ImageUploader.Type
     field :extra_info, :map, default: %{}
     field :pos, :integer, default: 1
     field :has_inventory, :boolean, default: true
@@ -21,7 +21,7 @@ defmodule Publit.Product do
 
     belongs_to :organization, Publit.Organization, type: :binary_id
 
-    embeds_many :variations, ProductVariation, on_replace: :delete
+    embeds_many :variations, Product.Variation, on_replace: :delete
 
     timestamps()
   end
@@ -30,7 +30,7 @@ defmodule Publit.Product do
   Builds and empte product
   """
   def new() do
-    Ecto.Changeset.change(%Product{variations: [%ProductVariation{}, %ProductVariation{}]})
+    Ecto.Changeset.change(%Product{variations: [%Product.Variation{}, %Product.Variation{}]})
   end
 
   @doc """
@@ -75,7 +75,7 @@ defmodule Publit.Product do
     if product.image do
       try do
         path = product.image.file_name
-        Task.async(fn -> Publit.ProductImage.delete({path, product}) end)
+        Task.async(fn -> Product.Image.delete({path, product}) end)
       rescue
         _ -> nil
       end

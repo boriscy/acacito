@@ -34,7 +34,7 @@ defmodule Publit.RegistrationControllerTest do
 
 
       user = Repo.all(User) |> List.first()
-      org = Repo.all(Organization) |> List.first()
+      org = Repo.all(from o  in Organization, select: [:id, :name]) |> List.first()
 
       assert org.category == "restaurant"
 
