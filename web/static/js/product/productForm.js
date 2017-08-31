@@ -1,4 +1,4 @@
-import s from './s.vue'
+import ProductVariations from './ProductVariations.vue'
 import ProductPreview from './ProductPreview.vue'
 import Modal from '../globals/Modal.vue'
 import Tag from '../globals/Tag.vue'
@@ -7,10 +7,10 @@ const md = new Markdown('commonmark', {html: false})
 
 export default {
   components: {
-    'product-variations': s,
-    'product-preview': ProductPreview,
-    'modal': Modal,
-    'tag': Tag
+    ProductVariations,
+    ProductPreview,
+    Modal,
+    Tag
   },
   data() {
     return {

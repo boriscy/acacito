@@ -49,11 +49,11 @@ exports.config = {
       options: {
         sourceMapEmbed: true
       }
-    },
-    vue: {
+    }
+    /*vue: {
       extractCSS: true
       //out: ''
-    }
+    }*/
   },
 
   modules: {

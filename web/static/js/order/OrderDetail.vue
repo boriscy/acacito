@@ -45,7 +45,7 @@ export default {
         <i class="material-icons text-gray">person</i>
         <strong>{{order.client_name}}</strong>
         <i class="material-icons text-gray">smartphone</i>
-        {{order.client_number | phone}}
+        {{order.cli.mobile_number | phone}}
       </h4>
       <p>
         <span class="text-gray">{{ 'Address' | translate }}:</span>

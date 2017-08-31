@@ -6,7 +6,8 @@ defmodule Publit.ClientApi.SearchController do
   # POST /api/search
   def search(conn, %{"search" => search_params}) do
     rows = SearchService.search(search_params)
+    |> Enum.map(&Publit.OrganizationView.to_api/1)
 
-    render(conn, "search.json", results: rows)
+    render(conn, "search.json", results: rows )
   end
 end

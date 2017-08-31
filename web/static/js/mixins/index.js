@@ -123,6 +123,7 @@ export const format = {
       return formatMethods.formatNumber(val, decs, sep)
     },
     phone(num) {
+      console.log('num', num)
       return `+${num.slice(0, 3)} ${num.slice(3, 12)}`
     },
     date(date, format = defaults.format.dateFormat) {

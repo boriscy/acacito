@@ -15,4 +15,8 @@ defmodule Publit.Util do
       end
     end)
   end
+
+  def atomize_keys(map) do
+    for {key, val} <- map, into: %{}, do: {String.to_atom(key), val}
+  end
 end

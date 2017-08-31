@@ -4,7 +4,7 @@ defmodule Publit.SearchService do
 
   @base_sql """
   SELECT o.id::text, o.name, o.pos, o.tags, o.address, o.open, o.rating,
-  o.rating_count, o.description, o.currency
+  o.rating_count, o.description, o.currency, o.images
   FROM organizations o, JSONB_ARRAY_ELEMENTS(tags) as t
   WHERE o.open = true AND ST_Distance_Sphere(o.pos, ST_MakePoint($1, $2)) <= $3 * 1000
   """
@@ -12,16 +12,17 @@ defmodule Publit.SearchService do
   def search(params) do
     {sql, params} = get_sql_and_params(params)
     case query(Repo, sql, params) do
-      {:ok, res} -> map_results(res.rows)
+      {:ok, res} ->
+        map_results(res.rows)
     end
   end
 
   defp map_results(rows) do
     Enum.map(rows, fn(row) ->
-      [id, name, pos, tags, address, open, rating, rating_count, desc, curr] = row
-      %{id: id, name: name, pos: Geo.JSON.encode(pos),
+      [id, name, pos, tags, address, open, rating, rating_count, desc, curr, images] = row
+      %{id: id, name: name, pos: pos,
         tags: tags, address: address, open: open, rating: rating, rating_count: rating_count,
-        description: desc, currency: curr}
+        description: desc, currency: curr, images: Publit.Util.map_to_list(images, :atom)}
     end)
   end
 

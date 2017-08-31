@@ -56,5 +56,13 @@ export default {
   "Variations": "Variaciones",
   "Variation name": "Nombre variación",
   "View order detail": "Ver detalle de pedido",
-  "walk": "caminar"
+  "walk": "caminar",
+  //
+  "new": "nuevo",
+  "process": "proceso",
+  "transport": "transporte",
+  "transporting": "en camino",
+  "delivered": "entregado",
+  "nulled": "anulado",
+  "ready": "listo"
 }

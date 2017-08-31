@@ -87,8 +87,21 @@ export default {
   <div class="order" :class="order.viewStatus">
     <div class="flex">
       <div class="left">
-        <div class="title">{{formatNum(order.num)}} - {{order.client_name}}</div>
-        {{order.status}}
+
+        <div class="flex">
+
+          <div class="w30">
+            <div class="title">{{formatNum(order.num)}}</div>
+            <span class="status" :class="order.status">{{order.status | translate}}</span>
+          </div>
+
+          <div>
+            <div class="name">{{order.cli.name}}</div>
+            <div class="name">{{order.cli.mobile_number | phone}}</div>
+          </div>
+
+        </div>
+
 
         <div class="order-time-ago">
           <i class="material-icons">watch_later</i>

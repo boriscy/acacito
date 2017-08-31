@@ -82,12 +82,29 @@ body{
     background: lighten($blue, 40%);
   }
 
+  .status {
+    border-radius: 3px;
+    padding: 0.1em 0.3em;
+    color: white;
+    font-size: 12px;
+    &.new { background: $new; }
+    &.process { background: $process; }
+    &.transport { background: $transport; }
+    &.transporting { background: $transporting; }
+    &.nulled { background: $nulled; }
+    &.ready { background: $ready; }
+  }
+
 
   .left {
     width: 70%;
     .title {
       font-size: 1.3em;
       margin: 0px;
+      .name {
+        font-size: 85%;
+        font-weight: bold;
+      }
     }
     .order-time-ago {
       color: $grayDark;

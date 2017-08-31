@@ -10,13 +10,18 @@ defmodule Publit.ClientApi.SearchControllerTest do
   end
 
   defp create_org(params) do
+    name_u = String.replace(params[:name], " " ,"_")
     Repo.insert(%Organization{
       name: params[:name],
       pos: params[:pos],
       tags: params[:tags],
       rating: params[:rating] || 1,
       open: true,
-      address: "address #{ :rand.uniform(100) }"
+      address: "address #{ :rand.uniform(100) }",
+      images: [
+        %Organization.Image{ctype: "list", filename: "#{name_u}.jpg"},
+        %Organization.Image{ctype: "logo", filename: "#{name_u}.png"}
+      ]
     })
   end
 
@@ -46,6 +51,16 @@ defmodule Publit.ClientApi.SearchControllerTest do
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
       assert json["results"] |> Enum.count() == 3
+
+      org = json["results"] |> List.first
+
+      img = org["images"] |> List.first()
+      img2 =  img |> Map.put("organization_id", org["id"])
+      |> Publit.Util.atomize_keys()
+
+      assert img["ctype"] == "list"
+      assert img["big"] == Organization.ImageUploader.path(img2, :big)
+      assert img["thumb"] == Organization.ImageUploader.path(img2, :thumb)
     end
   end
 
