@@ -47,6 +47,8 @@ Vue.mixin(format)
 import prodForm from './product/productForm'
 
 import edit from './organization/edit'
+import OrgData from './organization/Show.vue'
+
 
 switch(true) {
   case window.vueLoad == 'ProductForm':

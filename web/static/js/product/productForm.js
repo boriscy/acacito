@@ -1,7 +1,7 @@
 import ProductVariations from './ProductVariations.vue'
 import ProductPreview from './ProductPreview.vue'
 import Modal from '../globals/Modal.vue'
-import Tag from '../globals/Tag.vue'
+import TagSuggestion from '../globals/TagSuggestion.vue'
 
 const md = new Markdown('commonmark', {html: false})
 
@@ -10,7 +10,7 @@ export default {
     ProductVariations,
     ProductPreview,
     Modal,
-    Tag
+    TagSuggestion
   },
   data() {
     return {

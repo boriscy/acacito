@@ -16,9 +16,11 @@
       <label>
         <%= gettext("Tags") %>
       </label>
-      <span class="text-muted">(<%= gettext("Separate tags with commas") %>)
+      <span class="text-muted">(<%= gettext("Max 4") %>)
 
-      <tag :suggestions="allTags" :selected="form.tags" pname="$parent.form.tags" input-name="product[tags][]"></tag>
+        <tag-suggestion :suggestions="allTags" :selected-tags="form.tags" pname="$parent.form.tags"
+          input-name="product[tags][]" max-tags="4">
+        </tag-suggestion>
 
       <div class="clearfix"></div>
     </div>

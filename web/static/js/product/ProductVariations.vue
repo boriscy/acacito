@@ -18,6 +18,7 @@ export default {
       this.product.variations.push({name: '', price: 0.0})
     },
     removeLine(prod, index) {
+      console.log('remove');
       this.product.variations.splice(index, 1)
     },
     getPlaceholder(index) {
@@ -56,12 +57,12 @@ export default {
           <span class="help-block">{{ readError(prodVar, 'price') }}</span>
         </div>
         <div class="col remove">
-          <button class="btn btn-danger btn-xs remove" @click.prevent="removeLine(prodVar, index)" v-show="index != 0" :title="$t('Remove')">
+          <a class="btn btn-danger btn-xs remove" @click.prevent="removeLine(prodVar, index)" v-show="index != 0" :title="$t('Remove')">
             <i class="material-icons">delete</i>
-          </button>
+          </a>
         </div>
       </div>
-      <button class="btn btn-primary btn-sm" @click.prevent="addLine()">{{ $t('Add line') }}</button>
+      <a class="btn btn-primary btn-sm" @click.prevent="addLine()">{{ $t('Add line') }}</a>
     </div>
   </div>
 </template>
