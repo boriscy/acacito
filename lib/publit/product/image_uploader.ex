@@ -14,7 +14,7 @@ defmodule Publit.Product.ImageUploader do
   end
 
   def storage_dir(_, {_, prod}) do
-    "#{prod.organization_id}/products/#{prod.id}"
+    "organizations/#{prod.organization_id}/products/#{prod.id}"
   end
 
   def s3_object_headers(version, {file, scope}) do

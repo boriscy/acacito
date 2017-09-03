@@ -158,6 +158,7 @@ defmodule Publit.Router do
     put "/organizations/images", OrganizationController, :update_images
     get "/organizations/:id", OrganizationController, :show
     put "/organizations/open_close", OrganizationController, :open_close
+    put "/organizations/current", OrganizationController, :update
 
     get "/orders", OrderController, :index
   end

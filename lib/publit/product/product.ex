@@ -41,7 +41,7 @@ defmodule Publit.Product do
     cs = %Product{}
     |> cast(params, [:name, :description, :organization_id, :tags])
     |> put_change(:id, Ecto.UUID.generate())
-    |> cast_attachments(params, [:image])
+    |> set_image(params)
     |> validate_required([:name, :organization_id])
     |> cast_embed(:variations)
     |> Repo.insert()
