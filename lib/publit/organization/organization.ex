@@ -2,7 +2,7 @@ defmodule Publit.Organization do
   @moduledoc """
   The organization defines the schema in which you work
   """
-  use Publit.Web, :model
+  use PublitWeb, :model
   import Ecto.Query
 
   alias Publit.{Organization, Repo, Product}

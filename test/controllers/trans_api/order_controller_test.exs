@@ -1,5 +1,5 @@
 defmodule Publit.TransApi.OrderControllerTest do
-  use Publit.ConnCase, async: false
+  use PublitWeb.ConnCase, async: false
   import Mock
 
   alias Publit.{Order, UserTransport, Repo}
@@ -7,7 +7,7 @@ defmodule Publit.TransApi.OrderControllerTest do
   setup do
     ut = insert(:user_transport)
 
-    token = Phoenix.Token.sign(Publit.Endpoint, "user_id", ut.id)
+    token = Phoenix.Token.sign(PublitWeb.Endpoint, "user_id", ut.id)
 
     conn = build_conn()
 
@@ -51,7 +51,7 @@ defmodule Publit.TransApi.OrderControllerTest do
   end
 
   describe "PUT /trans_api/accept/:order_id" do
-    test_with_mock "OK", %{conn: conn, token: token}, Publit.OrganizationChannel, [],
+    test_with_mock "OK", %{conn: conn, token: token}, PublitWeb.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
       Agent.start_link(fn -> [] end, name: :api_mock)
       org = insert(:organization, open: true)
@@ -69,7 +69,7 @@ defmodule Publit.TransApi.OrderControllerTest do
       assert ord["status"] == "transport"
       assert ord["trans"]["final_price"] == to_string(order.trans.calculated_price)
 
-      assert called Publit.OrganizationChannel.broadcast_order(:_, "order:updated")
+      assert called PublitWeb.OrganizationChannel.broadcast_order(:_, "order:updated")
     end
 
     test "Error", %{conn: conn, token: token} do

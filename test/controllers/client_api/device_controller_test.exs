@@ -1,5 +1,5 @@
 defmodule Publit.ClientApi.DeviceControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
 
   setup do
     uc = insert(:user_client)

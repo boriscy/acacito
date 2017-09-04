@@ -1,5 +1,5 @@
 defmodule Publit.Api.PositionControllerTest do
-  use Publit.ConnCase, async: false
+  use PublitWeb.ConnCase, async: false
 
   @pos %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil}
 

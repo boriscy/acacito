@@ -1,7 +1,7 @@
 defmodule Publit.Order.StatusServiceTest do
   use Publit.ModelCase
   alias Publit.{Order, Repo, UserTransport}
-  import Publit.Gettext
+  import PublitWeb.Gettext
 
   setup do
     %{uc: insert(:user_client), org: insert(:organization, open: true)}

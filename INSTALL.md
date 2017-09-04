@@ -94,7 +94,7 @@ Edit the file `config/prod.exs` to look like
 ```
 use Mix.Config
 
-config :publit, Publit.Endpoint,
+config :publit, PublitWeb.Endpoint,
   http: [port: System.get_env("PORT")],
   url: [scheme: "http", host: "acacito.com", port: 80],
   cache_static_manifest: "priv/static/manifest.json",
@@ -104,7 +104,7 @@ config :publit, Publit.Endpoint,
   version: Mix.Project.config[:version]
 
 
-config :publit, Publit.Endpoint,
+config :publit, PublitWeb.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 # Do not print debug messages in production

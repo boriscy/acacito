@@ -1,5 +1,5 @@
 defmodule Publit.ProductControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
 
   alias Publit.{Repo, Product}
 

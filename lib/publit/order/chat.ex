@@ -1,5 +1,5 @@
 defmodule Publit.Order.Chat do
-  use Publit.Web, :model
+  use PublitWeb, :model
   alias Publit.{OrderLog}
 
   @primary_key {:id, :binary_id, autogenerate: true}

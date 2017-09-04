@@ -1,7 +1,7 @@
 defmodule Publit.Order.CommentTest do
   use Publit.ModelCase
   alias Publit.{Order}
-  import Publit.Gettext
+  import PublitWeb.Gettext
 
   describe "create client" do
     test "errors" do

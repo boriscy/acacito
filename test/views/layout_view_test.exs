@@ -1,3 +1,3 @@
 defmodule Publit.LayoutViewTest do
-  use Publit.ConnCase, async: true
+  use PublitWeb.ConnCase, async: true
 end

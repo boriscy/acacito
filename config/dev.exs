@@ -6,7 +6,7 @@ use Mix.Config
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
-config :publit, Publit.Endpoint,
+config :publit, PublitWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -14,12 +14,12 @@ config :publit, Publit.Endpoint,
   check_origin: false,
   watchers: [
     node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
-           cd: Path.expand("../", __DIR__)]
+           cd: Path.expand("../assets", __DIR__)]
   ]
 
 
 # Watch static and templates for browser reloading.
-config :publit, Publit.Endpoint,
+config :publit, PublitWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r{priv/static/js/.*js$},
@@ -27,8 +27,8 @@ config :publit, Publit.Endpoint,
       ~r{priv/static/css/images/.*(png|jpeg|jpg|gif|svg)$},
       ~r{priv/static/images/.*(png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
-      ~r{web/views/.*(ex)$},
-      ~r{web/templates/.*(eex)$}
+      ~r{lib/publit_web/views/.*(ex)$},
+      ~r{lib/publit_web/templates/.*(eex)$}
     ]
   ]
 

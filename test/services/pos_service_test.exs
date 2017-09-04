@@ -2,8 +2,8 @@ defmodule PublitPosServiceTest do
   use Publit.ModelCase
   import Mock
   alias Publit.{PosService, Order, Repo, UserTransport}
-  require Publit.Gettext
-  import Publit.Gettext
+  require PublitWeb.Gettext
+  import PublitWeb.Gettext
 
   describe "update_position" do
     test "OK" do
@@ -49,7 +49,7 @@ defmodule PublitPosServiceTest do
   end
 
   describe "update position and send message if it has orders" do
-    test_with_mock "OK near_org", Publit.OrganizationChannel, [],
+    test_with_mock "OK near_org", PublitWeb.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
 
       org = insert(:organization)
@@ -70,7 +70,7 @@ defmodule PublitPosServiceTest do
       token = uc.extra_data["device_token"]
       assert token
 
-      assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_org")
+      assert called PublitWeb.OrganizationChannel.broadcast_order(:_, "order:near_org")
 
       ord = Repo.get(Order, order.id)
       assert ord.trans.picked_arrived_at
@@ -83,7 +83,7 @@ defmodule PublitPosServiceTest do
     end
 
 
-    test_with_mock "OK near_client", Publit.OrganizationChannel, [],
+    test_with_mock "OK near_client", PublitWeb.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
 
       Agent.start_link(fn -> [] end, name: :api_mock)
@@ -102,7 +102,7 @@ defmodule PublitPosServiceTest do
       {:ok, ut} = PosService.update_pos(ut, %{"pos" => %{"coordinates" => [lng + 0.05, lat + 0.05], "type" => "Point"} })
 
       assert ut.pos == %Geo.Point{coordinates: {lng + 0.05, lat + 0.05}, srid: nil}
-      refute called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
+      refute called PublitWeb.OrganizationChannel.broadcast_order(:_, "order:near_client")
 
       ut = Repo.get(UserTransport, ut.id)
 
@@ -119,7 +119,7 @@ defmodule PublitPosServiceTest do
         title: gettext("Transport near"), message: gettext("Your order is arriving"),
         status: "order:near_client"}, tokens: [token], server_key: "server_key_cli"}]
 
-      assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
+      assert called PublitWeb.OrganizationChannel.broadcast_order(:_, "order:near_client")
 
       Process.sleep(100)
 
@@ -145,7 +145,7 @@ defmodule PublitPosServiceTest do
       assert Enum.at(log.log, 1)["type"] == "trans"
     end
 
-    test_with_mock "ERROR send message near_client", Publit.OrganizationChannel, [],
+    test_with_mock "ERROR send message near_client", PublitWeb.OrganizationChannel, [],
       [broadcast_order: fn(_a, _b) -> :ok end] do
 
       Agent.start_link(fn -> [] end, name: :api_mock)
@@ -172,7 +172,7 @@ defmodule PublitPosServiceTest do
 
       #assert Publit.MessageApiMock.get_data() == %{}
 
-      assert called Publit.OrganizationChannel.broadcast_order(:_, "order:near_client")
+      assert called PublitWeb.OrganizationChannel.broadcast_order(:_, "order:near_client")
 
       ord = Repo.get(Order, order.id)
       assert ord.trans.delivered_arrived_at

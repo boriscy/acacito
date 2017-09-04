@@ -1,4 +1,4 @@
-defmodule Publit.ChannelCase do
+defmodule PublitWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -28,7 +28,7 @@ defmodule Publit.ChannelCase do
       import Publit.Factory
       import Publit.Support.Order
       # The default endpoint for testing
-      @endpoint Publit.Endpoint
+      @endpoint PublitWeb.Endpoint
     end
   end
 

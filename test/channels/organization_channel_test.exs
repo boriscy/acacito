@@ -1,6 +1,6 @@
-defmodule Publit.OrderChannelTest do
-  use Publit.ChannelCase
-  alias Publit.{OrganizationChannel}
+defmodule PublitWeb.OrderChannelTest do
+  use PublitWeb.ChannelCase
+  alias PublitWeb.{OrganizationChannel}
 
   setup do
     org = insert(:organization)
@@ -13,8 +13,8 @@ defmodule Publit.OrderChannelTest do
   test "broadcast order:created", %{org: org} do
     uc = insert(:user_client)
     order = create_order_only(uc, org)
-    Publit.OrganizationChannel.broadcast_order(order)
-    ord = Publit.Api.OrderView.to_api(order)
+    PublitWeb.OrganizationChannel.broadcast_order(order)
+    ord = PublitWeb.Api.OrderView.to_api(order)
 
     assert_broadcast "order:created", ord
   end
@@ -22,8 +22,8 @@ defmodule Publit.OrderChannelTest do
   test "broadcast order:updated", %{org: org} do
     uc = insert(:user_client)
     order = create_order_only(uc, org)
-    Publit.OrganizationChannel.broadcast_order(order, "order:updated")
-    ord = Publit.Api.OrderView.to_api(order)
+    PublitWeb.OrganizationChannel.broadcast_order(order, "order:updated")
+    ord = PublitWeb.Api.OrderView.to_api(order)
 
     assert_broadcast "order:updated", ord
   end

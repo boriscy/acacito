@@ -1,7 +1,7 @@
 defmodule Publit.Order.CallService do
-  use Publit.Web, :model
+  use PublitWeb, :model
   import Ecto.Query
-  import Publit.Gettext
+  import PublitWeb.Gettext
   alias Ecto.Multi
 
   alias Publit.{Order, Repo}
@@ -60,7 +60,7 @@ defmodule Publit.Order.CallService do
       message: gettext("New order from %{org}", org: order.org.name),
       data: %{
         order_call_id: oc.id,
-        order: Publit.TransApi.OrderView.to_api(order)
+        order: PublitWeb.TransApi.OrderView.to_api(order)
       }
     }
 
@@ -71,7 +71,7 @@ defmodule Publit.Order.CallService do
       message: gettext("Your order has transportation"),
       data: %{
         status: "order:updated",
-        order: Publit.TransApi.OrderView.to_api(order)
+        order: PublitWeb.TransApi.OrderView.to_api(order)
       }
     }
 

@@ -1,8 +1,8 @@
 defmodule Publit.Order.StatusService do
-  use Publit.Web, :model
+  use PublitWeb, :model
   alias Publit.{Order, UserTransport, Repo, User, UserTransport}
   alias Ecto.Multi
-  import Publit.Gettext
+  import PublitWeb.Gettext
 
   @token_id "device_token"
 
@@ -62,7 +62,7 @@ defmodule Publit.Order.StatusService do
 
     case Repo.transaction(multi) do
       {:ok, res} ->
-        Publit.OrganizationChannel.broadcast_order(res.order, "order:updated")
+        PublitWeb.OrganizationChannel.broadcast_order(res.order, "order:updated")
         send_message_deliver(res.order)
         {:ok, res.order}
       {:error, cs} -> {:error, cs}
@@ -78,7 +78,7 @@ defmodule Publit.Order.StatusService do
 
     case Repo.transaction(multi) do
       {:ok, res} ->
-        Publit.OrganizationChannel.broadcast_order(res.order, "order:updated")
+        PublitWeb.OrganizationChannel.broadcast_order(res.order, "order:updated")
         send_message_deliver(res.order)
         {:ok, res.order}
       {:error, cs} -> {:error, cs}
@@ -94,7 +94,7 @@ defmodule Publit.Order.StatusService do
 
     case Repo.transaction(multi) do
       {:ok, res} ->
-        Publit.OrganizationChannel.broadcast_order(res.order, "order:updated")
+        PublitWeb.OrganizationChannel.broadcast_order(res.order, "order:updated")
         send_message_deliver(res.order)
         {:ok, res.order}
       {:error, cs} -> {:error, cs}
@@ -226,7 +226,7 @@ defmodule Publit.Order.StatusService do
   defp send_message(order, msg) do
     order = Repo.preload(order, [:user_transport, :user_client])
 
-    ord = Publit.TransApi.OrderView.to_api(order)
+    ord = PublitWeb.TransApi.OrderView.to_api(order)
     cb_ok = fn(_) -> "" end
     cb_err = fn(_) -> "" end
 
@@ -251,7 +251,7 @@ defmodule Publit.Order.StatusService do
 
     {title, msg} = {gettext("Order delivered"), gettext("Your order has been delivered")}
 
-    ord = Publit.TransApi.OrderView.to_api(order)
+    ord = PublitWeb.TransApi.OrderView.to_api(order)
     cb_ok = fn(_) -> "" end
     cb_err = fn(_) -> "" end
 

@@ -1,5 +1,5 @@
 defmodule Publit.Order.Organization do
-  use Publit.Web, :model
+  use PublitWeb, :model
   alias Publit.{Order, Repo}
 
   embedded_schema do

@@ -1,7 +1,7 @@
 defmodule Publit.ClientApi.OrderControllerTest do
-  use Publit.ConnCase, async: false
-  alias Publit.{Product, Endpoint}
-  require Publit.Gettext
+  use PublitWeb.ConnCase, async: false
+  alias Publit.{Product}
+  require PublitWeb.Gettext
   import Mock
 
   setup do
@@ -12,7 +12,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
 
     %{conn: conn, user_client: user_client, org: org}
   end
-  defp salt, do: Application.get_env(:publit, Publit.Endpoint)[:secret_key_base]
+  defp salt, do: Application.get_env(:publit, PublitWeb.Endpoint)[:secret_key_base]
 
   defp create_products2(org) do
     p1 = insert(:product, organization_id: org.id, publish: true)
@@ -41,7 +41,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
   end
 
   describe "POST /client_api/orders" do
-    test_with_mock "OK", %{conn: conn, org: org}, Publit.OrganizationChannel, [],
+    test_with_mock "OK", %{conn: conn, org: org}, PublitWeb.OrganizationChannel, [],
       [broadcast_order: fn(_ord) -> :ok end] do
       conn = post(conn, "/client_api/orders", %{"order" => order_params(org)})
 
@@ -53,10 +53,10 @@ defmodule Publit.ClientApi.OrderControllerTest do
       assert json["order"]["org"]["name"] == org.name
       assert json["order"]["trans"]["ctype"] == "delivery"
 
-      assert called Publit.OrganizationChannel.broadcast_order(:_)
+      assert called PublitWeb.OrganizationChannel.broadcast_order(:_)
     end
 
-    test_with_mock "OK pick and pay", %{conn: conn, org: org}, Publit.OrganizationChannel, [],
+    test_with_mock "OK pick and pay", %{conn: conn, org: org}, PublitWeb.OrganizationChannel, [],
       [broadcast_order: fn(_ord) -> :ok end] do
       p = Map.put(order_params(org), "trans", %{"calculated_price" => "3", "ctype" => "pickup"})
       conn = post(conn, "/client_api/orders", %{"order" => p})
@@ -69,7 +69,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
       assert json["order"]["organization_name"] == org.name
       assert json["order"]["trans"]["ctype"] == "pickup"
 
-      assert called Publit.OrganizationChannel.broadcast_order(:_)
+      assert called PublitWeb.OrganizationChannel.broadcast_order(:_)
     end
 
     test "ERROR",%{conn: conn, org: org} do
@@ -83,14 +83,14 @@ defmodule Publit.ClientApi.OrderControllerTest do
     end
 
     test "unauthorized" do
-      conn = build_conn() |> put_req_header("user_token", Phoenix.Token.sign(Endpoint, salt(), Ecto.UUID.generate()))
+      conn = build_conn() |> put_req_header("user_token", Phoenix.Token.sign(PublitWeb.Endpoint, salt(), Ecto.UUID.generate()))
 
       conn = post(conn, "/client_api/orders", %{"order" => %{}})
 
       assert conn.status == Plug.Conn.Status.code(:unauthorized)
       json = Poison.decode!(conn.resp_body)
 
-      assert json["message"] == Publit.Gettext.gettext("You need to login")
+      assert json["message"] == PublitWeb.Gettext.gettext("You need to login")
     end
   end
 

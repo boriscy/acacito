@@ -1,5 +1,5 @@
 defmodule Publit.Organization.Image do
-  use Publit.Web, :model
+  use PublitWeb, :model
   alias Publit.{Organization}
 
   @primary_key false

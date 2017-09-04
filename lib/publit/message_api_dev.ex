@@ -58,7 +58,7 @@ defmodule Publit.MessageApiDev do
 
     msg2 = Map.put(msg, :data, Poison.encode!(msg.data))
 
-    Enum.each(ids, fn(id) -> Publit.Endpoint.broadcast("users:" <> id, "message", msg2) end)
+    Enum.each(ids, fn(id) -> PublitWeb.Endpoint.broadcast("users:" <> id, "message", msg2) end)
 
     body = Poison.decode!(@resp_error.body)
     %Publit.MessageApi.Response{status: :ok, resp: @resp, body: body}

@@ -1,16 +1,16 @@
 use Mix.Config
 
-config :publit, Publit.Endpoint,
+config :publit, PublitWeb.Endpoint,
   http: [port: {:system, "PORT"}],#System.get_env("PORT")],
   url: [host: "www.acacito.com", port: 80],
-  cache_static_manifest: "priv/static/manifest.json",
+  cache_static_manifest: "priv/static/cache_manifest.json",
   # Distillery release config
   root: ".",
   server: true,
   version: Mix.Project.config[:version]
 
 
-config :publit, Publit.Endpoint,
+config :publit, PublitWeb.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 # Do not print debug messages in production

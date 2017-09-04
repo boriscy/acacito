@@ -1,6 +1,6 @@
 defmodule Publit.TransApi.RegistrationControllerTest do
-  use Publit.ConnCase
-  require Publit.Gettext
+  use PublitWeb.ConnCase
+  require PublitWeb.Gettext
 
   setup do
     %{conn: build_conn() }

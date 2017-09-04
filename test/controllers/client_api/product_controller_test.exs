@@ -1,5 +1,5 @@
 defmodule Publit.ClientApi.ProductControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{UserClient}
 
   setup do

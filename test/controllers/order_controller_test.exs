@@ -1,6 +1,6 @@
 defmodule Publit.OrderControllerTest do
-  use Publit.ConnCase
-  import Publit.Gettext
+  use PublitWeb.ConnCase
+  import PublitWeb.Gettext
 
   describe "GET /orders" do
     test "OK", %{conn: conn} do

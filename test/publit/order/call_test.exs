@@ -1,8 +1,8 @@
 defmodule Publit.Order.CallTest do
   use Publit.ModelCase
   alias Publit.{UserTransport, Order}
-  require Publit.Gettext
-  import Publit.Gettext
+  require PublitWeb.Gettext
+  import PublitWeb.Gettext
 
   defp create_user_transports do
     [

@@ -1,5 +1,5 @@
 defmodule Publit.Order.Detail do
-  use Publit.Web, :model
+  use PublitWeb, :model
 
   @primary_key false
   embedded_schema do

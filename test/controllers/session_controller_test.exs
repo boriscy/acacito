@@ -1,5 +1,5 @@
 defmodule Publit.SessionControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{UserOrganization}
 
   setup do
@@ -20,7 +20,7 @@ defmodule Publit.SessionControllerTest do
       assert conn.assigns.changeset
       assert conn.assigns.valid == true
       assert conn.private.phoenix_action == :index
-      assert conn.private.phoenix_controller == Publit.SessionController
+      assert conn.private.phoenix_controller == PublitWeb.SessionController
     end
   end
 
@@ -30,10 +30,10 @@ defmodule Publit.SessionControllerTest do
       |> post("/login", %{"user_authentication" => %{"email" => "lucas@mail.com", "password" => "demo1234"} })
 
       assert redirected_to(conn) == "/dashboard"
-      {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
+      {:ok, user_id} = Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", get_session(conn, "user_id"))
 
       assert user_id == user.id
-      {:ok, org_id} = Phoenix.Token.verify(Publit.Endpoint, "organization_id", get_session(conn, "organization_id"))
+      {:ok, org_id} = Phoenix.Token.verify(PublitWeb.Endpoint, "organization_id", get_session(conn, "organization_id"))
 
       assert org_id == org.id
     end
@@ -45,7 +45,7 @@ defmodule Publit.SessionControllerTest do
       |> post("/login", %{"user_authentication" => %{"email" => "other@mail.com", "password" => "demo1234"} })
 
       assert redirected_to(conn) == "/organizations"
-      {:ok, u_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
+      {:ok, u_id} = Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", get_session(conn, "user_id"))
 
       assert u_id == user.id
     end
@@ -69,7 +69,7 @@ defmodule Publit.SessionControllerTest do
       |> post("/login", %{"user_authentication" => %{"email" => "other@mail.com", "password" => "demo1234"} })
 
       assert redirected_to(conn) == "/organizations"
-      {:ok, u_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", get_session(conn, "user_id"))
+      {:ok, u_id} = Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", get_session(conn, "user_id"))
 
       assert u_id == user.id
 

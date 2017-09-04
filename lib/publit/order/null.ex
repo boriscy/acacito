@@ -1,6 +1,6 @@
 defmodule Publit.Order.Null do
   import Ecto.Changeset
-  import Publit.Gettext
+  import PublitWeb.Gettext
 
   alias Publit.{Order, Repo, User}
   alias Ecto.Multi
@@ -41,7 +41,7 @@ defmodule Publit.Order.Null do
 
     cb_ok = fn(_) -> "" end
     cb_err = fn(_) -> "" end
-    ord = Publit.TransApi.OrderView.to_api(order)
+    ord = PublitWeb.TransApi.OrderView.to_api(order)
 
     Publit.MessagingService.send_message_cli(tokens,
       %{title: title, message: title, data: %{status: "order:updated", order: ord} },

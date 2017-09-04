@@ -1,5 +1,5 @@
 defmodule Publit.ClientApi.SearchControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{UserClient, Organization}
 
   setup do
@@ -73,7 +73,6 @@ defmodule Publit.ClientApi.SearchControllerTest do
       conn = build_conn() |> put_req_header("authorization", token)
 
       conn = post(conn, "/client_api/search", %{"search" => %{"radius" => "2", "coordinates" => [-18.1778,-63.8748]}})
-
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
       assert json["results"] |> Enum.count() == 3

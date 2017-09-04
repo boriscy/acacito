@@ -116,7 +116,7 @@ defmodule Publit.SearchServiceTest do
       org = List.first(rows)
 
       assert org.name == "org 1"
-      assert org.pos == %{"coordinates" => [-63.876047, -18.1787804], "type" => "Point"}
+      assert org.pos == %Geo.Point{coordinates: {-63.876047, -18.1787804}, srid: nil}
       assert org.id
       assert org.open == true
       assert org.rating == Decimal.new("4.0")

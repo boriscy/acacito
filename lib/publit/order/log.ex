@@ -1,5 +1,5 @@
 defmodule Publit.Order.Log do
-  use Publit.Web, :model
+  use PublitWeb, :model
   import Ecto.Query
   alias Publit.{Order, Repo}
 

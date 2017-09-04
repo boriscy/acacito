@@ -1,5 +1,5 @@
 defmodule Publit.TransApi.SessionControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{UserTransport, UserAuthentication}
 
   setup do

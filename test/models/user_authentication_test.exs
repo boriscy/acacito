@@ -1,5 +1,5 @@
 defmodule Publit.UserAuthenticationTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{UserAuthentication, UserTransport}
 
   test "changeset" do
@@ -35,7 +35,7 @@ defmodule Publit.UserAuthenticationTest do
     user = insert(:user, verified: true)
 
     token = UserAuthentication.encrypt_user_id(user.id)
-    {:ok, user_id} = Phoenix.Token.verify(Publit.Endpoint, "user_id", token)
+    {:ok, user_id} = Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token)
     assert user_id == user.id
   end
 

@@ -1,7 +1,7 @@
-defmodule Publit.UserSocketTest do
-  use Publit.ChannelCase, async: true
+defmodule PublitWeb.UserSocketTest do
+  use PublitWeb.ChannelCase, async: true
 
-  alias Publit.{UserSocket}
+  alias PublitWeb.{UserSocket}
 
   test "authenticate" do
     token = Phoenix.Token.sign(@endpoint, "user_id", "user123")

@@ -1,8 +1,8 @@
 defmodule Publit.Order.Call do
-  use Publit.Web, :model
+  use PublitWeb, :model
   import Ecto.Adapters.SQL
   alias Publit.{Order, Order.Call, UserTransport, Repo}
-  import Publit.Gettext
+  import PublitWeb.Gettext
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "order_calls" do
@@ -83,7 +83,7 @@ defmodule Publit.Order.Call do
   def encode(oc) do
     oc
     |> Map.drop([:__meta__, :__struct__])
-    |> Map.put(:order, Publit.OrderView.to_api(oc.order) )
+    |> Map.put(:order, PublitWeb.OrderView.to_api(oc.order) )
   end
 
   def delete(order_id) do

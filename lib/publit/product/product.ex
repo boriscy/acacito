@@ -1,5 +1,5 @@
 defmodule Publit.Product do
-  use Publit.Web, :model
+  use PublitWeb, :model
   use Arc.Ecto.Schema
   import Ecto.Query
   alias Publit.{Product, Repo, Organization}

@@ -1,5 +1,5 @@
 defmodule Publit.TransApi.DeviceControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{UserTransport}
 
   setup do

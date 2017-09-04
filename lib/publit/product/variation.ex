@@ -1,5 +1,5 @@
 defmodule Publit.Product.Variation do
-  use Publit.Web, :model
+  use PublitWeb, :model
 
   alias Publit.{Product}
 

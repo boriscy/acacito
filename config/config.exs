@@ -10,14 +10,14 @@ config :publit,
   ecto_repos: [Publit.Repo]
 
 # Configures the endpoint
-config :publit, Publit.Endpoint,
+config :publit, PublitWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
-  render_errors: [view: Publit.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: PublitWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Publit.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
-config :publit, Publit.Gettext,
+config :publit, PublitWeb.Gettext,
   default_locale: "es"
 
 # Configures Elixir's Logger
@@ -38,4 +38,3 @@ config :publit, :app_name, "Acacito"
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"
-

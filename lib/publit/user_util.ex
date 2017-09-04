@@ -1,6 +1,6 @@
 defmodule Publit.UserUtil do
   import Ecto.Changeset
-  import Publit.Gettext
+  import PublitWeb.Gettext
   alias Publit.{Repo}
 
   @max_retry 2

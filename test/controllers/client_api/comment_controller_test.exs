@@ -1,7 +1,7 @@
 defmodule Publit.ClientApi.CommentControllerTest do
-  use Publit.ConnCase
-  require Publit.Gettext
-  import Publit.Gettext
+  use PublitWeb.ConnCase
+  require PublitWeb.Gettext
+  import PublitWeb.Gettext
   alias Publit.{Order}
 
   setup do
@@ -12,7 +12,7 @@ defmodule Publit.ClientApi.CommentControllerTest do
 
     %{conn: conn, user_client: user_client, org: org}
   end
-  defp salt, do: Application.get_env(:publit, Publit.Endpoint)[:secret_key_base]
+  defp salt, do: Application.get_env(:publit, PublitWeb.Endpoint)[:secret_key_base]
 
   describe "POST /client_api/comments" do
     test "OK cli", %{conn: conn, user_client: uc, org: org} do

@@ -1,5 +1,5 @@
 defmodule Publit.RegistrationControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{RegistrationService, User, Organization}
 
   setup do

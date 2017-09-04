@@ -1,7 +1,7 @@
 defmodule Publit.ClientApi.RegistrationControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{UserClient, Repo}
-  require Publit.Gettext
+  require PublitWeb.Gettext
 
   setup do
     %{conn: build_conn() }

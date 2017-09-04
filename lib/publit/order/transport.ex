@@ -1,5 +1,5 @@
 defmodule Publit.Order.Transport do
-  use Publit.Web, :model
+  use PublitWeb, :model
   alias Publit.{Order, Repo}
 
   @primary_key false

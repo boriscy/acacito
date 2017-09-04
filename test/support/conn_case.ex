@@ -1,4 +1,4 @@
-defmodule Publit.ConnCase do
+defmodule PublitWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -27,15 +27,15 @@ defmodule Publit.ConnCase do
 
       import Publit.Factory
 
-      import Publit.Router.Helpers
+      import PublitWeb.Router.Helpers
 
       import Phoenix.Controller, only: [view_template: 1]
       import Publit.Support.Session
       import Publit.Support.Order
 
-      import Publit.Gettext
+      import PublitWeb.Gettext
       # The default endpoint for testing
-      @endpoint Publit.Endpoint
+      @endpoint PublitWeb.Endpoint
     end
   end
 

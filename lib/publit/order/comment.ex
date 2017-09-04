@@ -1,6 +1,6 @@
 defmodule Publit.Order.Comment do
-  use Publit.Web, :model
-  import Publit.Gettext
+  use PublitWeb, :model
+  import PublitWeb.Gettext
   alias Publit.{Order, UserClient, UserTransport, Organization, Repo}
   alias Ecto.Multi
 

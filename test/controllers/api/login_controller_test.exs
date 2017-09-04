@@ -1,5 +1,5 @@
 defmodule Publit.Api.LoginControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{User, UserAuthentication}
 
   setup do

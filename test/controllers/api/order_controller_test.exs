@@ -1,6 +1,6 @@
 defmodule Publit.Api.OrderControllerTest do
-  use Publit.ConnCase
-  require Publit.Gettext
+  use PublitWeb.ConnCase
+  require PublitWeb.Gettext
   alias Publit.{Order, Repo}
 
   setup do

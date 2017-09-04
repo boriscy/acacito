@@ -1,6 +1,6 @@
 defmodule Publit.Order.CallServiceTest do
   use Publit.ModelCase
-  import Publit.Gettext
+  import PublitWeb.Gettext
 
   alias Publit.{Order, UserTransport, Repo}
 

@@ -1,5 +1,5 @@
 defmodule Publit.DashboardControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
 
   # https://github.com/elixir-lang/plug/blob/master/test/plug/session/cookie_test.exs
   setup do

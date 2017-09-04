@@ -1,5 +1,5 @@
 defmodule Publit.OrganizationControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
 
   defp user_conn do
     {user, _org} = create_user_org(%{mobile_number: "59166778899"})

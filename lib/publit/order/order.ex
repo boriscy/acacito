@@ -1,9 +1,9 @@
 defmodule Publit.Order do
-  use Publit.Web, :model
+  use PublitWeb, :model
   alias Publit.{Order, UserClient, UserTransport, Product, Organization, User, Repo}
   alias Ecto.Multi
   import Ecto.Query
-  import Publit.Gettext
+  import PublitWeb.Gettext
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "orders" do

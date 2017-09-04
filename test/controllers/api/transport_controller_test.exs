@@ -1,5 +1,5 @@
 defmodule Publit.Api.TransportControllerTest do
-  use Publit.ConnCase
+  use PublitWeb.ConnCase
   alias Publit.{Order, Repo, UserTransport}
 
   setup do

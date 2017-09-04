@@ -1,6 +1,6 @@
 defmodule Publit.UserClientTest do
   use Publit.ModelCase, async: false
-  import Publit.Gettext
+  import PublitWeb.Gettext
   alias Publit.{UserClient, Repo}
 
   @valid_attrs %{full_name: "Amaru Barroso", email: "amaru@mail.com",
