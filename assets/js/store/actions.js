@@ -50,14 +50,39 @@ export const setOrderViewStatus = ({commit}, data) => {
   commit(types.ORDER_VIEW_STATUS, {order: data.order, viewStatus: data.viewStatus})
 }
 
+
+import { auth } from './api/xhr'
 // Transport
 export const callTransport = ({commit}, data) => {
   commit(types.ORDER_CALLING, {order_id: data.id})
 
-  orderApi.callTransport(data.id, (data, order_id) => {
+  /*auth.post('/api/transport', {order_id: data.id})
+    .then((resp) => {
+      //if (res) { Promise.resolve(res.data) }
+
+      console.log('OK', resp)
+    })
+    .catch((error) => {
+      console.log('error', error)
+      //Promise.reject(error)
+    })
+  */
+
+  orderApi.callTransport(data.id)
+    .then(resp => {
+       commit(types.ORDER_TRANSPORTER, {order_id: resp.data.id})
+    })
+    .catch((error) => {
+      console.log('error', error)
+      if (error.response && [400, 424].includes(error.response.status) ) {
+        commit(types.ORDER_CALL_EMPTY, data.id)
+      }
+    })
+
+  /*orderApi.callTransport(data.id, (data, order_id) => {
+
     // No transports
     if(data.status == 424 || data.status == 400) {
-      commit(types.ORDER_CALL_EMPTY, data.id)
     }
     // Internal error
     if(data.status == 400) {
@@ -73,7 +98,7 @@ export const callTransport = ({commit}, data) => {
     }
 
     //commit(types.ORDER_TRANSPORTER, {order_id: data.id})
-  })
+  })*/
 }
 
 export const cancelCall = ({commit}, order_id) => {

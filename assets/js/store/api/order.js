@@ -42,14 +42,21 @@ export default {
     })
   },
   //
-  callTransport(order_id, cb) {
-    auth.post('/api/transport', {order_id: order_id})
-    .then((res) => {
-      cb(res)
-    })
-    .catch(error => {
-      cb(error.response, order_id)
-    })
+  callTransport(order_id) {
+    return auth.post('/api/transport', {order_id: order_id})
+    //  .then((res) => { Promise.resolve(res.data) })
+    //  .catch((error) => { Promise.reject(error) })
+    //  .then((res) => {
+    //    cb(res)
+    //  })
+    //  .catch(error => {
+    //    if (error.response) {
+    //      cb(error.response, order_id)
+    //    } else if (error.request) {
+    //      cb(error.request)
+    //    } else {
+    //    }
+    //  })
   },
   //
   cancelCall(order_id, cb) {

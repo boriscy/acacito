@@ -8,7 +8,7 @@ defmodule PublitWeb.UserSocket do
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket,
     check_origin: [
-      "https://app.acacito.com", "https://cli.acacito.com"
+      "//localhost", "https://app.acacito.com", "https://cli.acacito.com"
     ]
 
   #transport :longpoll, Phoenix.Transports.LongPoll#,

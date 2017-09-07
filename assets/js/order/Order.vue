@@ -91,7 +91,7 @@ export default {
         <div class="flex">
 
           <div class="w30">
-            <div class="title">{{formatNum(order.num)}}</div>
+            <div class="title">{{ order.num | num }}</div>
             <span class="status" :class="order.status">{{order.status | translate}}</span>
           </div>
 

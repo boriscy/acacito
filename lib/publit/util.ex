@@ -19,4 +19,8 @@ defmodule Publit.Util do
   def atomize_keys(map) do
     for {key, val} <- map, into: %{}, do: {String.to_atom(key), val}
   end
+
+  def time_ago() do
+
+  end
 end

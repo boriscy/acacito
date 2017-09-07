@@ -7,8 +7,9 @@ export default {
   name: 'OrderDetail',
   mixins: [format],
   computed: {
-    user_client() { return this.order.user_client },
-    currency() { return window.currencies[this.order.currency] },
+    curr () {
+      return window.currencies[this.order.currency]
+    }
   },
   components: {
     Modal,
@@ -21,14 +22,14 @@ export default {
     }
   },
   methods: {
-    open() {
+    open () {
       this.$refs.modal.open()
     },
-    getSrc(src) {
+    getSrc (src) {
       return src
     },
-    moveBack() {
-      if(confirm(this.$t('Are you sure to move the order status back?')) ) {
+    moveBack () {
+      if (confirm(this.$t('Are you sure to move the order status back?')) ) {
         this.$store.dispatch('moveBack', {order: this.order})
       }
     }
@@ -38,19 +39,30 @@ export default {
 
 <template>
   <Modal ref="modal" class="order-detail-modal">
-    <h3 slot="title">{{order.client_name}} <strong>{{order.total | number}}</strong></h3>
+
+    <h3 slot="title" class="title">
+      <strong>{{ order.num | num }}</strong> {{order.cli.name}}
+    </h3>
 
     <div slot="body" class="order-detail">
-      <h4>
-        <i class="material-icons text-gray">person</i>
-        <strong>{{order.client_name}}</strong>
-        <i class="material-icons text-gray">smartphone</i>
-        {{order.cli.mobile_number | phone}}
-      </h4>
+      <div class="flex">
+        <h4 class="w50">
+          <i class="material-icons text-gray">smartphone</i>&nbsp;
+          {{order.cli.mobile_number | phone}}
+        </h4>
+
+        <h4 class="w50">
+          <i class="material-icons text-gray">watch_later</i>&nbsp;
+          {{order.inserted_at | datetime}}
+        </h4>
+
+      </div>
+
       <p>
         <span class="text-gray">{{ 'Address' | translate }}:</span>
-        {{order.client_address}}
+        {{order.cli.address}}
       </p>
+
       <p>
         <span class="text-gray">{{ 'More details' | translate }}:</span>
         {{order.other_details}}
@@ -72,11 +84,11 @@ export default {
             <div class="det">
               {{det.quantity}} x
               {{det.price | number}}
-              <small class="text-gray">{{currency}}</small>
+              <small class="text-gray">{{ curr }}</small>
             </div>
             <div class="subtotal">
               {{(det.quantity * det.price) | number}}
-              <small class="text-gray">{{currency}}</small>
+              <small class="text-gray">{{ curr }}</small>
             </div>
           </div>
         </div>
@@ -85,7 +97,7 @@ export default {
       <div class="total">
         {{ 'Total' | translate }}
         {{(order.total) | number}}
-        <small class="text-gray">{{currency}}</small>
+        <small class="text-gray">{{ curr }}</small>
       </div>
     </div>
 
@@ -101,3 +113,11 @@ export default {
     </div>
   </Modal>
 </template>
+
+<style lang="scss">
+.order-detail-modal {
+  h3.title {
+    margin: 2px 10px;
+  }
+}
+</style>

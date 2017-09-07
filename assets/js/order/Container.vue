@@ -12,16 +12,17 @@
 
     <div class="orders-container" v-if="org.open">
       <NewOrders :orders="newOrders" title="New Orders" css-class="new"
-      v-bind:orderComp="orderComp">
+      v-bind:orderComp="Order">
       </NewOrders>
 
       <ProcessOrders :orders="processOrders" title="Orders in Process"
-      css-class="process" v-bind:orderComp="processComp">
+      css-class="process" v-bind:orderComp="Process">
       </ProcessOrders>
 
       <TransportOrders :orders="transportOrders" title="Transporting Orders"
-        css-class="transporting" v-bind:orderComp="processComp">
+        css-class="transporting" v-bind:orderComp="Process">
       </TransportOrders>
+
     </div>
   </div>
 </template>
@@ -31,18 +32,17 @@ import {Socket} from 'phoenix'
 
 import OrderList from './List.vue'
 import Order from './Order.vue'
-import OrderProcess from './Process.vue'
-import { mapGetters, mapActions } from 'vuex'
+import Process from './Process.vue'
 import {format} from '../mixins'
 import types from '../store/mutation-types'
 
 export default {
   name: 'OrderContainer',
   mixins: [format],
-  data() {
+  data () {
     return {
-      orderComp: Order,
-      processComp: OrderProcess,
+      Order,
+      Process,
       channel: null,
       saving: false
     }

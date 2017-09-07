@@ -1,7 +1,7 @@
 defmodule Publit.UserTransport do
   use PublitWeb, :model
   use Publit.Device
-  alias Publit.{UserTransport, Repo}
+  alias Publit.{UserTransport, Repo, Order}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
   @number_reg ~r|^591[6,7]\d{7}$|
@@ -82,6 +82,7 @@ defmodule Publit.UserTransport do
       user
       |> change()
       |> put_change(:status, "off")
+      |> update_trans_status()
       |> Repo.update()
     else
       cs = user |> change() |> add_error(:status, "Invalid status")
@@ -100,6 +101,21 @@ defmodule Publit.UserTransport do
       _ ->
         add_error(cs, :pos, "Invalid position")
     end
+  end
+
+  defp update_trans_status(cs) do
+    with "transport" <- cs.data.extra_data["trans_status"],
+      0 <- Repo.count(from o in orders_in_transport_query(cs.data.id), select: count(o.id)) do
+        cs |>
+        put_change(:extra_data, Map.put((cs.data.extra_data || %{}), "trans_status", "free"))
+    else
+      _ -> cs
+    end
+  end
+
+  def orders_in_transport_query(id, ago \\ -3600 * 24) do
+    from o in Order, where: o.user_transport_id == ^id and o.status in ["transport", "transporting", "process"]
+    and o.inserted_at > ^NaiveDateTime.add(NaiveDateTime.utc_now, ago)
   end
 
   defp valid_transport(cs) do

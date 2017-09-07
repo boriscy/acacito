@@ -6,7 +6,7 @@ const defaults = {
     decs: 2,
     numSep: ' ',
     date: 'DD MMM YYYY',
-    datetime: 'DD MMM YYYY hh:mm:ss',
+    datetime: 'DD MMM YYYY hh:mm:ss a',
     time: 'hh:mm:ss a'
   }
 }
@@ -14,71 +14,71 @@ const defaults = {
 const md = new Markdown('commonmark', {html: false})
 const formatMethods = {
   md(txt) {
-    if(txt) {
+    if (txt) {
       return md.render(txt)
     } else {
       return ''
     }
   },
-  getUser(id, field = 'full_name') {
+  getUser (id, field = 'full_name') {
     if(!field) {
       return users[id]
     } else {
       return users[id][field]
     }
   },
-  dateFormat(date, format = defaults.format.date, utc = true) {
+  dateFormat (date, format = defaults.format.date, utc = true) {
+    if (utc) {
+      return moment.utc(date).local().format(format)
+    } else {
+      return moment(date).format(format)
+    }
+  },
+  datetimeFormat (date, format = defaults.format.datetime, utc = true) {
     if(utc) {
       return moment.utc(date).local().format(format)
     } else {
       return moment(date).format(format)
     }
   },
-  datetimeFormat(date, format = defaults.format.datetime, utc = true) {
-    if(utc) {
+  timeFormat (date, format = defaults.format.time,utc = true) {
+    if (utc) {
       return moment.utc(date).local().format(format)
     } else {
       return moment(date).format(format)
     }
   },
-  timeFormat(date, format = defaults.format.time,utc = true) {
-    if(utc) {
-      return moment.utc(date).local().format(format)
-    } else {
-      return moment(date).format(format)
-    }
-  },
-  timeAgo(t) {
+  timeAgo (t) {
     return moment.utc(t).fromNow()
   },
-  getUrl(pre, id) {
+  getUrl (pre, id) {
     return [pre, id].join('/')
   },
-  toFixed(val, decs = defaults.format.decs) {
+  toFixed (val, decs = defaults.format.decs) {
     if(typeof(val) === 'string') {
       val = parseFloat(val)
     }
     return (Math.round(val * Math.pow(10, decs)) / Math.pow(10, decs)).toFixed(decs)
   },
-  formatNumber(val, decs = defaults.format.decs, sep = defaults.format.numSep) {
+  formatNumber (val, decs = defaults.format.decs, sep = defaults.format.numSep) {
     let sepa = `$1${sep}`
     return this.toFixed(val, decs).replace(/(\d)(?=(\d{3})+\.)/g, sepa)
   },
-  readError(obj, field) {
+  readError (obj, field) {
     if(obj && obj.errors && obj.errors[field]) {
       return obj.errors[field]
     } else {
       return ''
     }
   },
-  hasError(obj, field) {
+  hasError (obj, field) {
     if(obj && obj.errors && obj.errors[field]) {
       return 'has-error'
     } else {
       return ''
     }
   },
-  escapeHTML(unsafe) {
+  escapeHTML (unsafe) {
     return unsafe.replace(/[&<"']/g, function(m) {
       switch (m) {
         case '&':
@@ -92,8 +92,8 @@ const formatMethods = {
       }
     })
   },
-  currency(cur) {
-    switch(cur) {
+  currency (cur) {
+    switch (cur) {
       case 'BOB':
         return 'Bs.'
       case 'USD':
@@ -104,9 +104,9 @@ const formatMethods = {
         return 'Bs.'
     }
   },
-  formatNum(num) {
+  formatNum (num) {
     let str = String(num)
-    switch(str.length) {
+    switch (str.length) {
       case 1:
         return '00' + num
       case 2:
@@ -122,20 +122,19 @@ export const format = {
     number(val, decs, sep) {
       return formatMethods.formatNumber(val, decs, sep)
     },
-    phone(num) {
-      console.log('num', num)
+    phone (num) {
       return `+${num.slice(0, 3)} ${num.slice(3, 12)}`
     },
-    date(date, format = defaults.format.dateFormat) {
+    date (date, format = defaults.format.dateFormat) {
       return formatMethods.dateFormat(date, format)
     },
-    datetime(date, format = defaults.format.datetimeFormat) {
+    datetime (date, format = defaults.format.datetimeFormat) {
       return formatMethods.datetimeFormat(date, format)
     },
-    time(date, format = defaults.format.timeFormat) {
+    time (date, format = defaults.format.timeFormat) {
       return formatMethods.timeFormat(date, format)
     },
-    num(num) {
+    num (num) {
       return formatMethods.formatNum(num)
     }
   },

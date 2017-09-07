@@ -103,7 +103,7 @@ export default {
   mounted() {
     this.countStarted = true
     that = this
-    if(this.order_call.inserted_at) {
+    if (this.order_call.inserted_at) {
       this.setTimer()
     }
   }
@@ -112,7 +112,8 @@ export default {
 
 <template>
   <Order :order="order" nextProcess="transport-next">
-    <div slot="transport" class="transport" v-if="'deliver' === order.trans.ctype">
+    <div slot="transport" class="transport" v-if="'delivery' === order.trans.ctype">
+
       <div v-if="!order.transport_status">
         <button class="btn btn-primary" @click="callTransport()">{{'Call Transport' | translate}}</button>
       </div>

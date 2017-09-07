@@ -1,8 +1,8 @@
 <script>
 import L from 'leaflet'
-import {Socket} from 'phoenix'
-import {format} from '../mixins'
-import {auth} from '../../store/api/xhr'
+import { Socket } from 'phoenix'
+import { format } from '../mixins'
+import { auth } from '../store/api/xhr'
 
 let that = null
 export default {
