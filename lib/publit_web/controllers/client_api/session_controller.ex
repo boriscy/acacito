@@ -22,7 +22,9 @@ defmodule PublitWeb.ClientApi.SessionController do
     with {:ok, user_id} <- Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token, max_age: @max_age),
       uc <- Repo.get_by(UserClient, id: user_id),
       %UserClient{} <- uc do
-        render(conn, "valid_token.json", valid: true)
+        token = UserAuthentication.get_new_token(user_id, token)
+
+        render(conn, "show.json", user: uc, token: token)
     else
       _ ->
         conn

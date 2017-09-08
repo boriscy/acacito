@@ -82,10 +82,25 @@ defmodule Publit.UserAuthentication do
   @doc """
   Recives a %User{} struct and creates a token wit just the id
   """
-  @spec encrypt_user_id(Struct.t) :: String.t
-  def encrypt_user_id(id) do
-    Phoenix.Token.sign(PublitWeb.Endpoint, "user_id", id)
+  @spec encrypt_user_id(String.t) :: String.t
+  def encrypt_user_id(user_id) do
+    Phoenix.Token.sign(PublitWeb.Endpoint, "user_id", user_id)
   end
+
+
+  @doc """
+  Recives an id and adds the time
+  """
+  @spec get_new_token(String.t, String.t) :: String.t
+  def get_new_token(user_id, token) do
+    case Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token, max_age: min_age()) do
+      {:ok, _user_id} ->
+        token
+      {:error, :expired} ->
+        Phoenix.Token.sign(PublitWeb.Endpoint, "user_id", user_id)
+    end
+  end
+
 
   @doc """
   Gets the user by id decoding the token `user_id`
@@ -98,6 +113,11 @@ defmodule Publit.UserAuthentication do
       {:error, :invalid} ->
         nil
     end
+  end
+
+  # required to mock
+  defp min_age do
+    Application.get_env(:publit, :session_min_age)
   end
 
   defp valid_password?(user, password) do

@@ -60,7 +60,24 @@ defmodule Publit.ClientApi.SessionControllerTest do
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
 
-      assert json["valid"] == true
+      assert json["token"] == token
+      assert json["user"]["id"] == uc.id
+    end
+
+    test "Valid new token", %{conn: conn} do
+      Application.put_env(:publit, :session_min_age, 1)
+      uc = insert(:user_client)
+      token = UserAuthentication.encrypt_user_id(uc.id)
+
+      IO.puts "Sleep 1 sec"
+      Process.sleep(1000)
+
+      conn = get(conn, "/client_api/valid_token/#{token}")
+
+      assert conn.status == 200
+      json = Poison.decode!(conn.resp_body)
+      refute json["token"] == token
+      assert json["user"]["id"] == uc.id
     end
 
     test "INVALID", %{conn: conn} do

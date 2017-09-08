@@ -30,6 +30,7 @@ config :arc,
 
 ############################### weeks
 config :publit, :session_max_age, 10 * 7 * 24 * 60 * 60
+config :publit, :session_min_age, 7 * 24 * 60 * 60
 
 config :publit, :sms_api, Publit.SmsApi
 
