@@ -17,7 +17,7 @@ defmodule Publit.Organization.Image do
     o_img = Enum.find(org.images, fn(im) -> im.ctype === img.ctype end) || %Organization.Image{ctype: img.ctype}
     o_img = Map.put(o_img, :organization_id, org.id)
 
-    with %Plug.Upload{} <- img.image,
+    with %Plug.Upload{} <- img[:image],
       {:ok, filename} <- Organization.ImageUploader.store({img.image, o_img}) do
         %Organization.Image{ctype: img.ctype, organization_id: org.id, filename: filename}
     else

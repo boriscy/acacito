@@ -7,15 +7,15 @@ defmodule Publit.Order.CallTest do
   defp create_user_transports do
     [
       %UserTransport{mobile_number: "11223344", status: "listen", pos: %Geo.Point{coordinates: {-63.876047,-18.1787804}, srid: nil},
-      extra_data: %{device_token: "11223344"}},
+      extra_data: %{device_token: "11223344", trans_status: "listen"}},
       %UserTransport{mobile_number: "22334455", status: "listen", pos: %Geo.Point{coordinates: {-63.8732718,-18.1767489}, srid: nil},
-      extra_data: %{device_token: "22334455"}},
+      extra_data: %{device_token: "22334455", trans_status: "listen"}},
       %UserTransport{mobile_number: "33445566", status: "listen", pos: %Geo.Point{coordinates: {-63.8210238,-18.1650556}, srid: nil},
-      extra_data: %{device_token: "33445566"}},
+      extra_data: %{device_token: "33445566", trans_status: "listen"}},
       %UserTransport{mobile_number: "44556677", status: "listen", pos: %Geo.Point{coordinates: {-63.8660898,-18.1781923}, srid: nil},
-      extra_data: %{device_token: "44556677"}},
+      extra_data: %{device_token: "44556677", trans_status: "listen"}},
       %UserTransport{mobile_number: "55667788", status: "listen", pos: %Geo.Point{coordinates: {-63.8732718,-18.1767489}, srid: nil},
-      extra_data: %{device_token: "55667788"}}
+      extra_data: %{device_token: "55667788", trans_status: "listen"}}
     ] |> Enum.map(&Repo.insert/1)
   end
 
@@ -25,7 +25,7 @@ defmodule Publit.Order.CallTest do
 
       org = insert(:organization, open: true, pos: %Geo.Point{coordinates: { -63.8748, -18.1778 }, srid: nil})
       uc = insert(:user_client)
-      create_user_transports()
+      rr = create_user_transports()
       ord = create_order_only(uc, org)
 
       assert {:ok, oc, pid} = Order.Call.create(ord)

@@ -36,7 +36,7 @@ defmodule Publit.ClientApi.SessionControllerTest do
        assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
        json = Poison.decode!(conn.resp_body)
 
-       assert json["errors"]["email"] == Gettext.dgettext(PublitWeb.Gettext, "errors", "Invalid email or mobile number")
+       assert json["errors"]["email"] == [Gettext.dgettext(PublitWeb.Gettext, "errors", "Invalid email or mobile number")]
     end
 
     test "ERROR not verified", %{conn: conn} do

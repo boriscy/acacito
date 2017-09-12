@@ -75,8 +75,8 @@ defmodule Publit.Order.Call do
 
     q = from ut in UserTransport, where: ut.status == "listen"
       and fragment("ST_DISTANCE_SPHERE(?, ST_MakePoint(?, ?)) <= ?", ut.pos, ^lng, ^lat, ^radius)
-      and (fragment("?->>'trans_status' !='transport'", ut.extra_data))
-      # or fragment("?->>'trans_status' IS NULL", ut.extra_data))
+      and fragment("?->>'trans_status' !='transport'", ut.extra_data)
+      or fragment("?->>'trans_status' IS NULL", ut.extra_data)
 
     Repo.all(q)
   end

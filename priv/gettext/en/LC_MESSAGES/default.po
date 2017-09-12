@@ -10,353 +10,357 @@ msgid ""
 msgstr ""
 "Language: en\n"
 
-#: web/templates/layout/translations.html.eex:4
-#: web/templates/registration/index.html.eex:47
+#: lib/publit_web/templates/layout/translations.html.eex:4
+#: lib/publit_web/templates/registration/index.html.eex:47
 msgid "Address"
 msgstr ""
 
-#: web/templates/product/new.html.eex:1 web/templates/product/new.html.eex:6
+#: lib/publit_web/templates/product/new.html.eex:1
+#: lib/publit_web/templates/product/new.html.eex:6
 msgid "Create Product"
 msgstr ""
 
-#: web/templates/product/index.html.eex:32
-#: web/templates/product/show.html.eex:12
+#: lib/publit_web/templates/product/index.html.eex:32
+#: lib/publit_web/templates/product/show.html.eex:12
 msgid "Edit"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:17
-#: web/templates/session/index.html.eex:7
+#: lib/publit_web/templates/registration/index.html.eex:17
+#: lib/publit_web/templates/session/index.html.eex:7
 msgid "Email"
 msgstr ""
 
-#: web/templates/product/form.html.eex:27
+#: lib/publit_web/templates/product/form.html.eex:29
 msgid "Image"
 msgstr ""
 
-#: web/templates/session/index.html.eex:2
-#: web/templates/session/index.html.eex:17
+#: lib/publit_web/templates/session/index.html.eex:2
+#: lib/publit_web/templates/session/index.html.eex:17
 msgid "Login"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:29
-#: web/templates/product/form.html.eex:5
+#: lib/publit_web/templates/layout/translations.html.eex:29
+#: lib/publit_web/templates/product/form.html.eex:5
 msgid "Name"
 msgstr ""
 
-#: web/templates/dashboard/index.html.eex:3
+#: lib/publit_web/templates/dashboard/index.html.eex:3
 msgid "New product"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:22
-#: web/templates/session/index.html.eex:12
+#: lib/publit_web/templates/registration/index.html.eex:22
+#: lib/publit_web/templates/session/index.html.eex:12
 msgid "Password"
 msgstr ""
 
-#: web/templates/layout/app_full.html.eex:22
-#: web/templates/product/index.html.eex:2 web/templates/product/show.html.eex:1
+#: lib/publit_web/templates/layout/app_full.html.eex:22
+#: lib/publit_web/templates/product/index.html.eex:2
+#: lib/publit_web/templates/product/show.html.eex:1
 msgid "Products"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:52
+#: lib/publit_web/templates/registration/index.html.eex:52
 msgid "Register shop"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:9
+#: lib/publit_web/templates/registration/index.html.eex:9
 msgid "Register your shop"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:42
+#: lib/publit_web/templates/registration/index.html.eex:42
 msgid "Shop name"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:36
-#: web/templates/product/form.html.eex:17
+#: lib/publit_web/templates/layout/translations.html.eex:36
+#: lib/publit_web/templates/product/form.html.eex:17
 msgid "Tags"
 msgstr ""
 
-#: web/templates/product/edit.html.eex:1 web/templates/product/edit.html.eex:6
+#: lib/publit_web/templates/product/edit.html.eex:1
+#: lib/publit_web/templates/product/edit.html.eex:6
 msgid "Update Product"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:4
+#: lib/publit_web/templates/registration/index.html.eex:4
 msgid "You have entered invalid data please fix the errors"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:16
-#: web/templates/product/form.html.eex:34
+#: lib/publit_web/templates/layout/translations.html.eex:16
+#: lib/publit_web/templates/product/form.html.eex:36
 msgid "Description"
 msgstr ""
 
-#: web/templates/product/index.html.eex:6
+#: lib/publit_web/templates/product/index.html.eex:6
 msgid "New Product"
 msgstr ""
 
-#: web/templates/product/form.html.eex:6
+#: lib/publit_web/templates/product/form.html.eex:6
 msgid "Pizza with ham"
 msgstr ""
 
-#: web/controllers/product_controller.ex:36
+#: lib/publit_web/controllers/product_controller.ex:37
 msgid "Product created."
 msgstr ""
 
-#: web/controllers/product_controller.ex:58
+#: lib/publit_web/controllers/product_controller.ex:59
 msgid "Product updated."
 msgstr ""
 
-#: web/controllers/product_controller.ex:40
-#: web/controllers/product_controller.ex:62
+#: lib/publit_web/controllers/product_controller.ex:41
+#: lib/publit_web/controllers/product_controller.ex:63
 msgid "There are errors in the product."
 msgstr ""
 
-#: web/templates/product/index.html.eex:35
-#: web/templates/product/show.html.eex:15
+#: lib/publit_web/templates/product/index.html.eex:35
+#: lib/publit_web/templates/product/show.html.eex:15
 msgid "Are you sure to delete the product \"%{name}\"?"
 msgstr ""
 
-#: web/templates/product/index.html.eex:34
-#: web/templates/product/show.html.eex:14
+#: lib/publit_web/templates/product/index.html.eex:34
+#: lib/publit_web/templates/product/show.html.eex:14
 msgid "Delete"
 msgstr ""
 
-#: web/controllers/product_controller.ex:76
+#: lib/publit_web/controllers/product_controller.ex:77
 msgid "Product was deleted."
 msgstr ""
 
-#: web/templates/organization/index.html.eex:1
+#: lib/publit_web/templates/organization/index.html.eex:1
 msgid "Organizations"
 msgstr ""
 
-#: web/plug/organization_auth.ex:31
+#: lib/publit_web/plug/organization_auth.ex:31
 msgid "You don't have permission to access this page"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:18
+#: lib/publit_web/templates/layout/translations.html.eex:18
 msgid "Latitude"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:19
+#: lib/publit_web/templates/layout/translations.html.eex:19
 msgid "Longitude"
 msgstr ""
 
-#: web/plug/organization_auth.ex:17 web/plug/user_auth.ex:18
-#: web/views/api/session_view.ex:5
+#: lib/publit_web/plug/organization_auth.ex:17
+#: lib/publit_web/plug/user_auth.ex:18
+#: lib/publit_web/views/api/session_view.ex:5
 msgid "You need to login"
 msgstr ""
 
-#: web/controllers/session_controller.ex:19
+#: lib/publit_web/controllers/session_controller.ex:19
 msgid "Logged in correctly"
 msgstr ""
 
-#: web/views/product_view.ex:24
+#: lib/publit_web/views/product_view.ex:32
 msgid "Publish"
 msgstr ""
 
-#: web/views/product_view.ex:14
+#: lib/publit_web/views/product_view.ex:22
 msgid "Published"
 msgstr ""
 
-#: web/views/product_view.ex:22
+#: lib/publit_web/views/product_view.ex:30
 msgid "Unpublish"
 msgstr ""
 
-#: web/views/product_view.ex:16
+#: lib/publit_web/views/product_view.ex:24
 msgid "Unpublished"
 msgstr ""
 
-#: lib/publit/order/order.ex:130
+#: lib/publit/order/order.ex:121
 msgid "Invalid product"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:22
+#: lib/publit_web/templates/layout/translations.html.eex:22
 msgid "New Orders"
 msgstr ""
 
-#: web/templates/layout/app_full.html.eex:23
+#: lib/publit_web/templates/layout/app_full.html.eex:23
 msgid "Orders"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:37
+#: lib/publit_web/templates/layout/translations.html.eex:37
 msgid "Transporting Orders"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:26
+#: lib/publit_web/templates/layout/translations.html.eex:26
 msgid "Orders in Process"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:3
+#: lib/publit_web/templates/layout/translations.html.eex:3
 msgid "Add line"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:5
+#: lib/publit_web/templates/layout/translations.html.eex:5
 msgid "Big"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:20
+#: lib/publit_web/templates/layout/translations.html.eex:20
 msgid "Medium"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:31
+#: lib/publit_web/templates/layout/translations.html.eex:31
 msgid "Price"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:32
+#: lib/publit_web/templates/layout/translations.html.eex:32
 msgid "Remove"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:43
+#: lib/publit_web/templates/layout/translations.html.eex:43
 msgid "Variations"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:34
+#: lib/publit_web/templates/layout/translations.html.eex:34
 msgid "Small"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:7
+#: lib/publit_web/templates/layout/translations.html.eex:7
 msgid "Call Transport"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:33
-#: web/templates/product/form.html.eex:19
+#: lib/publit_web/templates/layout/translations.html.eex:33
 msgid "Separate tags with commas"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:44
+#: lib/publit_web/templates/layout/translations.html.eex:44
 msgid "Variation name"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:17
+#: lib/publit_web/templates/layout/translations.html.eex:17
 msgid "Enter tags"
 msgstr ""
 
-#: web/templates/product/form.html.eex:37
+#: lib/publit_web/templates/product/form.html.eex:39
 msgid "View examples"
 msgstr ""
 
-#: web/templates/product/form.html.eex:36
+#: lib/publit_web/templates/product/form.html.eex:38
 msgid "You can format the text"
 msgstr ""
 
-#: web/templates/product/form.html.eex:52
+#: lib/publit_web/templates/product/form.html.eex:54
 msgid "Description example"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:30
+#: lib/publit_web/templates/layout/translations.html.eex:30
 msgid "New order"
 msgstr ""
 
-#: web/controllers/api/order_controller.ex:81
-#: web/controllers/client_api/comment_controller.ex:49
-#: web/controllers/client_api/order_controller.ex:37
+#: lib/publit_web/controllers/api/order_controller.ex:98
+#: lib/publit_web/controllers/client_api/comment_controller.ex:49
+#: lib/publit_web/controllers/client_api/order_controller.ex:37
 msgid "Could not find the order"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:180 web/views/api/transport_view.ex:9
-#: web/views/trans_api/order_view.ex:11
+#: lib/publit/order/status_service.ex:213
+#: lib/publit_web/views/api/transport_view.ex:9
+#: lib/publit_web/views/trans_api/order_view.ex:11
 msgid "Order not found"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:23
-#: web/views/trans_api/order_view.ex:19
+#: lib/publit_web/templates/layout/translations.html.eex:23
+#: lib/publit_web/views/trans_api/order_view.ex:19
 msgid "No transport available"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:8
+#: lib/publit_web/templates/layout/translations.html.eex:8
 msgid "Calling transport"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:13
+#: lib/publit_web/templates/layout/translations.html.eex:13
 msgid "Cancel call"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:6
+#: lib/publit_web/templates/layout/translations.html.eex:6
 msgid "bike"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:12
+#: lib/publit_web/templates/layout/translations.html.eex:12
 msgid "car"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:28
+#: lib/publit_web/templates/layout/translations.html.eex:28
 msgid "motorcycle"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:40
+#: lib/publit_web/templates/layout/translations.html.eex:40
 msgid "truck"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:46
+#: lib/publit_web/templates/layout/translations.html.eex:46
 msgid "walk"
 msgstr ""
 
-#: lib/publit/order/call.ex:48 lib/publit/order/call_service.ex:64
+#: lib/publit/order/call.ex:48 lib/publit/order/call_service.ex:60
 msgid "New order from %{org}"
 msgstr "Nuevo pedido de %{org}"
 
-#: web/templates/layout/translations.html.eex:38
+#: lib/publit_web/templates/layout/translations.html.eex:38
 msgid "Transport has arrived"
 msgstr ""
 
-#: web/services/pos_service.ex:99
+#: lib/publit/services/pos_service.ex:95
 msgid "Transport near"
 msgstr ""
 
-#: web/services/pos_service.ex:99
+#: lib/publit/services/pos_service.ex:95
 msgid "Your order is arriving"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:162
+#: lib/publit/order/status_service.ex:195
 msgid "User transport not found"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:50
+#: lib/publit/order/status_service.ex:49
 msgid "Your order is on the way"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:219
+#: lib/publit/order/status_service.ex:252
 msgid "Order delivered"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:219
+#: lib/publit/order/status_service.ex:252
 msgid "Your order has been delivered"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:9
+#: lib/publit_web/templates/layout/translations.html.eex:9
 msgid "Click to edit"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:41
+#: lib/publit_web/templates/layout/translations.html.eex:41
 msgid "Update position"
 msgstr ""
 
-#: web/templates/organization/show.html.eex:40
+#: lib/publit_web/templates/organization/show.html.eex:40
 msgid "Search place"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:24
+#: lib/publit_web/templates/layout/translations.html.eex:24
 msgid "Obtain position using GPS"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:42
+#: lib/publit_web/templates/layout/translations.html.eex:42
 msgid "Update data and position"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:25
+#: lib/publit_web/templates/layout/translations.html.eex:25
 msgid "Open for sale"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:14
+#: lib/publit_web/templates/layout/translations.html.eex:14
 msgid "Close sale"
 msgstr ""
 
-#: web/models/user_authentication.ex:74
+#: lib/publit/account/user_authentication.ex:74
 msgid "Invalid email"
 msgstr ""
 
-#: web/models/user_authentication.ex:77
+#: lib/publit/account/user_authentication.ex:77
 msgid "Invalid password"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:10
+#: lib/publit_web/templates/layout/translations.html.eex:10
 msgid "Click the map to select your position"
 msgstr ""
 
@@ -364,16 +368,16 @@ msgstr ""
 msgid "Invalid verification code"
 msgstr ""
 
-#: web/controllers/client_api/registration_controller.ex:27
+#: lib/publit_web/controllers/client_api/registration_controller.ex:27
 msgid "The mobile number has been verified"
 msgstr "El número de móvil ha sido verificado"
 
-#: web/controllers/client_api/registration_controller.ex:40
-#: web/controllers/client_api/registration_controller.ex:60
+#: lib/publit_web/controllers/client_api/registration_controller.ex:40
+#: lib/publit_web/controllers/client_api/registration_controller.ex:60
 msgid "User not found"
 msgstr ""
 
-#: web/templates/product/form.html.eex:56
+#: lib/publit_web/templates/product/form.html.eex:58
 msgid "Write to test"
 msgstr ""
 
@@ -385,7 +389,7 @@ msgstr ""
 msgid "Your %{app} code is: %{code}"
 msgstr ""
 
-#: web/controllers/order_controller.ex:14
+#: lib/publit_web/controllers/order_controller.ex:14
 msgid "You must set your position."
 msgstr ""
 
@@ -393,36 +397,36 @@ msgstr ""
 msgid "Yor order will be processed"
 msgstr ""
 
-#: lib/publit/order/call_service.ex:75 lib/publit/order/status_service.ex:25
+#: lib/publit/order/call_service.ex:71 lib/publit/order/status_service.ex:24
 msgid "Your order has transportation"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:11
+#: lib/publit_web/templates/layout/translations.html.eex:11
 msgid "Close"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:45
+#: lib/publit_web/templates/layout/translations.html.eex:45
 msgid "View order detail"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:15
+#: lib/publit_web/templates/layout/translations.html.eex:15
 msgid "Detail"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:35
+#: lib/publit_web/templates/layout/translations.html.eex:35
 msgid "Subtotal"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:39
+#: lib/publit_web/templates/layout/translations.html.eex:39
 msgid "Total"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:27
-#: web/templates/registration/index.html.eex:34
+#: lib/publit_web/templates/layout/translations.html.eex:27
+#: lib/publit_web/templates/registration/index.html.eex:34
 msgid "Mobile number"
 msgstr ""
 
-#: web/templates/layout/translations.html.eex:21
+#: lib/publit_web/templates/layout/translations.html.eex:21
 msgid "More details"
 msgstr ""
 
@@ -430,7 +434,7 @@ msgstr ""
 msgid "Comment done"
 msgstr ""
 
-#: web/controllers/client_api/comment_controller.ex:58
+#: lib/publit_web/controllers/client_api/comment_controller.ex:58
 msgid "Comment not found"
 msgstr ""
 
@@ -446,18 +450,30 @@ msgstr ""
 msgid "Invalid user"
 msgstr ""
 
-#: lib/publit/order/null.ex:24
+#: lib/publit/order/null.ex:30
 msgid "We could not complete your order"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:29
+#: lib/publit/order/status_service.ex:28
 msgid "Your order is ready"
 msgstr ""
 
-#: web/templates/registration/index.html.eex:27
+#: lib/publit_web/templates/registration/index.html.eex:27
 msgid "Full name"
 msgstr ""
 
-#: lib/publit/order/status_service.ex:110
+#: lib/publit/order/status_service.ex:106 lib/publit/order/status_service.ex:130
 msgid "Don't worry we are working on your order, there was a small error updating your order status"
+msgstr ""
+
+#: lib/publit/order/order.ex:164
+msgid "Invalid organization"
+msgstr ""
+
+#: lib/publit_web/templates/product/form.html.eex:19
+msgid "Max 4"
+msgstr ""
+
+#: lib/publit_web/templates/organization/images.html.eex:1
+msgid "Organization images"
 msgstr ""

@@ -87,3 +87,6 @@ msgstr "Email inválido"
 
 msgid "Invalid password"
 msgstr "Contraseña inválida"
+
+msgid "Invalid email or mobile number"
+msgstr "email o número mobil inválido"

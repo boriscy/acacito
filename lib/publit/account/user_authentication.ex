@@ -37,7 +37,7 @@ defmodule Publit.UserAuthentication do
 
     with user <- UserClient.get_by_email_or_mobile(email_or_mobile),
       {:user, false} <- {:user, is_nil(user)},
-      {:pass, true} <- {:pass, valid_password?(user, params["password"])} do
+      {:pass, true} <- {:pass, valid_password?(user.encrypted_password, params["password"])} do
         {:ok, user}
     else
       {:user, _} ->
@@ -54,7 +54,7 @@ defmodule Publit.UserAuthentication do
 
     with user <- Repo.get_by(UserTransport, mobile_number: mobile_number),
       {:user, false} <- {:user, is_nil(user)},
-      {:pass, true} <- {:pass, valid_password?(user, params["password"])} do
+      {:pass, true} <- {:pass, valid_password?(user.encrypted_password, params["password"])} do
         {:ok, user}
     else
       {:user, _} -> {:error, changeset(params) |> add_error(:mobile_number, "Invalid mobile number")}
@@ -67,7 +67,7 @@ defmodule Publit.UserAuthentication do
 
     with user <- Repo.get_by(schema, email: email, verified: true),
       {:email, false} <- {:email, is_nil(user)},
-      {:pass, true} <- {:pass, valid_password?(user, params["password"])} do
+      {:pass, true} <- {:pass, valid_password?(user.encrypted_password, params["password"])} do
         {:ok, user}
     else
       {:email, _} ->
@@ -120,7 +120,8 @@ defmodule Publit.UserAuthentication do
     Application.get_env(:publit, :session_min_age)
   end
 
-  defp valid_password?(user, password) do
-    Comeonin.Bcrypt.checkpw(password, user.encrypted_password)
+  defp valid_password?(enc_pass, pass) when is_binary(enc_pass) and is_binary(pass) do
+    Comeonin.Bcrypt.checkpw(pass, enc_pass)
   end
+  defp valid_password?(_a, _b), do: false
 end

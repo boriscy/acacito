@@ -97,11 +97,25 @@ export default {
 
           <div>
             <div class="name">{{order.cli.name}}</div>
-            <div class="name">{{order.cli.mobile_number | phone}}</div>
+            <div class="mobile_number">
+              <i class="material-icons">smartphone</i>
+              {{order.cli.mobile_number | phone}}
+            </div>
           </div>
+
 
         </div>
 
+        <div v-if="0 < order.cli.nulled_orders">
+          <a class="pointer text-red">{{'Nulled orders' | translate}}</a>
+          <span class="label label-danger">{{order.cli.nulled_orders}}</span>
+        </div>
+
+        <div>
+          <a class="pointer">{{'Orders made' | translate}}</a>
+          <span class="label label-success">{{order.cli.orders}}</span>
+
+        </div>
 
         <div class="order-time-ago">
           <i class="material-icons">watch_later</i>

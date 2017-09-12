@@ -18,7 +18,7 @@ defmodule Publit.UserTransport do
     field :encrypted_password, :string
     field :locale, :string, default: "es"
     field :settings, :map, default: %{}
-    field :extra_data, :map, default: %{}
+    field :extra_data, :map, default: %{"status" => "listen"}
     field :mobile_number, :string
     field :plate, :string
     field :pos, Geo.Geometry

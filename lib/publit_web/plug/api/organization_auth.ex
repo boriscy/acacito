@@ -3,6 +3,8 @@ defmodule PublitWeb.Plug.Api.OrganizationAuth do
   import Phoenix.Controller, only: [put_flash: 3, redirect: 2, render: 3]
   alias Publit.{Repo, Organization}
 
+  @max_age Application.get_env :publit, :session_max_age
+
   def init(default), do: default
 
   def call(conn, _default) do
@@ -24,7 +26,7 @@ defmodule PublitWeb.Plug.Api.OrganizationAuth do
 
   defp get_organization(conn) do
     with [user_token] <- get_req_header(conn, "orgtoken"),
-      {:ok, organization_id} <- Phoenix.Token.verify(PublitWeb.Endpoint, "organization_id", user_token),
+      {:ok, organization_id} <- Phoenix.Token.verify(PublitWeb.Endpoint, "organization_id", user_token, max_age: @max_age),
       {:ok, organization_id} <- Ecto.UUID.cast(organization_id),
       org <- Repo.get(Organization, organization_id),
       false <- is_nil(org) do
