@@ -22,4 +22,17 @@ defmodule Publit.OrderControllerTest do
       assert redirected_to(conn) == "/organizations/current"
     end
   end
+
+  describe "GET /orders/list" do
+    test "OK" do
+      conn = build_conn()
+      |> set_user_org_conn()
+
+      conn = get(conn, "/orders/list")
+
+      assert view_template(conn) == "list.html"
+      assert conn.status == Plug.Conn.Status.code(:ok)
+    end
+  end
+
 end

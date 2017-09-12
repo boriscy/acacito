@@ -15,6 +15,15 @@ defmodule Publit.Order.Query do
     Repo.all(q) |> Repo.preload(:user_client)
   end
 
+  def delivered_nulled(organization_id, opts) do
+    by_status(organization_id, ["nulled", "delivered"], opts)
+  end
+
+  def by_status(org_id, status, opts \\ [limit: 50]) do
+    q = from o in Order,
+    where: o.status in ^status and o.organization_id == ^org_id
+  end
+
   # Returns the organization order
   def get_order(order_id, org_id) do
     Repo.one(from o in Order, where: o.id == ^order_id and o.organization_id == ^org_id)

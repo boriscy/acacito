@@ -1,7 +1,7 @@
 defmodule PublitWeb.OrderView do
   use PublitWeb, :view
 
-  def to_api(order) do
+  def to_api(order) when is_map(order) do
     order
     |> Map.drop([:__meta__, :__struct__, :user_client, :user_transport, :organization, :chat, :log, :order_calls])
     |> Map.put(:client_pos, Geo.JSON.encode(order.client_pos))
@@ -10,6 +10,10 @@ defmodule PublitWeb.OrderView do
     |> Map.put(:org, drop_struct(order.org))
     |> Map.put(:trans, drop_struct(order.trans))
     |> Map.merge(%{user_client: %{}, user_transport: %{}, organization: %{}, chat: [], log: [], order_calls: [] })
+  end
+
+  def to_api(order) when is_list(order) do
+    order |> Enum.map(fn (ord) -> to_api(ord) end)
   end
 
   def drop_struct(st) do

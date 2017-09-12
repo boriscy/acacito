@@ -63,7 +63,7 @@ switch(true) {
       components: {OrgData}
     })
   break;
-  case !!path.match(/orders/):
+  case !!path.match(/orders$/):
     new Vue({
       store,
       router

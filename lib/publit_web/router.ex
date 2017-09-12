@@ -161,5 +161,6 @@ defmodule PublitWeb.Router do
     put "/organizations/current", OrganizationController, :update
 
     get "/orders", OrderController, :index
+    get "/orders/list", OrderController, :list
   end
 end

@@ -65,7 +65,7 @@ defmodule Publit.Order.CallTest do
 
       [
         %UserTransport{mobile_number: "11223344", status: "listen", pos: %Geo.Point{coordinates: {-63.876047,-18.1787804}, srid: nil},
-        extra_data: %{device_token: "11223344"}},
+        extra_data: %{device_token: "11223344", trans_status: "listen"}},
         %UserTransport{mobile_number: "22334455", status: "listen", pos: %Geo.Point{coordinates: {-63.8732718,-18.1767489}, srid: nil},
         extra_data: %{device_token: "223344"}}
       ]

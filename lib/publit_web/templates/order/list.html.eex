@@ -1,0 +1,8 @@
+<h2><%= gettext("Completed and nulled orders") %></h2>
+
+<div class="vue">
+</div>
+
+<script>
+window.orders = <%= raw Poison.encode!(PublitWeb.OrderView.to_api(@orders)) %>
+</script>
