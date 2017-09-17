@@ -76,14 +76,15 @@ defmodule PublitWeb.Router do
     put "/validate_mobile_number/:id", RegistrationController, :validate_mobile_number
     put "/resend_verification_code/:id", RegistrationController, :resend_verification_code
 
+    get "/:organization_id/products", ProductController, :products
+    post "/search", SearchController, :search
+
     # Authorized API
     scope "/" do
       pipe_through [:user_client_auth]
 
       put "/device", DeviceController, :update
 
-      get "/:organization_id/products", ProductController, :products
-      post "/search", SearchController, :search
       get "/user_transport_position/:id", PositionController, :user_transport
 
       resources "/orders", OrderController
@@ -127,6 +128,11 @@ defmodule PublitWeb.Router do
 
 
   ######################################################
+  # Site
+  scope "/", PublitWeb do
+    post "/mobile", MobileController, :create
+  end
+
   scope "/", PublitWeb do
     pipe_through [:browser] # Use the default browser stack
 

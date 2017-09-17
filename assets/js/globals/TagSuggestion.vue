@@ -30,7 +30,7 @@ export default {
     }
   },
   methods: {
-    addTag(tag) {
+    addTag (tag) {
       this.$refs.tag.addSelTag(tag)
     }
   }

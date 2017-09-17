@@ -64,7 +64,7 @@ export default {
       window.map.setView([that.lat, that.lng], 18)
     },
     //
-    selectPos() {
+    selectPos () {
       this.posStatus = 'selpos'
       window.map.once('click', (e) => {
         this.lat = e.latlng.lat
@@ -82,7 +82,7 @@ export default {
       navigator.geolocation.getCurrentPosition(this.posSuccess, this.posError, geoOptions)
     },
     //
-    posSuccess(position) {
+    posSuccess (position) {
       this.lat = position.coords.latitude
       this.lng = position.coords.longitude
       this.updatePos()

@@ -73,7 +73,7 @@ const formatMethods = {
   },
   hasError (obj, field) {
     if(obj && obj.errors && obj.errors[field]) {
-      return 'has-error'
+      return 'has-error is-invalid'
     } else {
       return ''
     }

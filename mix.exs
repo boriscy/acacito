@@ -38,7 +38,8 @@ defmodule Publit.Mixfile do
       :geo,
       :hackney,
       :poison,
-      :sweet_xml]]
+      :sweet_xml,
+      :geoip]]
   end
 
   # Specifies which paths to compile per environment.
@@ -75,7 +76,8 @@ defmodule Publit.Mixfile do
      {:hackney, "1.6.5"},
      {:ex_machina, "~> 2.1", only: [:dev, :test]},
      {:mock, "~> 0.3.1", only: :test},
-     {:distillery, "~> 1.5", warn_missing: false}]
+     {:distillery, "~> 1.5", warn_missing: false},
+     {:geoip, "~>0.1"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

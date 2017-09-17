@@ -1,4 +1,5 @@
 export default {
+  "Add": "Adicionar",
   "Are you sure to null the selected order?": "Esta segur@ de anular el pedido seleccionado?",
   "Are you sure to move the order status back?": "Esta segur@ de mover el estado del pedido atras?",
   "Add line": "Add line",
@@ -20,6 +21,7 @@ export default {
   "Description": "Descripción",
   "Enter tags": "Ingresar etiquetas",
   "Estimated time for preparation?": "Tiempo estimado de preparación",
+  "Hit enter to add tag": "Presione enter para adicionar una etiqueta",
   "Latitude": "Latitud",
   "Longitude": "Longitud",
   "Medium": "Medio",

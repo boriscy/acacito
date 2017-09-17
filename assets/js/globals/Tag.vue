@@ -105,21 +105,21 @@ export default {
     remove(tag, idx) {
       this.selected.splice(idx, 1)
     },
-    enter() {
-      if(this.matches[this.current]) {
+    enter () {
+      if (this.matches[this.current]) {
         this.selected.push(this.matches[this.current])
       }
       this.input = ''
     },
-    up() {
-      if(this.current > 0)
+    up () {
+      if (this.current > 0)
         this.current--;
     },
-    down() {
-      if(this.current < this.suggestions.length - 1)
+    down () {
+      if (this.current < this.suggestions.length - 1)
         this.current++
     },
-    back() {
+    back () {
       const l = this.selected.length;
 
       if(this.input == '' && this.selectedTag == '' && l > 0) {
@@ -130,16 +130,16 @@ export default {
         this.selectedTag = ''
       }
     },
-    focus() {
+    focus () {
       this.inputFocus = true
       this.contActiveClass = 'active'
     },
-    blur() {
+    blur () {
       this.inputFocus = false
       this.contActiveClass = ''
       this.selectedTag = ''
     },
-    selectKey(event) {
+    selectKey (event) {
       switch (event.keyCode) {
         case 13:
           this.enter()
@@ -150,7 +150,7 @@ export default {
 
       }
     },
-    addTag() {
+    addTag () {
       const tag = this.input.trim()
       .toLowerCase().replace(this.separatorRegexp, '')
 
@@ -161,20 +161,20 @@ export default {
         this.input = ''
       }
     },
-    isActive(index) {
+    isActive (index) {
       return index === this.current
     },
-    change() {
+    change () {
       this.selection = this.input.value
       if (this.open == false) {
         this.open = true
         this.current = 0
       }
     },
-    focusTag() {
+    focusTag () {
       this.input.focus()
     },
-    selectTag(index) {
+    selectTag (index) {
       this.selection = this.matches[index]
       this.tag.add(this.selection)
       this.open = false
@@ -191,7 +191,7 @@ export default {
     }
   },
   mounted() {
-    if(this.pname) {
+    if (this.pname) {
       setTimeout(() => {
         this.parentOb = this.getParent(this.pname)
       }, 100)

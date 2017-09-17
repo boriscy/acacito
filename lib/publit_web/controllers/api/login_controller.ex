@@ -3,6 +3,8 @@ defmodule PublitWeb.Api.LoginController do
   plug :scrub_params, "login" when action in [:create]
   alias Publit.{UserAuthentication, User}
 
+  @max_age Application.get_env(:publit, :session_max_age)
+
 
   # POST /api/login
   def create(conn, %{"login" => login_params}) do
@@ -20,7 +22,7 @@ defmodule PublitWeb.Api.LoginController do
 
   # GET /api/valid_token/:token
   def valid_token(conn, %{"token" => token}) do
-    case Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token) do
+    case Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token, max_age: @max_age) do
       {:ok, _user_id} ->
         #user = Repo.get(User, user_id)
         render(conn, "valid_token.json", valid: true)

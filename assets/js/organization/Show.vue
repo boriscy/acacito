@@ -13,7 +13,7 @@ export default {
   name: 'OrgData',
   components: { Pos },
   mixins: [format],
-  data() {
+  data () {
     return {
       org: {},
       status: '',
@@ -26,7 +26,7 @@ export default {
     descriptionMD() { return  this.md(this.org.description) },
   },
   methods: {
-    getData() {
+    getData () {
       const pos = this.$refs.pos
       return {
         name: this.org.name,
@@ -36,24 +36,23 @@ export default {
         pos: {coordinates: [pos.lng, pos.lat], type: 'Point'}
       }
     },
-    update() {
+    update () {
       this.errors = {}
       this.saving = true
 
       xhr.put('/organizations/current', {organization: this.getData(), format: 'json'})
-      .then((resp) => {
-        this.saving = false
-      })
-      .catch((resp) => {
-        this.saving = false
-        if(resp.response.data.errors) {
-          this.errors = resp.response.data.errors
-        }
-      })
-      //this.status = 'editing'
+        .then((resp) => {
+          this.saving = false
+        })
+        .catch((resp) => {
+          this.saving = false
+          if(resp.response.data.errors) {
+            this.errors = resp.response.data.errors
+          }
+        })
     }
   },
-  mounted() {
+  mounted () {
     this.org = window.orgData
   }
 }

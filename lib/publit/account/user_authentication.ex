@@ -9,6 +9,8 @@ defmodule Publit.UserAuthentication do
 
   alias Publit.{UserAuthentication, User, UserClient, UserTransport, Repo, Gettext}
 
+  @max_age Application.get_env(:publit, :session_max_age)
+
   embedded_schema do
     field :email
     field :password
@@ -107,7 +109,7 @@ defmodule Publit.UserAuthentication do
   """
   @spec get_user(String.t) :: tuple
   def get_user(user_id) do
-    case Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", user_id) do
+    case Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", user_id, max_age: @max_age) do
       {:ok, user_id} ->
         Repo.get(User, user_id)
       {:error, :invalid} ->

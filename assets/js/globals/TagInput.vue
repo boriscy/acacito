@@ -4,7 +4,7 @@
     <input type="text" ref="input" :placeholder="$t('Hit enter to add tag')"
       @keydown.enter.prevent="" @keyup.prevent="addRemoveTag($event)"/>
 
-    <a @click="addTag()">Add</a>
+    <button @click.prevent="addTag()" class="btn btn-primary btn-sm">{{ 'Add' | translate }}</button>
 
     <ul class="tags" :class="contActiveClass" >
       <li class="tag" v-for="(tag, idx) in form.tags" :class="{selected: tag.selected}">
@@ -49,30 +49,32 @@ export default {
     }
   },
   methods: {
-    activate() {
+    activate () {
       this.$refs.input.focus()
     },
-    remove(tag, idx) {
+    remove (tag, idx) {
       this.form.tags.splice(idx, 1)
     },
     //
-    addRemoveTag(event) {
-      if(13 == event.keyCode) {
-        this.addTag()
-      }
+    addRemoveTag (event) {
       const l = this.form.tags.length
 
-      if(8 === event.keyCode) {
-        if(this.form.tags[l - 1].selected) {
-          this.form.tags.pop()
+      if (13 == event.keyCode) {
+        this.addTag()
+      } else if (0 < l) {
+        if (8 === event.keyCode && '' === this.$refs.input.value) {
+          if (this.form.tags[l - 1].selected) {
+            this.form.tags.pop()
+          }
+          this.form.tags[l - 1].selected = true
         }
-        this.form.tags[l - 1].selected = true
-      } else {
-        this.form.tags[l - 1].selected = false
+        else {
+          this.form.tags[l - 1].selected = false
+        }
       }
     },
     //
-    addTag() {
+    addTag () {
       const tag = this.$refs.input.value.trim()
       .toLowerCase().replace(this.separatorRegexp, '')
 
@@ -80,10 +82,9 @@ export default {
         this.form.tags.push({tag: tag, selected: false})
         this.$refs.input.value = ''
       }
-      return false
     },
     //
-    addSelTag(tag) {
+    addSelTag (tag) {
       if(this.validTag(tag)) {
         this.form.tags.push({tag: tag, selected: false})
       }
@@ -94,7 +95,7 @@ export default {
        tag.length >= this.tagMinLength && this.form.tags.length < this.maxTags
     },
     //
-    getParent(path) {
+    getParent (path) {
       let curr = this
       let arr = path.split('.')
       this.parentTagsName = arr.pop()
@@ -105,7 +106,7 @@ export default {
       return curr
     }
   },
-  mounted() {
+  mounted () {
     if(this.pname) {
       setTimeout(() => {
         this.form.tags = this.selectedTags.map(v => { return {selected: false, tag: v} })

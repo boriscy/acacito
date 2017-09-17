@@ -3,6 +3,8 @@ defmodule PublitWeb.TransApi.SessionController do
   plug :scrub_params, "login" when action in [:create]
   alias Publit.{UserAuthentication, UserTransport, Repo}
 
+  @max_age Application.get_env(:publit, :session_max_age)
+
 
   # POST /trans_api/login
   def create(conn, %{"login" => login_params}) do

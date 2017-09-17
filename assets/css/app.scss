@@ -1,10 +1,9 @@
 /* This file is for your main application css. */
-@import "libs/bootstrap";
+@import "modules/bootstrap_and_overrides";
 @import "libs/fontello-embedded";
 @import "libs/material-icons";
 @import "main";
 
-@import "modules/bootstrap_overrides";
 @import "modules/divs";
 @import "modules/forms";
 @import "modules/text";

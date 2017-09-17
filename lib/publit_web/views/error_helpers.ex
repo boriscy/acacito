@@ -11,13 +11,13 @@ defmodule PublitWeb.ErrorHelpers do
   def error_tag(form, field) do
     if error = form.source.errors[field] do
       error = elem(error, 0)
-      content_tag :span, translate_error({error, []}), class: "help-block"
+      content_tag :span, translate_error({error, []}), class: "error"
     end
   end
 
   def has_error(form, field) do
     if form.source.errors[field] do
-      "has-error"
+      "has-error is-invalid"
     end
   end
 

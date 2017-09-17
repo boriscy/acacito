@@ -4,6 +4,8 @@ defmodule PublitWeb.Plug.UserAuth do
   import PublitWeb.Gettext
   alias Publit.{Repo, User}
 
+  @max_age Application.get_env(:publit, :session_max_age)
+
   def init(default), do: default
 
   def call(conn, _default) do
@@ -26,7 +28,7 @@ defmodule PublitWeb.Plug.UserAuth do
 
   defp get_user(conn) do
     with user_token <- get_session(conn, :user_id),
-      {:ok, user_id} <- Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", user_token),
+      {:ok, user_id} <- Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", user_token, max_age: @max_age),
       {:ok, user_id} <- Ecto.UUID.cast(user_id) do
         case Repo.get(User, user_id) do
           nil -> :error

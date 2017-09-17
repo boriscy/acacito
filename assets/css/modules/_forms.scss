@@ -1,7 +1,14 @@
+@import "colors";
+
 .has-error {
   .help-block {
     font-size: 0.9em;
   }
+}
+
+
+.error {
+  color: $red;
 }
 
 input.pos {

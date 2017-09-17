@@ -1,9 +1,10 @@
 <div class="product-form flex">
   <%= form_for @changeset, @action, [multipart: true, style: "width: 900px"], fn f -> %>
 
-    <div class="form-group <%= has_error(f, :name) %>">
+    <div class="form-group ">
       <%= label f, :name, gettext("Name") %>
-      <%= text_input f, :name, class: "form-control", placeholder: gettext("Pizza with ham"), "v-model": "form.name", value: nil %>
+      <%= text_input f, :name, class: "form-control #{has_error(f, :name)}", placeholder: gettext("Pizza with ham"),
+        "v-model": "form.name", value: nil %>
       <%= error_tag f, :name %>
     </div>
 
@@ -36,7 +37,7 @@
       <%= label f, :description, gettext("Description") %>
       <span class-text="muted">
         <%= gettext("You can format the text") %>,
-        <a class="pointer" @click="$refs.modal.open()"><%= gettext("View examples") %></a>
+        <a class="pointer" href="javascript:;" @click="$refs.modal.open()"><%= gettext("View examples") %></a>
       </span>
       <%= textarea f, :description, class: "form-control", value: "", rows: 7, "v-model": "form.description" %>
       <%= error_tag f, :description %>
@@ -51,7 +52,8 @@
   <product-preview :product="form" ref="preview"></product-preview>
 
   <modal ref="modal">
-    <div slot="title"><%= gettext("Description example") %></div>
+    <h5 slot="title"><%= gettext("Description example") %></h5>
+
     <div slot="body">
       <div class="flex">
         <div style="width: 49%">

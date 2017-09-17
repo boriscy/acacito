@@ -4,7 +4,6 @@ defmodule Publit.ClientApi.ProductControllerTest do
 
   setup do
     conn = build_conn()
-    |> assign(:current_user_client, %UserClient{full_name: "Amaru", id: "781d55f4-e055-4098-a0f5-fd4852db8db0"})
 
     %{conn: conn}
   end

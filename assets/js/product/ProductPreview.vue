@@ -16,10 +16,11 @@
     <div>
       <span class="tag" v-for="tag in product.tags">{{tag}}</span>
     </div>
-    <div v-html="descriptionMD"></div>
+
+    <div v-html="descriptionMD">
+    </div>
 
   </div>
-
 </template>
 
 <script>

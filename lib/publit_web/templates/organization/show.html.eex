@@ -4,7 +4,7 @@
 <!--Required for the autocomplete-->
 <script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&key=AIzaSyDQwB6IOvELaaXQX1keoMuH-gaN3QbPRqM"></script>
 
-<div id="map" style="height:100%">
+<div id="map" style="height:90vh;width:100%">
 </div>
 
 <div id="org-data">
@@ -21,8 +21,8 @@
   || document.body.clientHeight;
 
   var map = document.getElementById('map')
-  map.style.height = (height - 120) + 'px';
-  map.style.width = (width - 65) + 'px';
+  //map.style.height = (height - 120) + 'px';
+  //map.style.width = (width - 65) + 'px';
 
   var map = window.map = L.map('map').setView([-18.174332636, -63.871996512], 16);
   //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -54,6 +54,16 @@
     var coords = place.geometry.location;
     map.setView([coords.lat(), coords.lng()], 16)
   });
+  // https://maps.googleapis.com/maps/api/place/autocomplete/json?input=los&location=-16.54309135,-68.07098&radius=10&types=address&key=AIzaSyDQwB6IOvELaaXQX1keoMuH-gaN3QbPRqM&callback=_xdc_._3o6bwr
+
+  function successPos (position) {
+    window.pos = {lat: position.coords.latitude, lng: position.coords.longitude}
+  }
+  function errorPos () {
+
+  }
+
+  navigator.geolocation.getCurrentPosition(successPos, errorPos)
 
 
   window.vueLoad = 'OrgData';
@@ -67,8 +77,10 @@
 #map {
   min-height: 300px;
 }
+/*
 .pac-container:after {
   background-image: none;
   display: none;
 }
+*/
 </style>
