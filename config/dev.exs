@@ -64,3 +64,5 @@ config :ex_aws,
   ]
 
 config :publit, :message_api, Publit.MessageApiDev
+# Host for push notifications and other stuff
+config :publit, :domain, "acacito.pagekite.me"

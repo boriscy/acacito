@@ -32,6 +32,12 @@ defmodule Publit.ClientApi.DeviceControllerTest do
     end
   end
 
+  describe "POST /client_api/validate_mobile" do
+    it "Validates for UserClient" do
+
+    end
+  end
+
 end
 
 

@@ -19,6 +19,9 @@ defmodule Publit.UserClient do
 
     field :password, :string, virtual: true
 
+    field :mobile_verification_token, :string
+    field :mobile_verification_send_at, :naive_datetime
+
     timestamps()
   end
   @derive {Poison.Encoder, only: [:id, :full_name, :email, :mobile_number]}
@@ -37,11 +40,19 @@ defmodule Publit.UserClient do
     |> unique_constraint(:mobile_number)
   end
 
+  def create_cs(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:full_name, :mobile_number])
+    |> validate_required([:full_name, :mobile_number])
+    |> validate_format(:mobile_number, @number_reg)
+    |> unique_constraint(:mobile_number)
+  end
+
   def create(params) do
-    cs = create_changeset(%UserClient{}, params)
+    cs = create_cs(%UserClient{}, params)
 
     if cs.valid? do
-      Publit.UserUtil.create_and_send_verification_code(cs)
+      Publit.UserUtil.create_and_set_verification_token(cs)
     else
       {:error , cs}
     end

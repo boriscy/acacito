@@ -17,4 +17,20 @@ defmodule PublitWeb.ClientApi.DeviceController do
     end
   end
 
+  # POST /client_api/validate_mobile
+  @doc """
+  Allows users to validate their mobile number througt a SMS gateway
+  """
+  def validate do
+
+  end
+
+  # POST /client_api/authenticate
+  @doc """
+  Method used for loging users
+  """
+  def authenticate do
+
+  end
+
 end

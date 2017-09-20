@@ -7,9 +7,17 @@ defmodule Publit.UserUtil do
 
   @number_reg ~r|^591[6,7]\d{7}$|
   @numbers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  @downcase_letters ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+  @upcase_letters ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+
+  @all_chars @numbers ++ @downcase_letters ++ @upcase_letters
 
   def generate_random_numbers(l) do
     Enum.map((1..l), fn(_) -> Enum.random(@numbers) end) |> Enum.join("")
+  end
+
+  def generate_random_string(l) do
+    Enum.map((1..l), fn(_) -> Enum.random(@all_chars) end) |> Enum.join("")
   end
 
 
@@ -22,22 +30,13 @@ defmodule Publit.UserUtil do
     end
   end
 
-  def create_and_send_verification_code(cs) do
-    ver_code = generate_random_numbers(6) |> to_string()
+  def create_and_set_verification_token(cs) do
+    code = generate_random_string(6) |> to_string()
 
-    resp = cs
-    |> generate_encrypted_password()
-    |> set_verification_data(ver_code)
+    cs
+    |> put_change(:mobile_verification_token, code)
+    |> put_change(:mobile_verification_send_at, NaiveDateTime.utc_now())
     |> Publit.Repo.insert()
-
-    case resp do
-      {:ok, user} ->
-        msg = gettext("Your %{app} code is: %{code}", app: app_name(), code: ver_code)
-        Publit.SmsService.send_message(user.mobile_number, msg, ok_fn(user), error_fn(user))
-      {:error, cs} ->
-    end
-
-    resp
   end
 
   def verify_mobile_number(user, mobile_number_key) do

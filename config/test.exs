@@ -42,3 +42,5 @@ config :ex_aws,
 config :publit, :message_api, Publit.MessageApiMock
 
 config :publit, :sms_api, Publit.SmsApiMock
+# Host for push notifications and other stuff
+config :publit, :domain, "acacito.pagekite.me"

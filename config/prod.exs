@@ -48,3 +48,6 @@ config :ex_aws,
   ]
 
 config :publit, :message_api, Publit.MessageApi
+
+# Host for push notifications and other stuff
+config :publit, :domain, "app.acacito.com"

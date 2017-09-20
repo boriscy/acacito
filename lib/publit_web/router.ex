@@ -79,6 +79,9 @@ defmodule PublitWeb.Router do
     get "/:organization_id/products", ProductController, :products
     post "/search", SearchController, :search
 
+    post "/validate_mobile", DeviceController, :validate
+    post "/authenticate", DeviceController, :authenticate
+
     # Authorized API
     scope "/" do
       pipe_through [:user_client_auth]
