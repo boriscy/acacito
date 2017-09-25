@@ -1,10 +1,10 @@
 defmodule Publit.UserClient do
   use PublitWeb, :model
-  use Publit.Device
+  use Publit.Account.Auth
   alias Publit.{UserClient, Repo}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
-  @number_reg ~r|^591[6,7]\d{7}$|
+  @number_reg ~r|^[6,7]\d{7}$|
 
   @primary_key {:id, :binary_id, autogenerate: true}
   schema "user_clients" do
@@ -29,27 +29,9 @@ defmodule Publit.UserClient do
   @doc """
   Builds a changeset based on the `struct` and `params`.
   """
-  def create_changeset(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:email, :full_name, :password, :mobile_number])
-    |> validate_required([:email, :password, :full_name, :mobile_number])
-    |> validate_format(:email, @email_reg)
-    |> validate_format(:mobile_number, @number_reg)
-    |> validate_length(:password, min: 8)
-    |> unique_constraint(:email)
-    |> unique_constraint(:mobile_number)
-  end
-
-  def create_cs(struct, params \\ %{}) do
-    struct
-    |> cast(params, [:full_name, :mobile_number])
-    |> validate_required([:full_name, :mobile_number])
-    |> validate_format(:mobile_number, @number_reg)
-    |> unique_constraint(:mobile_number)
-  end
 
   def create(params) do
-    cs = create_cs(%UserClient{}, params)
+    cs = create_changeset(%UserClient{}, params)
 
     if cs.valid? do
       Publit.UserUtil.create_and_set_verification_token(cs)

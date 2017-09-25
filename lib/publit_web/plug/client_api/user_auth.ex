@@ -28,7 +28,7 @@ defmodule PublitWeb.Plug.ClientApi.UserAuth do
     with [user_token] <- get_req_header(conn, "authorization"),
       {:ok, user_id} <- Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", user_token, max_age: @max_age),
       {:ok, user_id} <- Ecto.UUID.cast(user_id),
-      user <- Repo.get(UserClient, user_id),
+      user <- Repo.get_by(UserClient, id: user_id, verified: true),
       false <- is_nil(user) do
         {:ok, user}
     else

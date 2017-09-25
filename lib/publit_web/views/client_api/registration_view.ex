@@ -23,6 +23,6 @@ defmodule PublitWeb.ClientApi.RegistrationView do
 
   def to_api(user) do
     user
-    |> Map.take([:id, :full_name, :email, :locale, :mobile_number, :type])
+    |> Map.take([:id, :full_name, :email, :locale, :mobile_number, :type, :mobile_verification_token, :mobile_verification_send_at])
   end
 end

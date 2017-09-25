@@ -4,7 +4,7 @@ defmodule PublitWeb.ClientApi.RegistrationController do
   alias Publit.{UserClient, UserAuthentication, UserUtil, Repo}
 
 
-  # POST /api/client_registration
+  # POST /client_api/registration
   def create(conn, %{"user" => user_params}) do
     case UserClient.create(user_params) do
       {:ok, user} ->
@@ -16,48 +16,15 @@ defmodule PublitWeb.ClientApi.RegistrationController do
     end
   end
 
-  # PUT /api_client/validate_mobile_number
-  def validate_mobile_number(conn, %{"id" => id, "verification_code" => verification_code}) do
-    user = Repo.get(UserClient, id)
-
-    case user do
-      %UserClient{verified: true} ->
-        conn
-        |> put_status(:precondition_required)
-        |> render("error.json", msg: gettext("The mobile number has been verified"))
-      %UserClient{} ->
-        case UserUtil.verify_mobile_number(user, verification_code) do
-          {:ok, user} ->
-            render(conn, "show.json", user: user, token: UserAuthentication.encrypt_user_id(user.id))
-          {:error, msg} ->
-            conn
-            |> put_status(:unprocessable_entity)
-            |> render("error.json", msg: msg)
-        end
-      _ ->
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", msg: gettext("User not found"))
-    end
-  end
-
-  # PUT /api_client/resend_verification_code/:id
-  def resend_verification_code(conn, %{"id" => id, "mobile_number" => mobile_number}) do
-    user = Repo.get(UserClient, id)
-
-    if %UserClient{} = user do
-      case UserUtil.resend_verification_code(user, mobile_number) do
-        {:ok, user} ->
-          render(conn, "show.json", user: user)
-        {:error, cs} ->
-          conn
-          |> put_status(:unprocessable_entity)
-          |> render("errors.json", cs: cs)
-      end
-    else
+  # POST /client_api/validate_token
+  def validate_token(conn, %{"phone" => phone, "message" => msg}) do
+    case UserClient.verify_mobile_number(phone, msg) do
+    {:ok, user} ->
+      render(conn, "show.json", user: user)
+    :error ->
       conn
-      |> put_status(:not_found)
-      |> render("not_found.json", msg: gettext("User not found"))
+      |> put_status(:unprocessable_entity)
+      |> render("error.json", msg: "Invalid")
     end
   end
 

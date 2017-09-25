@@ -5,7 +5,7 @@ defmodule Publit.UserUtil do
 
   @max_retry 2
 
-  @number_reg ~r|^591[6,7]\d{7}$|
+  @number_reg ~r|^[6,7]\d{7}$|
   @numbers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   @downcase_letters ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
   @upcase_letters ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
@@ -30,11 +30,34 @@ defmodule Publit.UserUtil do
     end
   end
 
+
+  @doc """
+  Sets the user token to login later
+  """
+  def set_mobile_verification_token(struct, mobile_number) do
+    case Repo.get_by(struct, mobile_number: mobile_number) do
+      nil -> :error
+      u ->
+        token = generate_random_string(6) |> to_string()
+
+        change(u)
+        |> put_change(:mobile_verification_token, token)
+        |> put_change(:mobile_verification_send_at, NaiveDateTime.utc_now())
+        |> Repo.update()
+    end
+  end
+
+  defp get_keys(params, keys) do
+    Enum.map(keys, fn(key) ->
+      Map.get(params, key) |> to_string()
+    end)
+  end
+
   def create_and_set_verification_token(cs) do
-    code = generate_random_string(6) |> to_string()
+    token = generate_random_string(6) |> to_string()
 
     cs
-    |> put_change(:mobile_verification_token, code)
+    |> put_change(:mobile_verification_token, token)
     |> put_change(:mobile_verification_send_at, NaiveDateTime.utc_now())
     |> Publit.Repo.insert()
   end

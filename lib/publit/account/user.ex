@@ -2,7 +2,6 @@ defmodule Publit.User do
   use PublitWeb, :model
   alias Publit.{User, UserOrganization, Repo}
 
-
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
 
   @derive {Poison.Encoder, only: [:id, :full_name, :email, :locale]}

@@ -7,15 +7,18 @@ defmodule PublitWeb.ClientApi.SessionController do
 
   # POST /client_api/login
   def create(conn, %{"login" => login_params}) do
-    case UserAuthentication.valid_user_client(login_params) do
-      {:ok, user} ->
-        token = UserAuthentication.encrypt_user_id(user.id)
-        render(conn, "show.json", user: user, token: token)
-      {:error, cs} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render("errors.json", cs: cs)
-    end
+    UserUtil.verify_token(login_params)
+
+    #Repo.get_by(UserClient, mobile_number: mobile_number, token: token)
+    #case UserClient.valid_user_client(login_params) do
+    #  {:ok, user} ->
+    #    token = UserAuthentication.encrypt_user_id(user.id)
+    #    render(conn, "show.json", user: user, token: token)
+    #  {:error, cs} ->
+    #    conn
+    #    |> put_status(:unprocessable_entity)
+    #    |> render("errors.json", cs: cs)
+    #end
   end
 
   # GET /client_api/valid_token/:token

@@ -1,5 +1,5 @@
 defmodule Publit.UserClientTest do
-  use Publit.ModelCase, async: false
+  use Publit.ModelCase
   import PublitWeb.Gettext
   alias Publit.{UserClient, Repo}
 
@@ -9,7 +9,7 @@ defmodule Publit.UserClientTest do
 
   describe "create" do
     test "OK" do
-      {:ok, user} = UserClient.create(%{"mobile_number" => "59173732655", "full_name" => "Amaru Barroso"})
+      {:ok, user} = UserClient.create(%{"mobile_number" => "73732655", "full_name" => "Amaru Barroso"})
 
       assert user.mobile_verification_token |> String.length() == 6
       assert user.mobile_verification_send_at
@@ -23,66 +23,75 @@ defmodule Publit.UserClientTest do
       assert cs.errors[:mobile_number]
     end
 
+    test "full_name validation" do
+      {:error, cs} = UserClient.create(%{"full_name" => ""})
+      assert cs.errors[:full_name]
+
+      {:error, cs} = UserClient.create(%{"full_name" => "Pab"})
+      assert cs.errors[:full_name]
+    end
+
   end
 
   test "number validation" do
-    {:error, cs} = UserClient.create(%{"mobile_number" => "59133445566"})
+    {:error, cs} = UserClient.create(%{"mobile_number" => "33445566"})
     assert cs.errors[:mobile_number]
 
-    {:error, cs} = UserClient.create(%{"mobile_number" => "5917344556"})
+    {:error, cs} = UserClient.create(%{"mobile_number" => "7344556"})
     assert cs.errors[:mobile_number]
 
-    {:error, cs} = UserClient.create(%{"mobile_number" => "59173445566"})
+    {:error, cs} = UserClient.create(%{"mobile_number" => "73445566"})
     refute cs.errors[:mobile_number]
 
-    {:error, cs} = UserClient.create(%{"mobile_number" => "59163445566"})
+    {:error, cs} = UserClient.create(%{"mobile_number" => "63445566"})
     refute cs.errors[:mobile_number]
+  end
+
+  test "duplicated mobile_number" do
+    {:ok, uc} = UserClient.create(%{"mobile_number" => "73732655", "full_name" => "Amaru Barroso"})
+
+    assert {:error, cs} = UserClient.create(%{"mobile_number" => "73732655", "full_name" => "Amaru Barroso"})
+
+    assert cs.errors[:mobile_number]
   end
 
   @device_token "14d14fa953ac53aaff8416"
 
-  describe "update_device_token" do
+  describe "check_mobile_verification_token" do
     test "OK" do
-      Agent.start_link(fn -> %{} end, name: :sms_mock)
+      {:ok, uc} = UserClient.create(%{"mobile_number" => "73732655", "full_name" => "Amaru Barroso"})
 
-      {:ok, user} = UserClient.create(@valid_attrs)
+      assert uc.verified == false
+      token = uc.mobile_verification_token
 
-      {:ok, user} = UserClient.update_device_token(user, @device_token)
+      assert {:ok, uc} = UserClient.check_mobile_verification_token("73732655", token)
 
-      t = to_string(user.extra_data["device_token_updated_at"])
-
-      user = Repo.get(UserClient, user.id)
-
-      assert user.extra_data["device_token"] == @device_token
-      assert user.extra_data["device_token_updated_at"] == t
-
-      Agent.stop(:sms_mock)
+      assert uc.verified == true
+      assert uc.mobile_verification_token == "V" <> token
     end
 
-    test "does not override" do
-      Agent.start_link(fn -> %{} end, name: :sms_mock)
+    test "time" do
+      {:ok, uc} = UserClient.create(%{"mobile_number" => "73732655", "full_name" => "Amaru Barroso"})
 
-      {:ok, user} = Repo.insert(%UserClient{
-        full_name: "Amaru Barroso", mobile_number: "12345678", email: "amaru@mail.com",
-        encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo1234"),
-        extra_data: %{a: "data", b: 123, dec: 12.3, bool: true}
-      })
+      t = NaiveDateTime.add(uc.mobile_verification_send_at, -3601)
 
-      user = Repo.get(UserClient, user.id)
-      {:ok, user} = UserClient.update_device_token(user, @device_token)
-
-      user = Repo.get(UserClient, user.id)
-
-      assert user.extra_data["a"] == "data"
-      assert user.extra_data["b"] == 123
-      assert user.extra_data["dec"] == 12.3
-      assert user.extra_data["bool"] == true
+      {:ok, uc} = Ecto.Changeset.change(uc) |> Ecto.Changeset.put_change(:mobile_verification_send_at, t) |> Repo.update()
 
 
-      assert user.extra_data["device_token"] == @device_token
-      assert user.extra_data["device_token_updated_at"]
-
-      Agent.stop(:sms_mock)
+      assert :error = UserClient.check_mobile_verification_token("73732655", uc.mobile_verification_token)
     end
+
+    test "invalid token" do
+      {:ok, uc} = UserClient.create(%{"mobile_number" => "73732655", "full_name" => "Amaru Barroso"})
+
+      assert :error = UserClient.check_mobile_verification_token("73732655", "je12345")
+    end
+
+
+    test "not found" do
+      assert :error = UserClient.check_mobile_verification_token("73732655", "je12345tt")
+    end
+
   end
+
 end

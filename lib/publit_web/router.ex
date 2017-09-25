@@ -73,8 +73,8 @@ defmodule PublitWeb.Router do
     get "/valid_token/:token", SessionController, :valid_token
     # Registration
     post "/registration", RegistrationController, :create
-    put "/validate_mobile_number/:id", RegistrationController, :validate_mobile_number
-    put "/resend_verification_code/:id", RegistrationController, :resend_verification_code
+    post "/validate_token", RegistrationController, :validate_token
+    #put "/resend_verification_code/:id", RegistrationController, :resend_verification_code
 
     get "/:organization_id/products", ProductController, :products
     post "/search", SearchController, :search
