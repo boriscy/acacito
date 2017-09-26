@@ -4,27 +4,25 @@ defmodule Publit.UserTransportTest do
   alias Publit.UserTransport
 
   @valid_attrs %{full_name: "Julio Juarez", email: "julio@mail.com",
-   password: "demo1234", mobile_number: "59173732655", plate: "TUK123", vehicle: "motorcycle"}
+   password: "demo1234", mobile_number: "73732655", plate: "TUK123", vehicle: "motorcycle"}
   @invalid_attrs %{email: "to", mobile_number: "22", status: "invalid status"}
 
   describe "create" do
     test "OK" do
-      {:ok, user} = UserTransport.create(@valid_attrs)
-      assert %UserTransport{} = user
+      {:ok, ut} = UserTransport.create(@valid_attrs)
+      assert %UserTransport{} = ut
 
-      assert user.encrypted_password
-      assert user.email == "julio@mail.com"
-      assert user.mobile_number == "59173732655"
-      assert user.status == "off"
-      assert user.vehicle == "motorcycle"
+      assert ut.mobile_number == "73732655"
+      assert ut.status == "off"
+      assert ut.vehicle == "motorcycle"
+
+      assert "T-" <> _t = ut.mobile_verification_token
     end
 
     test "Errors" do
       {:error, cs} = UserTransport.create(@invalid_attrs)
 
       assert cs.valid? == false
-      assert cs.errors[:email]
-      assert cs.errors[:password]
       assert cs.errors[:full_name]
       assert cs.errors[:mobile_number]
     end
@@ -33,13 +31,13 @@ defmodule Publit.UserTransportTest do
       {:error, cs} = UserTransport.create(%{"mobile_number" => ""})
       assert cs.errors[:mobile_number]
 
-      {:error, cs} = UserTransport.create(%{"mobile_number" => "77112233"})
+      {:error, cs} = UserTransport.create(%{"mobile_number" => "27112233"})
       assert cs.errors[:mobile_number]
 
-      {:error, cs} = UserTransport.create(%{"mobile_number" => "59157112233"})
+      {:error, cs} = UserTransport.create(%{"mobile_number" => "57112233"})
       assert cs.errors[:mobile_number]
 
-      {:error, cs} = UserTransport.create(%{"mobile_number" => "59167112233"})
+      {:error, cs} = UserTransport.create(%{"mobile_number" => "67112233"})
       refute cs.errors[:mobile_number]
     end
 

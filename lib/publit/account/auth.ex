@@ -38,20 +38,7 @@ defmodule Publit.Account.Auth do
         |> unique_constraint(:mobile_number)
       end
 
-      def check_mobile_verification_token(mobile_number, token) do
-        with u <- Repo.get_by(__MODULE__, mobile_number: mobile_number),
-          false <- is_nil(u),
-          true <- u.mobile_verification_token == token  && NaiveDateTime.diff(NaiveDateTime.utc_now, u.mobile_verification_send_at) <= 3600 do
-            Ecto.Changeset.change(u)
-            |> put_change(:verified, true)
-            |> put_change(:mobile_verification_token, "V" <> token)
-            |> Repo.update()
-        else
-          _ ->
-            :error
-        end
-      end
-
+      defoverridable [create_changeset: 2]
     end
   end
 

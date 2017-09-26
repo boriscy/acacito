@@ -8,8 +8,11 @@ defmodule Publit.ClientApi.SessionControllerTest do
 
   describe "POST /client_api/login" do
     test "OK", %{conn: conn} do
-      Repo.insert(%UserClient{email: "amaru@mail.com", mobile_number: "59177112233", encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321"), verified: true} )
-      conn = post(conn, "/client_api/login", %{"login" => %{"email" => "amaru@mail.com", "password" => "demo4321"}})
+      {:ok, uc} = UserClient.create(%{mobile_number: "77112233", full_name: "Amaru Barroso"} )
+
+      token = uc.mobile_verification_token
+
+      conn = post(conn, "/client_api/login", %{"login" => %{"mobile_number" => "77112233"}})
 
        assert conn.status == 200
        json = Poison.decode!(conn.resp_body)

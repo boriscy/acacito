@@ -16,11 +16,10 @@ defmodule Publit.UserClient do
     field :extra_data, :map, default: %{}
     field :mobile_number, :string
     field :verified, :boolean, default: false
-
-    field :password, :string, virtual: true
-
     field :mobile_verification_token, :string
     field :mobile_verification_send_at, :naive_datetime
+
+    field :password, :string, virtual: true
 
     timestamps()
   end

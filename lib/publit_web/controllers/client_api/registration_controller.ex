@@ -18,7 +18,7 @@ defmodule PublitWeb.ClientApi.RegistrationController do
 
   # POST /client_api/validate_token
   def validate_token(conn, %{"phone" => phone, "message" => msg}) do
-    case UserClient.verify_mobile_number(phone, msg) do
+    case UserClient.check_mobile_verification_token(phone, msg) do
     {:ok, user} ->
       render(conn, "show.json", user: user)
     :error ->

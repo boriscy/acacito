@@ -1,7 +1,7 @@
 defmodule Publit.UserUtil do
   import Ecto.Changeset
   import PublitWeb.Gettext
-  alias Publit.{Repo}
+  alias Publit.{Repo, User, UserClient, UserTransport}
 
   @max_retry 2
 
@@ -20,6 +20,21 @@ defmodule Publit.UserUtil do
     Enum.map((1..l), fn(_) -> Enum.random(@all_chars) end) |> Enum.join("")
   end
 
+  def check_mobile_verification_token(mobile_number, token) do
+    with struct <- get_struct(token),
+      false <- is_nil(struct),
+      u <- Repo.get_by(struct, mobile_number: mobile_number),
+      false <- is_nil(u),
+      true <- u.mobile_verification_token == token  && NaiveDateTime.diff(NaiveDateTime.utc_now, u.mobile_verification_send_at) <= 3600 do
+        change(u)
+        |> put_change(:verified, true)
+        |> put_change(:mobile_verification_token, "V" <> token)
+        |> Repo.update()
+    else
+      _ ->
+        :error
+    end
+  end
 
   defp generate_encrypted_password(cs) do
     case cs do
@@ -30,21 +45,42 @@ defmodule Publit.UserUtil do
     end
   end
 
-
   @doc """
-  Sets the user token to login later
+  Sets the user token to login later for UserClient,
   """
+  @type set_mobile_verification_token(struct :: UserClient.t | UserTransport.t | User.t, mobile_number :: binary) :: UserClient.t | UserTransport.t | User.t
   def set_mobile_verification_token(struct, mobile_number) do
     case Repo.get_by(struct, mobile_number: mobile_number) do
       nil -> :error
       u ->
-        token = generate_random_string(6) |> to_string()
+        token = generate_token(struct)
 
         change(u)
         |> put_change(:mobile_verification_token, token)
         |> put_change(:mobile_verification_send_at, NaiveDateTime.utc_now())
         |> Repo.update()
     end
+  end
+
+  defp get_prefix(struct) do
+    case struct do
+      UserClient -> "C-"
+      UserTransport -> "T-"
+      User -> "O-"
+    end
+  end
+
+  defp get_struct(token) do
+    case token do
+      "C-" <> _ -> UserClient
+      "T-" <> _ -> UserTransport
+      "O-" <> _ -> User
+      _ -> nil
+    end
+  end
+
+  defp generate_token(struct) do
+    get_prefix(struct) <> generate_random_string(6) |> to_string()
   end
 
   defp get_keys(params, keys) do
@@ -54,7 +90,7 @@ defmodule Publit.UserUtil do
   end
 
   def create_and_set_verification_token(cs) do
-    token = generate_random_string(6) |> to_string()
+    token = generate_token(cs.data.__struct__)
 
     cs
     |> put_change(:mobile_verification_token, token)

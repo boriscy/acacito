@@ -4,7 +4,7 @@ defmodule Publit.UserTransport do
   alias Publit.{UserTransport, Repo, Order}
 
   @email_reg ~r|^[\w0-9._%+-]+@[\w0-9.-]+\.[\w]{2,63}$|
-  @number_reg ~r|^591[6,7]\d{7}$|
+  @number_reg ~r|^[6,7]\d{7}$|
 
   #defmodule Order do
   #  defstruct [:id, :status]
@@ -26,6 +26,8 @@ defmodule Publit.UserTransport do
     field :vehicle, :string
     field :orders, Publit.Array, default: []
     field :verified, :boolean, default: false
+    field :mobile_verification_token, :string
+    field :mobile_verification_send_at, :naive_datetime
 
     field :password, :string, virtual: true
 
@@ -40,15 +42,12 @@ defmodule Publit.UserTransport do
   """
   def create_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:mobile_number, :email, :full_name, :password, :plate, :vehicle])
-    |> validate_required([:password, :full_name, :mobile_number, :vehicle])
-    |> validate_format(:email, @email_reg)
+    |> cast(params, [:mobile_number, :full_name, :plate, :vehicle])
+    |> validate_required([:mobile_number, :full_name])
     |> validate_format(:mobile_number, @number_reg)
-    |> validate_length(:password, min: 8)
     |> validate_inclusion(:vehicle, @vehicles)
     |> unique_constraint(:mobile_number)
     |> valid_transport()
-    |> unique_constraint(:email)
     |> unique_constraint(:mobile_number)
   end
 
@@ -56,8 +55,7 @@ defmodule Publit.UserTransport do
     cs = create_changeset(%UserTransport{}, params)
 
     if cs.valid? do
-      cs = Publit.User.generate_encrypted_password(cs)
-      Repo.insert(cs)
+      Publit.UserUtil.create_and_set_verification_token(cs)
     else
       {:error , cs}
     end
@@ -119,7 +117,7 @@ defmodule Publit.UserTransport do
   end
 
   defp valid_transport(cs) do
-    case Enum.any?(@vehicles_plate, fn(v) -> v == cs.changes[:vehicle] end) do
+    case Enum.any?(@vehicles_plate, fn(v) -> v === cs.changes[:vehicle] end) do
       true ->
         cs
         |> validate_required([:plate])
