@@ -73,12 +73,22 @@ defmodule Publit.UserUtil do
   def valid_mobile_verification_token(struct, params) do
     with u <- Repo.get_by(struct, mobile_number: params["mobile_number"]),
       false <- is_nil(u),
-      true  <- Regex.match?(~r/^V#{params["token"]}/, u.mobile_verification_token) do
-        %{user: u, token: Phoenix.Token.sign(PublitWeb.Endpoint, "user_id", u.id) }
+      true  <- Regex.match?(~r/^V#{params["token"]}/, u.mobile_verification_token),
+      {:ok, user} <- reset_mobile_verification_token(u) do
+        %{user: user, token: Phoenix.Token.sign(PublitWeb.Endpoint, "user_id", u.id) }
     else
       _ ->
        :error
     end
+  end
+
+  def reset_mobile_verification_token(user) do
+      token = generate_token(user.__struct__)
+
+      change(user)
+      |> put_change(:mobile_verification_token, token)
+      |> put_change(:mobile_verification_send_at, NaiveDateTime.utc_now())
+      |> Repo.update()
   end
 
   defp get_prefix(struct) do
