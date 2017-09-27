@@ -5,7 +5,7 @@ defmodule Publit.UserUtilTest do
   @cli_params %{"full_name" => "Amaru Barroso", "mobile_number" => "73732655"}
   @trans_params %{full_name: "Julio Juarez", mobile_number: "73732655", plate: "TUK123", vehicle: "motorcycle"}
 
-  describe "set_token" do
+  describe "set_mobile_verification_token" do
     test "OK client" do
       {:ok, uc} = Repo.insert(%UserClient{mobile_number: "73732655", full_name: "Amaru Barroso"})
 
@@ -23,7 +23,7 @@ defmodule Publit.UserUtilTest do
 
       refute ut.mobile_verification_token
 
-      {:ok, ut} = UserUtil.set_mobile_verification_token(UserTransport, "73732655")
+      assert {:ok, ut} = UserUtil.set_mobile_verification_token(UserTransport, "73732655")
 
       assert "T-" <> t = ut.mobile_verification_token
 

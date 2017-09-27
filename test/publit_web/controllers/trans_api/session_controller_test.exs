@@ -12,12 +12,14 @@ defmodule Publit.TransApi.SessionControllerTest do
 
       conn = post(conn, "/trans_api/login", %{"mobile_number" => "73732655"})
 
-       assert conn.status == 200
-       json = Poison.decode!(conn.resp_body)
+      assert conn.status == 200
+      json = Poison.decode!(conn.resp_body)
 
-       assert json["user"]["id"]
-       assert json["user"]["mobile_verification_token"]
-       assert "T-" <> _t = json["user"]["mobile_verification_token"]
+      assert json["user"]["id"]
+      assert json["user"]["mobile_verification_token"]
+      assert "T-" <> _t = json["user"]["mobile_verification_token"]
+
+      assert String.length(json["sms_gateway"]) == 8
     end
 
     test "mot_found", %{conn: conn} do
@@ -43,7 +45,7 @@ defmodule Publit.TransApi.SessionControllerTest do
       assert conn.status == Plug.Conn.Status.code(:ok)
       assert String.length(json["token"]) > 30
       assert json["user"]
-      assert "VT-" <> _t = json["user"]["mobile_verification_token"]
+      assert "T-" <> _t = json["user"]["mobile_verification_token"]
     end
 
     test "Error", %{conn: conn} do

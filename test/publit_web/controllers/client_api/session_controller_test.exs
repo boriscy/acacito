@@ -10,12 +10,14 @@ defmodule Publit.ClientApi.SessionControllerTest do
 
       conn = post(conn, "/client_api/login", %{"mobile_number" => "77112233"})
 
-       assert conn.status == 200
-       json = Poison.decode!(conn.resp_body)
+      assert conn.status == 200
+      json = Poison.decode!(conn.resp_body)
 
-       assert json["user"]["id"]
-       assert json["user"]["mobile_verification_token"]
-       assert "C-" <> _t = json["user"]["mobile_verification_token"]
+      assert json["user"]["id"]
+      assert json["user"]["mobile_verification_token"]
+      assert "C-" <> _t = json["user"]["mobile_verification_token"]
+
+      assert String.length(json["sms_gateway"]) == 8
     end
 
     test "mot_found", %{conn: conn} do

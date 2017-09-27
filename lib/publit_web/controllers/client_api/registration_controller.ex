@@ -7,7 +7,7 @@ defmodule PublitWeb.ClientApi.RegistrationController do
   def create(conn, %{"user" => user_params}) do
     case UserClient.create(user_params) do
       {:ok, user} ->
-        render(conn, "show.json", user: user)
+        render(conn, "show.json", user: user, sms_gateway: UserUtil.get_sms_gateway())
       {:error, cs} ->
         conn
         |> put_status(:unprocessable_entity)

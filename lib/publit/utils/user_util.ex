@@ -83,12 +83,12 @@ defmodule Publit.UserUtil do
   end
 
   def reset_mobile_verification_token(user) do
-      token = generate_token(user.__struct__)
+    token = generate_token(user.__struct__)
 
-      change(user)
-      |> put_change(:mobile_verification_token, token)
-      |> put_change(:mobile_verification_send_at, NaiveDateTime.utc_now())
-      |> Repo.update()
+    change(user)
+    |> put_change(:mobile_verification_token, token)
+    |> put_change(:mobile_verification_send_at, NaiveDateTime.utc_now())
+    |> Repo.update()
   end
 
   defp get_prefix(struct) do

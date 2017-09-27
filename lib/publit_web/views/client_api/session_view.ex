@@ -5,8 +5,8 @@ defmodule PublitWeb.ClientApi.SessionView do
     %{user: to_api(user), token: token}
   end
 
-  def render("show.json", %{user: user}) do
-    %{user: to_api(user)}
+  def render("show.json", %{user: user, sms_gateway: sms_gateway}) do
+    %{user: to_api(user), sms_gateway: sms_gateway}
   end
 
   def render("errors.json", %{cs: cs}) do

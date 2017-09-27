@@ -1,6 +1,6 @@
 defmodule PublitWeb.TransApi.SessionController do
   use PublitWeb, :controller
-  alias Publit.{Repo, UserUtil, UserTransport}
+  alias Publit.{Repo, UserUtil, UserTransport, SmsService}
   alias PublitWeb.ClientApi
   plug :scrub_params, "auth" when action in [:token]
 
@@ -10,7 +10,7 @@ defmodule PublitWeb.TransApi.SessionController do
   def create(conn, %{"mobile_number" => mobile_number}) do
     case UserUtil.set_mobile_verification_token(UserTransport, mobile_number) do
       {:ok, user} ->
-        render(conn, ClientApi.SessionView, "show.json", user: user)
+        render(conn, ClientApi.SessionView, "show.json", user: user, sms_gateway: SmsService.sms_gateway_num())
       _ ->
         conn
         |> put_status(:not_found)

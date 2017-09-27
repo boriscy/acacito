@@ -35,4 +35,8 @@ defmodule Publit.SmsService do
     @sms_api.send_message(number, msg)
   end
 
+  def sms_gateway_num do
+    "73732677"
+  end
+
 end
