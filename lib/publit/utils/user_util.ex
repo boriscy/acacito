@@ -20,6 +20,35 @@ defmodule Publit.UserUtil do
     Enum.map((1..l), fn(_) -> Enum.random(@all_chars) end) |> Enum.join("")
   end
 
+  defp generate_encrypted_password(cs) do
+    case cs do
+      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
+        put_change(cs, :encrypted_password, Comeonin.Bcrypt.hashpwsalt(password))
+      _ ->
+        cs
+    end
+  end
+
+  @doc """
+  Sets the user token to login later for UserClient,
+  """
+  @type set_mobile_verification_token(struct :: UserClient.t | UserTransport.t | User.t, mobile_number :: binary) :: tuple
+  def set_mobile_verification_token(struct, mobile_number) do
+    case Repo.get_by(struct, mobile_number: mobile_number) do
+      nil -> :error
+      u ->
+        token = generate_token(struct)
+
+        change(u)
+        |> put_change(:mobile_verification_token, token)
+        |> put_change(:mobile_verification_send_at, NaiveDateTime.utc_now())
+        |> Repo.update()
+    end
+  end
+
+  @doc """
+  Checks if the mobile_verification_token is valida and updates to valid
+  """
   def check_mobile_verification_token(mobile_number, token) do
     with struct <- get_struct(token),
       false <- is_nil(struct),
@@ -36,29 +65,19 @@ defmodule Publit.UserUtil do
     end
   end
 
-  defp generate_encrypted_password(cs) do
-    case cs do
-      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
-        put_change(cs, :encrypted_password, Comeonin.Bcrypt.hashpwsalt(password))
-      _ ->
-        cs
-    end
-  end
-
   @doc """
-  Sets the user token to login later for UserClient,
+  Checks if the mobile_verification_token has been validated and returns a token
+  with the user_id
   """
-  @type set_mobile_verification_token(struct :: UserClient.t | UserTransport.t | User.t, mobile_number :: binary) :: UserClient.t | UserTransport.t | User.t
-  def set_mobile_verification_token(struct, mobile_number) do
-    case Repo.get_by(struct, mobile_number: mobile_number) do
-      nil -> :error
-      u ->
-        token = generate_token(struct)
-
-        change(u)
-        |> put_change(:mobile_verification_token, token)
-        |> put_change(:mobile_verification_send_at, NaiveDateTime.utc_now())
-        |> Repo.update()
+  @type valid_mobile_verification_token(struct :: UserClient.t | UserTransport.t | User.t, params :: map) :: map
+  def valid_mobile_verification_token(struct, params) do
+    with u <- Repo.get_by(struct, mobile_number: params["mobile_number"]),
+      false <- is_nil(u),
+      true  <- Regex.match?(~r/^V#{params["token"]}/, u.mobile_verification_token) do
+        %{user: u, token: Phoenix.Token.sign(PublitWeb.Endpoint, "user_id", u.id) }
+    else
+      _ ->
+       :error
     end
   end
 

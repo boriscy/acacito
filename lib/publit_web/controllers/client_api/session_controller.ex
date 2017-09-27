@@ -1,36 +1,33 @@
 defmodule PublitWeb.ClientApi.SessionController do
   use PublitWeb, :controller
-  plug :scrub_params, "login" when action in [:create]
-  alias Publit.{UserAuthentication, Repo, UserClient}
+  alias Publit.{Repo, UserUtil, UserClient}
+
+
+  plug :scrub_params, "auth" when action in [:token]
 
   @max_age Application.get_env(:publit, :session_max_age)
 
   # POST /client_api/login
-  def create(conn, %{"login" => login_params}) do
-    case UserUtil.set_mobile_verification_token(UserClient, login_params) do
-      {:ok, uc} ->
-        render(conn, "show.json", user: uc)
+  def create(conn, %{"mobile_number" => mobile_number}) do
+    case UserUtil.set_mobile_verification_token(UserClient, mobile_number) do
+      {:ok, user} ->
+        render(conn, "show.json", user: user)
+      _ ->
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", msg: gettext("Mobile number not found"))
+    end
+  end
+
+  # POST /client_api/get_token
+  def get_token(conn, %{"auth" => params}) do
+    case UserUtil.valid_mobile_verification_token(UserClient, params) do
+      %{user: user, token: token} ->
+        render(conn, "show.json", user: user, token: token)
       _ ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render("error.json", msg: gettext("Phone not found"))
-    end
-
-  end
-
-  # GET /client_api/valid_token/:token
-  def valid_token(conn, %{"token" => token}) do
-    with {:ok, user_id} <- Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token, max_age: @max_age),
-      uc <- Repo.get_by(UserClient, id: user_id),
-      %UserClient{} <- uc do
-        token = UserAuthentication.get_new_token(user_id, token)
-
-        render(conn, "show.json", user: uc, token: token)
-    else
-      _ ->
-        conn
-        |> put_status(:unauthorized)
-        |> render("valid_token.json", valid: false)
+        |> render("error.json", msg: gettext("Invalid token"))
     end
   end
 

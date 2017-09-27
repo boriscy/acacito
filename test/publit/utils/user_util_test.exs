@@ -2,6 +2,9 @@ defmodule Publit.UserUtilTest do
   use Publit.ModelCase
   alias Publit.{UserClient, UserTransport, UserUtil, Repo}
 
+  @cli_params %{"full_name" => "Amaru Barroso", "mobile_number" => "73732655"}
+  @trans_params %{full_name: "Julio Juarez", mobile_number: "73732655", plate: "TUK123", vehicle: "motorcycle"}
+
   describe "set_token" do
     test "OK client" do
       {:ok, uc} = Repo.insert(%UserClient{mobile_number: "73732655", full_name: "Amaru Barroso"})
@@ -63,7 +66,7 @@ defmodule Publit.UserUtilTest do
     end
 
     test "invalid token" do
-      {:ok, uc} = UserClient.create(%{"mobile_number" => "73732655", "full_name" => "Amaru Barroso"})
+      {:ok, _uc} = UserClient.create(%{"mobile_number" => "73732655", "full_name" => "Amaru Barroso"})
 
       assert :error = UserUtil.check_mobile_verification_token("73732655", "je12345")
     end
@@ -71,6 +74,45 @@ defmodule Publit.UserUtilTest do
     test "not found" do
       assert :error = UserUtil.check_mobile_verification_token("73732655", "je12345tt")
     end
+  end
+
+  describe "valid_mobile_verification_token" do
+    test "OK user_client" do
+      {:ok, uc} = UserClient.create(%{mobile_number: "73732655", full_name: "Amaru Barroso"})
+
+      assert {:ok, _uc} = UserUtil.check_mobile_verification_token(uc.mobile_number, uc.mobile_verification_token)
+
+      p = %{"mobile_number" => "73732655", "token" => uc.mobile_verification_token}
+      assert %{user: user, token: token} = UserUtil.valid_mobile_verification_token(UserClient, p)
+
+      assert "VC-" <> _t = user.mobile_verification_token
+      assert String.length(token) > 30
+    end
+
+    test "error user_client" do
+      {:ok, uc} = UserClient.create(%{mobile_number: "73732655", full_name: "Amaru Barroso"})
+
+      p = %{"mobile_number" => "73732655", "token" => uc.mobile_verification_token}
+      assert :error = UserUtil.valid_mobile_verification_token(UserClient, p)
+    end
+
+    test "error no user" do
+      p = %{"mobile_number" => "73732655", "token" => "C-123abc"}
+      assert :error = UserUtil.valid_mobile_verification_token(UserClient, p)
+    end
+
+    test "OK user_transport" do
+      {:ok, ut} = UserTransport.create(@trans_params)
+
+      assert {:ok, _ut} = UserUtil.check_mobile_verification_token("73732655", ut.mobile_verification_token)
+
+      p = %{"mobile_number" => "73732655", "token" => ut.mobile_verification_token}
+      assert %{user: user, token: token} = UserUtil.valid_mobile_verification_token(UserTransport, p)
+
+      assert "VT-" <> _t = user.mobile_verification_token
+      assert String.length(token) > 30
+    end
+
   end
 
 end

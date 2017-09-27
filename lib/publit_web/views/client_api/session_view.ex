@@ -2,6 +2,10 @@ defmodule PublitWeb.ClientApi.SessionView do
   use PublitWeb, :view
 
   def render("show.json", %{user: user, token: token}) do
+    %{user: to_api(user), token: token}
+  end
+
+  def render("show.json", %{user: user}) do
     %{user: to_api(user)}
   end
 

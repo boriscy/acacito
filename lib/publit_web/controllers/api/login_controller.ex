@@ -19,7 +19,6 @@ defmodule PublitWeb.Api.LoginController do
     end
   end
 
-
   # GET /api/valid_token/:token
   def valid_token(conn, %{"token" => token}) do
     case Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token, max_age: @max_age) do

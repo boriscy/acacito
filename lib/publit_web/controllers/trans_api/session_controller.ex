@@ -1,39 +1,32 @@
 defmodule PublitWeb.TransApi.SessionController do
   use PublitWeb, :controller
-  plug :scrub_params, "login" when action in [:create]
-  alias Publit.{UserAuthentication, UserTransport, Repo}
+  alias Publit.{Repo, UserUtil, UserTransport}
+  alias PublitWeb.ClientApi
+  plug :scrub_params, "auth" when action in [:token]
 
   @max_age Application.get_env(:publit, :session_max_age)
 
-
   # POST /trans_api/login
-  def create(conn, %{"login" => login_params}) do
-    case UserAuthentication.valid_user_transport(login_params) do
+  def create(conn, %{"mobile_number" => mobile_number}) do
+    case UserUtil.set_mobile_verification_token(UserTransport, mobile_number) do
       {:ok, user} ->
-        token = UserAuthentication.encrypt_user_id(user.id)
-        render(conn, "show.json", user: user, token: token)
-      {:error, cs} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render("errors.json", cs: cs)
-    end
-  end
-
-  @doc """
-  Returns the validity of token and the user data
-  """
-  # GET /trans_api/valid_token_user/:token
-  def valid_token(conn, %{"token" => token}) do
-    with {:ok, user_id} <- Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token, max_age: @max_age),
-      ut <- Repo.get_by(UserTransport, id: user_id),
-      %UserTransport{} <- ut do
-        render(conn, "show.json", user: ut, token: token)
-    else
+        render(conn, ClientApi.SessionView, "show.json", user: user)
       _ ->
         conn
-        |> put_status(:unauthorized)
-        |> render("valid_token.json", valid: false)
+        |> put_status(:not_found)
+        |> render(ClientApi.SessionView, "error.json", msg: gettext("Mobile number not found"))
     end
   end
 
+  # POST /trans_api/get_token
+  def get_token(conn, %{"auth" => params}) do
+    case UserUtil.valid_mobile_verification_token(UserTransport, params) do
+      %{user: user, token: token} ->
+        render(conn, ClientApi.SessionView, "show.json", user: user, token: token)
+      _ ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render(ClientApi.SessionView, "error.json", msg: gettext("Invalid token"))
+    end
+  end
 end

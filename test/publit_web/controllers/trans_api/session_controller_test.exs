@@ -1,64 +1,60 @@
 defmodule Publit.TransApi.SessionControllerTest do
   use PublitWeb.ConnCase
-  alias Publit.{UserTransport, UserAuthentication}
+  alias Publit.{UserTransport, UserUtil}
 
-  setup do
-    %{conn: build_conn()}
-  end
-
-  defp user do
-    {:ok, u} = Repo.insert(%UserTransport{email: "juan@mail.com", mobile_number: "59177123456",
-      encrypted_password: Comeonin.Bcrypt.hashpwsalt("demo4321"), verified: true} )
-    u
-  end
+  @trans_params %{full_name: "Julio Juarez", mobile_number: "73732655", plate: "TUK123", vehicle: "motorcycle"}
 
   describe "POST /trans_api/login" do
     test "OK", %{conn: conn} do
-      user()
-      conn = post(conn, "/trans_api/login", %{"login" => %{"mobile_number" => "59177123456", "password" => "demo4321"}})
+      {:ok, user} = UserTransport.create(@trans_params)
+
+      token = user.mobile_verification_token
+
+      conn = post(conn, "/trans_api/login", %{"mobile_number" => "73732655"})
 
        assert conn.status == 200
        json = Poison.decode!(conn.resp_body)
 
-       assert json["token"]
        assert json["user"]["id"]
+       assert json["user"]["mobile_verification_token"]
+       assert "T-" <> _t = json["user"]["mobile_verification_token"]
     end
 
-    test "ERROR", %{conn: conn} do
-      user()
-      conn = post(conn, "/trans_api/login", %{"login" => %{"mobile_number" => "59177123456", "password" => "demo1234"}})
+    test "mot_found", %{conn: conn} do
+      conn = post(conn, "/trans_api/login", %{"mobile_number" => "77112233"})
 
-       assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
-    end
-  end
+       assert conn.status == Plug.Conn.Status.code(:not_found)
+       json = Poison.decode!(conn.resp_body)
 
-  describe "GET /trans_api/valid_token" do
-    test "VALID", %{conn: conn} do
-      ut = insert(:user_transport)
-      token = UserAuthentication.encrypt_user_id(ut.id)
-
-      conn = get(conn, "/trans_api/valid_token/#{token}")
-
-      assert conn.status == 200
-      json = Poison.decode!(conn.resp_body)
-
-      assert json["user"]["id"] == ut.id
-      assert json["token"]
-    end
-
-    test "INVALID", %{conn: conn} do
-      id = Ecto.UUID.generate()
-      token = UserAuthentication.encrypt_user_id(id) <> "aa"
-
-      conn = get(conn, "/trans_api/valid_token/#{token}")
-
-      assert conn.status == Plug.Conn.Status.code(:unauthorized)
-      json = Poison.decode!(conn.resp_body)
-
-      assert json["valid"] == false
+       assert json["error"] == gettext("Mobile number not found")
     end
 
   end
+
+  describe "get_token" do
+    test "OK", %{conn: conn} do
+      {:ok, uc} = UserTransport.create(%{mobile_number: "77112233", full_name: "Amaru Barroso"} )
+
+      UserUtil.check_mobile_verification_token("77112233", uc.mobile_verification_token)
+
+      conn = post(conn, "/trans_api/get_token", %{auth: %{mobile_number: "77112233", token: uc.mobile_verification_token}})
+      json = Poison.decode!(conn.resp_body)
+
+      assert conn.status == Plug.Conn.Status.code(:ok)
+      assert String.length(json["token"]) > 30
+      assert json["user"]
+      assert "VT-" <> _t = json["user"]["mobile_verification_token"]
+    end
+
+    test "Error", %{conn: conn} do
+      {:ok, uc} = UserTransport.create(%{mobile_number: "77112233", full_name: "Amaru Barroso"} )
+
+      conn = post(conn, "/trans_api/get_token", %{auth: %{mobile_number: "77112233", token: uc.mobile_verification_token}})
+
+      assert conn.status == Plug.Conn.Status.code(:unprocessable_entity)
+    end
+  end
+
 
 end
 

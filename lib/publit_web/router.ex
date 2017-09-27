@@ -38,6 +38,8 @@ defmodule PublitWeb.Router do
 
     resources "/login", Api.LoginController, only: [:create, :delete]
     get "/valid_token/:token", Api.LoginController, :valid_token
+
+    post "/validate_token", Api.SessionController, :validate_token
   end
 
   # Api that the organization accesses
@@ -69,11 +71,9 @@ defmodule PublitWeb.Router do
   scope "/client_api", PublitWeb.ClientApi do
     pipe_through [:api]
     post "/login", SessionController, :create
-    delete "/login", SessionController, :delete
-    get "/valid_token/:token", SessionController, :valid_token
+    post "/get_token", SessionController, :get_token
     # Registration
     post "/registration", RegistrationController, :create
-    post "/validate_token", RegistrationController, :validate_token
     #put "/resend_verification_code/:id", RegistrationController, :resend_verification_code
 
     get "/:organization_id/products", ProductController, :products
@@ -106,8 +106,10 @@ defmodule PublitWeb.Router do
   # API for transport
   scope "/trans_api", PublitWeb.TransApi do
     pipe_through [:api]
+
     post "/login", SessionController, :create
-    delete "/login", SessionController, :delete
+    post "/get_token", SessionController, :get_token
+
     get "/valid_token/:token", SessionController, :valid_token
     get "/valid_token_user/:token", SessionController, :valid_token_user
 
