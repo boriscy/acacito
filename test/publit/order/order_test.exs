@@ -28,7 +28,7 @@ defmodule Publit.OrderTest do
       "cli" => %{"address" => "Los Pinos, B777"},
       "other_details" => "cambio de 200",
       "details" => %{
-          "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "image_thumb" => "thumb1.jpg", "details" => "Con aji"},
+          "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "image_thumb" => "thumb1.jpg", "extras" => "Con aji"},
           "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2", "image_thumb" => "thumb2.jpg"}
         },
         "trans" => %{"ctype" => "delivery", "calculated_price" => "5"}
@@ -65,7 +65,7 @@ defmodule Publit.OrderTest do
       assert d1.name == p1.name
       assert d1.variation == v1.name
       assert d1.image_thumb == "thumb1.jpg"
-      assert d1.details == "Con aji"
+      assert d1.extras == "Con aji"
 
       assert d2.price == Decimal.new("20.5")
       assert d2.quantity == Decimal.new("2")

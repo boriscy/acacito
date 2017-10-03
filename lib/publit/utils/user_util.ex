@@ -71,6 +71,7 @@ defmodule Publit.UserUtil do
   """
   @type valid_mobile_verification_token(struct :: UserClient.t | UserTransport.t | User.t, params :: map) :: map
   def valid_mobile_verification_token(struct, params) do
+IO.inspect params
     with u <- Repo.get_by(struct, mobile_number: params["mobile_number"]),
       false <- is_nil(u),
       true  <- Regex.match?(~r/^V#{params["token"]}/, u.mobile_verification_token),

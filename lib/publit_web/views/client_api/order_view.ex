@@ -1,6 +1,5 @@
 defmodule PublitWeb.ClientApi.OrderView do
   use PublitWeb, :view
-  alias Publit.{Organization, Repo}
 
   def render("index.json", %{orders: orders}) do
     orders = Enum.map(orders, &to_api/1)

@@ -1,6 +1,7 @@
 defmodule PublitWeb.Plug.ClientApi.UserAuth do
   import Plug.Conn
   import Phoenix.Controller, only: [put_flash: 3, redirect: 2, render: 3]
+  import PublitWeb.Gettext
   alias Publit.{Repo, UserClient}
 
   @max_age Application.get_env(:publit, :session_max_age)
@@ -36,5 +37,4 @@ defmodule PublitWeb.Plug.ClientApi.UserAuth do
     end
   end
 
-  defp salt, do: Application.get_env(:publit, PublitWeb.Endpoint)[:secret_key_base]
 end

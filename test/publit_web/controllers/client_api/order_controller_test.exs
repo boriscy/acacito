@@ -33,7 +33,7 @@ defmodule Publit.ClientApi.OrderControllerTest do
     "client_pos" => %{"coordinates" => [-120, 30], "type" => "Point"},
     "cli" => %{"address" => "Los Pinos B100"},
     "details" => %{
-        "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1"},
+        "0" => %{"product_id" => p1.id, "variation_id" => v1.id, "quantity" => "1", "extras" => "Salsa picante"},
         "1" => %{"product_id" => p2.id, "variation_id" => v2.id, "quantity" => "2"}
      },
      "trans" => %{"calculated_price" => "3", "ctype" => "delivery"}
@@ -52,6 +52,9 @@ defmodule Publit.ClientApi.OrderControllerTest do
 
       assert json["order"]["org"]["name"] == org.name
       assert json["order"]["trans"]["ctype"] == "delivery"
+
+      det = json["order"]["details"] |> Enum.at(0)
+      assert det["extras"] == "Salsa picante"
 
       assert called PublitWeb.OrganizationChannel.broadcast_order(:_)
     end
