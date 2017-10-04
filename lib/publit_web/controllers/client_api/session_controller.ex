@@ -9,7 +9,7 @@ defmodule PublitWeb.ClientApi.SessionController do
 
   # POST /client_api/login
   def create(conn, %{"mobile_number" => mobile_number}) do
-    case UserUtil.set_mobile_verification_token(UserClient, mobile_number) do
+    case UserUtil.set_mobile_verification_token(UserClient, to_string(mobile_number)) do
       {:ok, user} ->
         render(conn, "show.json", user: user, sms_gateway: SmsService.sms_gateway_num())
       _ ->

@@ -7,8 +7,8 @@ defmodule Publit.UserUtil do
 
   @number_reg ~r|^[6,7]\d{7}$|
   @numbers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-  @downcase_letters ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-  @upcase_letters ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+  @downcase_letters ?a..?z |> Enum.to_list |> List.to_string() |> String.split("")
+  @upcase_letters ?A..?Z |> Enum.to_list |> List.to_string() |> String.split("")
 
   @all_chars @numbers ++ @downcase_letters ++ @upcase_letters
 
@@ -18,6 +18,10 @@ defmodule Publit.UserUtil do
 
   def generate_random_string(l) do
     Enum.map((1..l), fn(_) -> Enum.random(@all_chars) end) |> Enum.join("")
+  end
+
+  def generate_downcase_string(l) do
+    Enum.map((1..l), fn(_) -> Enum.random(@downcase_letters ++ @numbers) end) |> Enum.join("")
   end
 
   defp generate_encrypted_password(cs) do
@@ -50,7 +54,8 @@ defmodule Publit.UserUtil do
   Checks if the mobile_verification_token is valida and updates to valid
   """
   def check_mobile_verification_token(mobile_number, token) do
-    with struct <- get_struct(token),
+    with {true, true} <- {is_binary(mobile_number), is_binary(token)},
+      struct <- get_struct(token),
       false <- is_nil(struct),
       u <- Repo.get_by(struct, mobile_number: mobile_number),
       false <- is_nil(u),
@@ -71,7 +76,6 @@ defmodule Publit.UserUtil do
   """
   @type valid_mobile_verification_token(struct :: UserClient.t | UserTransport.t | User.t, params :: map) :: map
   def valid_mobile_verification_token(struct, params) do
-IO.inspect params
     with u <- Repo.get_by(struct, mobile_number: params["mobile_number"]),
       false <- is_nil(u),
       true  <- Regex.match?(~r/^V#{params["token"]}/, u.mobile_verification_token),
@@ -94,23 +98,23 @@ IO.inspect params
 
   defp get_prefix(struct) do
     case struct do
-      UserClient -> "C-"
-      UserTransport -> "T-"
-      User -> "O-"
+      UserClient -> "C"
+      UserTransport -> "T"
+      User -> "O"
     end
   end
 
   defp get_struct(token) do
     case token do
-      "C-" <> _ -> UserClient
-      "T-" <> _ -> UserTransport
-      "O-" <> _ -> User
+      "C" <> _ -> UserClient
+      "T" <> _ -> UserTransport
+      "O" <> _ -> User
       _ -> nil
     end
   end
 
   defp generate_token(struct) do
-    get_prefix(struct) <> generate_random_string(6) |> to_string()
+    get_prefix(struct) <> generate_downcase_string(6) |> to_string()
   end
 
   defp get_keys(params, keys) do

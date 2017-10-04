@@ -4,6 +4,7 @@ defmodule Publit.UserUtilTest do
 
   @cli_params %{"full_name" => "Amaru Barroso", "mobile_number" => "73732655"}
   @trans_params %{full_name: "Julio Juarez", mobile_number: "73732655", plate: "TUK123", vehicle: "motorcycle"}
+  @reg ~r/\A[a-z0-9]{6}\z/
 
   describe "set_mobile_verification_token" do
     test "OK client" do
@@ -13,9 +14,10 @@ defmodule Publit.UserUtilTest do
 
       {:ok, uc} = UserUtil.set_mobile_verification_token(UserClient, "73732655")
 
-      assert "C-" <> t = uc.mobile_verification_token
+      assert "C" <> t = uc.mobile_verification_token
 
       assert String.length(t) == 6
+      assert Regex.match?(@reg, t)
     end
 
     test "OK trans" do
@@ -25,9 +27,10 @@ defmodule Publit.UserUtilTest do
 
       assert {:ok, ut} = UserUtil.set_mobile_verification_token(UserTransport, "73732655")
 
-      assert "T-" <> t = ut.mobile_verification_token
+      assert "T" <> t = ut.mobile_verification_token
 
       assert String.length(t) == 6
+      assert Regex.match?(@reg, t)
     end
 
     test "invalid" do
@@ -39,21 +42,21 @@ defmodule Publit.UserUtilTest do
     test "OK user_client" do
       {:ok, uc} = UserClient.create(%{mobile_number: "73732655", full_name: "Amaru Barroso"})
 
-      assert "C-" <> _t = uc.mobile_verification_token
+      assert "C" <> _t = uc.mobile_verification_token
 
       assert {:ok, uc} = UserUtil.check_mobile_verification_token(uc.mobile_number, uc.mobile_verification_token)
 
-      assert "VC-" <> _t = uc.mobile_verification_token
+      assert "VC" <> _t = uc.mobile_verification_token
     end
 
     test "OK user_transport" do
       {:ok, ut} = UserTransport.create(%{mobile_number: "73732655", full_name: "Amaru Barroso"})
 
-      assert "T-" <> _t = ut.mobile_verification_token
+      assert "T" <> _t = ut.mobile_verification_token
 
       assert {:ok, ut} = UserUtil.check_mobile_verification_token(ut.mobile_number, ut.mobile_verification_token)
 
-      assert "VT-" <> _t = ut.mobile_verification_token
+      assert "VT" <> _t = ut.mobile_verification_token
     end
 
     test "time" do
@@ -85,7 +88,7 @@ defmodule Publit.UserUtilTest do
       p = %{"mobile_number" => "73732655", "token" => uc.mobile_verification_token}
       assert %{user: user, token: token} = UserUtil.valid_mobile_verification_token(UserClient, p)
 
-      assert "C-" <> _t = user.mobile_verification_token
+      assert "C" <> _t = user.mobile_verification_token
       assert String.length(token) > 30
     end
 
@@ -109,7 +112,7 @@ defmodule Publit.UserUtilTest do
       p = %{"mobile_number" => "73732655", "token" => ut.mobile_verification_token}
       assert %{user: user, token: token} = UserUtil.valid_mobile_verification_token(UserTransport, p)
 
-      assert "T-" <> _t = user.mobile_verification_token
+      assert "T" <> _t = user.mobile_verification_token
       assert String.length(token) > 30
     end
 
