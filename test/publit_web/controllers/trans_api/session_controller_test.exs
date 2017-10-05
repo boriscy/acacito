@@ -17,7 +17,7 @@ defmodule Publit.TransApi.SessionControllerTest do
 
       assert json["user"]["id"]
       assert json["user"]["mobile_verification_token"]
-      assert "T-" <> _t = json["user"]["mobile_verification_token"]
+      assert "T" <> _t = json["user"]["mobile_verification_token"]
 
       assert String.length(json["sms_gateway"]) == 8
     end
@@ -45,7 +45,7 @@ defmodule Publit.TransApi.SessionControllerTest do
       assert conn.status == Plug.Conn.Status.code(:ok)
       assert String.length(json["token"]) > 30
       assert json["user"]
-      assert "T-" <> _t = json["user"]["mobile_verification_token"]
+      assert "T" <> _t = json["user"]["mobile_verification_token"]
     end
 
     test "Error", %{conn: conn} do

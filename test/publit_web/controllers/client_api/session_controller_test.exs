@@ -20,7 +20,7 @@ defmodule Publit.ClientApi.SessionControllerTest do
       assert String.length(json["sms_gateway"]) == 8
     end
 
-    test "mot_found", %{conn: conn} do
+    test "not_found", %{conn: conn} do
       conn = post(conn, "/client_api/login", %{"mobile_number" => "77112233"})
 
        assert conn.status == Plug.Conn.Status.code(:not_found)
