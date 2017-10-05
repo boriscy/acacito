@@ -1,14 +1,11 @@
 defmodule Publit.ClientApi.RegistrationControllerTest do
   use PublitWeb.ConnCase
-  alias Publit.{UserClient, Repo}
   require PublitWeb.Gettext
 
   @valid_params %{"full_name" => "Amaru Barroso", "mobile_number" => "73732655"}
 
   describe "POST /client_api/registration" do
     test "OK", %{conn: conn} do
-      Agent.start_link(fn -> %{} end, name: :sms_mock)
-
       conn = post(conn, "/client_api/registration", %{"user" => @valid_params})
 
       assert conn.status == 200

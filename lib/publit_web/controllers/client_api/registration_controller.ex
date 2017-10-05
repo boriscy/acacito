@@ -1,18 +1,9 @@
 defmodule PublitWeb.ClientApi.RegistrationController do
   use PublitWeb, :controller
-  plug :scrub_params, "user" when action in [:create]
-  alias Publit.{UserClient, UserAuthentication, UserUtil, Repo}
+  alias Publit.UserClient
+  alias PublitWeb.SharedRegistrationController
 
   # POST /client_api/registration
-  def create(conn, %{"user" => user_params}) do
-    case UserClient.create(user_params) do
-      {:ok, user} ->
-        render(conn, "show.json", user: user, sms_gateway: UserUtil.get_sms_gateway())
-      {:error, cs} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render("errors.json", cs: cs)
-    end
-  end
+  def create(conn, params), do: SharedRegistrationController.create(UserClient, conn, params)
 
 end
