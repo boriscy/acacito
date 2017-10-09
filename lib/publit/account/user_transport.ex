@@ -43,7 +43,7 @@ defmodule Publit.UserTransport do
   def create_changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:mobile_number, :full_name, :plate, :vehicle])
-    |> validate_required([:mobile_number, :full_name])
+    |> validate_required([:mobile_number, :full_name, :vehicle])
     |> validate_format(:mobile_number, @number_reg)
     |> validate_inclusion(:vehicle, @vehicles)
     |> unique_constraint(:mobile_number)

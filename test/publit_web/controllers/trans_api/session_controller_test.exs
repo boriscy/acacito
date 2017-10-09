@@ -2,7 +2,7 @@ defmodule Publit.TransApi.SessionControllerTest do
   use PublitWeb.ConnCase
   alias Publit.{UserTransport, UserUtil}
 
-  @trans_params %{full_name: "Julio Juarez", mobile_number: "73732655", plate: "TUK123", vehicle: "motorcycle"}
+  @trans_params %{full_name: "Julio Juarez", mobile_number: "77112233", plate: "TUK123", vehicle: "motorcycle"}
 
   describe "POST /trans_api/login" do
     test "OK", %{conn: conn} do
@@ -10,7 +10,7 @@ defmodule Publit.TransApi.SessionControllerTest do
 
       token = user.mobile_verification_token
 
-      conn = post(conn, "/trans_api/login", %{"mobile_number" => "73732655"})
+      conn = post(conn, "/trans_api/login", %{"mobile_number" => "77112233"})
 
       assert conn.status == 200
       json = Poison.decode!(conn.resp_body)
@@ -35,7 +35,7 @@ defmodule Publit.TransApi.SessionControllerTest do
 
   describe "get_token" do
     test "OK", %{conn: conn} do
-      {:ok, uc} = UserTransport.create(%{mobile_number: "77112233", full_name: "Amaru Barroso"} )
+      {:ok, uc} = UserTransport.create(@trans_params)
 
       UserUtil.check_mobile_verification_token("77112233", uc.mobile_verification_token)
 
@@ -49,7 +49,7 @@ defmodule Publit.TransApi.SessionControllerTest do
     end
 
     test "Error", %{conn: conn} do
-      {:ok, uc} = UserTransport.create(%{mobile_number: "77112233", full_name: "Amaru Barroso"} )
+      {:ok, uc} = UserTransport.create(@trans_params)
 
       conn = post(conn, "/trans_api/get_token", %{auth: %{mobile_number: "77112233", token: uc.mobile_verification_token}})
 
@@ -57,6 +57,29 @@ defmodule Publit.TransApi.SessionControllerTest do
     end
   end
 
+  describe "valid_token" do
+    test "OK", %{conn: conn} do
+      {:ok, ut} = UserTransport.create(@trans_params)
+
+      {:ok, _u} = UserUtil.check_mobile_verification_token("77112233", ut.mobile_verification_token)
+
+      %{token: token} =  UserUtil.valid_mobile_verification_token(UserTransport, %{"mobile_number" => "77112233", "token" => ut.mobile_verification_token})
+
+      conn = get(conn, "/trans_api/valid_token/#{token}")
+      json = Poison.decode!(conn.resp_body)
+
+      assert conn.status == Plug.Conn.Status.code(:ok)
+      assert json["valid"]
+    end
+
+    test "Invalid", %{conn: conn} do
+      conn = get(conn, "/trans_api/valid_token/asdf")
+      json = Poison.decode!(conn.resp_body)
+
+      assert conn.status == Plug.Conn.Status.code(:unauthorized)
+      refute json["valid"]
+    end
+  end
 
 end
 

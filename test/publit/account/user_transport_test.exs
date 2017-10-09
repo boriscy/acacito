@@ -16,7 +16,7 @@ defmodule Publit.UserTransportTest do
       assert ut.status == "off"
       assert ut.vehicle == "motorcycle"
 
-      assert "T-" <> _t = ut.mobile_verification_token
+      assert "T" <> _t = ut.mobile_verification_token
     end
 
     test "Errors" do

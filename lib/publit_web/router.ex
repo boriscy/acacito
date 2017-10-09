@@ -111,7 +111,7 @@ defmodule PublitWeb.Router do
     post "/get_token", SessionController, :get_token
 
     get "/valid_token/:token", SessionController, :valid_token
-    get "/valid_token_user/:token", SessionController, :valid_token_user
+    # get "/valid_token_user/:token", SessionController, :valid_token_user
 
     post "/registration", RegistrationController, :create
 

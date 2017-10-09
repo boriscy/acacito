@@ -4,6 +4,8 @@ defmodule PublitWeb.SharedSessionController do
   alias PublitWeb.SharedSessionView
   plug :scrub_params, "auth" when action in [:token]
 
+  @max_age Application.get_env(:publit, :session_max_age)
+
   @doc """
   """
   # @type create(term, Plug.Conn.t, map) :: Plug.Conn.t
@@ -31,4 +33,16 @@ defmodule PublitWeb.SharedSessionController do
         |> render(SharedSessionView, "error.json", msg: gettext("Invalid token"))
     end
   end
+
+  def valid_token(conn, %{"token" => token}) do
+    case Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token, max_age: @max_age) do
+      {:ok, _user_id} ->
+        render(conn, SharedSessionView, "valid_token.json", valid: true)
+      {:error, :invalid} ->
+        conn
+        |> put_status(:unauthorized)
+        |> render(SharedSessionView, "valid_token.json", valid: false)
+    end
+  end
+
 end

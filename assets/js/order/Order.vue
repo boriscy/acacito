@@ -99,7 +99,7 @@ export default {
             <div class="name">{{order.cli.name}}</div>
             <div class="mobile_number">
               <i class="material-icons">smartphone</i>
-              {{order.cli.mobile_number | phone}}
+              {{order.cli.mobile_number}}
             </div>
           </div>
 
