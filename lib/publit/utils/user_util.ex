@@ -5,6 +5,8 @@ defmodule Publit.UserUtil do
 
   @max_retry 2
 
+  @max_age Application.get_env(:publit, :session_max_age)
+
   @number_reg ~r|^[6,7]\d{7}$|
   @numbers [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   @downcase_letters ?a..?z |> Enum.to_list |> List.to_string() |> String.split("")
@@ -55,11 +57,10 @@ defmodule Publit.UserUtil do
   """
   def check_mobile_verification_token(mobile_number, token) do
     with {true, true} <- {is_binary(mobile_number), is_binary(token)},
-      struct <- get_struct(token),
-      false <- is_nil(struct),
-      u <- Repo.get_by(struct, mobile_number: mobile_number),
+      {module, false} <- {get_module_by_token(token), is_nil(get_module_by_token(token))},
+      u <- Repo.get_by(module, mobile_number: mobile_number),
       false <- is_nil(u),
-      true <- u.mobile_verification_token == token  && NaiveDateTime.diff(NaiveDateTime.utc_now, u.mobile_verification_send_at) <= 3600 do
+      true <- u.mobile_verification_token == token && NaiveDateTime.diff(NaiveDateTime.utc_now, u.mobile_verification_send_at) <= 3600 do
         change(u)
         |> put_change(:verified, true)
         |> put_change(:mobile_verification_token, "V" <> token)
@@ -74,9 +75,10 @@ defmodule Publit.UserUtil do
   Checks if the mobile_verification_token has been validated and returns a token
   with the user_id
   """
-  @type valid_mobile_verification_token(struct :: UserClient.t | UserTransport.t | User.t, params :: map) :: map
-  def valid_mobile_verification_token(struct, params) do
-    with u <- Repo.get_by(struct, mobile_number: params["mobile_number"]),
+  @type valid_mobile_verification_token(module :: UserClient.t | UserTransport.t | User.t, params :: map) :: map
+  def valid_mobile_verification_token(module, params) do
+    with true <- valid_module(module),
+      u = Repo.get_by(module, mobile_number: params["mobile_number"]),
       false <- is_nil(u),
       true  <- Regex.match?(~r/^V#{params["token"]}/, u.mobile_verification_token),
       {:ok, user} <- reset_mobile_verification_token(u) do
@@ -84,6 +86,20 @@ defmodule Publit.UserUtil do
     else
       _ ->
        :error
+    end
+  end
+
+  @doc """
+  Gets the current user using the token
+  """
+  @type get_user_by_token(module :: UserClient.t | UserTransport.t | User.t, token :: binary) :: map
+  def get_user_by_token(module, token) do
+    with {:ok, user_id} <- Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token, max_age: @max_age),
+      user <- Repo.get(module, user_id),
+      false <- is_nil(user) do
+        user
+    else
+      _ -> :error
     end
   end
 
@@ -96,15 +112,16 @@ defmodule Publit.UserUtil do
     |> Repo.update()
   end
 
-  defp get_prefix(struct) do
-    case struct do
+  defp get_prefix(module) do
+    case module do
       UserClient -> "C"
       UserTransport -> "T"
       User -> "O"
+      _ -> nil
     end
   end
 
-  defp get_struct(token) do
+  defp get_module_by_token(token) do
     case token do
       "C" <> _ -> UserClient
       "T" <> _ -> UserTransport
@@ -113,8 +130,21 @@ defmodule Publit.UserUtil do
     end
   end
 
-  defp generate_token(struct) do
-    get_prefix(struct) <> generate_downcase_string(6) |> to_string()
+  def get_struct(module) do
+    case module do
+      UserClient -> %UserClient{}
+      UserTransport -> %UserTransport{}
+      User -> %User{}
+      _ -> nil
+    end
+  end
+
+  defp valid_module(module) do
+    !!get_struct(module)
+  end
+
+  defp generate_token(module) do
+    get_prefix(module) <> generate_downcase_string(6) |> to_string()
   end
 
   defp get_keys(params, keys) do

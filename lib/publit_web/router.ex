@@ -74,7 +74,6 @@ defmodule PublitWeb.Router do
     post "/get_token", SessionController, :get_token
     # Registration
     post "/registration", RegistrationController, :create
-    #put "/resend_verification_code/:id", RegistrationController, :resend_verification_code
 
     get "/:organization_id/products", ProductController, :products
     post "/search", SearchController, :search
@@ -109,9 +108,8 @@ defmodule PublitWeb.Router do
 
     post "/login", SessionController, :create
     post "/get_token", SessionController, :get_token
-
     get "/valid_token/:token", SessionController, :valid_token
-    # get "/valid_token_user/:token", SessionController, :valid_token_user
+    get "/get_user/:token", SessionController, :get_user
 
     post "/registration", RegistrationController, :create
 

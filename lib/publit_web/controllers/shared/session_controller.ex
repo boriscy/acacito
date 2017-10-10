@@ -36,12 +36,27 @@ defmodule PublitWeb.SharedSessionController do
 
   def valid_token(conn, %{"token" => token}) do
     case Phoenix.Token.verify(PublitWeb.Endpoint, "user_id", token, max_age: @max_age) do
-      {:ok, _user_id} ->
-        render(conn, SharedSessionView, "valid_token.json", valid: true)
+      {:ok, user_id} ->
+        render(conn, SharedSessionView, "valid_token.json", valid: true, user_id: user_id)
       {:error, :invalid} ->
         conn
         |> put_status(:unauthorized)
         |> render(SharedSessionView, "valid_token.json", valid: false)
+    end
+  end
+
+
+  @ dov """
+  Gets the user
+  """
+  def get_user(mod, conn, %{"token" => token}) do
+    case UserUtil.get_user_by_token(mod, token) do
+      :error ->
+        conn
+        |> put_status(:not_found)
+        |> render(SharedSessionView, "user_not_found.json", erro: :error)
+      user ->
+        render(conn, SharedSessionView, "user.json", user: user)
     end
   end
 

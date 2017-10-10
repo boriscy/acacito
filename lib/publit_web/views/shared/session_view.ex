@@ -17,6 +17,14 @@ defmodule PublitWeb.SharedSessionView do
     %{valid: valid}
   end
 
+  def render("user.json", %{user: user}) do
+    %{user: to_api(user)}
+  end
+
+  def render("user_not_found.json", _params) do
+    %{error: gettext("User not found")}
+  end
+
   def to_api(user) do
     user
     |> Map.drop([:__meta__, :__struct__])

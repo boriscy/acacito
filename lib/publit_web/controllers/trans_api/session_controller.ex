@@ -11,4 +11,7 @@ defmodule PublitWeb.TransApi.SessionController do
   # GET /trans_api/valid_token/:token
   def valid_token(conn, params), do: PublitWeb.SharedSessionController.valid_token(conn, params)
 
+  # GET /trans_api/get_user/:user_id
+  def get_user(conn, params), do: PublitWeb.SharedSessionController.get_user(UserTransport, conn, params)
+
 end

@@ -81,5 +81,29 @@ defmodule Publit.TransApi.SessionControllerTest do
     end
   end
 
+  describe "get_user" do
+    test "OK", %{conn: conn} do
+      {:ok, ut} = UserTransport.create(@trans_params)
+
+      token = Phoenix.Token.sign(PublitWeb.Endpoint, "user_id", ut.id)
+
+      conn = get(conn, "/trans_api/get_user/#{token}")
+      json = Poison.decode!(conn.resp_body)
+
+      assert conn.status == Plug.Conn.Status.code(:ok)
+      assert json["user"]["id"] == ut.id
+    end
+
+    test "Invalid", %{conn: conn} do
+      token = Phoenix.Token.sign(PublitWeb.Endpoint, "user_id", Ecto.UUID.generate())
+
+      conn = get(conn, "/trans_api/get_user/#{token}")
+      json = Poison.decode!(conn.resp_body)
+
+      assert conn.status == Plug.Conn.Status.code(:not_found)
+      assert json["error"] == gettext("User not found")
+    end
+  end
+
 end
 
