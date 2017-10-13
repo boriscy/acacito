@@ -131,3 +131,9 @@ msg = %{
 
 {:ok, pid} = Publit.MessagingService.send_message_trans(tokens, msg, cb_ok, cb_error)
 ```
+
+## UserTransport status
+
+Update user transport status, sometimes there is a problem with status
+
+> update user_transports set extra_data = jsonb_set(extra_data, '{trans_status}', '"open"');
