@@ -81,6 +81,8 @@ defmodule Publit.Order.StatusService do
         PublitWeb.OrganizationChannel.broadcast_order(res.order, "order:updated")
         send_message_deliver(res.order)
         {:ok, res.order}
+      {:error, :user_transport, cs, b} ->
+        IO.inspect cs
       {:error, cs} -> {:error, cs}
     end
   end
