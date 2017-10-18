@@ -9,7 +9,7 @@ defmodule Publit.Product do
   schema "products" do
     field :name, :string
     field :description, :string
-    field :publish, :boolean, default: false
+    field :published, :boolean, default: false
     field :currency, :string, default: "BOB"
     field :tags, Publit.Array, default: []
     field :unit, :string
@@ -52,7 +52,7 @@ defmodule Publit.Product do
   """
   def update(product, params) do
     cs = product
-    |> cast(params, [:name, :description, :publish, :tags])
+    |> cast(params, [:name, :description, :published, :tags])
     |> set_image(params)
     |> cast_embed(:variations)
     |> validate_required([:name])
@@ -116,7 +116,7 @@ defmodule Publit.Product do
 
   def published(org_id) do
     Repo.all(from p in Product,
-     where: p.organization_id == ^org_id and p.publish == true,
+     where: p.organization_id == ^org_id and p.published == true,
      order_by: [asc: p.name])
   end
 
@@ -125,7 +125,7 @@ defmodule Publit.Product do
   """
   def get(org_id, prod_id) do
     Repo.one(from p in Product,
-     where: p.organization_id == ^org_id and p.publish == true and p.id == ^prod_id)
+     where: p.organization_id == ^org_id and p.published == true and p.id == ^prod_id)
   end
 
   def all_tags(org_id) do

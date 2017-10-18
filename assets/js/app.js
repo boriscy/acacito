@@ -40,8 +40,8 @@ const router = new VueRouter({
 const path = window.location.pathname
 
 // Mixins
-import { format } from './mixins'
-Vue.mixin(format)
+import { global } from './mixins'
+Vue.mixin(global)
 
 //////////////////////////////////////
 import prodForm from './product/productForm'

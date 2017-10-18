@@ -134,7 +134,7 @@ defmodule Publit.Organization do
     sql = """
     with tags as (
       select unnest(p.tags) as tag, p.id from products p
-      where p.publish = true and p.organization_id = $1
+      where p.published = true and p.organization_id = $1
       union
       select 'producto', '377ad713-16d2-45c2-8d7c-79c074408140'
     ),

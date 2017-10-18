@@ -265,6 +265,7 @@ defmodule Publit.Order.StatusServiceTest do
       u = build(:user, id: Ecto.UUID.generate())
       {:ok, ord} = Order.StatusService.previous_status(ord, u)
 
+      IO.puts "wait" # Wait to pass test
       assert ord.status == "process"
 
       msg = Agent.get(:api_mock, fn(v) -> v end) |> List.last()

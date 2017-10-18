@@ -5,8 +5,8 @@ defmodule Publit.OrderTest do
   alias Publit.{Order, Product, Repo}
 
   defp create_products2(org) do
-    p1 = insert(:product, organization_id: org.id, publish: true)
-    p2 = insert(:product, name: "Super Salad", organization_id: org.id, publish: true,
+    p1 = insert(:product, organization_id: org.id, published: true)
+    p2 = insert(:product, name: "Super Salad", organization_id: org.id, published: true,
      variations: [
       %Product.Variation{price: Decimal.new("20.5")}
     ])

@@ -30,50 +30,6 @@ form.link, form.button {
   min-height: 100%;
   height: auto;
 
-  header {
-    background: $dark;
-    min-height: 100%;
-    height: auto;
-    margin: 0px;
-
-    .menu-links {
-      margin: 0px;
-      padding: 0px;
-      list-style: none;
-
-      a {
-        color: $grayLighter;
-        text-align: center;
-        display: block;
-        padding: 0.7rem 0.2em;
-        border-bottom: 1px solid darken($grayLighter, 50%);
-        width: 4em;
-
-        &.logo {
-          img {
-            width: 70%;
-          }
-        }
-        &:hover {
-          background: lighten($dark, 10%);
-          text-decoration: none;
-        }
-        &.active {
-          color: #000;
-          background: lighten($dark, 40%);
-        }
-
-        i {
-          font-size: 2.2em;
-        }
-        .text {
-          font-size: 0.7em;
-          margin-top: -0.7em;
-        }
-      }
-    }
-  }
-
   .cont-right {
     padding: 0px 10px;
     width: 94%;
@@ -150,4 +106,10 @@ a.back {
   padding: 10px;
   display: inline-block;
   font-size: 1.2em;
+}
+
+@media screen and (max-width: 450px) {
+  main {
+    margin-top: 2rem;
+  }
 }

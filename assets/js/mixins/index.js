@@ -117,10 +117,13 @@ const formatMethods = {
   }
 }
 
-export const format = {
+export const global = {
   filters: {
-    number(val, decs, sep) {
+    number (val, decs, sep) {
       return formatMethods.formatNumber(val, decs, sep)
+    },
+    price (val) {
+      return formatMethods.formatNumber(val, 2)
     },
     phone (num) {
       return `+${num.slice(0, 3)} ${num.slice(3, 12)}`
@@ -136,6 +139,16 @@ export const format = {
     },
     num (num) {
       return formatMethods.formatNum(num)
+    },
+    currency (val) {
+      switch (val) {
+        case 'BOB':
+          return 'Bs'
+        case 'USD':
+          return '$'
+        default:
+          return val
+      }
     }
   },
   methods: formatMethods

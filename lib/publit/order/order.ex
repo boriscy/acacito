@@ -124,7 +124,7 @@ defmodule Publit.Order do
 
   defp get_products(cs) do
     ids = cs.changes.details |> Enum.map(fn(det) -> det.changes.product_id end)
-    q = from p in Product, where: p.id in ^ids and p.organization_id == ^cs.params["organization_id"] and p.publish == true
+    q = from p in Product, where: p.id in ^ids and p.organization_id == ^cs.params["organization_id"] and p.published == true
     Repo.all(q)
   end
 

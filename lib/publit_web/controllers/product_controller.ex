@@ -67,7 +67,7 @@ defmodule PublitWeb.ProductController do
   end
 
   def delete(conn, %{"id" => _id}) do
-    if conn.assigns.product.publish do
+    if conn.assigns.product.published do
       conn
       |> put_flash(:error, "Can't delete product that is published.")
       |> redirect(to: product_path(conn, :index))

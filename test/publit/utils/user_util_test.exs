@@ -50,7 +50,7 @@ defmodule Publit.UserUtilTest do
     end
 
     test "OK user_transport" do
-      {:ok, ut} = UserTransport.create(%{mobile_number: "73732655", full_name: "Amaru Barroso"})
+      {:ok, ut} = UserTransport.create(%{mobile_number: "73732655", full_name: "Amaru Barroso", vehicle: "bike"})
 
       assert "T" <> _t = ut.mobile_verification_token
 
@@ -119,4 +119,3 @@ defmodule Publit.UserUtilTest do
   end
 
 end
-

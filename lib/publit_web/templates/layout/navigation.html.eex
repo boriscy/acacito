@@ -1,5 +1,9 @@
-<header >
-  <nav role="navigation">
+<header class="main-nav">
+  <button class="top-menu" :class="cssMenu" v-on:click="toggle()">
+    <i class="material-icons" style="color:white">menu</i>
+  </button>
+
+  <nav role="navigation" class="nav" :class="cssMenu">
     <ul class="menu-links">
       <li>
         <a href="/dashboard" class="logo <%= active_link(@conn, "/dashboard") %>">
@@ -28,4 +32,25 @@
       </li>
     </ul>
   </nav>
+
 </header>
+
+<script>
+document.addEventListener('appLoaded', () => {
+  new Vue({
+    el: '.main-nav',
+    data () {
+      return {cssMenu: ''}
+    },
+    methods: {
+      toggle () {
+        if ('show' === this.cssMenu) {
+          this.cssMenu = ''
+        } else {
+          this.cssMenu = 'show'
+        }
+      }
+    }
+  })
+})
+</script>

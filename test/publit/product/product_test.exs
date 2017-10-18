@@ -76,7 +76,7 @@ defmodule Publit.ProductTest do
       attrs = %{
         "name" => "A new name", "organization_id" => org.id,
         "tags" => %{"0" => "multiple", "1" => "other"}, "description" => "A new *italic* text",
-        "publish" => "true",
+        "published" => "true",
         "variations" =>
         [%{"price"=> "22", "name" => "Small", "description" => "Small size 10 x 10", "id" => pv1.id},
          %{"price"=> "30.5", "name" => "Medium Esp", "description" => "Medium size 15 x 15", "id" => pv2.id},
@@ -105,8 +105,9 @@ defmodule Publit.ProductTest do
 
       org = Repo.get(Organization, p2.organization_id)
 
-      assert org.tags == [%{"count" => 1, "tag" => "producto"}, %{"count" => 1, "tag" => "other"},
- %{"count" => 1, "tag" => "multiple"}]
+      assert org.tags == [%{"count" => 1, "tag" => "producto"},
+        %{"count" => 1, "tag" => "other"},
+        %{"count" => 1, "tag" => "multiple"}]
     end
   end
 

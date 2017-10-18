@@ -150,7 +150,7 @@ defmodule Publit.ProductControllerTest do
     end
 
     test "Error", %{conn: conn} do
-      prod = insert(:product, organization_id: conn.assigns.current_organization.id, publish: true)
+      prod = insert(:product, organization_id: conn.assigns.current_organization.id, published: true)
 
       conn = delete(conn, "/products/#{prod.id}")
 

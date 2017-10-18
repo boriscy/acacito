@@ -17,7 +17,7 @@ defmodule PublitWeb.Api.SessionControllerTest do
       user = Repo.get(UserClient, json["user"]["id"])
 
       assert user.verified == true
-      assert "VC-" <> t = user.mobile_verification_token
+      assert "VC" <> t = user.mobile_verification_token
       assert String.length(t) == 6
     end
 
@@ -33,7 +33,7 @@ defmodule PublitWeb.Api.SessionControllerTest do
 
       assert user.verified == true
       assert user.plate == "TUK123"
-      assert "VT-" <> t = user.mobile_verification_token
+      assert "VT" <> t = user.mobile_verification_token
       assert String.length(t) == 6
     end
 

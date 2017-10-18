@@ -242,7 +242,6 @@ defmodule Publit.Order.StatusService do
     end
 
     tokens = [order.user_client.extra_data[@token_id]]
-
     Publit.MessagingService.send_message_cli(tokens, msg, cb_ok, cb_err)
   end
 

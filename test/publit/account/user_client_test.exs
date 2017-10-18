@@ -11,7 +11,7 @@ defmodule Publit.UserClientTest do
     test "OK" do
       {:ok, user} = UserClient.create(%{"mobile_number" => "73732655", "full_name" => "Amaru Barroso"})
 
-      assert user.mobile_verification_token |> String.length() == 8
+      assert user.mobile_verification_token |> String.length() == 7
       assert user.mobile_verification_send_at
     end
 

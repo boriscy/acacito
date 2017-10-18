@@ -18,7 +18,7 @@ defmodule PublitWeb.ProductView do
   end
 
   def published(product, opts \\ [fs: "fs50p"]) do
-    if product.publish do
+    if product.published do
       content_tag(:span, gettext("Published"), class: "label label-success #{opts[:fs]}")
     else
       content_tag(:span, gettext("Unpublished"), class: "label label-danger #{opts[:fs]}")
@@ -26,7 +26,7 @@ defmodule PublitWeb.ProductView do
   end
 
   def publish_button(product) do
-    if product.publish do
+    if product.published do
       content_tag(:button, gettext("Unpublish"), class: "btn btn-danger publish-button")
     else
       content_tag(:button, gettext("Publish"), class: "btn btn-success publish-button")

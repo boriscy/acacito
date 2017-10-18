@@ -15,7 +15,7 @@
     data: [confirm: gettext("Are you sure to delete the product \"%{name}\"?", %{name: @product.name})], class: "text-red" %>
 
     <%= form_for Ecto.Changeset.change(@product), product_path(@conn, :update, @product), [class: "w100 text-right"], fn f -> %>
-      <%= checkbox(f, :publish, value: !@product.publish, class: "hidden") %>
+      <%= checkbox(f, :publish, value: !@product.published, class: "hidden") %>
       <%= publish_button(@product) %>
     <% end %>
   </div>

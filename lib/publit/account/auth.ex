@@ -36,7 +36,6 @@ defmodule Publit.Account.Auth do
         |> validate_length(:full_name, min: 4)
         |> validate_format(:mobile_number, @mobile_number_reg)
         |> unique_constraint(:mobile_number)
-        |> IO.inspect
       end
 
       defoverridable [create_changeset: 2]
@@ -44,4 +43,3 @@ defmodule Publit.Account.Auth do
   end
 
 end
-

@@ -4,8 +4,6 @@ defmodule PublitWeb.Api.SessionController do
 
   # POST /api/validate_token
   def validate_token(conn, %{"phone" => phone, "message" => msg}) do
-IO.inspect phone
-IO.inspect msg
     case UserUtil.check_mobile_verification_token(phone, msg) do
     {:ok, user} ->
       render(conn, "show.json", user: user)

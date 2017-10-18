@@ -65,14 +65,14 @@ defmodule Publit.Support.Order do
 
   defp products do
     [
-      %Product{name: "Goulash", publish: true, tags: ["sopa", "vegetariano"],
+      %Product{name: "Goulash", published: true, tags: ["sopa", "vegetariano"],
         variations: [%{name: nil, price: Decimal.new("30")}] },
 
-      %Product{name: "Pizza", publish: true, tags: ["pizza", "queso"],
+      %Product{name: "Pizza", published: true, tags: ["pizza", "queso"],
         variations: [%{name: "Mini", price: Decimal.new("15")}, %{name: "Medio", price: Decimal.new("25")} ] },
 
       %Product{
-        name: "Aji de fideo", publish: true, tags: ["carne", "picante", "comida boliviana", "bolivia"],
+        name: "Aji de fideo", published: true, tags: ["carne", "picante", "comida boliviana", "bolivia"],
         variations: [%{name: nil, price: Decimal.new("30")}] }
     ]
   end
