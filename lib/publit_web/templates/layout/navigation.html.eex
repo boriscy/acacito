@@ -12,12 +12,12 @@
       </li>
       <li>
         <a href="/products" class="<%= active_link(@conn, "/products") %>">
-          <i class="material-icons">list</i>
+          <i class="material-icons">shopping_basket</i>
         </a>
       </li>
       <li>
         <a href="/orders" class="<%= active_link(@conn, "/orders") %>">
-          <i class="material-icons">shopping_cart</i>
+          <i class="material-icons">store</i>
         </a>
       </li>
       <li>

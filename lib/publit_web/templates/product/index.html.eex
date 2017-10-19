@@ -1,7 +1,7 @@
-<div class="title flex">
-  <h2><%= gettext("Products") %></h2>
+<div class="main-title">
+  <h3 class="tit"><%= gettext("Products") %></h3>
   <div class="actions">
-    <%= link to: product_path(@conn, :new), class: "btn" do %>
+    <%= link to: product_path(@conn, :new) do %>
       <i class="material-icons">add_circle</i>
       <%= gettext("New Product") %>
     <% end %>
@@ -10,39 +10,63 @@
 
 <hr/>
 
-<div class="product-list products-vue">
-  <div class="product" v-for="product in products">
-    <div class="price">
-        {{product.variations[0].price | price}}
-        <small>{{org.currency | currency}}</small>
-        <i class="material-icons" v-if="product.variations.length>1" size="0.9rem" :title="$t('more variations')">add_circle</i>
-    </div>
+<div class="products-vue">
+  <button class="btn btn-primary btn-sm" v-on:click="togglePublishButtonText()">{{togglePublishText | translate}}</button>
+  <br/><br/>
 
-    <div class="product-image">
-      <figure>
-        <img :src="product.image_thumb" :ref="`img${product.id}`"/>
-      </figure>
+  <div class="product-list">
+    <div class="product" v-for="product in products" v-on:click="showProduct(product)">
+      <div class="price">
+          {{product.variations[0].price | price}}
+          <small>{{org.currency | currency}}</small>
+          <i class="material-icons" v-if="product.variations.length>1" size="0.9rem" :title="$t('more variations')">add_circle</i>
+      </div>
+
+      <div class="published" :class="{active: product.published}" v-on:click.stop="publish(product)" v-if="showPublish">
+        {{product.published ? $t('published') : $t('unpublished')}}
+      </div>
+
+      <div class="product-image">
+        <figure>
+          <img :src="product.image_thumb" :ref="`img${product.id}`"/>
+        </figure>
+      </div>
+      <div class="name">{{product.name}}</div>
     </div>
-    <div class="name">{{product.name}}</div>
   </div>
+
 </div>
 
 <script>
 document.addEventListener('appLoaded', function() {
-  //var md = new Markdown('commonmark', {html: false});
   new Vue({
     el: '.products-vue',
     data () {
       return {
+        togglePublishText: 'Hide publish',
+        showPublish: true,
         org: <%= raw PublitWeb.OrganizationView.to_api(@conn.assigns.current_organization) |> Poison.encode!() %>,
         products: <%= raw @products |> Enum.map(&PublitWeb.ProductView.to_api(&1)) |> Poison.encode! %>
       }
+    },
+    methods: {
+      showProduct (prod) {
+        window.location = `/products/${prod.id}`
+      },
+      //
+      togglePublishButtonText () {
+        if (this.showPublish) {
+          this.togglePublishText = 'Show publish'
+        } else {
+          this.togglePublishText = 'Hide publish'
+        }
+        this.showPublish = !this.showPublish
+      },
+      //
+      publish (prod) {
+        console.log('prod', prod);
+      }
     }
   })
-
-  /*document.querySelectorAll('.md').forEach(v => {
-    var html = md.render(v.textContent);
-    v.innerHTML = html;
-  })*/
 });
 </script>

@@ -4,13 +4,15 @@ header {
     position: fixed;
     border-radius: 50%;
     background: rgba(0,0,0,0.5);
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     padding: 0.1rem;
     border: none;
     z-index: 11;
     top: 4px;
     left: 4px;
+    font-size: 1.8rem;
+    line-height: 1;
   }
   > .nav {
     background: $dark;

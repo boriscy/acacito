@@ -29,6 +29,7 @@
 }
 
 .product-list {
+  width: 100%;
   .product {
     border-bottom: 1px solid #efefef;
     padding-bottom: 1.5em;
@@ -41,8 +42,6 @@
     position: relative;
     border: 1px solid gray;
     .product-image {
-      width: 40vw;
-      height: 40vw;
       overflow: hidden;
       figure {
         margin: 0px;
@@ -77,6 +76,29 @@
       i {
         margin-left: -0.2rem;
       }
+    }
+    .published {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      background: rgba(255,0,0,0.8);
+      font-size: 0.7em;
+      color: white;
+      border-radius: 3px;
+      padding: 2px 2px;
+      cursor: pointer;
+      &.active {
+        background: rgba(76,175,80,0.9);
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .product-list {
+    .product {
+      width: 49%;
+      height: 49vw;
     }
   }
 }
