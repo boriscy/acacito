@@ -162,6 +162,7 @@ defmodule PublitWeb.Router do
     get "/dashboard", DashboardController, :index
 
     resources "/products", ProductController
+    get "/products_frame", ProductController, :index_frame
 
     get "/organizations/images", OrganizationController, :edit_images
     put "/organizations/images", OrganizationController, :update_images

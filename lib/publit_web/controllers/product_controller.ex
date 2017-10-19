@@ -14,6 +14,15 @@ defmodule PublitWeb.ProductController do
     render(conn, "index.html", products: products)
   end
 
+  # GET /products_frame
+  def index_frame(conn, _params) do
+    products = Product.all(conn.assigns.current_organization.id)
+
+    conn
+    |> put_layout("app_frame.html")
+    |> render("index_frame.html", products: products)
+  end
+
   # GET /products/:id
   def show(conn, _params) do
     render(conn, "show.html", product: conn.assigns.product)

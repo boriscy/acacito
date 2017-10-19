@@ -14,27 +14,13 @@
   <button class="btn btn-primary btn-sm" v-on:click="togglePublishButtonText()">{{togglePublishText | translate}}</button>
   <br/><br/>
 
-  <div class="product-list">
-    <div class="product" v-for="product in products" v-on:click="showProduct(product)">
-      <div class="price">
-          {{product.variations[0].price | price}}
-          <small>{{org.currency | currency}}</small>
-          <i class="material-icons" v-if="product.variations.length>1" size="0.9rem" :title="$t('more variations')">add_circle</i>
-      </div>
+  <div class="flex">
+    <%= render("products.html", conn: @conn, products: @products) %>
 
-      <div class="published" :class="{active: product.published}" v-on:click.stop="publish(product)" v-if="showPublish">
-        {{product.published ? $t('published') : $t('unpublished')}}
-      </div>
+    <iframe class="iframe-preview" src="/products_frame">
+    </iframe>
 
-      <div class="product-image">
-        <figure>
-          <img :src="product.image_thumb" :ref="`img${product.id}`"/>
-        </figure>
-      </div>
-      <div class="name">{{product.name}}</div>
-    </div>
   </div>
-
 </div>
 
 <script>

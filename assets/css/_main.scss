@@ -6,7 +6,7 @@ html {
 
 /* Space out content a bit */
 body {
-  background: $white;
+  background: white !important;
   margin-top: 0px;
   height: 100%;
 }
@@ -29,10 +29,10 @@ form.link, form.button {
   display: flex;
   min-height: 100%;
   height: auto;
+  max-width: 1280px;
 
   .cont-right {
     padding: 0px 10px;
-    max-width: 1000px;
   }
   .main-title {
     display: flex;
