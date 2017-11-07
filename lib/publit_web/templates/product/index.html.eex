@@ -11,48 +11,11 @@
 <hr/>
 
 <div class="products-vue">
-  <button class="btn btn-primary btn-sm" v-on:click="togglePublishButtonText()">{{togglePublishText | translate}}</button>
-  <br/><br/>
-
-  <div class="flex">
-    <%= render("products.html", conn: @conn, products: @products) %>
-
-    <iframe class="iframe-preview" src="/products_frame">
-    </iframe>
-
-  </div>
+  <products-list/>
 </div>
 
 <script>
-document.addEventListener('appLoaded', function() {
-  new Vue({
-    el: '.products-vue',
-    data () {
-      return {
-        togglePublishText: 'Hide publish',
-        showPublish: true,
-        org: <%= raw PublitWeb.OrganizationView.to_api(@conn.assigns.current_organization) |> Poison.encode!() %>,
-        products: <%= raw @products |> Enum.map(&PublitWeb.ProductView.to_api(&1)) |> Poison.encode! %>
-      }
-    },
-    methods: {
-      showProduct (prod) {
-        window.location = `/products/${prod.id}`
-      },
-      //
-      togglePublishButtonText () {
-        if (this.showPublish) {
-          this.togglePublishText = 'Show publish'
-        } else {
-          this.togglePublishText = 'Hide publish'
-        }
-        this.showPublish = !this.showPublish
-      },
-      //
-      publish (prod) {
-        console.log('prod', prod);
-      }
-    }
-  })
-});
+window.vueLoad = 'product-list';
+window.org = <%= raw PublitWeb.OrganizationView.to_api(@conn.assigns.current_organization) |> Poison.encode!() %>;
+window.products = <%= raw @products |> Enum.map(&PublitWeb.ProductView.to_api(&1)) |> Poison.encode! %>;
 </script>

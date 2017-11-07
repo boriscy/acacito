@@ -46,6 +46,7 @@ export default {
   "Orders in Process": "Ordenes en proceso",
   "Order ready at": "Pedido listo a las",
   "Price": "Precio",
+  "Preview": "Vista previa",
   "published": "públicado",
   "Remove": "Eliminar",
   "Separate tags with commas": "Separar etiquetas con comas",

@@ -1,0 +1,3 @@
+<div class="products-vue">
+  <%= render("products.html", conn: @conn, products: @products) %>
+</div>

@@ -1,5 +1,5 @@
 <script>
-import {format} from '../mixins'
+import { format } from '../mixins'
 
 export default {
   mixins: [format],

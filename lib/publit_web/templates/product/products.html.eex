@@ -1,0 +1,57 @@
+<div class="product-list">
+  <div class="product pointer" v-for="product in products" v-on:click="showProduct(product)">
+    <div class="price">
+        {{product.variations[0].price | price}}
+        <small>{{org.currency | currency}}</small>
+        <i class="material-icons" v-if="product.variations.length>1" size="0.9rem" :title="$t('more variations')">add_circle</i>
+    </div>
+
+    <div class="published" :class="{active: product.published}" v-on:click.stop="publish(product)" v-if="showPublish">
+      {{product.published ? $t('published') : $t('unpublished')}}
+    </div>
+
+    <div class="product-image">
+      <figure>
+        <img :src="product.image_thumb" :ref="`img${product.id}`"/>
+      </figure>
+    </div>
+    <div class="name">{{product.name}}</div>
+  </div>
+</div>
+
+<script>
+/*
+document.addEventListener('appLoaded', function() {
+  new Vue({
+    el: '.products-vue',
+    data () {
+      return {
+        togglePublishText: 'Hide publish',
+        showPublish: true,
+        org: <%= raw PublitWeb.OrganizationView.to_api(@conn.assigns.current_organization) |> Poison.encode!() %>,
+        products: <%= raw @products |> Enum.map(&PublitWeb.ProductView.to_api(&1)) |> Poison.encode! %>
+      }
+    },
+    methods: {
+      showProduct (prod) {
+        console.log('prod', prod);
+        window.location = `/products/${prod.id}`
+      },
+      //
+      togglePublishButtonText () {
+        if (this.showPublish) {
+          this.togglePublishText = 'Show publish'
+        } else {
+          this.togglePublishText = 'Hide publish'
+        }
+        this.showPublish = !this.showPublish
+      },
+      //
+      publish (prod) {
+        console.log('prod', prod);
+      }
+    }
+  })
+});
+*/
+</script>

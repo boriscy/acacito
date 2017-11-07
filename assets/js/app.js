@@ -45,30 +45,34 @@ Vue.mixin(global)
 
 //////////////////////////////////////
 import prodForm from './product/productForm'
+import ProductsList from './product/ProductsList.vue'
 
 import edit from './organization/edit'
 import OrgData from './organization/Show.vue'
 
 
 switch(true) {
-  case window.vueLoad == 'ProductForm':
+  case 'ProductForm' === window.vueLoad:
     new Vue({
       el: '.product-form',
       mixins: [prodForm]
     })
-  break;
-  case window.vueLoad == 'OrgData':
+  break
+  case 'OrgData' === window.vueLoad:
     new Vue({
       el: window.vueEl,
       components: {OrgData}
     })
-  break;
+  break
   case !!path.match(/orders$/):
     new Vue({
       store,
       router
     }).$mount('#main')
   break;
+  case 'product-list' === window.vueLoad:
+    new Vue({el: '.products-vue', components: {ProductsList}})
+  break
 }
 
 // set moment locale
