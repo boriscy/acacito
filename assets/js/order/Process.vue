@@ -4,18 +4,14 @@
  * for putting all related data from transport
  */
 import Order from './Order.vue'
-import {format} from '../mixins'
-import Timer from '../globals/Timer.vue'
+import VTimer from '../globals/Timer.vue'
 import types from '../store/mutation-types'
-
-let that = null
 
 export default {
   name: 'Process',
-  mixins: [format],
   components: {
-    Order: Order,
-    Timer: Timer
+    Order,
+    VTimer
   },
   props: {
     order: {
@@ -23,61 +19,61 @@ export default {
     }
   },
   computed: {
-    timerCount() {
+    timerCount () {
       if(this.countStarted) {
         return this.$refs.timer.count
       } else {
         return 0
       }
     },
-    transportStatus() {
+    transportStatus () {
       return this.order.transport_status
     },
-    order_call() {
+    order_call () {
       if(this.order && this.order.order_calls && this.order.order_calls.length > 0) {
         return this.order.order_calls[0]
       } else {
         return {}
       }
     },
-    trans() {
-      if(this.order && this.order.trans) {
+    trans () {
+      if (this.order && this.order.trans) {
         return this.order.trans
       } else {
         return {}
       }
     },
-    vehicle() { return this.order.trans.vehicle }
+    vehicle () { return this.order.trans.vehicle }
   },
   watch: {
-    transportStatus: (a, b) => {
+    transportStatus (a, b) {
       if(a == 'call_empty') {
         setTimeout(() => {
-          that.$store.commit(types.RESET_ORDER_CALL, that.order.id)
+          this.$store.commit(types.RESET_ORDER_CALL, this.order.id)
         }, 5000)
       }
     }
   },
-  data() {
+  data () {
     return {call_seconds: 0, countStarted: false, cancelTimerCount: 9 }
   },
   methods: {
-    callTransport() {
+    callTransport () {
       this.$store.dispatch('callTransport', {id: this.order.id})
       this.$refs.timer.restart()
     },
-    setTimer() {
+    setTimer () {
       const count = (new Date().getTime() - Date.parse(this.order_call.inserted_at)) / 1000
       this.$refs.timer.count = Math.floor(count)
       this.$refs.timer.start()
     },
-    cancelCall() {
+    cancelCall () {
       this.$store.dispatch('cancelCall', this.order.id)
       .then(r => {
         this.$refs.timer.reset()
       })
     },
-    getVehicleIcon(vehicle) {
+    getVehicleIcon (vehicle) {
       let v = null
       switch(vehicle) {
         case 'walk':
@@ -100,9 +96,8 @@ export default {
       return v
     }
   },
-  mounted() {
+  mounted () {
     this.countStarted = true
-    that = this
     if (this.order_call.inserted_at) {
       this.setTimer()
     }
@@ -120,7 +115,7 @@ export default {
 
       <div v-show="'calling' === order.transport_status" class="well well-sm">
         <div>
-          <Timer ref="timer"/>
+          <v-timer ref="timer"/>
           <span class="text-muted">{{'Calling transport' | translate}}</span>
         </div>
         <button class="btn btn-danger btn-sm" v-if="timerCount > cancelTimerCount" @click="cancelCall()">{{'Cancel call' | translate}}</button>

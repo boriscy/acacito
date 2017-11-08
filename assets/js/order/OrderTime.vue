@@ -1,11 +1,8 @@
 <script>
-import {format} from '../mixins'
 import Modal from '../globals/Modal.vue'
-
 
 export default {
   name: 'OrderTime',
-  mixins: [format],
   components: {
     Modal
   },

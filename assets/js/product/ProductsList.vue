@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import Modal from '../globals/Modal.vue'
+
 export default {
   name: 'ProductsList',
   data () {

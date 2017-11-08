@@ -1,5 +1,4 @@
 <script>
-import {format} from '../mixins'
 import types from '../store/mutation-types'
 import {auth} from '../store/api/xhr'
 import Modal from '../globals/Modal.vue'
@@ -7,7 +6,6 @@ import Modal from '../globals/Modal.vue'
 
 export default {
   name: 'NullOrder',
-  mixins: [format],
   components: {
     Modal
   },

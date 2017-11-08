@@ -1,11 +1,9 @@
 <script>
 import Modal from '../globals/Modal.vue'
-import {format} from '../mixins'
 import NullOrder from './NullOrder.vue'
 
 export default {
   name: 'OrderDetail',
-  mixins: [format],
   computed: {
     curr () {
       return window.currencies[this.order.currency]

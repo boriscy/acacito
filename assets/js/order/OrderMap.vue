@@ -1,12 +1,10 @@
 <script>
 import L from 'leaflet'
 import { Socket } from 'phoenix'
-import { format } from '../mixins'
 import { auth } from '../store/api/xhr'
 
 let that = null
 export default {
-  mixins: [format],
   components: {
   },
   computed: {

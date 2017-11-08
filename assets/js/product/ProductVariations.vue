@@ -1,8 +1,7 @@
 <script>
-import { format } from '../mixins'
+//import { format } from '../mixins'
 
 export default {
-  mixins: [format],
   props: {
     product: {
       type: Object,
@@ -27,6 +26,9 @@ export default {
     roundPrice (prod) {
       prod.price = this.toFixed(+prod.price, 2)
     }
+  },
+  mounted () {
+    console.log('pv', this.product);
   }
 }
 </script>
@@ -60,6 +62,7 @@ export default {
           </button>
         </div>
       </div>
+
       <button class="btn btn-primary btn-sm" @click.prevent="addLine()">{{ $t('Add line') }}</button>
     </div>
   </div>

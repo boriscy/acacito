@@ -1,12 +1,10 @@
 <script>
-import {format} from '../mixins'
 import OrderDetail from './OrderDetail.vue'
 import NullOrder from  './NullOrder.vue'
 import OrderTime from  './OrderTime.vue'
 
 export default {
   name: 'Order',
-  mixins: [format],
   components: {
     OrderDetail,
     NullOrder,

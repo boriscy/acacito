@@ -32,17 +32,15 @@ import {Socket} from 'phoenix'
 
 import OrderList from './List.vue'
 import Order from './Order.vue'
-import Process from './Process.vue'
-import {format} from '../mixins'
+//import Process from './Process.vue'
 import types from '../store/mutation-types'
 
 export default {
   name: 'OrderContainer',
-  mixins: [format],
   data () {
     return {
       Order,
-      Process,
+      //Process,
       channel: null,
       saving: false
     }
@@ -68,7 +66,7 @@ export default {
     }
   },
   methods: {
-    openCloseOrg() {
+    openCloseOrg () {
       this.saving = true
       this.$store.dispatch('openCloseOrganization')
       .then((res) => {
@@ -76,11 +74,11 @@ export default {
         this.saving = false
       })
     },
-    createMessage(order) {
+    createMessage (order) {
       return `${this.$t('New order')}, ${order.user_client.full_name}: ${this.currency(order.currency)}
       ${this.formatNumber(order.total)}`
     },
-    setChannel() {
+    setChannel () {
       this.socket = new Socket("/socket", {params: {token: localStorage.getItem('authToken') }})
       this.socket.connect()
 
@@ -121,20 +119,12 @@ export default {
         this.sound.play()
         this.$store.commit(types.ORDER_UPDATED, {order: order})
       })
-      //let user = `user-${Math.floor(Math.random() * 100000)}`
-      //this.socket = new Socket("/socket", {})
-      //this.socket.connect()
-      //this.socket.onOpen( ev => console.log("OPEN", ev) )
-      //this.socket.onError( ev => console.log("ERROR", ev) )
-      //this.socket.onClose( e => console.log("CLOSE", e))
-
     }
   },
-  ////////////////////////
-  mounted() {
+  // mounted
+  mounted () {
     this.$store.dispatch('getOrders')
     this.setChannel()
-
 
     this.sound = new Audio('/sounds/alert1.mp3')
     Notification.requestPermission().then(function(result) {

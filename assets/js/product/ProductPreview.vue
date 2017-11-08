@@ -24,13 +24,9 @@
 </template>
 
 <script>
-import {format} from '../mixins'
-
 const md = new Markdown('commonmark', {html: false})
 
-
 export default {
-  mixins: [format],
   computed: {
     imagePath() { return this.product.image },
     descriptionMD() {

@@ -1,5 +1,5 @@
 import moment from 'moment'
-
+import axios from 'axios'
 
 const defaults = {
   format: {
@@ -118,6 +118,15 @@ const formatMethods = {
 }
 
 export const global = {
+  computed: {
+    xhr () {
+      return axios.create({
+        headers: {
+          'x-csrf-token': document.querySelector('[name=csrf]').content
+        }
+      })
+    }
+  },
   filters: {
     number (val, decs, sep) {
       return formatMethods.formatNumber(val, decs, sep)

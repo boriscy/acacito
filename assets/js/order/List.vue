@@ -13,12 +13,10 @@
 </template>
 
 <script>
-import {format} from '../mixins'
 import Order from './Order.vue'
 
 export default {
   name: 'OrderList',
-  mixins: [format],
   components: {
     Order
   },

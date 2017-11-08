@@ -6,9 +6,10 @@ defmodule PublitWeb.ProductController do
   # function imported on web.ex and created in Publit.Plug.OrganizationAuth
   plug :verify_admin_user, [path: "/products"] when action in [:create, :edit, :update, :delete]
   plug :set_product when action in [:show, :edit, :update, :delete]
+  plug :action
 
   # GET /products
-  def index(conn, _params) do
+  def index(conn, params) do
     products = Product.all(conn.assigns.current_organization.id)
 
     render(conn, "index.html", products: products)

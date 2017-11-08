@@ -1,18 +1,9 @@
 <script>
-import Pos from '../components/Pos.vue'
-import {format} from '../mixins'
-import axios from 'axios'
-
-const xhr = axios.create({
-  headers: {
-    'x-csrf-token': document.querySelector('[name=csrf]').content
-  }
-})
+import VPos from '../components/Pos.vue'
 
 export default {
   name: 'OrgData',
-  components: { Pos },
-  mixins: [format],
+  components: { VPos },
   data () {
     return {
       org: {},
@@ -40,7 +31,7 @@ export default {
       this.errors = {}
       this.saving = true
 
-      xhr.put('/organizations/current', {organization: this.getData(), format: 'json'})
+      this.xhr.put('/organizations/current', {organization: this.getData(), format: 'json'})
         .then((resp) => {
           this.saving = false
         })
@@ -60,7 +51,7 @@ export default {
 
 <template>
   <div class="org-data">
-    <Pos :pos="org.pos" ref="pos" />
+    <v-pos :pos="org.pos" ref="pos" />
 
     <div class="flex">
       <div>

@@ -21,26 +21,22 @@
 </template>
 
 <script>
-import {format} from '../mixins'
-
-let that
 export default {
   name: 'Pos',
   props: {
     pos: null
   },
   watch: {
-    pos:(a, b) => {
+    pos (a, b) {
       if(a && a.coordinates) {
-        that.lng = a.coordinates[0]
-        that.lat = a.coordinates[1]
+        this.lng = a.coordinates[0]
+        this.lat = a.coordinates[1]
 
-        that.updatePos()
+        this.updatePos()
       }
     }
   },
-  mixins: [format],
-  data() {
+  data () {
     return {
       lat: null,
       lng: null,
@@ -61,7 +57,7 @@ export default {
       } else {
         this.marker.setLatLng({lat: this.lat, lng: this.lng})
       }
-      window.map.setView([that.lat, that.lng], 18)
+      window.map.setView([this.lat, this.lng], 18)
     },
     //
     selectPos () {
@@ -89,9 +85,6 @@ export default {
     },
     //
     posError() {},
-  },
-  mounted() {
-    that = this
   }
 }
 </script>

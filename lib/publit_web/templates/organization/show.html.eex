@@ -4,7 +4,7 @@
 <!--Required for the autocomplete-->
 <script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&key=AIzaSyDQwB6IOvELaaXQX1keoMuH-gaN3QbPRqM"></script>
 
-<div id="map" style="height:90vh;width:100%">
+<div id="map" style="width:100%;height:50vh">
 </div>
 
 <div id="org-data">
@@ -20,40 +20,39 @@
   || document.documentElement.clientHeight
   || document.body.clientHeight;
 
-  var map = document.getElementById('map')
-  //map.style.height = (height - 120) + 'px';
-  //map.style.width = (width - 65) + 'px';
+  setTimeout(function() {
+    var map = window.map = L.map('map').setView([-18.174332636, -63.871996512], 16);
 
-  var map = window.map = L.map('map').setView([-18.174332636, -63.871996512], 16);
-  //L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> '
-  }).addTo(map);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> '
+    }).addTo(map);
 
-  var GoogleSearch = L.Control.extend({
-    onAdd: function() {
-      var el = document.createElement("input");
-      el.id = "searchBox";
-      el.classList.add('form-control');
-      el.classList.add('input-sm');
-      el.style.width = "17  em";
-      el.placeholder = "<%= gettext("Search place") %>";
+    var GoogleSearch = L.Control.extend({
+      onAdd: function() {
+        var el = document.createElement("input");
+        el.id = "searchBox";
+        el.classList.add('form-control');
+        el.classList.add('input-sm');
+        el.style.width = "17  em";
+        el.placeholder = "<%= gettext("Search place") %>";
 
-      return el;
-    }
-  });
+        return el;
+      }
+    });
 
-  (new GoogleSearch).addTo(map);
+    (new GoogleSearch).addTo(map);
 
-  var input = document.getElementById("searchBox");
-  var searchBox = new google.maps.places.SearchBox(input);
-  searchBox.addListener('places_changed', function() {
-    var places = searchBox.getPlaces();
+    var input = document.getElementById("searchBox");
+    var searchBox = new google.maps.places.SearchBox(input);
+    searchBox.addListener('places_changed', function() {
+      var places = searchBox.getPlaces();
 
-    var place = places[0];
-    var coords = place.geometry.location;
-    map.setView([coords.lat(), coords.lng()], 16)
-  });
+      var place = places[0];
+      var coords = place.geometry.location;
+      map.setView([coords.lat(), coords.lng()], 16)
+    });
+  }, 200);
+
   // https://maps.googleapis.com/maps/api/place/autocomplete/json?input=los&location=-16.54309135,-68.07098&radius=10&types=address&key=AIzaSyDQwB6IOvELaaXQX1keoMuH-gaN3QbPRqM&callback=_xdc_._3o6bwr
 
   function successPos (position) {
@@ -64,7 +63,6 @@
   }
 
   navigator.geolocation.getCurrentPosition(successPos, errorPos)
-
 
   window.vueLoad = 'OrgData';
   window.vueEl = '#org-data';

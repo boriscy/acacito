@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      form: {variations: [], name: ''},
+      product: {variations: [], name: ''},
       allTags: window.allTags,
       demoMd:
 `**Esto es negrita**
@@ -45,6 +45,6 @@ ___
     }
   },
   mounted() {
-    this.form = window.product
+    this.product = window.product
   }
 }
